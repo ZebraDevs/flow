@@ -1,0 +1,24 @@
+# IDE configuration
+.idea/
+
+# Backup Files
+*.cpp~
+*.hpp~
+*.h~
+*.md~
+*.py~
+*.yaml~
+
+# Other files
+*.swp
+*.pyc
+
+# Bazel Build Artifacts
+bazel-testlogs
+bazel-bin
+bazel-genfiles
+bazel-out
+bazel-flow
+
+# Doxygen
+doxygen
