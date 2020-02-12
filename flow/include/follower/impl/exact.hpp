@@ -35,13 +35,13 @@ State Exact<DispatchT, LockPolicyT, AllocatorT>::capture_follower_impl(OutputDis
   {
     return State::RETRY;
   }
-  else if (PolicyType::queue_.newest_stamp() > range.upper_stamp)
+  else if (PolicyType::queue_.oldest_stamp() > range.upper_stamp)
   {
     return State::ABORT;
   }
 
   // Assign matching element
-  *(output++) = PolicyType::queue_.front();
+  *(output++) = PolicyType::queue_.pop();
   return State::PRIMED;
 }
 
