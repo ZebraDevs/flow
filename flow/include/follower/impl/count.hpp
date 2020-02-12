@@ -9,7 +9,7 @@
 
 // C++ Standard Library
 #include <iterator>
-
+#include <stdexcept>
 
 namespace flow
 {
@@ -23,6 +23,7 @@ Count<DispatchT, LockPolicyT, AllocatorT>::Count(const size_type n_before,
   n_before_{n_before},
   m_after_{m_after}
 {
+  validate();
 }
 
 
@@ -34,6 +35,7 @@ Count<DispatchT, LockPolicyT, AllocatorT>::Count(const size_type n_before,
   n_before_{n_before},
   m_after_{m_after}
 {
+  validate();
 }
 
 
@@ -76,6 +78,16 @@ State Count<DispatchT, LockPolicyT, AllocatorT>::capture_follower_impl(OutputDis
 template<typename DispatchT, typename LockPolicyT, typename AllocatorT>
 void Count<DispatchT, LockPolicyT, AllocatorT>::abort_follower_impl(const stamp_type& t_abort)
 {
+}
+
+
+template<typename DispatchT, typename LockPolicyT, typename AllocatorT>
+inline void Count<DispatchT, LockPolicyT, AllocatorT>::validate() const
+{
+  if (m_after_ < 1)
+  {
+    throw std::invalid_argument{"m_after_ must be > 0; m_after_ == 0 could cause for non-deterministic synchronization"};
+  }
 }
 
 }  // namespace follower

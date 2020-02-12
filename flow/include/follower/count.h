@@ -42,18 +42,24 @@ public:
 
   /**
    * @brief Setup constructor
+   *
    * @param n_before  number of elements before target time to capture
    * @param m_after  number of elements before target time to capture
+   *
+   * @throw <code>std::invalid_argument</code> if <code>m_after < 1</code>
    */
-  Count(const size_type n_before, const size_type m_after);
+  Count(const size_type n_before, const size_type m_after) noexcept(false);
 
   /**
    * @brief Setup constructor
+   *
    * @param n_before  number of elements before target time to capture
    * @param m_after  number of elements before target time to capture
    * @param alloc  dispatch object allocator with some initial state
+   *
+   * @throw <code>std::invalid_argument</code> if <code>m_after < 1</code>
    */
-  Count(const size_type n_before, const size_type m_after, const AllocatorT& alloc);
+  Count(const size_type n_before, const size_type m_after, const AllocatorT& alloc) noexcept(false);
 
 private:
   using PolicyType = Follower<Count<DispatchT, LockPolicyT, AllocatorT>>;
@@ -84,6 +90,11 @@ private:
    * @brief Defines Captor reset behavior
    */
   inline void reset_follower_impl() noexcept(true) {}
+
+  /**
+   * @brief Validates captor configuration
+   */
+  inline void validate() const noexcept(false);
 
   /// Number of message before target to accept before ready
   size_type n_before_;
