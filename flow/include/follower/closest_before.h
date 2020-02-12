@@ -19,7 +19,7 @@ namespace follower
  * @brief Captures next closest data element based on a known input rate
  *
  *        This capture buffer will search for data whose sequencing stamp is closest
- *        to the driving stamp (<code>range.upper_stamp</code>) which also occured before the
+ *        to the driving stamp (<code>range.upper_stamp</code>) which also occurred before the
  *        upper driving stamp.
  * \n
  *        If elements are available, but it is likely that incoming element will
@@ -36,6 +36,11 @@ namespace follower
  * @tparam DispatchT  data dispatch type
  * @tparam LockPolicyT  a BasicLockable (https://en.cppreference.com/w/cpp/named_req/BasicLockable) object or NoLock
  * @tparam AllocatorT  <code>DispatchT</code> allocator type
+ *
+ * @warn ClosestBefore will behave non-deterministically if actual input period (difference between successive
+ *       dispatch stamps) does not match the <code>period</code> argument specified on construction. For example,
+ *       if <code>period</code> is too large, than multiple inputs could appear before the driving range, causing
+ *       for different data on two or more iterations where the "latest" data was assumed to have been the same
  */
 template<typename DispatchT,
          typename LockPolicyT = NoLock,
@@ -51,6 +56,7 @@ public:
 
   /**
    * @brief Setup constructor
+   *
    * @param period  expected period between successive data element
    * @param delay  the delay with which to capture
    */
@@ -58,6 +64,7 @@ public:
 
   /**
    * @brief Setup constructor
+   *
    * @param period  expected half-period between successive data elements
    * @param delay  the delay with which to capture
    * @param alloc  dispatch object allocator with some initial state
@@ -74,7 +81,7 @@ private:
    * @param[out] output  output data iterator
    * @param[in] range  data capture/sequencing range
    *
-   * @retval ABORT   If next closest element hase sequencing stamp greater than <code>range.upper_stamp</code>
+   * @retval ABORT   If next closest element has a sequencing stamp greater than <code>range.upper_stamp</code>
    * @retval PRIMED  If next closest element to is available
    * @retval RETRY   Element with sequence stamp greater than <code>range.upper_stamp</code> exists, and
    *                 there is a data element within the expected duration window before
