@@ -1,5 +1,5 @@
 /**
- * @copyright 2019 Fetch Robotics Inc.
+ * @copyright 2020 Fetch Robotics Inc.
  * @author Brian Cairl
  *
  * @file followers.h
@@ -13,6 +13,7 @@
 #include <flow/follower/count.h>
 #include <flow/follower/closest_before.h>
 #include <flow/follower/exact.h>
+#include <flow/follower/latched.h>
 
 namespace flow
 {

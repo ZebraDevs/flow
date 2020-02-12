@@ -31,3 +31,11 @@ flow_cc_gtest(
     deps=["//flow:flow"],
     timeout="short",
 )
+
+
+flow_cc_gtest(
+    name="latched",
+    srcs=["latched.cpp"],
+    deps=["//flow:flow"],
+    timeout="short",
+)
