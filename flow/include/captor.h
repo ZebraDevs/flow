@@ -222,6 +222,10 @@ public:
     return derived()->capture_impl(output, std::forward<CaptureRangeT>(range), timeout);
   }
 
+
+  // Sanity check to ensure that DispatchType is copyable
+  static_assert(std::is_copy_constructible<DispatchType>(), "'DispatchType' must be a copyable type");
+
 protected:
   /// Data dispatch queue
   DispatchQueue<DispatchType, DispatchAllocatorType> queue_;
