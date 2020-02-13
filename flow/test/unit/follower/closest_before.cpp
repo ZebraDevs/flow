@@ -156,7 +156,7 @@ TEST_F(FollowerClosestBefore, PrimedOnInitialLoopBackCapture)
   this->setLoopBackMode(true);
 
   ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
-  ASSERT_EQ(this->size(), 0UL);
+  ASSERT_EQ(this->size(), static_cast<std::size_t>(10 - PERIOD));
 }
 
 #endif  // DOXYGEN_SKIP
