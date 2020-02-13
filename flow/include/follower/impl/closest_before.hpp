@@ -73,7 +73,7 @@ State ClosestBefore<DispatchT, LockPolicyT, AllocatorT>::capture_follower_impl(O
       *(output++) = *curr_qitr;
 
       // Remove all elements before delayed boundary
-      PolicyType::queue_.remove_before(boundary);
+      PolicyType::queue_.remove_before(boundary - period_);
       return State::PRIMED;
     }
     else
@@ -88,7 +88,7 @@ State ClosestBefore<DispatchT, LockPolicyT, AllocatorT>::capture_follower_impl(O
 template<typename DispatchT, typename LockPolicyT, typename AllocatorT>
 void ClosestBefore<DispatchT, LockPolicyT, AllocatorT>::abort_follower_impl(const stamp_type& t_abort)
 {
-  // don't remove anything abort
+  PolicyType::queue_.remove_before(t_abort - delay_ - period_);
 }
 
 }  // namespace follower
