@@ -48,10 +48,10 @@ State ClosestBefore<DispatchT, LockPolicyT, AllocatorT>::capture_follower_impl(O
   }
 
   // The boundary before which messages are valid and after which they are not. Non-inclusive.
-  const stamp_type boundary = range.upper_stamp - delay_;
+  const stamp_type boundary = range.lower_stamp - delay_;
 
   // Retry if priming is not possible
-  if (PolicyType::queue_.oldest_stamp() > boundary + period_)
+  if (PolicyType::queue_.oldest_stamp() > boundary)
   {
     return State::ABORT;
   }
@@ -62,22 +62,26 @@ State ClosestBefore<DispatchT, LockPolicyT, AllocatorT>::capture_follower_impl(O
   auto curr_qitr = PolicyType::queue_.rbegin();
   while (curr_qitr != PolicyType::queue_.rend())
   {
-    const auto prev_qitr = std::next(curr_qitr);
-    if (((prev_qitr != PolicyType::queue_.rend()) and (prev_qitr->stamp() < boundary) and (curr_qitr->stamp() >= boundary)) or
-        ((curr_qitr->stamp() < boundary) and (curr_qitr->stamp() + period_ >= boundary)))
+    if (curr_qitr->stamp() >= boundary)
     {
+      ++curr_qitr;
+      continue;
+    }
+    else if (curr_qitr->stamp() < boundary and curr_qitr->stamp() + period_ >= boundary)
+    {
+      // Get element
       *(output++) = *curr_qitr;
-      break;
+
+      // Remove all elements before delayed boundary
+      PolicyType::queue_.remove_before(boundary);
+      return State::PRIMED;
     }
     else
     {
       ++curr_qitr;
     }
   }
-
-  // Remove all elements before delayed boundary
-  PolicyType::queue_.remove_before(boundary);
-  return State::PRIMED;
+  return State::RETRY;
 }
 
 

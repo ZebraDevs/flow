@@ -117,7 +117,7 @@ TEST_F(SynchronizerTestSuite, CanPrime)
 
   driver->inject(Dispatch<int, int>{10, 10});
   follower1->inject(Dispatch<int, double>{0, 2.0});
-  follower1->inject(Dispatch<int, double>{10, 2.0});
+  follower1->inject(Dispatch<int, double>{9, 2.0});
   follower2->inject(Dispatch<int, std::string>{20, "ok"});
 
   std::vector<Dispatch<int, int>> driver_output_data;

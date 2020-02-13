@@ -62,7 +62,7 @@ TEST_F(FollowerClosestBefore, PrimedAtDataBoundary)
   std::vector<Dispatch<int, int>> data;
   CaptureRange<int> t_range{t_target, t_target};
   ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
-  ASSERT_EQ(data.back().data(), t_target - DELAY);
+  ASSERT_EQ(data.back().data(), t_target - DELAY - 1);
 }
 
 
@@ -91,7 +91,7 @@ TEST_F(FollowerClosestBefore, PrimedAtDataBoundaryFilledPast)
   std::vector<Dispatch<int, int>> data;
   CaptureRange<int> t_range{t_target, t_target};
   ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
-  ASSERT_EQ(data.back().data(), t_target - DELAY);
+  ASSERT_EQ(data.back().data(), t_target - DELAY - 1);
 }
 
 
@@ -112,7 +112,7 @@ TEST_F(FollowerClosestBefore, PrimedClosestBeforeDataBeforePeriod)
   std::vector<Dispatch<int, int>> data;
   CaptureRange<int> t_range{t_target, t_target};
   ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
-  ASSERT_EQ(data.back().data(), t - DELAY);
+  ASSERT_EQ(data.back().data(), t - DELAY - 1);
 }
 
 
