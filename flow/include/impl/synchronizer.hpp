@@ -69,25 +69,14 @@ public:
   template<typename PolicyT, typename OutputIteratorT>
   inline void operator()(Driver<PolicyT>& c, OutputIteratorT output)
   {
-    // Get capture range alias
-    CaptureRange<StampT>& range = result_->range;
-
     // Get capture state
-    State state = c.capture(output, range, timeout_);
+    result_->state = c.capture(output, result_->range, timeout_);
 
     // Set aborted state if driving sequence range violates monotonicity guard
-    if (range.upper_stamp < t_latest_)
+    if (result_->range.upper_stamp < t_latest_)
     {
-      state = State::ABORT;
+      result_->state = State::ABORT;
     }
-
-    // Run abort behavior when abort state set
-    if (state == State::ABORT)
-    {
-      c.abort(range.lower_stamp);
-    }
-
-    result_->state = state;
   }
 
   /// Abort caller for follower captors
@@ -95,23 +84,9 @@ public:
   inline void operator()(Follower<PolicyT>& c, OutputIteratorT output)
   {
     // Get capture state alias
-    State& state = result_->state;
-    if (state == State::RETRY)
+    if (result_->state == State::PRIMED)
     {
-      return;
-    }
-
-    // Get capture range alias
-    const CaptureRange<StampT>& range = result_->range;
-
-    if (state == State::ABORT)
-    {
-      // Release waits
-      c.abort(range.lower_stamp);
-    }
-    else
-    {
-      state = c.capture(output, range, timeout_);
+      result_->state = c.capture(output, result_->range, timeout_);
     }
   }
 
