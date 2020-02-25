@@ -21,11 +21,12 @@ using namespace flow::follower;
 
 struct FollowerCount : ::testing::Test, Count<Dispatch<int, int>, NoLock>
 {
+  static constexpr int DELAY = 0;
   static constexpr size_type N_BEFORE = 5;
   static constexpr size_type M_AFTER = 3;
 
-FollowerCount() :
-    Count<Dispatch<int, int>, NoLock>{N_BEFORE, M_AFTER}
+  FollowerCount() :
+    Count<Dispatch<int, int>, NoLock>{DELAY, N_BEFORE, M_AFTER}
   {}
 
   void SetUp() final

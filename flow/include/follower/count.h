@@ -40,15 +40,19 @@ public:
   /// Integer size type
   using size_type = typename CaptorTraits<Count>::size_type;
 
+  /// Data stamp duration type
+  using offset_type = typename CaptorTraits<Count>::offset_type;
+
   /**
    * @brief Setup constructor
    *
+   * @param delay  the delay with which to capture
    * @param n_before  number of elements before target time to capture
    * @param m_after  number of elements before target time to capture
    *
    * @throw <code>std::invalid_argument</code> if <code>m_after < 1</code>
    */
-  Count(const size_type n_before, const size_type m_after) noexcept(false);
+  Count(const offset_type& delay, const size_type n_before, const size_type m_after) noexcept(false);
 
   /**
    * @brief Setup constructor
@@ -59,7 +63,7 @@ public:
    *
    * @throw <code>std::invalid_argument</code> if <code>m_after < 1</code>
    */
-  Count(const size_type n_before, const size_type m_after, const AllocatorT& alloc) noexcept(false);
+  Count(const offset_type& delay, const size_type n_before, const size_type m_after, const AllocatorT& alloc) noexcept(false);
 
 private:
   using PolicyType = Follower<Count<DispatchT, LockPolicyT, AllocatorT>>;
@@ -95,6 +99,9 @@ private:
    * @brief Validates captor configuration
    */
   inline void validate() const noexcept(false);
+
+  /// Capture delay
+  offset_type delay_;
 
   /// Number of message before target to accept before ready
   size_type n_before_;

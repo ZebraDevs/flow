@@ -17,9 +17,11 @@ namespace follower
 {
 
 template<typename DispatchT, typename LockPolicyT, typename AllocatorT>
-Count<DispatchT, LockPolicyT, AllocatorT>::Count(const size_type n_before,
+Count<DispatchT, LockPolicyT, AllocatorT>::Count(const offset_type& delay,
+                                                 const size_type n_before,
                                                  const size_type m_after) :
   PolicyType{},
+  delay_{delay},
   n_before_{n_before},
   m_after_{m_after}
 {
@@ -28,10 +30,12 @@ Count<DispatchT, LockPolicyT, AllocatorT>::Count(const size_type n_before,
 
 
 template<typename DispatchT, typename LockPolicyT, typename AllocatorT>
-Count<DispatchT, LockPolicyT, AllocatorT>::Count(const size_type n_before,
+Count<DispatchT, LockPolicyT, AllocatorT>::Count(const offset_type& delay,
+                                                 const size_type n_before,
                                                  const size_type m_after,
                                                  const AllocatorT& alloc) :
   PolicyType{alloc},
+  delay_{delay},
   n_before_{n_before},
   m_after_{m_after}
 {
@@ -50,9 +54,15 @@ State Count<DispatchT, LockPolicyT, AllocatorT>::capture_follower_impl(OutputDis
     return State::RETRY;
   }
 
+  // Range subject to delay offset
+  const CaptureRange<stamp_type> offset_range{
+    range.lower_stamp - delay_,
+    range.upper_stamp - delay_
+  };
+
   // Find messages around sequence stamp targets
   const auto counts = PolicyType::queue_.capture_around(output,
-                                                        range,
+                                                        offset_range,
                                                         n_before_,
                                                         m_after_);
   if (std::get<0>(counts) < n_before_)
