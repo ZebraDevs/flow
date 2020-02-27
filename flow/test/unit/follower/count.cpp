@@ -21,7 +21,7 @@ using namespace flow::follower;
 
 struct FollowerCount : ::testing::Test, Count<Dispatch<int, int>, NoLock>
 {
-  static constexpr int DELAY = 0;
+  static constexpr int DELAY = 2;
   static constexpr size_type N_BEFORE = 5;
   static constexpr size_type M_AFTER = 3;
 
@@ -54,7 +54,7 @@ TEST_F(FollowerCount, AbortOnTooFewBefore)
   size_type N = N_BEFORE / 2;
   while (N--)
   {
-    this->inject(Dispatch<int, int>{t, 1});
+    this->inject(Dispatch<int, int>{t-DELAY, 1});
     t += 1;
   }
 
@@ -65,7 +65,7 @@ TEST_F(FollowerCount, AbortOnTooFewBefore)
   size_type M = M_AFTER;
   while (M--)
   {
-    this->inject(Dispatch<int, int>{t, 1});
+    this->inject(Dispatch<int, int>{t-DELAY, 1});
     t += 1;
   }
 
@@ -83,7 +83,7 @@ TEST_F(FollowerCount, RetryOnTooFewAfter)
   size_type N = N_BEFORE;
   while (N--)
   {
-    this->inject(Dispatch<int, int>{t, 1});
+    this->inject(Dispatch<int, int>{t-DELAY, 1});
     t += 1;
   }
 
@@ -94,7 +94,7 @@ TEST_F(FollowerCount, RetryOnTooFewAfter)
   size_type M = M_AFTER / 2;
   while (M--)
   {
-    this->inject(Dispatch<int, int>{t, 1});
+    this->inject(Dispatch<int, int>{t-DELAY, 1});
     t += 1;
   }
 
@@ -112,7 +112,7 @@ TEST_F(FollowerCount, ReadyOnExactCounts)
   size_type N = N_BEFORE;
   while (N--)
   {
-    this->inject(Dispatch<int, int>{t, 1});
+    this->inject(Dispatch<int, int>{t-DELAY, 1});
     t += 1;
   }
 
@@ -123,7 +123,7 @@ TEST_F(FollowerCount, ReadyOnExactCounts)
   size_type M = M_AFTER;
   while (M--)
   {
-    this->inject(Dispatch<int, int>{t, 1});
+    this->inject(Dispatch<int, int>{t-DELAY, 1});
     t += 1;
   }
 
@@ -131,6 +131,36 @@ TEST_F(FollowerCount, ReadyOnExactCounts)
   CaptureRange<int> t_range{t_target, t_target};
   ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
   ASSERT_EQ(data.size(), N_BEFORE + M_AFTER);
+}
+
+
+TEST_F(FollowerCount, ReadyOnRangedTarget)
+{
+  int t = 0;
+
+  // Inject messages before t_target
+  size_type N = N_BEFORE;
+  while (N--)
+  {
+    this->inject(Dispatch<int, int>{t-DELAY, 1});
+    t += 1;
+  }
+
+  // Stamp between messages
+  const int t_target = t;
+
+  // Inject messages after t_target
+  size_type M = 2 * M_AFTER;
+  while (M--)
+  {
+    this->inject(Dispatch<int, int>{t-DELAY, 1});
+    t += 1;
+  }
+
+  std::vector<Dispatch<int, int>> data;
+  CaptureRange<int> t_range{t_target, t_target+3};
+  ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
+  ASSERT_EQ(data.size(), N_BEFORE + M_AFTER + 3);
 }
 
 
@@ -142,7 +172,7 @@ TEST_F(FollowerCount, ReadyOnExcessCounts)
   size_type N = 2 * N_BEFORE;
   while (N--)
   {
-    this->inject(Dispatch<int, int>{t, 1});
+    this->inject(Dispatch<int, int>{t-DELAY, 1});
     t += 1;
   }
 
@@ -153,7 +183,7 @@ TEST_F(FollowerCount, ReadyOnExcessCounts)
   size_type M = 2 * M_AFTER;
   while (M--)
   {
-    this->inject(Dispatch<int, int>{t, 1});
+    this->inject(Dispatch<int, int>{t-DELAY, 1});
     t += 1;
   }
 
@@ -174,7 +204,7 @@ TEST_F(FollowerCount, PrimedOnInitialLoopBackCapture)
   size_type N = N_BEFORE;
   while (N--)
   {
-    this->inject(Dispatch<int, int>{t, 1});
+    this->inject(Dispatch<int, int>{t-DELAY, 1});
     t += 1;
   }
 
@@ -195,7 +225,7 @@ TEST_F(FollowerCount, PrimedOnInitialLoopBackCapture)
   size_type M = M_AFTER;
   while (M--)
   {
-    this->inject(Dispatch<int, int>{t, 1});
+    this->inject(Dispatch<int, int>{t-DELAY, 1});
     t += 1;
   }
   ASSERT_EQ(this->size(), N_BEFORE + M_AFTER);
