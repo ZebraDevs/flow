@@ -7,6 +7,9 @@
 #ifndef FLOW_FOLLOWER_IMPL_FOLLOWER_HPP
 #define FLOW_FOLLOWER_IMPL_FOLLOWER_HPP
 
+// C++ Standard Library
+#include <utility>
+
 // Flow
 #include <flow/captor_state.h>
 
@@ -39,11 +42,11 @@ void Follower<PolicyT>::setLoopBackMode(bool enabled)
 
 template<typename PolicyT>
 template<typename OutputDispatchIteratorT>
-State Follower<PolicyT>::capture_policy_impl(OutputDispatchIteratorT output,
+State Follower<PolicyT>::capture_policy_impl(OutputDispatchIteratorT&& output,
                                              const CaptureRange<stamp_type>& range)
 {
   // Get prime-attempt result
-  const State st = derived()->capture_follower_impl(output, range);
+  const State st = derived()->capture_follower_impl(std::forward<OutputDispatchIteratorT>(output), range);
 
   // Update loop-back initialization flag
   loopback_primed_ = loopback_primed_ or st == State::PRIMED;

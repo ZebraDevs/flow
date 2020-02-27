@@ -95,7 +95,7 @@ Captor<CaptorT, LockableT>::get_capacity_impl() const
 
 template<typename CaptorT, typename LockableT>
 template<typename OutputDispatchIteratorT, typename CaptureRangeT>
-State Captor<CaptorT, LockableT>::capture_impl(const OutputDispatchIteratorT output,
+State Captor<CaptorT, LockableT>::capture_impl(OutputDispatchIteratorT&& output,
                                                CaptureRangeT&& range,
                                                const std::chrono::system_clock::time_point timeout)
 {
@@ -104,7 +104,8 @@ State Captor<CaptorT, LockableT>::capture_impl(const OutputDispatchIteratorT out
   // Wait for data and attempt capture when data is available
   while (true)
   {
-    const State state = derived()->capture_policy_impl(output, std::forward<CaptureRangeT>(range));
+    const State state = derived()->capture_policy_impl(std::forward<OutputDispatchIteratorT>(output),
+                                                       std::forward<CaptureRangeT>(range));
 
     if (state != State::RETRY)
     {

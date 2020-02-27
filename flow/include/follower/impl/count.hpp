@@ -10,6 +10,7 @@
 // C++ Standard Library
 #include <iterator>
 #include <stdexcept>
+#include <utility>
 
 namespace flow
 {
@@ -45,7 +46,7 @@ Count<DispatchT, LockPolicyT, AllocatorT>::Count(const offset_type& delay,
 
 template<typename DispatchT, typename LockPolicyT, typename AllocatorT>
 template<typename OutputDispatchIteratorT>
-State Count<DispatchT, LockPolicyT, AllocatorT>::capture_follower_impl(OutputDispatchIteratorT output,
+State Count<DispatchT, LockPolicyT, AllocatorT>::capture_follower_impl(OutputDispatchIteratorT&& output,
                                                                        const CaptureRange<stamp_type>& range)
 {
   if (PolicyType::queue_.empty())
@@ -61,7 +62,7 @@ State Count<DispatchT, LockPolicyT, AllocatorT>::capture_follower_impl(OutputDis
   };
 
   // Find messages around sequence stamp targets
-  const auto counts = PolicyType::queue_.capture_around(output,
+  const auto counts = PolicyType::queue_.capture_around(std::forward<OutputDispatchIteratorT>(output),
                                                         offset_range,
                                                         n_before_,
                                                         m_after_);

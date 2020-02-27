@@ -7,6 +7,9 @@
 #ifndef FLOW_DRIVER_IMPL_DRIVER_HPP
 #define FLOW_DRIVER_IMPL_DRIVER_HPP
 
+// C++ Standard Library
+#include <utility>
+
 // Flow
 #include <flow/captor_state.h>
 
@@ -27,9 +30,9 @@ Driver<PolicyT>::Driver(const DispatchAllocatorType& alloc) :
 
 template<typename PolicyT>
 template<typename OutputDispatchIteratorT>
-State Driver<PolicyT>::capture_policy_impl(OutputDispatchIteratorT output, CaptureRange<stamp_type>& range)
+State Driver<PolicyT>::capture_policy_impl(OutputDispatchIteratorT&& output, CaptureRange<stamp_type>& range)
 {
-  return derived()->capture_driver_impl(output, range);
+  return derived()->capture_driver_impl(std::forward<OutputDispatchIteratorT>(output), range);
 }
 
 

@@ -70,7 +70,7 @@ private:
    * @retval State::RETRY  Captor should continue waiting for messages after prime attempt
    */
   template<typename OutputDispatchIteratorT>
-  inline State capture_policy_impl(OutputDispatchIteratorT output, CaptureRange<stamp_type>& range);
+  inline State capture_policy_impl(OutputDispatchIteratorT&& output, CaptureRange<stamp_type>& range);
 
   /**
    * @brief Defines Captor behavior on <code>ABORT</code>

@@ -82,7 +82,7 @@ private:
    *                 M-elements do not exist after <code>range.upper_stamp</code>
    */
   template<typename OutputDispatchIteratorT>
-  inline State capture_follower_impl(OutputDispatchIteratorT output, const CaptureRange<stamp_type>& range);
+  inline State capture_follower_impl(OutputDispatchIteratorT&& output, const CaptureRange<stamp_type>& range);
 
   /**
    * @brief Defines behavior on <code>ABORT</code>
