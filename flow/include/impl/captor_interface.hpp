@@ -12,6 +12,7 @@
 #include <memory>
 #include <mutex>
 #include <type_traits>
+#include <utility>
 
 namespace flow
 {
@@ -27,6 +28,18 @@ CaptorInterface<CaptorT>::CaptorInterface(const size_type capacity, const Dispat
   capacity_{capacity},
   queue_{alloc}
 {}
+
+
+template<typename CaptorT>
+template<typename... InsertArgTs>
+void CaptorInterface<CaptorT>::insert_and_limit(InsertArgTs&&... args)
+{
+  queue_.insert(std::forward<InsertArgTs>(args)...);
+  if (capacity_)
+  {
+    queue_.shrink_to_fit(capacity_);
+  }
+}
 
 
 namespace detail

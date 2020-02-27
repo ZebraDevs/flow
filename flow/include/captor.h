@@ -227,6 +227,16 @@ public:
   static_assert(std::is_copy_constructible<DispatchType>(), "'DispatchType' must be a copyable type");
 
 protected:
+  /**
+   * @brief Inserts data into queue and limit queue size to capacity, if applicable
+   *
+   * @param args  args forward to <code>DispatchQueue::insert</code>
+   *
+   * @return capture directive code
+   */
+  template<typename... InsertArgTs>
+  inline void insert_and_limit(InsertArgTs&&... args);
+
   /// Data dispatch queue
   DispatchQueue<DispatchType, DispatchAllocatorType> queue_;
 

@@ -67,7 +67,7 @@ void Captor<CaptorT, LockableT>::inject_impl(const DispatchType& dispatch)
   {
     // Insert new data
     LockableT lock{capture_mutex_};
-    CaptorInterfaceType::queue_.insert(dispatch);
+    CaptorInterfaceType::insert_and_limit(dispatch);
   }
 
   // Notify that new data has arrived

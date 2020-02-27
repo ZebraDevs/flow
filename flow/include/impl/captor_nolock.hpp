@@ -90,7 +90,7 @@ private:
    */
   inline void inject_impl(const DispatchType& dispatch)
   {
-    CaptorInterfaceType::queue_.insert(dispatch);
+    CaptorInterfaceType::insert_and_limit(dispatch);
   }
 
   /**
