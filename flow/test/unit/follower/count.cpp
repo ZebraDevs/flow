@@ -34,6 +34,7 @@ struct FollowerCount : ::testing::Test, Count<Dispatch<int, int>, NoLock>
     this->reset();
   }
 };
+constexpr int FollowerCount::DELAY;
 constexpr FollowerCount::size_type FollowerCount::N_BEFORE;
 constexpr FollowerCount::size_type FollowerCount::M_AFTER;
 
@@ -252,6 +253,7 @@ struct FollowerCountZeroDelay : ::testing::Test, Count<Dispatch<int, int>, NoLoc
     this->reset();
   }
 };
+constexpr int FollowerCountZeroDelay::DELAY;
 constexpr FollowerCountZeroDelay::size_type FollowerCountZeroDelay::N_BEFORE;
 constexpr FollowerCountZeroDelay::size_type FollowerCountZeroDelay::M_AFTER;
 
