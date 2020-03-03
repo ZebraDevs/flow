@@ -10,8 +10,6 @@
 
 // C++ Standard Library
 #include <deque>
-#include <memory>
-#include <tuple>
 #include <utility>
 
 // Flow
@@ -168,40 +166,28 @@ public:
   inline void insert(DispatchConstructorArgTs&&... dispatch_args);
 
   /**
-   * @brief Returns N-elements before and M-elements after a targeted sequence stamp
+   * @brief Find iterator of element with sequence stamp which is less than or equal to <code>stamp</code>
    *
-   * @tparam OutputDispatchIteratorT  (deduced) output iterator type
+   * @param stamp  limiting sequencing stamp value
+   * @param start  search start iterator
    *
-   * @param[out] output  output data container
-   * @param range  capture sequencing range specifications
-   * @param n_before  number of messages before <code>t_begin</code> to collect
-   * @param m_after  number of messages after <code>t_end</code> to collect
-   *
-   * @return tuple with number of elements before and number of elements after
-   *         target sequencing stamps. <code>output</code> should be regarded as invalid
-   *         on any return value were <code>retval.first < n_before</code> or
-   *         <code>retval.second < m_after</code>
+   * @revtal iterator  one element before OR at <code>stamp</code>
+   * @revtal end()     if iterator could not be found
    */
-  template<typename OutputDispatchIteratorT>
-  inline std::tuple<size_type, size_type, stamp_type> capture_around(OutputDispatchIteratorT output,
-                                                                     const CaptureRange<stamp_type>& range,
-                                                                     size_type n_before,
-                                                                     size_type m_after) const;
+  inline const_iterator seek_before(const stamp_type& stamp, const_iterator start) const;
+
+  /**
+   * @brief Find iterator of element with sequence stamp which is greater than <code>stamp</code>
+   *
+   * @param stamp  limiting sequencing stamp value
+   * @param start  search start iterator
+   *
+   * @revtal iterator  one element strictly after <code>stamp</code>
+   * @revtal end()     if iterator could not be found
+   */
+  inline const_iterator seek_after(const stamp_type& stamp, const_iterator start) const;
 
 private:
-  /**
-   * @brief Scrolls an iterator according to target sequence stamp
-   *
-   *        The position of the iterator is that which corresponds to the first
-   *        element whose associated sequence stamp-stamp is greater than <code>target</code>
-   *
-   * @param[in,out] itr  iterator to scroll
-   * @param target  target sequencing stamp
-   * @return number of elements iterator was advanced
-   */
-  template<typename IteratorType>
-  inline size_type advance(IteratorType& itr, const stamp_type& target) const;
-
   /// Queued data dispatches
   BaseContainerType queue_;
 };

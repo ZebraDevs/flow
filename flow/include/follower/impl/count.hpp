@@ -8,6 +8,7 @@
 #define FLOW_FOLLOWER_IMPL_COUNT_HPP
 
 // C++ Standard Library
+#include <algorithm>
 #include <iterator>
 #include <stdexcept>
 #include <utility>
@@ -55,34 +56,54 @@ State Count<DispatchT, LockPolicyT, AllocatorT>::capture_follower_impl(OutputDis
     return State::RETRY;
   }
 
-  // Range subject to delay offset
-  const CaptureRange<stamp_type> offset_range{
-    range.lower_stamp - delay_,
-    range.upper_stamp - delay_
-  };
+  // Find initial start position iterator
+  auto first = PolicyType::queue_.seek_before(range.lower_stamp - delay_, PolicyType::queue_.begin());
 
-  // Find messages around sequence stamp targets
-  const auto counts = PolicyType::queue_.capture_around(std::forward<OutputDispatchIteratorT>(output),
-                                                        offset_range,
-                                                        n_before_,
-                                                        m_after_);
-  if (std::get<0>(counts) < n_before_)
+  // Abort if there are no messages before
+  if (first == PolicyType::queue_.end())
   {
-    // Abort if there are no messages before
     return State::ABORT;
   }
-  else if (std::get<1>(counts) < m_after_)
+
+  // Step first iterator backwards by n_before_ (first will always start 1 before range)
   {
-    // Wait for messages after target sequence stamp range
-    return State::RETRY;
+    size_type remaining = n_before_;
+    while (remaining and first != PolicyType::queue_.begin())
+    {
+      --first;
+      --remaining;
+    }
+
+    // Must abort if could not rewind far enough
+    if (remaining)
+    {
+      return State::ABORT;
+    }
   }
-  else if (std::get<1>(counts) >= m_after_)
+
+  // Find initial end position iterator
+  auto last = PolicyType::queue_.seek_after(range.upper_stamp - delay_, first);
+
+  // Step last iterator forward by m_after_ - 1  (m_after_ > 0, always)
   {
-    // Capture when enough data is available
-    PolicyType::queue_.remove_before(std::get<2>(counts));
-    return State::PRIMED;
+    size_type remaining = m_after_ - 1;
+    while (remaining and last != PolicyType::queue_.end())
+    {
+      ++last;
+      --remaining;
+    }
+
+    // Must retry if could not increment far enough
+    if (remaining)
+    {
+      return State::RETRY;
+    }
   }
-  return State::RETRY;
+
+  // Copy captured data over range
+  std::copy(first, last, output);
+
+  return State::PRIMED;
 }
 
 

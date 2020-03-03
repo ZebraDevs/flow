@@ -4,9 +4,6 @@
  */
 #ifndef DOXYGEN_SKIP
 
-// C++ Standard Library
-#include <vector>
-
 // GTest
 #include <gtest/gtest.h>
 
@@ -251,124 +248,166 @@ TEST(DispatchQueue, InsertUnordered)
 }
 
 
-TEST(DispatchQueue, AroundSingleTimeTooFewBefore)
+TEST(DispatchQueue, SeekBeforeEmpty)
 {
   using DispatchType = Dispatch<int, int>;
 
   DispatchQueue<DispatchType> queue;
 
-  const int t0 = 0;
-  const int t1 = t0 + 1;
-  const int t2 = t1 + 1;
+  ASSERT_EQ(queue.size(), 0u);
 
-  queue.insert(DispatchType{t0, 1});
-  queue.insert(DispatchType{t2, 1});
-  queue.insert(DispatchType{t1, 1});
+  const auto itr = queue.seek_before(0, queue.begin());
 
-  std::vector<DispatchType> elements;
-
-  ASSERT_EQ(queue.size(), 3u);
-
-  const auto counts = queue.capture_around(std::back_inserter(elements),
-                                           CaptureRange<int>{t1, t1},
-                                           2, 1);
-
-  EXPECT_EQ(std::get<0>(counts), 1u);
-  EXPECT_EQ(std::get<1>(counts), 0u);
+  EXPECT_TRUE(itr == queue.end());
 }
 
 
-TEST(DispatchQueue, AroundSingleTimeTooFewAhead)
+TEST(DispatchQueue, SeekBeforeExactSingleEntry)
 {
   using DispatchType = Dispatch<int, int>;
 
   DispatchQueue<DispatchType> queue;
 
-  const int t0 = 1;
-  const int t1 = t0 + 1;
-  const int t2 = t1 + 1;
+  queue.insert(DispatchType{1, 1});
 
-  queue.insert(DispatchType{t0, 1});
-  queue.insert(DispatchType{t2, 1});
-  queue.insert(DispatchType{t1, 1});
+  ASSERT_EQ(queue.size(), 1u);
 
-  std::vector<DispatchType> elements;
+  const auto itr = queue.seek_before(1, queue.begin());
 
-  ASSERT_EQ(queue.size(), 3u);
-
-  const auto counts = queue.capture_around(std::back_inserter(elements),
-                                           CaptureRange<int>{t2, t2},
-                                           1, 2);
-
-  EXPECT_EQ(std::get<0>(counts), 2u);
-  EXPECT_EQ(std::get<1>(counts), 1u);
+  EXPECT_TRUE(itr == queue.begin());
 }
 
 
-TEST(DispatchQueue, AroundSingleTimeExact)
+TEST(DispatchQueue, SeekBeforeInexactSingleEntry)
 {
   using DispatchType = Dispatch<int, int>;
 
   DispatchQueue<DispatchType> queue;
 
-  const int t0 = 0;
-  const int t1 = t0 + 1;
-  const int t2 = t1 + 1;
+  queue.insert(DispatchType{0, 1});
 
-  queue.insert(DispatchType{t0, 1});
-  queue.insert(DispatchType{t2, 1});
-  queue.insert(DispatchType{t1, 1});
+  ASSERT_EQ(queue.size(), 1u);
 
-  std::vector<DispatchType> elements;
+  const auto itr = queue.seek_before(1, queue.begin());
 
-  ASSERT_EQ(queue.size(), 3u);
-
-  const auto counts = queue.capture_around(std::back_inserter(elements),
-                                           CaptureRange<int>{t1, t1},
-                                           1, 2);
-
-  EXPECT_EQ(std::get<0>(counts), 1u);
-  EXPECT_EQ(std::get<1>(counts), 2u);
-
-  ASSERT_EQ(elements.size(), 3u);
-  EXPECT_LT(elements[0].stamp(), elements[1].stamp());
+  EXPECT_TRUE(itr == queue.begin());
 }
 
 
-TEST(DispatchQueue, AroundTimeRangeExact)
+
+TEST(DispatchQueue, SeekBeforeExactMultiEntry)
 {
   using DispatchType = Dispatch<int, int>;
 
   DispatchQueue<DispatchType> queue;
 
-  const int t0 = 0;
-  const int t1 = t0 + 1;
-  const int t2 = t1 + 1;
-  const int t3 = t2 + 1;
-  const int t4 = t3 + 1;
+  queue.insert(DispatchType{0, 1});
+  queue.insert(DispatchType{1, 1});
 
-  queue.insert(DispatchType{t0, 1});
-  queue.insert(DispatchType{t1, 1});
-  queue.insert(DispatchType{t2, 1});
-  queue.insert(DispatchType{t3, 1});
-  queue.insert(DispatchType{t4, 1});
+  ASSERT_EQ(queue.size(), 2u);
 
-  std::vector<DispatchType> elements;
+  const auto itr = queue.seek_before(1, queue.begin());
 
-  ASSERT_EQ(queue.size(), 5u);
-
-  const auto counts = queue.capture_around(std::back_inserter(elements),
-                                           CaptureRange<int>{t1, t3},
-                                           1, 2);
-
-  ASSERT_EQ(std::get<0>(counts), 1u);
-  ASSERT_EQ(std::get<1>(counts), 2u);
-
-  ASSERT_EQ(elements.size(), 5u);
-  for (auto itr = std::next(elements.cbegin()); itr != elements.cend(); ++itr)
-  {
-    EXPECT_LT((*std::prev(itr)).stamp(), (*itr).stamp());
-  }
+  EXPECT_TRUE(itr != queue.begin());
+  EXPECT_TRUE(itr != queue.end());
 }
+
+
+TEST(DispatchQueue, SeekBeforeInexactMultiEntry)
+{
+  using DispatchType = Dispatch<int, int>;
+
+  DispatchQueue<DispatchType> queue;
+
+  queue.insert(DispatchType{0, 1});
+  queue.insert(DispatchType{1, 1});
+
+  ASSERT_EQ(queue.size(), 2u);
+
+  const auto itr = queue.seek_before(2, queue.begin());
+
+  EXPECT_TRUE(std::next(itr) == queue.end());
+}
+
+
+TEST(DispatchQueue, SeekAfterEmpty)
+{
+  using DispatchType = Dispatch<int, int>;
+
+  DispatchQueue<DispatchType> queue;
+
+  ASSERT_EQ(queue.size(), 0u);
+
+  const auto itr = queue.seek_after(0, queue.begin());
+
+  EXPECT_TRUE(itr == queue.end());
+}
+
+
+TEST(DispatchQueue, SeekAfterExactSingleEntry)
+{
+  using DispatchType = Dispatch<int, int>;
+
+  DispatchQueue<DispatchType> queue;
+
+  queue.insert(DispatchType{0, 1});
+
+  ASSERT_EQ(queue.size(), 1u);
+
+  const auto itr = queue.seek_after(0, queue.begin());
+
+  EXPECT_TRUE(itr == queue.end());
+}
+
+
+TEST(DispatchQueue, SeekAfterInexactSingleEntry)
+{
+  using DispatchType = Dispatch<int, int>;
+
+  DispatchQueue<DispatchType> queue;
+
+  queue.insert(DispatchType{1, 1});
+
+  ASSERT_EQ(queue.size(), 1u);
+
+  const auto itr = queue.seek_after(0, queue.begin());
+
+  EXPECT_TRUE(itr == queue.begin());
+}
+
+
+TEST(DispatchQueue, SeekAfterExactMultiEntry)
+{
+  using DispatchType = Dispatch<int, int>;
+
+  DispatchQueue<DispatchType> queue;
+
+  queue.insert(DispatchType{0, 1});
+  queue.insert(DispatchType{1, 1});
+
+  ASSERT_EQ(queue.size(), 2u);
+
+  const auto itr = queue.seek_after(1, queue.begin());
+
+  EXPECT_TRUE(itr == queue.end());
+}
+
+
+TEST(DispatchQueue, SeekAfterInexactMultiEntry)
+{
+  using DispatchType = Dispatch<int, int>;
+
+  DispatchQueue<DispatchType> queue;
+
+  queue.insert(DispatchType{1, 1});
+  queue.insert(DispatchType{2, 1});
+
+  ASSERT_EQ(queue.size(), 2u);
+
+  const auto itr = queue.seek_after(0, queue.begin());
+
+  EXPECT_TRUE(itr == queue.begin());
+}
+
 
 #endif  // DOXYGEN_SKIP

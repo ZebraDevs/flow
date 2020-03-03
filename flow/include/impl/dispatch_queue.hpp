@@ -109,86 +109,35 @@ void DispatchQueue<DispatchT, AllocatorT>::shrink_to_fit(size_type n)
 
 
 template<typename DispatchT, typename AllocatorT>
-template<typename IteratorType>
 typename
-DispatchQueue<DispatchT, AllocatorT>::size_type
-DispatchQueue<DispatchT, AllocatorT>::advance(IteratorType& itr, const stamp_type& target) const
+DispatchQueue<DispatchT, AllocatorT>::const_iterator
+DispatchQueue<DispatchT, AllocatorT>::seek_before(const stamp_type& stamp, const_iterator start) const
 {
-  size_type count_before{0};
-
-  while (itr->stamp() < target)
+  if (start == queue_.end())
   {
-    ++count_before;
-    if (++itr == queue_.cend())
-    {
-      return count_before;
-    }
+    return start;
   }
-  return count_before;
+
+  // Find iterator one before OR exactly at limiting stamp
+  while (start != queue_.end() and start->stamp() <= stamp)
+  {
+    ++start;
+  }
+  return std::prev(start);
 }
 
 
 template<typename DispatchT, typename AllocatorT>
-template<typename OutputDispatchIteratorT>
-std::tuple<typename DispatchQueue<DispatchT, AllocatorT>::size_type,
-           typename DispatchQueue<DispatchT, AllocatorT>::size_type,
-           typename DispatchQueue<DispatchT, AllocatorT>::stamp_type>
-DispatchQueue<DispatchT, AllocatorT>::capture_around(OutputDispatchIteratorT output,
-                                                     const CaptureRange<stamp_type>& range,
-                                                     size_type n_before,
-                                                     size_type m_after) const
+typename
+DispatchQueue<DispatchT, AllocatorT>::const_iterator
+DispatchQueue<DispatchT, AllocatorT>::seek_after(const stamp_type& stamp, const_iterator start) const
 {
-  // Abort when queue is empty
-  if (queue_.empty())
+  // Find iterator one past limiting stamp
+  while (start != queue_.end() and start->stamp() <= stamp)
   {
-    return std::make_tuple(0, 0, StampTraits<stamp_type>::min());
+    ++start;
   }
-
-  // Scroll to first valid data element
-  auto itr = queue_.cbegin();
-  const size_type count_before = advance(itr, range.lower_stamp);
-
-  // Check if there are enough elements available before range.lower_stamp
-  if (n_before > count_before)
-  {
-    return std::make_tuple(count_before, 0, StampTraits<stamp_type>::min());
-  }
-
-  // Rewind
-  itr = std::prev(itr, n_before);
-
-  // Get first stamp
-  const stamp_type first_stamp = itr->stamp();
-
-  // Add elements before range.lower_stamp
-  while (n_before--)
-  {
-    *(output++) = *(itr++);
-  }
-
-  // Add element until range.upper_stamp
-  size_type count_middle{count_before};
-  while (itr != queue_.cend() and
-         itr->stamp() < range.upper_stamp)
-  {
-    *(output++) = *(itr++);
-    ++count_middle;
-  }
-
-  // Check if there are enough elements available after range.upper_stamp
-  const size_type count_after = queue_.size() - count_middle;
-  if (m_after > count_after)
-  {
-    return std::make_tuple(count_before, count_after, first_stamp);
-  }
-
-  // Add element after range.upper_stamp
-  while (m_after--)
-  {
-    *(output++) = *(itr++);
-  }
-
-  return std::make_tuple(count_before, count_after, first_stamp);
+  return start;
 }
 
 }  // namespace flow
