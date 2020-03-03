@@ -62,12 +62,13 @@ void Captor<CaptorT, LockableT>::abort_impl(const stamp_type& t_abort)
 
 
 template<typename CaptorT, typename LockableT>
-void Captor<CaptorT, LockableT>::inject_impl(const DispatchType& dispatch)
+template<typename... DispatchConstructorArgTs>
+void Captor<CaptorT, LockableT>::inject_impl(DispatchConstructorArgTs&&... dispatch_args)
 {
   {
     // Insert new data
     LockableT lock{capture_mutex_};
-    CaptorInterfaceType::insert_and_limit(dispatch);
+    CaptorInterfaceType::insert_and_limit(std::forward<DispatchConstructorArgTs>(dispatch_args)...);
   }
 
   // Notify that new data has arrived
@@ -118,6 +119,19 @@ State Captor<CaptorT, LockableT>::capture_impl(OutputDispatchIteratorT&& output,
     }
   }
   return State::TIMEOUT;
+}
+
+
+template<typename CaptorT, typename LockableT>
+template<typename InpectCallbackT>
+void Captor<CaptorT, LockableT>::inspect_impl(InpectCallbackT&& inspect_dispatch_cb) const
+{
+  LockableT lock{capture_mutex_};
+
+  for (const auto& dispatch : CaptorInterfaceType::queue_)
+  {
+    inspect_dispatch_cb(dispatch);
+  }
 }
 
 }  // namespace flow

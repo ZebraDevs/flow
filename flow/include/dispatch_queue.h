@@ -162,9 +162,10 @@ public:
 
   /**
    * @brief Inserts data in sequence stamp order as Dispatch (duplicates allowed)
-   * @param dispatch  data dispatch object
+   * @param dispatch_args  dispatch constructor args
    */
-  inline void insert(const DispatchT& dispatch);
+  template<typename... DispatchConstructorArgTs>
+  inline void insert(DispatchConstructorArgTs&&... dispatch_args);
 
   /**
    * @brief Returns N-elements before and M-elements after a targeted sequence stamp

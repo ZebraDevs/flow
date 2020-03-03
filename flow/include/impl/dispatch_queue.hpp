@@ -35,13 +35,16 @@ bool DispatchQueue<DispatchT, AllocatorT>::empty() const
 
 
 template<typename DispatchT, typename AllocatorT>
-void DispatchQueue<DispatchT, AllocatorT>::insert(const DispatchT& dispatch)
+template<typename... DispatchConstructorArgTs>
+void DispatchQueue<DispatchT, AllocatorT>::insert(DispatchConstructorArgTs&&... dispatch_args)
 {
+  DispatchT dispatch{std::forward<DispatchConstructorArgTs>(dispatch_args)...};
+
   // If data to add is ordered with respect to current queue,
   // add to back (as newest element)
   if (queue_.empty() or (queue_.back().stamp() < dispatch.stamp()))
   {
-    queue_.emplace_back(dispatch);
+    queue_.emplace_back(std::move(dispatch));
     return;
   }
 
@@ -51,11 +54,11 @@ void DispatchQueue<DispatchT, AllocatorT>::insert(const DispatchT& dispatch)
   {
     if (qitr == queue_.begin())
     {
-      queue_.emplace_front(dispatch);
+      queue_.emplace_front(std::move(dispatch));
       return;
     }
   }
-  queue_.emplace(std::next(qitr), dispatch);
+  queue_.emplace(std::next(qitr), std::move(dispatch));
 }
 
 

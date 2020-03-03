@@ -39,10 +39,27 @@ TEST(CaptorCheckStampType, MultiCaptor)
 }
 
 
-TEST(CaptorCheckStampType, DefautlCapacity)
+TEST(CaptorCheckStampType, DefaultCapacity)
 {
   driver::Next<Dispatch<int, int>> captor{};
   ASSERT_EQ(captor.get_capacity(), 0UL);
+}
+
+
+TEST(CaptorCheckStampType, InspectCallback)
+{
+  driver::Next<Dispatch<int, int>> captor{};
+  captor.inject(0, 1);
+
+  std::size_t call_count = 0;
+  captor.inspect([&call_count](const Dispatch<int, int>& dispatch)
+  {
+    ++call_count;
+    ASSERT_EQ(dispatch.stamp(), 0);
+    ASSERT_EQ(dispatch.data(), 1);
+  });
+
+  ASSERT_EQ(call_count, 1UL);
 }
 
 #endif  // DOXYGEN_SKIP

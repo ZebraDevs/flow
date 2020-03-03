@@ -159,11 +159,14 @@ public:
    *        Data is automatically removed from <code>queue_</code> when its
    *        size is in excess of the size specified by <code>capacity_</code>
    *
-   * @param dispatch  data dispatch object
+   * @tparam DispatchConstructorArgTs...  dispatch constructor argument types
+   *
+   * @param dispatch_args  dispatch constructor arguments
    */
-  inline void inject(const DispatchType& dispatch)
+  template<typename... DispatchConstructorArgTs>
+  inline void inject(DispatchConstructorArgTs&&... dispatch_args)
   {
-    return derived()->inject_impl(dispatch);
+    return derived()->inject_impl(std::forward<DispatchConstructorArgTs>(dispatch_args)...);
   }
 
   /**
@@ -208,6 +211,9 @@ public:
   /**
    * @brief Waits for ready state and captures inputs
    *
+   * @tparam OutputDispatchIteratorT  output iterator type for a value type which supports assignment with <code>DispatchType</code>
+   * @tparam CaptureRangeT  message capture stamp range type
+   *
    * @param[out] output  output data iterator
    * @param[in,out] range  data capture/sequencing range
    * @param timeout  system time to stop waiting for data
@@ -224,6 +230,21 @@ public:
                                    timeout);
   }
 
+  /**
+   * @brief Runs inspection callback all messages available in the current queue
+   *
+   *        The queue and its contents will be immutable during inspection
+   *
+   * @tparam InpectCallbackT  queue inspection callback type which can be called as
+   *                          <code>cb(const DispatchType& dispatch)</code>
+   *
+   * @param inspect_dispatch_cb  callback invoked for each available dispatch
+   */
+  template<typename InpectCallbackT>
+  inline void inspect(InpectCallbackT&& inspect_dispatch_cb) const
+  {
+    return derived()->inspect_impl(std::forward<InpectCallbackT>(inspect_dispatch_cb));
+  }
 
   // Sanity check to ensure that DispatchType is copyable
   static_assert(std::is_copy_constructible<DispatchType>(), "'DispatchType' must be a copyable type");
@@ -304,7 +325,8 @@ private:
   /**
    * @copydoc CaptorInterface::inject
    */
-  inline void inject_impl(const DispatchType& dispatch);
+  template<typename... DispatchConstructorArgTs>
+  inline void inject_impl(DispatchConstructorArgTs&&... dispatch_args);
 
   /**
    * @copydoc CaptorInterface::abort
@@ -318,6 +340,12 @@ private:
   inline State capture_impl(OutputDispatchIteratorT&& output,
                             CaptureRangeT&& range,
                             const std::chrono::system_clock::time_point timeout);
+
+  /**
+   * @copydoc CaptorInterface::inspect
+   */
+  template<typename InpectCallbackT>
+  inline void inspect_impl(InpectCallbackT&& inspect_dispatch_cb) const;
 
   /**
    * @copydoc CaptorInterface::set_capacity

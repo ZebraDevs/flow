@@ -88,9 +88,10 @@ private:
   /**
    * @copydoc CaptorInterface::inject
    */
-  inline void inject_impl(const DispatchType& dispatch)
+  template<typename... DispatchConstructorArgTs>
+  inline void inject_impl(DispatchConstructorArgTs&&... dispatch_args)
   {
-    CaptorInterfaceType::insert_and_limit(dispatch);
+    CaptorInterfaceType::insert_and_limit(std::forward<DispatchConstructorArgTs>(dispatch_args)...);
   }
 
   /**
@@ -119,6 +120,18 @@ private:
   {
     return derived()->capture_policy_impl(std::forward<OutputDispatchIteratorT>(output),
                                           std::forward<CaptureRangeT>(range));
+  }
+
+  /**
+   * @copydoc CaptorInterface::capture
+   */
+  template<typename InpectCallbackT>
+  void inspect_impl(InpectCallbackT&& inspect_dispatch_cb) const
+  {
+    for (const auto& dispatch : CaptorInterfaceType::queue_)
+    {
+      inspect_dispatch_cb(dispatch);
+    }
   }
 
   using CaptorInterfaceType = CaptorInterface<Captor<CaptorT, NoLock>>;
