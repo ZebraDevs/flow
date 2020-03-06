@@ -103,6 +103,9 @@ State Count<DispatchT, LockPolicyT, AllocatorT>::capture_follower_impl(OutputDis
   // Copy captured data over range
   std::copy(first, last, output);
 
+  // Remove data before first captured element
+  PolicyType::queue_.remove_before(first->stamp());
+
   return State::PRIMED;
 }
 
