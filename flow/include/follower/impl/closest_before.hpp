@@ -56,29 +56,21 @@ State ClosestBefore<DispatchT, LockPolicyT, AllocatorT>::capture_follower_impl(O
     return State::ABORT;
   }
 
-  // Return messages on:
-  // - next message stamp > boundary
-  // - stamp + period > boundary
-  auto curr_qitr = PolicyType::queue_.rbegin();
-  while (curr_qitr != PolicyType::queue_.rend())
+  // Starting from the oldest data, return on when data found withing periodic window
+  for (const auto& dispatch : PolicyType::queue_)
   {
-    if (curr_qitr->stamp() >= boundary)
+    if (dispatch.stamp() >= boundary)
     {
-      ++curr_qitr;
-      continue;
+      break;
     }
-    else if (curr_qitr->stamp() < boundary and curr_qitr->stamp() + period_ >= boundary)
+    else if (dispatch.stamp() + period_ >= boundary)
     {
       // Get element
-      *(output++) = *curr_qitr;
+      *(output++) = dispatch;
 
-      // Remove all elements before delayed boundary
-      PolicyType::queue_.remove_before(boundary - period_);
+      // Remove all elements before captured element
+      PolicyType::queue_.remove_before(dispatch.stamp());
       return State::PRIMED;
-    }
-    else
-    {
-      ++curr_qitr;
     }
   }
   return State::RETRY;

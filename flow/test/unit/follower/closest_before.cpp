@@ -62,7 +62,9 @@ TEST_F(FollowerClosestBefore, PrimedAtDataBoundary)
   std::vector<Dispatch<int, int>> data;
   CaptureRange<int> t_range{t_target, t_target};
   ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
-  ASSERT_EQ(data.back().data(), t_target - DELAY - 1);
+  ASSERT_EQ(data.back().data(), t_target - DELAY - PERIOD);
+
+  ASSERT_EQ(this->size(), static_cast<std::size_t>(DELAY + PERIOD + 1UL));
 }
 
 
@@ -91,7 +93,9 @@ TEST_F(FollowerClosestBefore, PrimedAtDataBoundaryFilledPast)
   std::vector<Dispatch<int, int>> data;
   CaptureRange<int> t_range{t_target, t_target};
   ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
-  ASSERT_EQ(data.back().data(), t_target - DELAY - 1);
+  ASSERT_EQ(data.back().data(), t_target - DELAY - PERIOD);
+
+  ASSERT_EQ(this->size(), static_cast<std::size_t>((PERIOD + 1UL) + 2UL * (DELAY + PERIOD)));
 }
 
 
@@ -112,7 +116,9 @@ TEST_F(FollowerClosestBefore, PrimedClosestBeforeDataBeforePeriod)
   std::vector<Dispatch<int, int>> data;
   CaptureRange<int> t_range{t_target, t_target};
   ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
-  ASSERT_EQ(data.back().data(), t - DELAY - 1);
+  ASSERT_EQ(data.back().data(), t - DELAY - PERIOD);
+
+  ASSERT_EQ(this->size(), static_cast<std::size_t>(DELAY + PERIOD + 1UL));
 }
 
 
@@ -133,6 +139,8 @@ TEST_F(FollowerClosestBefore, AbortClosestBeforeDataAfterPeriod)
   std::vector<Dispatch<int, int>> data;
   CaptureRange<int> t_range{t_target, t_target};
   ASSERT_EQ(State::ABORT, this->capture(std::back_inserter(data), t_range));
+
+  ASSERT_EQ(this->size(), 10U);
 }
 
 
