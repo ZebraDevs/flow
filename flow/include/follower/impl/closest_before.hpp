@@ -56,24 +56,33 @@ State ClosestBefore<DispatchT, LockPolicyT, AllocatorT>::capture_follower_impl(O
     return State::ABORT;
   }
 
-  // Starting from the oldest data, return on when data found withing periodic window
-  for (const auto& dispatch : PolicyType::queue_)
+  // Starting from the oldest data, return on when data found within periodic window
+  auto capture_itr = PolicyType::queue_.end();
+  for (auto itr = PolicyType::queue_.begin(); itr != PolicyType::queue_.end(); ++itr)
   {
-    if (dispatch.stamp() >= boundary)
+    if (itr->stamp() >= boundary)
     {
       break;
     }
-    else if (dispatch.stamp() + period_ >= boundary)
+    else if (itr->stamp() + period_ >= boundary)
     {
-      // Get element
-      *(output++) = dispatch;
-
-      // Remove all elements before captured element
-      PolicyType::queue_.remove_before(dispatch.stamp());
-      return State::PRIMED;
+      capture_itr = itr;
     }
   }
-  return State::RETRY;
+
+  // Check if inputs were captured
+  if (capture_itr == PolicyType::queue_.end())
+  {
+    return State::RETRY;
+  }
+
+  // Set captured data
+  *output = *capture_itr;
+
+  // Remove old data
+  PolicyType::queue_.remove_before(capture_itr->stamp());
+
+  return State::PRIMED;
 }
 
 

@@ -62,9 +62,9 @@ TEST_F(FollowerClosestBefore, PrimedAtDataBoundary)
   std::vector<Dispatch<int, int>> data;
   CaptureRange<int> t_range{t_target, t_target};
   ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
-  ASSERT_EQ(data.back().data(), t_target - DELAY - PERIOD);
+  ASSERT_EQ(data.back().data(), t_target - DELAY - 1);
 
-  ASSERT_EQ(this->size(), static_cast<std::size_t>(DELAY + PERIOD + 1UL));
+  ASSERT_EQ(this->size(), static_cast<std::size_t>(PERIOD));
 }
 
 
@@ -93,9 +93,9 @@ TEST_F(FollowerClosestBefore, PrimedAtDataBoundaryFilledPast)
   std::vector<Dispatch<int, int>> data;
   CaptureRange<int> t_range{t_target, t_target};
   ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
-  ASSERT_EQ(data.back().data(), t_target - DELAY - PERIOD);
+  ASSERT_EQ(data.back().data(), t_target - DELAY - 1);
 
-  ASSERT_EQ(this->size(), static_cast<std::size_t>((PERIOD + 1UL) + 2UL * (DELAY + PERIOD)));
+  ASSERT_EQ(this->size(), static_cast<std::size_t>(DELAY + 2UL * (DELAY + PERIOD) - 1));
 }
 
 
@@ -116,9 +116,9 @@ TEST_F(FollowerClosestBefore, PrimedClosestBeforeDataBeforePeriod)
   std::vector<Dispatch<int, int>> data;
   CaptureRange<int> t_range{t_target, t_target};
   ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
-  ASSERT_EQ(data.back().data(), t - DELAY - PERIOD);
+  ASSERT_EQ(data.back().data(), t - DELAY - 1);
 
-  ASSERT_EQ(this->size(), static_cast<std::size_t>(DELAY + PERIOD + 1UL));
+  ASSERT_EQ(this->size(), static_cast<std::size_t>(PERIOD));
 }
 
 
@@ -164,7 +164,7 @@ TEST_F(FollowerClosestBefore, PrimedOnInitialLoopBackCapture)
   this->setLoopBackMode(true);
 
   ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
-  ASSERT_EQ(this->size(), static_cast<std::size_t>(10 - PERIOD));
+  ASSERT_EQ(this->size(), 1UL);
 }
 
 #endif  // DOXYGEN_SKIP
