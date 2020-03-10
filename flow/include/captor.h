@@ -360,6 +360,9 @@ private:
   /// Mutex to protect queue and captures
   mutable std::mutex capture_mutex_;
 
+  /// Flag used to indicate that capture loop should continue
+  volatile bool capturing_ = true;
+
   /**
    * @brief Condition variable used to wait for data
    *

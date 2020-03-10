@@ -31,7 +31,7 @@ Captor<CaptorT, LockableT>::Captor(const DispatchAllocatorType& alloc) :
 template<typename CaptorT, typename LockableT>
 Captor<CaptorT, LockableT>::~Captor()
 {
-  capture_cv_.notify_all();
+  abort_impl(StampTraits<stamp_type>::max());
 }
 
 
@@ -57,6 +57,13 @@ template<typename CaptorT, typename LockableT>
 void Captor<CaptorT, LockableT>::abort_impl(const stamp_type& t_abort)
 {
   LockableT lock{capture_mutex_};
+
+  // Indicate that capture should stop
+  capturing_ = false;
+
+  // Release capture waits
+  capture_cv_.notify_one();
+
   derived()->abort_policy_impl(t_abort);
 }
 
@@ -102,8 +109,11 @@ State Captor<CaptorT, LockableT>::capture_impl(OutputDispatchIteratorT&& output,
 {
   LockableT lock{capture_mutex_};
 
+  // Reset capture flag
+  capturing_ = true;
+
   // Wait for data and attempt capture when data is available
-  while (true)
+  while (capturing_)
   {
     const State state = derived()->capture_policy_impl(std::forward<OutputDispatchIteratorT>(output),
                                                        std::forward<CaptureRangeT>(range));
@@ -112,13 +122,17 @@ State Captor<CaptorT, LockableT>::capture_impl(OutputDispatchIteratorT&& output,
     {
       return state;
     }
-    else if (std::chrono::system_clock::time_point::max() != timeout and
-             std::cv_status::timeout == capture_cv_.wait_until(lock, timeout))
+    else if (std::chrono::system_clock::time_point::max() == timeout)
     {
-      break;
+      capture_cv_.wait(lock);
+    }
+    else if (std::cv_status::timeout == capture_cv_.wait_until(lock, timeout))
+    {
+      return State::TIMEOUT;
     }
   }
-  return State::TIMEOUT;
+
+  return State::ABORT;
 }
 
 

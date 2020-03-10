@@ -56,7 +56,7 @@ State ClosestBefore<DispatchT, LockPolicyT, AllocatorT>::capture_follower_impl(O
     return State::ABORT;
   }
 
-  // Starting from the oldest data, return on when data found within periodic window
+  // Starting from the oldest data, return on when data found within periodic windowp
   auto capture_itr = PolicyType::queue_.end();
   for (auto itr = PolicyType::queue_.begin(); itr != PolicyType::queue_.end(); ++itr)
   {
