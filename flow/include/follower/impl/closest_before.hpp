@@ -50,12 +50,6 @@ State ClosestBefore<DispatchT, LockPolicyT, AllocatorT>::capture_follower_impl(O
   // The boundary before which messages are valid and after which they are not. Non-inclusive.
   const stamp_type boundary = range.lower_stamp - delay_;
 
-  // Retry if priming is not possible
-  if (PolicyType::queue_.oldest_stamp() > boundary)
-  {
-    return State::ABORT;
-  }
-
   // Starting from the oldest data, return on when data found within periodic windowp
   auto capture_itr = PolicyType::queue_.end();
   for (auto itr = PolicyType::queue_.begin(); itr != PolicyType::queue_.end(); ++itr)
@@ -71,9 +65,10 @@ State ClosestBefore<DispatchT, LockPolicyT, AllocatorT>::capture_follower_impl(O
   }
 
   // Check if inputs were captured
+  // NOTE: If no capture iput was set, then all data is at or after boundary
   if (capture_itr == PolicyType::queue_.end())
   {
-    return State::RETRY;
+    return State::ABORT;
   }
 
   // Set captured data
