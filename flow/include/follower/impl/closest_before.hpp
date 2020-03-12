@@ -61,6 +61,7 @@ State ClosestBefore<DispatchT, LockPolicyT, AllocatorT>::capture_follower_impl(O
     else if (itr->stamp() + period_ >= boundary)
     {
       capture_itr = itr;
+      break;
     }
   }
 
