@@ -45,6 +45,26 @@ TEST_F(FollowerClosestBefore, RetryOnEmpty)
 }
 
 
+TEST_F(FollowerClosestBefore, AbortTooNew)
+{
+  this->inject(Dispatch<int, int>{1, 1});
+
+  std::vector<Dispatch<int, int>> data;
+  CaptureRange<int> t_range{0, 0};
+  ASSERT_EQ(State::ABORT, this->capture(std::back_inserter(data), t_range));
+}
+
+
+TEST_F(FollowerClosestBefore, AbortAtDataBoundary)
+{
+  this->inject(Dispatch<int, int>{0, 0});
+
+  std::vector<Dispatch<int, int>> data;
+  CaptureRange<int> t_range{0, 0};
+  ASSERT_EQ(State::ABORT, this->capture(std::back_inserter(data), t_range));
+}
+
+
 TEST_F(FollowerClosestBefore, PrimedAtDataBoundary)
 {
   int t = 0;

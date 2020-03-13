@@ -41,12 +41,6 @@ template<typename OutputDispatchIteratorT>
 State ClosestBefore<DispatchT, LockPolicyT, AllocatorT>::capture_follower_impl(OutputDispatchIteratorT output,
                                                                                const CaptureRange<stamp_type>& range)
 {
-  // Retry if queue has no data
-  if (PolicyType::queue_.empty())
-  {
-    return State::RETRY;
-  }
-
   // The boundary before which messages are valid and after which they are not. Non-inclusive.
   const stamp_type boundary = range.lower_stamp - delay_;
 
@@ -56,28 +50,31 @@ State ClosestBefore<DispatchT, LockPolicyT, AllocatorT>::capture_follower_impl(O
   {
     if (itr->stamp() >= boundary)
     {
-      break;
+      // If oldest element is far ahead of boundary, abort
+      return State::ABORT;
     }
     else if (itr->stamp() + period_ >= boundary)
     {
+      // If oldest element is first within period, collect
       capture_itr = itr;
       break;
     }
   }
 
   // Check if inputs were captured
-  // NOTE: If no capture iput was set, then all data is at or after boundary
+  // NOTE: If no capture input was set, then all data is at or after boundary
   if (capture_itr == PolicyType::queue_.end())
   {
-    return State::ABORT;
+    return State::RETRY;
   }
+  else
+  {
+    // Set captured data
+    *output = *capture_itr;
 
-  // Set captured data
-  *output = *capture_itr;
-
-  // Remove old data
-  PolicyType::queue_.remove_before(capture_itr->stamp());
-
+    // Remove old data
+    PolicyType::queue_.remove_before(capture_itr->stamp());
+  }
   return State::PRIMED;
 }
 
