@@ -2,11 +2,11 @@
  * @copyright 2020 Fetch Robotics Inc.
  * @author Brian Cairl
  *
- * @file next.h
- * @brief Defines a simple next-message driving input capture buffer
+ * @file throttle.h
+ * @brief Defines a throttled next-message driving input capture buffer
  */
-#ifndef FLOW_DRIVER_NEXT_H
-#define FLOW_DRIVER_NEXT_H
+#ifndef FLOW_DRIVER_THROTTLED_H
+#define FLOW_DRIVER_THROTTLED_H
 
 // C++ Standard Library
 #include <memory>
@@ -23,13 +23,16 @@ namespace driver
 {
 
 /**
- * @brief Next element driving capture object
+ * @brief Throttled next element driving capture object
  *
- *        Captures the next oldest data element.
- *        Produces a target sequencing stamp range using the stamp associated with
+ *        Captures the next oldest data element, limited to a max expected period. This means that some elements
+ *        are skipped if the input rate indicated by data sequence stamps is higher than the throttled rate, then
+ *        some messages will be ignored and not captured.
+ * \n
+ *        This captor produces a target sequencing stamp range using the stamp associated with
  *        the captured element (<code>range.lower_stamp == range.upper_stamp</code>)
  * \n
- *        <b>Data removal:</b> Captor will remove a single data element on each new capture attempt
+ *        <b>Data removal:</b> Captor will remove all elements before the captured data element
  *
  * @tparam DispatchT  data dispatch type
  * @tparam LockPolicyT  a BasicLockable (https://en.cppreference.com/w/cpp/named_req/BasicLockable) object or NoLock or PollingLock
@@ -39,28 +42,32 @@ namespace driver
 template<typename DispatchT,
          typename LockPolicyT = NoLock,
          typename AllocatorT = std::allocator<DispatchT>>
-class Next : public Driver<Next<DispatchT, LockPolicyT, AllocatorT>>
+class Throttled : public Driver<Throttled<DispatchT, LockPolicyT, AllocatorT>>
 {
 public:
-  /// Integer size type
-  using size_type = typename CaptorTraits<Next>::size_type;
-
   /// Data stamp type
-  using stamp_type = typename CaptorTraits<Next>::stamp_type;
+  using stamp_type = typename CaptorTraits<Throttled>::stamp_type;
+
+  /// Data stamp duration type
+  using offset_type = typename CaptorTraits<Throttled>::offset_type;
 
   /**
    * @brief Configuration constructor
+   *
+   * @param throttle_period  capture throttling period
    */
-  explicit Next() = default;
+  explicit Throttled(const offset_type throttle_period);
 
   /**
    * @brief Configuration constructor
+  *
+   * @param throttle_period  capture throttling period
    * @param alloc  dispatch object allocator with some initial state
    */
-  explicit Next(const AllocatorT& alloc);
+  explicit Throttled(const offset_type throttle_period, const AllocatorT& alloc);
 
 private:
-  using PolicyType = Driver<Next<DispatchT, LockPolicyT, AllocatorT>>;
+  using PolicyType = Driver<Throttled<DispatchT, LockPolicyT, AllocatorT>>;
   friend PolicyType;
 
   /**
@@ -69,7 +76,7 @@ private:
    * @param[out] output  output data iterator
    * @param[in,out] range  data capture/sequencing range
    *
-   * @retval State::PRIMED    next element has been captured
+   * @retval State::PRIMED  next element has been captured
    * @retval State::RETRY  Captor should continue waiting for messages after prime attempt
    */
   template<typename OutputDispatchIteratorT>
@@ -85,6 +92,9 @@ private:
    * @brief Defines Captor reset behavior
    */
   inline void reset_driver_impl() noexcept(true) {}
+
+  /// Capture throttling period
+  offset_type throttle_period_;
 };
 
 }  // namespace driver
@@ -101,7 +111,7 @@ private:
 template<typename DispatchT,
          typename LockPolicyT,
          typename AllocatorT>
-struct CaptorTraits<driver::Next<DispatchT, LockPolicyT, AllocatorT>> : CaptorTraitsFromDispatch<DispatchT>
+struct CaptorTraits<driver::Throttled<DispatchT, LockPolicyT, AllocatorT>> : CaptorTraitsFromDispatch<DispatchT>
 {
   /// Dispatch object allocation type
   using DispatchAllocatorType = AllocatorT;
@@ -113,6 +123,6 @@ struct CaptorTraits<driver::Next<DispatchT, LockPolicyT, AllocatorT>> : CaptorTr
 }  // namespace flow
 
 // Flow (implementation)
-#include <flow/driver/impl/next.hpp>
+#include <flow/driver/impl/throttled.hpp>
 
-#endif  // FLOW_DRIVER_NEXT_H
+#endif  // FLOW_DRIVER_THROTTLED_H

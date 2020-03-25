@@ -23,3 +23,11 @@ flow_cc_gtest(
     deps=["//flow:flow"],
     timeout="short",
 )
+
+
+flow_cc_gtest(
+    name="throttled",
+    srcs=["throttled.cpp"],
+    deps=["//flow:flow"],
+    timeout="short",
+)

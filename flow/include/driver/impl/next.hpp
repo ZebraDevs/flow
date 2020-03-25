@@ -49,5 +49,4 @@ void Next<DispatchT, LockPolicyT, AllocatorT>::abort_driver_impl(const stamp_typ
 }  // namespace driver
 }  // namespace flow
 
-
 #endif  // FLOW_DRIVER_IMPL_NEXT_HPP
