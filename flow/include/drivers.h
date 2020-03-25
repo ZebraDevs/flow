@@ -3,7 +3,6 @@
  * @author Brian Cairl
  *
  * @file drivers.h
- * @brief Includes all driving captor implementations
  */
 #ifndef FLOW_DRIVERS_H
 #define FLOW_DRIVERS_H
@@ -12,6 +11,7 @@
 #include <flow/driver/batch.h>
 #include <flow/driver/chunk.h>
 #include <flow/driver/next.h>
+#include <flow/driver/throttled.h>
 
 namespace flow
 {

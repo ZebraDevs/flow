@@ -3,7 +3,6 @@
  * @author Brian Cairl
  *
  * @file next.h
- * @brief Defines a simple next-message driving input capture buffer
  */
 #ifndef FLOW_DRIVER_NEXT_H
 #define FLOW_DRIVER_NEXT_H

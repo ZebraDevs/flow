@@ -3,7 +3,6 @@
  * @author Brian Cairl
  *
  * @file throttle.h
- * @brief Defines a throttled next-message driving input capture buffer
  */
 #ifndef FLOW_DRIVER_THROTTLED_H
 #define FLOW_DRIVER_THROTTLED_H

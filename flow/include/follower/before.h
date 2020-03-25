@@ -3,7 +3,6 @@
  * @author Levon Avagyan, Brian Cairl
  *
  * @file before.h
- * @brief Defines a before (with delay) capture buffer
  */
 #ifndef FLOW_FOLLOWER_BEFORE_H
 #define FLOW_FOLLOWER_BEFORE_H

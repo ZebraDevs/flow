@@ -3,7 +3,6 @@
  * @author Brian Cairl
  *
  * @file follower.h
- * @brief Defines a basic following input-capture buffer
  */
 #ifndef FLOW_FOLLOWER_FOLLOWER_H
 #define FLOW_FOLLOWER_FOLLOWER_H

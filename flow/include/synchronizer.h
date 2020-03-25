@@ -3,7 +3,6 @@
  * @author Brian Cairl
  *
  * @file synchronizer.h
- * @brief Defines an event driven execution block
  */
 #ifndef FLOW_SYNCHRONIZER_H
 #define FLOW_SYNCHRONIZER_H

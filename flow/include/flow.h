@@ -3,7 +3,6 @@
  * @author Brian Cairl
  *
  * @file flow.h
- * @brief Includes all core flow library components
  */
 #ifndef FLOW_FLOW_H
 #define FLOW_FLOW_H

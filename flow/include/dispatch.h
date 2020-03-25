@@ -3,7 +3,6 @@
  * @author Brian Cairl
  *
  * @file dispatch.h
- * @brief Defines a standard stamped data dispatching type
  */
 #ifndef FLOW_CAPTOR_DISPATCH_H
 #define FLOW_CAPTOR_DISPATCH_H

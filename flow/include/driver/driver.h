@@ -3,7 +3,6 @@
  * @author Brian Cairl
  *
  * @file driver.h
- * @brief Defines basic driving input capture concept
  */
 #ifndef FLOW_DRIVER_DRIVER_H
 #define FLOW_DRIVER_DRIVER_H

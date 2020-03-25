@@ -3,7 +3,6 @@
  * @author Brian Cairl
  *
  * @file dispatch_queue.h
- * @brief Defines an ordered stamped data queuing container
  */
 #ifndef FLOW_DISPATCH_QUEUE_H
 #define FLOW_DISPATCH_QUEUE_H

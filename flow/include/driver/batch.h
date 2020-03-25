@@ -3,7 +3,6 @@
  * @author Brian Cairl
  *
  * @file batch.h
- * @brief Defines a sliding-window driving input capture buffer
  */
 #ifndef FLOW_DRIVER_BATCH_H
 #define FLOW_DRIVER_BATCH_H

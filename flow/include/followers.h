@@ -3,7 +3,6 @@
  * @author Brian Cairl
  *
  * @file followers.h
- * @brief Includes all follower captor implementations
  */
 #ifndef FLOW_FOLLOWERS_H
 #define FLOW_FOLLOWERS_H

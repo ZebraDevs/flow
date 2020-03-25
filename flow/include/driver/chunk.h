@@ -3,7 +3,6 @@
  * @author Brian Cairl
  *
  * @file chuck.h
- * @brief Defines a chunking driving input capture buffer
  */
 #ifndef FLOW_DRIVER_CHUNK_H
 #define FLOW_DRIVER_CHUNK_H

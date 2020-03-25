@@ -3,7 +3,6 @@
  * @author Brian Cairl
  *
  * @file captor.h
- * @brief Defines basic data capture buffer object
  */
 #ifndef FLOW_CAPTOR_H
 #define FLOW_CAPTOR_H
