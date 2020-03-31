@@ -118,12 +118,19 @@ DispatchQueue<DispatchT, AllocatorT>::seek_before(const stamp_type& stamp, const
     return start;
   }
 
-  // Find iterator one before OR exactly at limiting stamp
-  while (start != queue_.end() and start->stamp() <= stamp)
+  while (true)
   {
-    ++start;
+    const auto prev = start++;
+    if (start == queue_.end())
+    {
+      break;
+    }
+    else if (start->stamp() >= stamp)
+    {
+      return prev;
+    }
   }
-  return std::prev(start);
+  return start;
 }
 
 
@@ -132,10 +139,16 @@ typename
 DispatchQueue<DispatchT, AllocatorT>::const_iterator
 DispatchQueue<DispatchT, AllocatorT>::seek_after(const stamp_type& stamp, const_iterator start) const
 {
-  // Find iterator one past limiting stamp
-  while (start != queue_.end() and start->stamp() <= stamp)
+  while (start != queue_.end())
   {
-    ++start;
+    if (start->stamp() > stamp)
+    {
+      return start;
+    }
+    else
+    {
+      ++start;
+    }
   }
   return start;
 }

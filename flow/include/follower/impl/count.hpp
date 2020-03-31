@@ -84,9 +84,9 @@ State Count<DispatchT, LockPolicyT, AllocatorT>::capture_follower_impl(OutputDis
   // Find initial end position iterator
   auto last = PolicyType::queue_.seek_after(range.upper_stamp - delay_, first);
 
-  // Step last iterator forward by m_after_ - 1  (m_after_ > 0, always)
+  // Step last iterator forward by m_after_ (seek to one element past m_after_)
   {
-    size_type remaining = m_after_ - 1;
+    size_type remaining = m_after_;
     while (remaining and last != PolicyType::queue_.end())
     {
       ++last;
@@ -101,7 +101,7 @@ State Count<DispatchT, LockPolicyT, AllocatorT>::capture_follower_impl(OutputDis
   }
 
   // Copy captured data over range
-  std::copy(first, last, output);
+  std::copy(std::next(first), last, std::forward<OutputDispatchIteratorT>(output));
 
   // Remove data before first captured element
   PolicyType::queue_.remove_before(first->stamp());

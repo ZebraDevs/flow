@@ -308,7 +308,7 @@ TEST(DispatchQueue, SeekBeforeExactMultiEntry)
 
   const auto itr = queue.seek_before(1, queue.begin());
 
-  EXPECT_TRUE(itr != queue.begin());
+  EXPECT_TRUE(itr == queue.begin());
   EXPECT_TRUE(itr != queue.end());
 }
 

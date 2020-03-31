@@ -63,7 +63,7 @@ TEST_F(FollowerCount, AbortOnTooFewBefore)
   const int t_target = t;
 
   // Inject messages after t_target
-  size_type M = M_AFTER;
+  size_type M = M_AFTER + 1;
   while (M--)
   {
     this->inject(Dispatch<int, int>{t-DELAY, 1});
@@ -81,7 +81,7 @@ TEST_F(FollowerCount, RetryOnTooFewAfter)
   int t = 0;
 
   // Inject messages before t_target
-  size_type N = N_BEFORE;
+  size_type N = N_BEFORE + 1;
   while (N--)
   {
     this->inject(Dispatch<int, int>{t-DELAY, 1});
@@ -110,7 +110,37 @@ TEST_F(FollowerCount, ReadyOnExactCounts)
   int t = 0;
 
   // Inject messages before t_target
-  size_type N = N_BEFORE;
+  size_type N = N_BEFORE + 1;
+  while (N--)
+  {
+    this->inject(Dispatch<int, int>{t-DELAY, 1});
+    t += 1;
+  }
+
+  // Stamp between messages
+  const int t_target = t;
+
+  // Inject messages after t_target
+  size_type M = M_AFTER + 1;
+  while (M--)
+  {
+    this->inject(Dispatch<int, int>{t-DELAY, 1});
+    t += 1;
+  }
+
+  std::vector<Dispatch<int, int>> data;
+  CaptureRange<int> t_range{t_target, t_target};
+  ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
+  ASSERT_EQ(data.size(), N_BEFORE + M_AFTER + 1);
+}
+
+
+TEST_F(FollowerCount, ReadyOnExactCountsNoneAtTargetStamp)
+{
+  int t = 0;
+
+  // Inject messages before t_target
+  size_type N = N_BEFORE + 1;
   while (N--)
   {
     this->inject(Dispatch<int, int>{t-DELAY, 1});
@@ -124,7 +154,7 @@ TEST_F(FollowerCount, ReadyOnExactCounts)
   size_type M = M_AFTER;
   while (M--)
   {
-    this->inject(Dispatch<int, int>{t-DELAY, 1});
+    this->inject(Dispatch<int, int>{t-DELAY+1, 1});
     t += 1;
   }
 
@@ -140,7 +170,7 @@ TEST_F(FollowerCount, ReadyOnRangedTarget)
   int t = 0;
 
   // Inject messages before t_target
-  size_type N = N_BEFORE;
+  size_type N = N_BEFORE + 1;
   while (N--)
   {
     this->inject(Dispatch<int, int>{t-DELAY, 1});
@@ -151,7 +181,7 @@ TEST_F(FollowerCount, ReadyOnRangedTarget)
   const int t_target = t;
 
   // Inject messages after t_target
-  size_type M = 2 * M_AFTER;
+  size_type M = 2 * M_AFTER + 3;
   while (M--)
   {
     this->inject(Dispatch<int, int>{t-DELAY, 1});
@@ -159,9 +189,9 @@ TEST_F(FollowerCount, ReadyOnRangedTarget)
   }
 
   std::vector<Dispatch<int, int>> data;
-  CaptureRange<int> t_range{t_target, t_target+3};
+  CaptureRange<int> t_range{t_target, t_target + 3};
   ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
-  ASSERT_EQ(data.size(), N_BEFORE + M_AFTER + 3);
+  ASSERT_EQ(data.size(), N_BEFORE + M_AFTER + 4);
 }
 
 
@@ -191,7 +221,7 @@ TEST_F(FollowerCount, ReadyOnExcessCounts)
   std::vector<Dispatch<int, int>> data;
   CaptureRange<int> t_range{t_target, t_target};
   ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
-  ASSERT_EQ(data.size(), N_BEFORE + M_AFTER);
+  ASSERT_EQ(data.size(), N_BEFORE + M_AFTER + 1);
 }
 
 
@@ -202,7 +232,7 @@ TEST_F(FollowerCount, PrimedOnInitialLoopBackCapture)
   int t = 0;
 
   // Inject only data before t_target
-  size_type N = N_BEFORE;
+  size_type N = N_BEFORE + 1;
   while (N--)
   {
     this->inject(Dispatch<int, int>{t-DELAY, 1});
@@ -216,24 +246,24 @@ TEST_F(FollowerCount, PrimedOnInitialLoopBackCapture)
   CaptureRange<int> t_range{t_target, t_target};
 
   // First priming attempt allows capture
-  ASSERT_EQ(this->size(), N_BEFORE);
+  ASSERT_EQ(this->size(), N_BEFORE+1);
   ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
-  ASSERT_EQ(this->size(), N_BEFORE);
+  ASSERT_EQ(this->size(), N_BEFORE+1);
 
   data.clear();
 
   // Inject messages after t_target
-  size_type M = M_AFTER;
+  size_type M = M_AFTER + 1;
   while (M--)
   {
     this->inject(Dispatch<int, int>{t-DELAY, 1});
     t += 1;
   }
-  ASSERT_EQ(this->size(), N_BEFORE + M_AFTER);
+  ASSERT_EQ(this->size(), N_BEFORE + M_AFTER + 2);
 
   // Second attempt result in primed, now with data
   ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
-  ASSERT_EQ(data.size(), N_BEFORE + M_AFTER);
+  ASSERT_EQ(data.size(), N_BEFORE + M_AFTER + 1);
 }
 
 
@@ -282,7 +312,7 @@ TEST_F(FollowerCountZeroDelay, AbortOnTooFewBefore)
   const int t_target = t;
 
   // Inject messages after t_target
-  size_type M = M_AFTER;
+  size_type M = M_AFTER + 1;
   while (M--)
   {
     this->inject(Dispatch<int, int>{t-DELAY, 1});
@@ -300,7 +330,7 @@ TEST_F(FollowerCountZeroDelay, RetryOnTooFewAfter)
   int t = 0;
 
   // Inject messages before t_target
-  size_type N = N_BEFORE;
+  size_type N = N_BEFORE + 1;
   while (N--)
   {
     this->inject(Dispatch<int, int>{t-DELAY, 1});
@@ -329,7 +359,37 @@ TEST_F(FollowerCountZeroDelay, ReadyOnExactCounts)
   int t = 0;
 
   // Inject messages before t_target
-  size_type N = N_BEFORE;
+  size_type N = N_BEFORE + 1;
+  while (N--)
+  {
+    this->inject(Dispatch<int, int>{t-DELAY, 1});
+    t += 1;
+  }
+
+  // Stamp between messages
+  const int t_target = t;
+
+  // Inject messages after t_target
+  size_type M = M_AFTER + 1;
+  while (M--)
+  {
+    this->inject(Dispatch<int, int>{t-DELAY, 1});
+    t += 1;
+  }
+
+  std::vector<Dispatch<int, int>> data;
+  CaptureRange<int> t_range{t_target, t_target};
+  ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
+  ASSERT_EQ(data.size(), N_BEFORE + M_AFTER + 1);
+}
+
+
+TEST_F(FollowerCountZeroDelay, ReadyOnExactCountsNoneAtTargetStamp)
+{
+  int t = 0;
+
+  // Inject messages before t_target
+  size_type N = N_BEFORE + 1;
   while (N--)
   {
     this->inject(Dispatch<int, int>{t-DELAY, 1});
@@ -343,7 +403,7 @@ TEST_F(FollowerCountZeroDelay, ReadyOnExactCounts)
   size_type M = M_AFTER;
   while (M--)
   {
-    this->inject(Dispatch<int, int>{t-DELAY, 1});
+    this->inject(Dispatch<int, int>{t-DELAY+1, 1});
     t += 1;
   }
 
@@ -359,7 +419,7 @@ TEST_F(FollowerCountZeroDelay, ReadyOnRangedTarget)
   int t = 0;
 
   // Inject messages before t_target
-  size_type N = N_BEFORE;
+  size_type N = N_BEFORE + 1;
   while (N--)
   {
     this->inject(Dispatch<int, int>{t-DELAY, 1});
@@ -370,7 +430,7 @@ TEST_F(FollowerCountZeroDelay, ReadyOnRangedTarget)
   const int t_target = t;
 
   // Inject messages after t_target
-  size_type M = 2 * M_AFTER;
+  size_type M = 2 * M_AFTER + 3;
   while (M--)
   {
     this->inject(Dispatch<int, int>{t-DELAY, 1});
@@ -378,9 +438,9 @@ TEST_F(FollowerCountZeroDelay, ReadyOnRangedTarget)
   }
 
   std::vector<Dispatch<int, int>> data;
-  CaptureRange<int> t_range{t_target, t_target+3};
+  CaptureRange<int> t_range{t_target, t_target + 3};
   ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
-  ASSERT_EQ(data.size(), N_BEFORE + M_AFTER + 3);
+  ASSERT_EQ(data.size(), N_BEFORE + M_AFTER + 4);
 }
 
 
@@ -410,7 +470,7 @@ TEST_F(FollowerCountZeroDelay, ReadyOnExcessCounts)
   std::vector<Dispatch<int, int>> data;
   CaptureRange<int> t_range{t_target, t_target};
   ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
-  ASSERT_EQ(data.size(), N_BEFORE + M_AFTER);
+  ASSERT_EQ(data.size(), N_BEFORE + M_AFTER + 1);
 }
 
 
@@ -421,7 +481,7 @@ TEST_F(FollowerCountZeroDelay, PrimedOnInitialLoopBackCapture)
   int t = 0;
 
   // Inject only data before t_target
-  size_type N = N_BEFORE;
+  size_type N = N_BEFORE + 1;
   while (N--)
   {
     this->inject(Dispatch<int, int>{t-DELAY, 1});
@@ -435,24 +495,24 @@ TEST_F(FollowerCountZeroDelay, PrimedOnInitialLoopBackCapture)
   CaptureRange<int> t_range{t_target, t_target};
 
   // First priming attempt allows capture
-  ASSERT_EQ(this->size(), N_BEFORE);
+  ASSERT_EQ(this->size(), N_BEFORE + 1);
   ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
-  ASSERT_EQ(this->size(), N_BEFORE);
+  ASSERT_EQ(this->size(), N_BEFORE + 1);
 
   data.clear();
 
   // Inject messages after t_target
-  size_type M = M_AFTER;
+  size_type M = M_AFTER + 1;
   while (M--)
   {
     this->inject(Dispatch<int, int>{t-DELAY, 1});
     t += 1;
   }
-  ASSERT_EQ(this->size(), N_BEFORE + M_AFTER);
+  ASSERT_EQ(this->size(), N_BEFORE + M_AFTER + 2);
 
   // Second attempt result in primed, now with data
   ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
-  ASSERT_EQ(data.size(), N_BEFORE + M_AFTER);
+  ASSERT_EQ(data.size(), N_BEFORE + M_AFTER + 1);
 }
 
 #endif  // DOXYGEN_SKIP
