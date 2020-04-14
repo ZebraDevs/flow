@@ -272,7 +272,7 @@ TEST(DispatchQueue, SeekBeforeExactSingleEntry)
 
   ASSERT_EQ(queue.size(), 1u);
 
-  const auto itr = queue.seek_before(1, queue.begin());
+  const auto itr = queue.seek_before(2, queue.begin());
 
   EXPECT_TRUE(itr == queue.begin());
 }
