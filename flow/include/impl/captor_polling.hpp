@@ -119,6 +119,17 @@ private:
   }
 
   /**
+   * @copydoc CaptorInterface::get_available_stamp_range
+   */
+  inline CaptureRange<stamp_type> get_available_stamp_range_impl() const
+  {
+    BasicLockableT lock{queue_mutex_};
+    return queue_.empty() ?
+           CaptureRange<stamp_type>{} :
+           CaptureRange<stamp_type>{queue_.oldest_stamp(), queue_.newest_stamp()};
+  }
+
+  /**
    * @copydoc CaptorInterface::capture
    */
   template<typename OutputDispatchIteratorT, typename CaptureRangeT>

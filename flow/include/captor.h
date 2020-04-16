@@ -208,6 +208,14 @@ public:
   }
 
   /**
+   * @brief Gets the time range between oldest/newest buffered messages
+   */
+  inline CaptureRange<stamp_type> get_available_stamp_range() const
+  {
+    return derived()->get_available_stamp_range_impl();
+  }
+
+  /**
    * @brief Waits for ready state and captures inputs
    *
    * @tparam OutputDispatchIteratorT  output iterator type for a value type which supports assignment with <code>DispatchType</code>
@@ -355,6 +363,11 @@ private:
    * @copydoc CaptorInterface::get_capacity
    */
   inline size_type get_capacity_impl() const;
+
+  /**
+   * @copydoc CaptorInterface::get_available_stamp_range
+   */
+  inline CaptureRange<stamp_type> get_available_stamp_range_impl() const;
 
   /// Mutex to protect queue and captures
   mutable std::mutex capture_mutex_;

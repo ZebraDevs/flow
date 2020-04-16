@@ -46,7 +46,7 @@ TEST(CaptorCheckStampType, DefaultCapacity)
 }
 
 
-TEST(CaptorCheckStampType, InspectCallback)
+TEST(Captor, InspectCallback)
 {
   driver::Next<Dispatch<int, int>> captor{};
   captor.inject(0, 1);
@@ -62,4 +62,29 @@ TEST(CaptorCheckStampType, InspectCallback)
   ASSERT_EQ(call_count, 1UL);
 }
 
+
+TEST(Captor, AvailableStampRangeEmpty)
+{
+  driver::Next<Dispatch<int, int>> captor{};
+
+  const auto range = captor.get_available_stamp_range();
+
+  ASSERT_FALSE(range);
+  ASSERT_EQ(range.lower_stamp, StampTraits<int>::max());
+  ASSERT_EQ(range.upper_stamp, StampTraits<int>::min());
+}
+
+
+TEST(Captor, AvailableStampRangeNonEmpty)
+{
+  driver::Next<Dispatch<int, int>> captor{};
+  captor.inject(1, 1);
+  captor.inject(10, 1);
+
+  const auto range = captor.get_available_stamp_range();
+
+  ASSERT_TRUE(range);
+  ASSERT_EQ(range.lower_stamp, 1);
+  ASSERT_EQ(range.upper_stamp, 10);
+}
 #endif  // DOXYGEN_SKIP

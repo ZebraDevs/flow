@@ -102,6 +102,17 @@ Captor<CaptorT, LockableT>::get_capacity_impl() const
 
 
 template<typename CaptorT, typename LockableT>
+CaptureRange<typename Captor<CaptorT, LockableT>::stamp_type>
+Captor<CaptorT, LockableT>::get_available_stamp_range_impl() const
+{
+  LockableT lock{capture_mutex_};
+  return queue_.empty() ?
+         CaptureRange<stamp_type>{} :
+         CaptureRange<stamp_type>{queue_.oldest_stamp(), queue_.newest_stamp()};
+}
+
+
+template<typename CaptorT, typename LockableT>
 template<typename OutputDispatchIteratorT, typename CaptureRangeT>
 State Captor<CaptorT, LockableT>::capture_impl(OutputDispatchIteratorT&& output,
                                                CaptureRangeT&& range,
