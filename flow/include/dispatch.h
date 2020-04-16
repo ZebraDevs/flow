@@ -187,19 +187,40 @@ struct CaptureRange
 
   /**
    * @brief Sequencing range constructor
+   *
    * @param _lower_stamp  lower sequencing stamp bound
    * @param _upper_stamp  upper sequencing stamp bound
    * @param _newest_follower_stamp  stamp used to limit difference in current driving
    *                                stamp and oldest sequence stamp in following captor
    */
-  CaptureRange(const StampT _lower_stamp = StampTraits<StampT>::min(),
-               const StampT _upper_stamp = StampTraits<StampT>::max()) :
+  CaptureRange(const StampT _lower_stamp = StampTraits<StampT>::max(),
+               const StampT _upper_stamp = StampTraits<StampT>::min()) :
     lower_stamp{_lower_stamp},
     upper_stamp{_upper_stamp}
   {}
 
   /**
+   * @brief Checks if capture stamp range is valid
+   *
+   * @retval true  if upper_stamp >= lower_stamp
+   * @retval false  otherwise
+   */
+  inline bool valid() const
+  {
+    return upper_stamp >= lower_stamp;
+  }
+
+  /**
+   * @copydoc CaptureRange::valid
+   */
+  inline operator bool() const
+  {
+    return valid();
+  }
+
+  /**
    * @brief Output stream overload for <code>CaptureRange</code> codes
+   *
    * @param[in,out] os  output stream
    * @param range  capture stamp range
    * @return os
