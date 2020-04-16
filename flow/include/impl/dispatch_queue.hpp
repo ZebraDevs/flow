@@ -121,11 +121,7 @@ DispatchQueue<DispatchT, AllocatorT>::seek_before(const stamp_type& stamp, const
   while (true)
   {
     const auto prev = start++;
-    if (start == queue_.end())
-    {
-      break;
-    }
-    else if (start->stamp() >= stamp)
+    if (start == queue_.end() or start->stamp() >= stamp)
     {
       return prev;
     }
