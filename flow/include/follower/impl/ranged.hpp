@@ -19,20 +19,17 @@ namespace follower
 {
 
 template<typename DispatchT, typename LockPolicyT, typename AllocatorT>
-Ranged<DispatchT, LockPolicyT, AllocatorT>::Ranged(const offset_type& period, const offset_type& delay) :
+Ranged<DispatchT, LockPolicyT, AllocatorT>::Ranged(const offset_type& delay) :
   PolicyType{},
-  period_{period},
   delay_{delay}
 {
 }
 
 
 template<typename DispatchT, typename LockPolicyT, typename AllocatorT>
-Ranged<DispatchT, LockPolicyT, AllocatorT>::Ranged(const offset_type& period,
-                                                   const offset_type& delay,
+Ranged<DispatchT, LockPolicyT, AllocatorT>::Ranged(const offset_type& delay,
                                                    const AllocatorT& alloc) :
   PolicyType{alloc},
-  period_{period},
   delay_{delay}
 {
 }
@@ -88,10 +85,7 @@ State Ranged<DispatchT, LockPolicyT, AllocatorT>::capture_follower_impl(OutputDi
 
 
 template<typename DispatchT, typename LockPolicyT, typename AllocatorT>
-void Ranged<DispatchT, LockPolicyT, AllocatorT>::abort_follower_impl(const stamp_type& t_abort)
-{
-  PolicyType::queue_.remove_before(t_abort - delay_ - period_ - period_);
-}
+void Ranged<DispatchT, LockPolicyT, AllocatorT>::abort_follower_impl(const stamp_type& t_abort) {}
 
 }  // namespace follower
 }  // namespace flow

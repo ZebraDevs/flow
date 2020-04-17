@@ -46,19 +46,17 @@ public:
   /**
    * @brief Setup constructor
    *
-   * @param period  expected data period
    * @param delay  the delay with which to capture
    */
-  Ranged(const offset_type& period, const offset_type& delay);
+  Ranged(const offset_type& delay);
 
   /**
    * @brief Setup constructor
    *
-   * @param period  expected data period
    * @param delay  the delay with which to capture
    * @param alloc  dispatch object allocator with some initial state
    */
-  Ranged(const offset_type& period, const offset_type& delay, const AllocatorT& alloc);
+  Ranged(const offset_type& delay, const AllocatorT& alloc);
 
 private:
   using PolicyType = Follower<Ranged<DispatchT, LockPolicyT, AllocatorT>>;
@@ -89,9 +87,6 @@ private:
    * @brief Defines Captor reset behavior
    */
   inline void reset_follower_impl() noexcept(true) {}
-
-  /// Expected data period, used for computing aborts
-  offset_type period_;
 
   /// Capture delay
   offset_type delay_;

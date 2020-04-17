@@ -20,24 +20,22 @@ using namespace flow;
 using namespace flow::follower;
 
 
-struct FollowerRangedTest : ::testing::TestWithParam<::std::tuple<int, int>>
+struct FollowerRangedTest : ::testing::TestWithParam<::std::tuple<int>>
 {
   using CaptorType = Ranged<Dispatch<int, int>, NoLock>;
 
   void SetUp() final
   {
     p_delay = std::get<0>(GetParam());
-    p_period = std::get<1>(GetParam());
   }
 
   int p_delay = 0;
-  int p_period = 0;
 };
 
 
 TEST_P(FollowerRangedTest, RetryOnEmpty)
 {
-  CaptorType captor{p_period, p_delay};
+  CaptorType captor{p_delay};
 
   std::vector<Dispatch<int, int>> data;
 
@@ -49,7 +47,7 @@ TEST_P(FollowerRangedTest, RetryOnEmpty)
 
 TEST_P(FollowerRangedTest, AbortOnTooFewBeforeZeroRange)
 {
-  CaptorType captor{p_period, p_delay};
+  CaptorType captor{p_delay};
 
   std::vector<Dispatch<int, int>> data;
 
@@ -64,7 +62,7 @@ TEST_P(FollowerRangedTest, AbortOnTooFewBeforeZeroRange)
 
 TEST_P(FollowerRangedTest, AbortOnTooFewBeforeNonZeroRange)
 {
-  CaptorType captor{p_period, p_delay};
+  CaptorType captor{p_delay};
 
   std::vector<Dispatch<int, int>> data;
 
@@ -79,7 +77,7 @@ TEST_P(FollowerRangedTest, AbortOnTooFewBeforeNonZeroRange)
 
 TEST_P(FollowerRangedTest, RetryOnNoneAfterZeroRange)
 {
-  CaptorType captor{p_period, p_delay};
+  CaptorType captor{p_delay};
 
   std::vector<Dispatch<int, int>> data;
 
@@ -94,7 +92,7 @@ TEST_P(FollowerRangedTest, RetryOnNoneAfterZeroRange)
 
 TEST_P(FollowerRangedTest, RetryOnNoneAfterNonZeroRange)
 {
-  CaptorType captor{p_period, p_delay};
+  CaptorType captor{p_delay};
 
   std::vector<Dispatch<int, int>> data;
 
@@ -109,7 +107,7 @@ TEST_P(FollowerRangedTest, RetryOnNoneAfterNonZeroRange)
 
 TEST_P(FollowerRangedTest, CaptureOnZeroRange)
 {
-  CaptorType captor{p_period, p_delay};
+  CaptorType captor{p_delay};
 
   std::vector<Dispatch<int, int>> data;
 
@@ -124,7 +122,7 @@ TEST_P(FollowerRangedTest, CaptureOnZeroRange)
 
 TEST_P(FollowerRangedTest, CaptureOnZeroRangeWithIntermediate)
 {
-  CaptorType captor{p_period, p_delay};
+  CaptorType captor{p_delay};
 
   std::vector<Dispatch<int, int>> data;
 
@@ -140,7 +138,7 @@ TEST_P(FollowerRangedTest, CaptureOnZeroRangeWithIntermediate)
 
 TEST_P(FollowerRangedTest, CaptureOnNonZeroRange)
 {
-  CaptorType captor{p_period, p_delay};
+  CaptorType captor{p_delay};
 
   std::vector<Dispatch<int, int>> data;
 
@@ -155,7 +153,7 @@ TEST_P(FollowerRangedTest, CaptureOnNonZeroRange)
 
 TEST_P(FollowerRangedTest, CaptureOnNonZeroRangeWithIntermediate)
 {
-  CaptorType captor{p_period, p_delay};
+  CaptorType captor{p_delay};
 
   std::vector<Dispatch<int, int>> data;
 
@@ -170,33 +168,11 @@ TEST_P(FollowerRangedTest, CaptureOnNonZeroRangeWithIntermediate)
 }
 
 
-TEST_P(FollowerRangedTest, AbortDataRemoval)
-{
-  CaptorType captor{p_period, p_delay};
-
-  std::vector<Dispatch<int, int>> data;
-
-  captor.inject(-p_delay-3 * p_period, 100);
-  captor.inject(-p_delay-1, 100);
-  captor.inject(-p_delay, 100);
-  captor.inject(-p_delay+1, 100);
-  captor.inject(-p_delay+2, 100);
-
-  captor.abort(0);
-
-  const auto available = captor.get_available_stamp_range();
-
-  ASSERT_TRUE(available);
-  ASSERT_GT(available.lower_stamp, (0 - p_delay - 2 * p_period));
-}
-
-
 INSTANTIATE_TEST_SUITE_P(
   FollowerRangedTestSweep,
   FollowerRangedTest,
   testing::Combine(
-    testing::ValuesIn(std::vector<int>{0, 1, 2}),  // delay
-    testing::ValuesIn(std::vector<int>{1, 2})  // period
+    testing::ValuesIn(std::vector<int>{0, 1, 2})  // delay
   ));
 
 #endif  // DOXYGEN_SKIP
