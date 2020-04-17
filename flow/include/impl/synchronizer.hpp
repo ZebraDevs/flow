@@ -135,7 +135,10 @@ Synchronizer<CaptorTs...>::capture(const std::tuple<CaptorTs&...>& captors,
               outputs);
 
   // Update sequence monotonicity guard
-  latest_stamp_ = std::max(result.range.lower_stamp, latest_stamp_);
+  if (result.range)
+  {
+    latest_stamp_ = std::max(result.range.lower_stamp, latest_stamp_);
+  }
 
   // Check for aborted capture
   if (result.state == State::ABORT)
