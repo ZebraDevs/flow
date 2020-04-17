@@ -164,28 +164,6 @@ public:
   template<typename... DispatchConstructorArgTs>
   inline void insert(DispatchConstructorArgTs&&... dispatch_args);
 
-  /**
-   * @brief Find iterator of element with sequence stamp which is less than or equal to <code>stamp</code>
-   *
-   * @param stamp  limiting sequencing stamp value
-   * @param start  search start iterator
-   *
-   * @revtal iterator  one element before OR at <code>stamp</code>
-   * @revtal end()     if iterator could not be found
-   */
-  inline const_iterator seek_before(const stamp_type& stamp, const_iterator start) const;
-
-  /**
-   * @brief Find iterator of element with sequence stamp which is greater than <code>stamp</code>
-   *
-   * @param stamp  limiting sequencing stamp value
-   * @param start  search start iterator
-   *
-   * @revtal iterator  one element strictly after <code>stamp</code>
-   * @revtal end()     if iterator could not be found
-   */
-  inline const_iterator seek_after(const stamp_type& stamp, const_iterator start) const;
-
 private:
   /// Queued data dispatches
   BaseContainerType queue_;

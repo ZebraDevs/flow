@@ -9,10 +9,10 @@
 
 // Flow
 #include <flow/follower/before.h>
-#include <flow/follower/count.h>
 #include <flow/follower/closest_before.h>
 #include <flow/follower/exact.h>
 #include <flow/follower/latched.h>
+#include <flow/follower/ranged.h>
 
 namespace flow
 {

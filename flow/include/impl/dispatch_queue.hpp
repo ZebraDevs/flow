@@ -107,48 +107,6 @@ void DispatchQueue<DispatchT, AllocatorT>::shrink_to_fit(size_type n)
   }
 }
 
-
-template<typename DispatchT, typename AllocatorT>
-typename
-DispatchQueue<DispatchT, AllocatorT>::const_iterator
-DispatchQueue<DispatchT, AllocatorT>::seek_before(const stamp_type& stamp, const_iterator start) const
-{
-  if (start == queue_.end())
-  {
-    return start;
-  }
-
-  while (true)
-  {
-    const auto prev = start++;
-    if (start == queue_.end() or start->stamp() >= stamp)
-    {
-      return prev;
-    }
-  }
-  return start;
-}
-
-
-template<typename DispatchT, typename AllocatorT>
-typename
-DispatchQueue<DispatchT, AllocatorT>::const_iterator
-DispatchQueue<DispatchT, AllocatorT>::seek_after(const stamp_type& stamp, const_iterator start) const
-{
-  while (start != queue_.end())
-  {
-    if (start->stamp() > stamp)
-    {
-      return start;
-    }
-    else
-    {
-      ++start;
-    }
-  }
-  return start;
-}
-
 }  // namespace flow
 
 #endif  // FLOW_CAPTURE_IMPL_DISPATCH_QUEUE_HPP

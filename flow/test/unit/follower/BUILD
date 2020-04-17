@@ -16,15 +16,6 @@ flow_cc_gtest(
     timeout="short",
 )
 
-
-flow_cc_gtest(
-    name="count",
-    srcs=["count.cpp"],
-    deps=["//flow:flow"],
-    timeout="short",
-)
-
-
 flow_cc_gtest(
     name="exact",
     srcs=["exact.cpp"],
@@ -36,6 +27,14 @@ flow_cc_gtest(
 flow_cc_gtest(
     name="latched",
     srcs=["latched.cpp"],
+    deps=["//flow:flow"],
+    timeout="short",
+)
+
+
+flow_cc_gtest(
+    name="ranged",
+    srcs=["ranged.cpp"],
     deps=["//flow:flow"],
     timeout="short",
 )

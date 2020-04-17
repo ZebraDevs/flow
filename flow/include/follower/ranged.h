@@ -2,10 +2,10 @@
  * @copyright 2020 Fetch Robotics Inc.
  * @author Brian Cairl
  *
- * @file count.h
+ * @file ranged.h
  */
-#ifndef FLOW_FOLLOWER_COUNT_H
-#define FLOW_FOLLOWER_COUNT_H
+#ifndef FLOW_FOLLOWER_RANGED_H
+#define FLOW_FOLLOWER_RANGED_H
 
 // Flow
 #include <flow/follower/follower.h>
@@ -16,7 +16,7 @@ namespace follower
 {
 
 /**
- * @brief Captures N-elements before and M-elements after a sequencing range
+ * @brief Captures 1 -element before and 1 element after a sequencing range, and all element which fall between
  *
  *        Also captures all data with associated sequencing stamps between
  *        the lower and upper sequencing stamps
@@ -31,42 +31,37 @@ namespace follower
 template<typename DispatchT,
          typename LockPolicyT = NoLock,
          typename AllocatorT = std::allocator<DispatchT>>
-class Count : public Follower<Count<DispatchT, LockPolicyT, AllocatorT>>
+class Ranged : public Follower<Ranged<DispatchT, LockPolicyT, AllocatorT>>
 {
 public:
   /// Data stamp type
-  using stamp_type = typename CaptorTraits<Count>::stamp_type;
+  using stamp_type = typename CaptorTraits<Ranged>::stamp_type;
 
   /// Integer size type
-  using size_type = typename CaptorTraits<Count>::size_type;
+  using size_type = typename CaptorTraits<Ranged>::size_type;
 
   /// Data stamp duration type
-  using offset_type = typename CaptorTraits<Count>::offset_type;
+  using offset_type = typename CaptorTraits<Ranged>::offset_type;
 
   /**
    * @brief Setup constructor
    *
+   * @param period  expected data period
    * @param delay  the delay with which to capture
-   * @param n_before  number of elements before target time to capture
-   * @param m_after  number of elements before target time to capture
-   *
-   * @throw <code>std::invalid_argument</code> if <code>m_after < 1</code>
    */
-  Count(const offset_type& delay, const size_type n_before, const size_type m_after) noexcept(false);
+  Ranged(const offset_type& period, const offset_type& delay);
 
   /**
    * @brief Setup constructor
    *
-   * @param n_before  number of elements before target time to capture
-   * @param m_after  number of elements before target time to capture
+   * @param period  expected data period
+   * @param delay  the delay with which to capture
    * @param alloc  dispatch object allocator with some initial state
-   *
-   * @throw <code>std::invalid_argument</code> if <code>m_after < 1</code>
    */
-  Count(const offset_type& delay, const size_type n_before, const size_type m_after, const AllocatorT& alloc) noexcept(false);
+  Ranged(const offset_type& period, const offset_type& delay, const AllocatorT& alloc);
 
 private:
-  using PolicyType = Follower<Count<DispatchT, LockPolicyT, AllocatorT>>;
+  using PolicyType = Follower<Ranged<DispatchT, LockPolicyT, AllocatorT>>;
   friend PolicyType;
 
   /**
@@ -95,19 +90,11 @@ private:
    */
   inline void reset_follower_impl() noexcept(true) {}
 
-  /**
-   * @brief Validates captor configuration
-   */
-  inline void validate() const noexcept(false);
+  /// Expected data period, used for computing aborts
+  offset_type period_;
 
   /// Capture delay
   offset_type delay_;
-
-  /// Number of message before target to accept before ready
-  size_type n_before_;
-
-  /// Number of message after target to accept before ready
-  size_type m_after_;
 };
 
 }  // namespace follower
@@ -124,7 +111,7 @@ private:
 template<typename DispatchT,
          typename LockPolicyT,
          typename AllocatorT>
-struct CaptorTraits<follower::Count<DispatchT, LockPolicyT, AllocatorT>> : CaptorTraitsFromDispatch<DispatchT>
+struct CaptorTraits<follower::Ranged<DispatchT, LockPolicyT, AllocatorT>> : CaptorTraitsFromDispatch<DispatchT>
 {
   /// Dispatch object allocation type
   using DispatchAllocatorType = AllocatorT;
@@ -136,6 +123,6 @@ struct CaptorTraits<follower::Count<DispatchT, LockPolicyT, AllocatorT>> : Capto
 }  // namespace flow
 
 // Flow (implementation)
-#include <flow/follower/impl/count.hpp>
+#include <flow/follower/impl/ranged.hpp>
 
-#endif  // FLOW_FOLLOWER_COUNT_H
+#endif  // FLOW_FOLLOWER_RANGED_H
