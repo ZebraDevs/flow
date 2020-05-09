@@ -73,7 +73,7 @@ public:
     result_->state = c.capture(output, result_->range, timeout_);
 
     // Set aborted state if driving sequence range violates monotonicity guard
-    if (result_->range.upper_stamp < t_latest_)
+    if (result_->state == State::PRIMED and result_->range.upper_stamp < t_latest_)
     {
       result_->state = State::ABORT;
     }
