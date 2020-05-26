@@ -18,13 +18,15 @@ namespace flow
 
 template<typename CaptorT, typename LockableT>
 Captor<CaptorT, LockableT>::Captor() :
-  CaptorInterfaceType{0UL}
+  CaptorInterfaceType{0UL},
+  capturing_{true}
 {}
 
 
 template<typename CaptorT, typename LockableT>
 Captor<CaptorT, LockableT>::Captor(const DispatchAllocatorType& alloc) :
-  CaptorInterfaceType{0UL, alloc}
+  CaptorInterfaceType{0UL, alloc},
+  capturing_{true}
 {}
 
 
@@ -118,10 +120,23 @@ State Captor<CaptorT, LockableT>::capture_impl(OutputDispatchIteratorT&& output,
                                                CaptureRangeT&& range,
                                                const std::chrono::system_clock::time_point timeout)
 {
+  // Helper used to reset a flag on destruction
+  struct ResetTrue
+  {
+    inline explicit ResetTrue(volatile bool& flag) : flag_{std::addressof(flag)} {}
+    inline ~ResetTrue() { *flag_ = true; }
+    volatile bool* const flag_;
+  };
+
   LockableT lock{capture_mutex_};
 
-  // Reset capture flag
-  capturing_ = true;
+  // This object is used to make sure 'capturing_' == true before lock goes out of scope
+  //
+  // This ensure the following:
+  //   - if 'capturing_' was set to 'false' during a CV wait, then it will be true again after call
+  //   - if 'capturing_' was set to 'false' before call, then it will be true again after call
+  //
+  ResetTrue reset_on_destroy{capturing_};
 
   // Wait for data and attempt capture when data is available
   while (capturing_)
