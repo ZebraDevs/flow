@@ -53,21 +53,46 @@ private:
 
 
 /// captor::capture call helper
-template<typename ResultT, typename StampT>
+template<typename ResultT, typename StampT, typename TimePointT>
 class CaptureHelper
 {
 public:
   CaptureHelper(ResultT& result,
                 const StampT& t_latest,
-                const std::chrono::system_clock::time_point timeout) :
+                const TimePointT timeout) :
     result_{std::addressof(result)},
     t_latest_{t_latest},
     timeout_{timeout}
   {}
 
+  /// Abort caller for driving captors (which don't require wait timeouts)
+  template<typename PolicyT, typename OutputIteratorT>
+  inline std::enable_if_t<is_polling<PolicyT>::value> operator()(Driver<PolicyT>& c, OutputIteratorT output)
+  {
+    // Get capture state
+    result_->state = c.capture(output, result_->range);
+
+    // Set aborted state if driving sequence range violates monotonicity guard
+    if (result_->state == State::PRIMED and result_->range.upper_stamp < t_latest_)
+    {
+      result_->state = State::ABORT;
+    }
+  }
+
+  /// Abort caller for follower captors (which don't require wait timeouts)
+  template<typename PolicyT, typename OutputIteratorT>
+  inline std::enable_if_t<is_polling<PolicyT>::value> operator()(Follower<PolicyT>& c, OutputIteratorT output)
+  {
+    // Get capture state alias
+    if (result_->state == State::PRIMED)
+    {
+      result_->state = c.capture(output, result_->range);
+    }
+  }
+
   /// Abort caller for driving captors
   template<typename PolicyT, typename OutputIteratorT>
-  inline void operator()(Driver<PolicyT>& c, OutputIteratorT output)
+  inline std::enable_if_t<!is_polling<PolicyT>::value> operator()(Driver<PolicyT>& c, OutputIteratorT output)
   {
     // Get capture state
     result_->state = c.capture(output, result_->range, timeout_);
@@ -81,7 +106,7 @@ public:
 
   /// Abort caller for follower captors
   template<typename PolicyT, typename OutputIteratorT>
-  inline void operator()(Follower<PolicyT>& c, OutputIteratorT output)
+  inline std::enable_if_t<!is_polling<PolicyT>::value> operator()(Follower<PolicyT>& c, OutputIteratorT output)
   {
     // Get capture state alias
     if (result_->state == State::PRIMED)
@@ -97,8 +122,8 @@ private:
   /// Known latest sequence stamp
   StampT t_latest_;
 
-  /// System time to end data waits
-  std::chrono::system_clock::time_point timeout_;
+  /// Time at which data waits should end
+  TimePointT timeout_;
 };
 
 }  // namespace detail
@@ -121,16 +146,18 @@ Synchronizer<CaptorTs...>::~Synchronizer()
 
 
 template<typename... CaptorTs>
-template<typename... OutputIteratorTs>
+template<typename ClockT, typename DurationT, typename... OutputIteratorTs>
 typename
 Synchronizer<CaptorTs...>::Result
 Synchronizer<CaptorTs...>::capture(const std::tuple<CaptorTs&...>& captors,
                                    const std::tuple<OutputIteratorTs...> outputs,
-                                   const std::chrono::system_clock::time_point timeout)
+                                   const std::chrono::time_point<ClockT, DurationT> timeout)
 {
+  using time_point_type = std::chrono::time_point<ClockT, DurationT>;
+
   // Capture next input set
   Result result;
-  apply_every(detail::CaptureHelper<Result, stamp_type>{result, latest_stamp_, timeout},
+  apply_every(detail::CaptureHelper<Result, stamp_type, time_point_type>{result, latest_stamp_, timeout},
               captors,
               outputs);
 
@@ -139,13 +166,19 @@ Synchronizer<CaptorTs...>::capture(const std::tuple<CaptorTs&...>& captors,
   {
     latest_stamp_ = std::max(result.range.lower_stamp, latest_stamp_);
   }
-
-  // Check for aborted capture
-  if (result.state == State::ABORT)
-  {
-    abort(captors, latest_stamp_);
-  }
   return result;
+}
+
+
+template<typename... CaptorTs>
+template<typename CaptorTupleT, typename OutputIteratorTupleT>
+typename
+Synchronizer<CaptorTs...>::Result
+Synchronizer<CaptorTs...>::capture(CaptorTupleT&& captors, OutputIteratorTupleT&& outputs)
+{
+  return this->capture(std::forward<CaptorTupleT>(captors),
+                       std::forward<OutputIteratorTupleT>(outputs),
+                       std::chrono::steady_clock::time_point::max());
 }
 
 

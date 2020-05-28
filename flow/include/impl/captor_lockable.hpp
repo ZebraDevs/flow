@@ -52,6 +52,7 @@ void Captor<CaptorT, LockableT>::reset_impl()
 {
   LockableT lock{capture_mutex_};
   derived()->reset_policy_impl();
+  CaptorInterfaceType::queue_.clear();
 }
 
 
@@ -115,50 +116,40 @@ Captor<CaptorT, LockableT>::get_available_stamp_range_impl() const
 
 
 template<typename CaptorT, typename LockableT>
-template<typename OutputDispatchIteratorT, typename CaptureRangeT>
+template<typename OutputDispatchIteratorT, typename CaptureRangeT, typename ClockT, typename DurationT>
 State Captor<CaptorT, LockableT>::capture_impl(OutputDispatchIteratorT&& output,
                                                CaptureRangeT&& range,
-                                               const std::chrono::system_clock::time_point timeout)
+                                               const std::chrono::time_point<ClockT, DurationT> timeout)
 {
-  // Helper used to reset a flag on destruction
-  struct ResetTrue
-  {
-    inline explicit ResetTrue(volatile bool& flag) : flag_{std::addressof(flag)} {}
-    inline ~ResetTrue() { *flag_ = true; }
-    volatile bool* const flag_;
-  };
-
   LockableT lock{capture_mutex_};
 
-  // This object is used to make sure 'capturing_' == true before lock goes out of scope
-  //
-  // This ensure the following:
-  //   - if 'capturing_' was set to 'false' during a CV wait, then it will be true again after call
-  //   - if 'capturing_' was set to 'false' before call, then it will be true again after call
-  //
-  ResetTrue reset_on_destroy{capturing_};
+  State state = State::ABORT;
 
   // Wait for data and attempt capture when data is available
   while (capturing_)
   {
-    const State state = derived()->capture_policy_impl(std::forward<OutputDispatchIteratorT>(output),
-                                                       std::forward<CaptureRangeT>(range));
+    state = derived()->capture_policy_impl(std::forward<OutputDispatchIteratorT>(output),
+                                           std::forward<CaptureRangeT>(range));
 
     if (state != State::RETRY)
     {
-      return state;
+      break;
     }
-    else if (std::chrono::system_clock::time_point::max() == timeout)
+    else if (std::chrono::time_point<ClockT, DurationT>::max() == timeout)
     {
       capture_cv_.wait(lock);
     }
     else if (std::cv_status::timeout == capture_cv_.wait_until(lock, timeout))
     {
-      return State::TIMEOUT;
+      state = State::TIMEOUT;
+      break;
     }
   }
 
-  return State::ABORT;
+  // Make sure capturing flag is reset under lock before next call, under lock
+  capturing_ = true;
+
+  return state;
 }
 
 
