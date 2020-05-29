@@ -123,17 +123,20 @@ State Captor<CaptorT, LockableT>::capture_impl(OutputDispatchIteratorT&& output,
 {
   LockableT lock{capture_mutex_};
 
-  State state = State::ABORT;
+  // Reset flag if cancelled externally on previous capture
+  capturing_ = true;
 
   // Wait for data and attempt capture when data is available
-  while (capturing_)
+  do
   {
-    state = derived()->capture_policy_impl(std::forward<OutputDispatchIteratorT>(output),
-                                           std::forward<CaptureRangeT>(range));
+    // Attempt data capture
+    const State state = derived()->capture_policy_impl(std::forward<OutputDispatchIteratorT>(output),
+                                                       std::forward<CaptureRangeT>(range));
 
+    // Check capture state, and whether or not a data wait is needed
     if (state != State::RETRY)
     {
-      break;
+      return state;
     }
     else if (std::chrono::time_point<ClockT, DurationT>::max() == timeout)
     {
@@ -141,15 +144,13 @@ State Captor<CaptorT, LockableT>::capture_impl(OutputDispatchIteratorT&& output,
     }
     else if (std::cv_status::timeout == capture_cv_.wait_until(lock, timeout))
     {
-      state = State::TIMEOUT;
-      break;
+      return State::TIMEOUT;
     }
   }
+  while (capturing_);
 
-  // Make sure capturing flag is reset under lock before next call, under lock
-  capturing_ = true;
-
-  return state;
+  // Make sure capturing flag is reset under lock before next capture attempt
+  return State::ABORT;
 }
 
 
