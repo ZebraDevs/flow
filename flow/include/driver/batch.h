@@ -124,7 +124,7 @@ struct CaptorTraits<driver::Batch<DispatchT, LockPolicyT, AllocatorT>> : CaptorT
   using DispatchAllocatorType = AllocatorT;
 
   /// Thread locking policy type
-  using LockPolicyType = LockPolicyT;;
+  using LockPolicyType = LockPolicyT;
 };
 
 }  // namespace flow

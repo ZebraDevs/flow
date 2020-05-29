@@ -153,10 +153,21 @@ public:
    *
    * @return capture/synchronization details
    */
-  template<typename... OutputIteratorTs>
+  template<typename ClockT, typename DurationT, typename... OutputIteratorTs>
   Result capture(const std::tuple<CaptorTs&...>& captors,
                  const std::tuple<OutputIteratorTs...> outputs,
-                 const std::chrono::system_clock::time_point timeout = std::chrono::system_clock::time_point::max());
+                 const std::chrono::time_point<ClockT, DurationT> timeout);
+
+  /**
+   * @brief Runs event input capture without explicit timeout point
+   *
+   * @param captors  tuple of captors used to perform synchronization
+   * @param outputs  tuple of dispath output iterators, order w.r.t <code>CaptorTs</code>
+   *
+   * @return capture/synchronization details
+   */
+  template<typename CaptorTupleT, typename OutputIteratorTupleT>
+  inline Result capture(CaptorTupleT&& captors, OutputIteratorTupleT&& outputs);
 
 private:
   /// Sequencing stamp of the latest valid result

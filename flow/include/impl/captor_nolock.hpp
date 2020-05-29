@@ -124,9 +124,7 @@ private:
    * @copydoc CaptorInterface::capture
    */
   template<typename OutputDispatchIteratorT, typename CaptureRangeT>
-  inline State capture_impl(OutputDispatchIteratorT&& output,
-                            CaptureRangeT&& range,
-                            const std::chrono::system_clock::time_point timeout = std::chrono::system_clock::time_point::max())
+  inline State capture_impl(OutputDispatchIteratorT&& output, CaptureRangeT&& range)
   {
     return derived()->capture_policy_impl(std::forward<OutputDispatchIteratorT>(output),
                                           std::forward<CaptureRangeT>(range));
