@@ -162,7 +162,7 @@ Synchronizer<CaptorTs...>::capture(const std::tuple<CaptorTs&...>& captors,
               outputs);
 
   // Update sequence monotonicity guard
-  if (result.range)
+  if (result.range and result.state != State::RETRY)
   {
     latest_stamp_ = std::max(result.range.lower_stamp, latest_stamp_);
   }
