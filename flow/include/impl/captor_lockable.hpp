@@ -59,15 +59,18 @@ void Captor<CaptorT, LockableT>::reset_impl()
 template<typename CaptorT, typename LockableT>
 void Captor<CaptorT, LockableT>::abort_impl(const stamp_type& t_abort)
 {
-  LockableT lock{capture_mutex_};
+  {
+    LockableT lock{capture_mutex_};
 
-  // Indicate that capture should stop
-  capturing_ = false;
+    // Indicate that capture should stop
+    capturing_ = false;
+
+    // Run abort behavior for this captor
+    derived()->abort_policy_impl(t_abort);
+  }
 
   // Release capture waits
   capture_cv_.notify_one();
-
-  derived()->abort_policy_impl(t_abort);
 }
 
 
