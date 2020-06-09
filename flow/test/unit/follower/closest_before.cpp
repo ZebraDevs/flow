@@ -104,8 +104,8 @@ TEST_F(FollowerClosestBefore, PrimedAtDataBoundaryFilledPast)
   std::size_t M = 2UL * (DELAY + PERIOD);
   while (M--)
   {
-    this->inject(Dispatch<int, int>{t, t});
     t += 1;
+    this->inject(Dispatch<int, int>{t, t});
   }
 
   ASSERT_EQ(this->size(), 4UL * (DELAY + PERIOD));
