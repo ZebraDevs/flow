@@ -58,7 +58,12 @@ void DispatchQueue<DispatchT, AllocatorT>::insert(DispatchConstructorArgTs&&... 
       return;
     }
   }
-  queue_.emplace(std::next(qitr), std::move(dispatch));
+
+  // Insert only if this element does not duplicate an existing element
+  if (qitr->stamp() != dispatch.stamp())
+  {
+    queue_.emplace(std::next(qitr), std::move(dispatch));
+  }
 }
 
 

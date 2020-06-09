@@ -141,25 +141,31 @@ public:
 
   /**
    * @brief Removes data with stamp older than reference sequence stamp
+   *
    * @param stamp  lower bound on container sequence stamp
    */
   inline void remove_before(const stamp_type& t);
 
   /**
    * @brief Removes data with stamp older than or equal to some reference sequence stamp
+   *
    * @param stamp  lower bound on container sequence stamp
    */
   inline void remove_at_before(const stamp_type& t);
 
   /**
    * @brief Removes oldest data until queue has less than or equal to N-elements
+   *
    * @param n  lower bound on total container size
    */
   inline void shrink_to_fit(size_type n);
 
   /**
-   * @brief Inserts data in sequence stamp order as Dispatch (duplicates allowed)
+   * @brief Inserts data in sequence stamp order as Dispatch
+   *
    * @param dispatch_args  dispatch constructor args
+   *
+   * @warning elements with stamps identical to existing element stamps are not added
    */
   template<typename... DispatchConstructorArgTs>
   inline void insert(DispatchConstructorArgTs&&... dispatch_args);

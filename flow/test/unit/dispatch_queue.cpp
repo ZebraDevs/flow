@@ -190,11 +190,12 @@ TEST(DispatchQueue, InsertDuplicateTimeBehavior)
   queue.insert(DispatchType{t0, 2});
   queue.insert(DispatchType{t0, 3});
 
-  ASSERT_EQ(queue.size(), 3u);
+  ASSERT_EQ(queue.size(), 1u);
 
   const auto p0 = queue.pop();
 
   EXPECT_EQ(p0.stamp(), t0);
+  EXPECT_EQ(p0.data(), 1);
 }
 
 
