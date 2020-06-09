@@ -8,6 +8,7 @@
 #define FLOW_CAPTURE_IMPL_CAPTOR_NOLOCK_HPP
 
 // C++ Standard Library
+#include <algorithm>
 #include <iterator>
 #include <memory>
 #include <mutex>
@@ -92,6 +93,15 @@ private:
   inline void inject_impl(DispatchConstructorArgTs&&... dispatch_args)
   {
     CaptorInterfaceType::insert_and_limit(std::forward<DispatchConstructorArgTs>(dispatch_args)...);
+  }
+
+  /**
+   * @copydoc CaptorInterface::insert
+   */
+  template<typename FirstForwardDispatchIteratorT, typename LastForwardDispatchIteratorT>
+  inline void insert_impl(FirstForwardDispatchIteratorT first, LastForwardDispatchIteratorT last)
+  {
+    std::for_each(first, last, [this](const DispatchType& dispatch) { CaptorInterfaceType::insert_and_limit(dispatch); });
   }
 
   /**

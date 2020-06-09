@@ -169,6 +169,24 @@ public:
   }
 
   /**
+   * @brief Injects a range of new data into Captor queue
+   *
+   *        Data is automatically removed from <code>queue_</code> when its
+   *        size is in excess of the size specified by <code>capacity_</code>
+   *
+   * @tparam FirstForwardDispatchIteratorT  forward iterator type for <code>DispatchType</code> elements
+   * @tparam LastForwardDispatchIteratorT  forward iterator type for <code>DispatchType</code> elements
+   *
+   * @param dispatch_args  dispatch constructor arguments
+   */
+  template<typename FirstForwardDispatchIteratorT, typename LastForwardDispatchIteratorT>
+  inline void insert(FirstForwardDispatchIteratorT&& first, LastForwardDispatchIteratorT&& last)
+  {
+    return derived()->insert_impl(std::forward<FirstForwardDispatchIteratorT>(first),
+                                  std::forward<LastForwardDispatchIteratorT>(last));
+  }
+
+  /**
    * @brief Defines Captor behavior on <code>ABORT</code>
    *
    *        Triggers data removal before \p t_abort
@@ -355,6 +373,12 @@ private:
    */
   template<typename... DispatchConstructorArgTs>
   inline void inject_impl(DispatchConstructorArgTs&&... dispatch_args);
+
+  /**
+   * @copydoc CaptorInterface::insert
+   */
+  template<typename FirstForwardDispatchIteratorT, typename LastForwardDispatchIteratorT>
+  inline void insert_impl(FirstForwardDispatchIteratorT first, LastForwardDispatchIteratorT last);
 
   /**
    * @copydoc CaptorInterface::abort
