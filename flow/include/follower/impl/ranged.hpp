@@ -38,7 +38,7 @@ Ranged<DispatchT, LockPolicyT, AllocatorT>::Ranged(const offset_type& delay,
 template<typename DispatchT, typename LockPolicyT, typename AllocatorT>
 template<typename OutputDispatchIteratorT>
 State Ranged<DispatchT, LockPolicyT, AllocatorT>::capture_follower_impl(OutputDispatchIteratorT&& output,
-                                                                       const CaptureRange<stamp_type>& range)
+                                                                        const CaptureRange<stamp_type>& range)
 {
   // Abort early on empty queue
   if (PolicyType::queue_.empty())
@@ -50,7 +50,7 @@ State Ranged<DispatchT, LockPolicyT, AllocatorT>::capture_follower_impl(OutputDi
   const auto past_first = std::find_if(
     PolicyType::queue_.begin(),
     PolicyType::queue_.end(),
-    [offset_lower_stamp=(range.lower_stamp - delay_)](const auto& dispatch) {return dispatch.stamp() >= offset_lower_stamp;});
+    [offset_lower_stamp=(range.lower_stamp - delay_)](const DispatchT& dispatch) {return dispatch.stamp() >= offset_lower_stamp;});
 
   // If we are at the start of the available range, then all elements after this one will be after the valid range
   if (past_first == PolicyType::queue_.begin())
@@ -62,7 +62,7 @@ State Ranged<DispatchT, LockPolicyT, AllocatorT>::capture_follower_impl(OutputDi
   const auto before_last = std::find_if_not(
     past_first == PolicyType::queue_.end() ? PolicyType::queue_.begin() : past_first,
     PolicyType::queue_.end(),
-    [offset_upper_stamp=(range.upper_stamp - delay_)](const auto& dispatch) {return dispatch.stamp() <= offset_upper_stamp;});
+    [offset_upper_stamp=(range.upper_stamp - delay_)](const DispatchT& dispatch) {return dispatch.stamp() <= offset_upper_stamp;});
 
   // If the end of our range
   if (before_last == PolicyType::queue_.end())
