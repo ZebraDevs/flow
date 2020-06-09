@@ -18,7 +18,8 @@ namespace driver
 template<typename DispatchT, typename LockPolicyT, typename AllocatorT>
 Throttled<DispatchT, LockPolicyT, AllocatorT>::Throttled(const offset_type throttle_period) noexcept(false) :
   PolicyType{},
-  throttle_period_{throttle_period}
+  throttle_period_{throttle_period},
+  previous_stamp_{StampTraits<stamp_type>::min()}
 {
 }
 
@@ -26,7 +27,8 @@ Throttled<DispatchT, LockPolicyT, AllocatorT>::Throttled(const offset_type throt
 template<typename DispatchT, typename LockPolicyT, typename AllocatorT>
 Throttled<DispatchT, LockPolicyT, AllocatorT>::Throttled(const offset_type throttle_period, const AllocatorT& alloc) noexcept(false) :
   PolicyType{alloc},
-  throttle_period_{throttle_period}
+  throttle_period_{throttle_period},
+  previous_stamp_{StampTraits<stamp_type>::min()}
 {
 }
 
@@ -37,32 +39,25 @@ State Throttled<DispatchT, LockPolicyT, AllocatorT>::capture_driver_impl(OutputD
                                                                          CaptureRange<stamp_type>& range)
 {
   // Abort if there are no queued dispatches
-  if (PolicyType::queue_.size() < 2)
+  if (PolicyType::queue_.empty())
   {
     return State::RETRY;
   }
 
-  // Get oldest time stamp
-  const auto oldest_stamp = PolicyType::queue_.oldest_stamp();
-
   // Capture message which falls within throttling period
-  auto itr = std::next(PolicyType::queue_.begin());
-  while (itr != PolicyType::queue_.end())
+  for (const auto& dispatch : PolicyType::queue_)
   {
-    if (itr->stamp() - oldest_stamp >= throttle_period_)
+    if (previous_stamp_ == StampTraits<stamp_type>::min() or (dispatch.stamp() - previous_stamp_) >= throttle_period_)
     {
-      range.lower_stamp = itr->stamp();
+      range.lower_stamp = dispatch.stamp();
       range.upper_stamp = range.lower_stamp;
 
-      *(output++) = *(itr);
+      *(output++) = dispatch;
 
-      PolicyType::queue_.remove_before(itr->stamp());
+      previous_stamp_ = range.lower_stamp;
+      PolicyType::queue_.remove_at_before(range.lower_stamp);
 
       return State::PRIMED;
-    }
-    else
-    {
-      ++itr;
     }
   }
   return State::RETRY;
@@ -73,6 +68,13 @@ template<typename DispatchT, typename LockPolicyT, typename AllocatorT>
 void Throttled<DispatchT, LockPolicyT, AllocatorT>::abort_driver_impl(const stamp_type& t_abort)
 {
   PolicyType::queue_.remove_before(t_abort);
+}
+
+
+template<typename DispatchT, typename LockPolicyT, typename AllocatorT>
+void Throttled<DispatchT, LockPolicyT, AllocatorT>::reset_driver_impl()
+{
+  previous_stamp_ = StampTraits<stamp_type>::min();
 }
 
 }  // namespace driver

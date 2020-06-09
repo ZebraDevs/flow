@@ -90,10 +90,13 @@ private:
   /**
    * @brief Defines Captor reset behavior
    */
-  inline void reset_driver_impl() noexcept(true) {}
+  inline void reset_driver_impl();
 
   /// Capture throttling period
   offset_type throttle_period_;
+
+  /// Previous captured element stamp
+  stamp_type previous_stamp_;
 };
 
 }  // namespace driver
