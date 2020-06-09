@@ -8,6 +8,7 @@
 #define FLOW_CAPTURE_IMPL_CAPTOR_POLLING_HPP
 
 // C++ Standard Library
+#include <algorithm>
 #include <iterator>
 #include <memory>
 #include <mutex>
@@ -98,6 +99,16 @@ private:
   {
     BasicLockableT lock{queue_mutex_};
     CaptorInterfaceType::insert_and_limit(std::forward<DispatchConstructorArgTs>(dispatch_args)...);
+  }
+
+  /**
+   * @copydoc CaptorInterface::insert
+   */
+  template<typename FirstForwardDispatchIteratorT, typename LastForwardDispatchIteratorT>
+  inline void insert_impl(FirstForwardDispatchIteratorT first, LastForwardDispatchIteratorT last)
+  {
+    BasicLockableT lock{queue_mutex_};
+    std::for_each(first, last, [this](const DispatchType& dispatch) { CaptorInterfaceType::insert_and_limit(dispatch); });
   }
 
   /**
