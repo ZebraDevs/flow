@@ -13,16 +13,16 @@
 #include <gtest/gtest.h>
 
 // Flow
-#include <flow/follower/exact.h>
+#include <flow/follower/matched_stamp.h>
 
 using namespace flow;
 using namespace flow::follower;
 
 
-struct FollowerExact : ::testing::Test, Exact<Dispatch<int, int>, NoLock>
+struct FollowerMatchedStamp : ::testing::Test, MatchedStamp<Dispatch<int, int>, NoLock>
 {
-  FollowerExact() :
-    Exact<Dispatch<int, int>, NoLock>{}
+  FollowerMatchedStamp() :
+    MatchedStamp<Dispatch<int, int>, NoLock>{}
   {}
 
   void SetUp() final
@@ -32,7 +32,7 @@ struct FollowerExact : ::testing::Test, Exact<Dispatch<int, int>, NoLock>
 };
 
 
-TEST_F(FollowerExact, RetryOnEmpty)
+TEST_F(FollowerMatchedStamp, RetryOnEmpty)
 {
   std::vector<Dispatch<int, int>> data;
   CaptureRange<int> t_range{0, 0};
@@ -40,7 +40,7 @@ TEST_F(FollowerExact, RetryOnEmpty)
 }
 
 
-TEST_F(FollowerExact, RetryOnDataTooOld)
+TEST_F(FollowerMatchedStamp, RetryOnDataTooOld)
 {
   std::vector<Dispatch<int, int>> data;
 
@@ -52,7 +52,7 @@ TEST_F(FollowerExact, RetryOnDataTooOld)
 }
 
 
-TEST_F(FollowerExact, AbortOnDataTooNew)
+TEST_F(FollowerMatchedStamp, AbortOnDataTooNew)
 {
   std::vector<Dispatch<int, int>> data;
 
@@ -64,7 +64,7 @@ TEST_F(FollowerExact, AbortOnDataTooNew)
 }
 
 
-TEST_F(FollowerExact, PrimedOnExactStamp)
+TEST_F(FollowerMatchedStamp, PrimedOnMatchedStamp)
 {
   std::vector<Dispatch<int, int>> data;
 

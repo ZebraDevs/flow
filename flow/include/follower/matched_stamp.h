@@ -2,10 +2,10 @@
  * @copyright 2020 Fetch Robotics Inc.
  * @author Brian Cairl
  *
- * @file exact.h
+ * @file matched_stamp.h
  */
-#ifndef FLOW_FOLLOWER_EXACT_H
-#define FLOW_FOLLOWER_EXACT_H
+#ifndef FLOW_FOLLOWER_MATCHED_STAMP_H
+#define FLOW_FOLLOWER_MATCHED_STAMP_H
 
 // Flow
 #include <flow/follower/follower.h>
@@ -38,25 +38,25 @@ namespace follower
 template<typename DispatchT,
          typename LockPolicyT = NoLock,
          typename AllocatorT = std::allocator<DispatchT>>
-class Exact : public Follower<Exact<DispatchT, LockPolicyT, AllocatorT>>
+class MatchedStamp : public Follower<MatchedStamp<DispatchT, LockPolicyT, AllocatorT>>
 {
 public:
   /// Data stamp type
-  using stamp_type = typename CaptorTraits<Exact>::stamp_type;
+  using stamp_type = typename CaptorTraits<MatchedStamp>::stamp_type;
 
   /**
    * @brief Default constructor
    */
-  Exact() = default;
+  MatchedStamp() = default;
 
   /**
    * @brief Setup constructor
    * @param alloc  dispatch object allocator with some initial state
    */
-  explicit Exact(const AllocatorT& alloc);
+  explicit MatchedStamp(const AllocatorT& alloc);
 
 private:
-  using PolicyType = Follower<Exact<DispatchT, LockPolicyT, AllocatorT>>;
+  using PolicyType = Follower<MatchedStamp<DispatchT, LockPolicyT, AllocatorT>>;
   friend PolicyType;
 
   /**
@@ -101,7 +101,7 @@ private:
 template<typename DispatchT,
          typename LockPolicyT,
          typename AllocatorT>
-struct CaptorTraits<follower::Exact<DispatchT, LockPolicyT, AllocatorT>> : CaptorTraitsFromDispatch<DispatchT>
+struct CaptorTraits<follower::MatchedStamp<DispatchT, LockPolicyT, AllocatorT>> : CaptorTraitsFromDispatch<DispatchT>
 {
   /// Dispatch object allocation type
   using DispatchAllocatorType = AllocatorT;
@@ -113,6 +113,6 @@ struct CaptorTraits<follower::Exact<DispatchT, LockPolicyT, AllocatorT>> : Capto
 }  // namespace flow
 
 // Flow (implementation)
-#include <flow/follower/impl/exact.hpp>
+#include <flow/follower/impl/matched_stamp.hpp>
 
-#endif  // FLOW_FOLLOWER_EXACT_H
+#endif  // FLOW_FOLLOWER_MATCHED_STAMP_H

@@ -25,8 +25,8 @@ flow_cc_gtest(
 )
 
 flow_cc_gtest(
-    name="exact",
-    srcs=["exact.cpp"],
+    name="matched_stamp",
+    srcs=["matched_stamp.cpp"],
     deps=["//flow:flow"],
     timeout="short",
 )
