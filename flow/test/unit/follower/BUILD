@@ -18,11 +18,20 @@ flow_cc_gtest(
 
 
 flow_cc_gtest(
+    name="count_before",
+    srcs=["count_before.cpp"],
+    deps=["//flow:flow"],
+    timeout="short",
+)
+
+
+flow_cc_gtest(
     name="closest_before",
     srcs=["closest_before.cpp"],
     deps=["//flow:flow"],
     timeout="short",
 )
+
 
 flow_cc_gtest(
     name="matched_stamp",
