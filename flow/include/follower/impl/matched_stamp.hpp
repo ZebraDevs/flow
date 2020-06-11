@@ -4,8 +4,8 @@
  *
  * @warning IMPLEMENTATION ONLY: THIS FILE SHOULD NEVER BE INCLUDED DIRECTLY!
  */
-#ifndef FLOW_FOLLOWER_IMPL_EXACT_HPP
-#define FLOW_FOLLOWER_IMPL_EXACT_HPP
+#ifndef FLOW_FOLLOWER_IMPL_MATCHED_STAMP_HPP
+#define FLOW_FOLLOWER_IMPL_MATCHED_STAMP_HPP
 
 // C++ Standard Library
 #include <iterator>
@@ -17,7 +17,7 @@ namespace follower
 {
 
 template<typename DispatchT, typename LockPolicyT, typename AllocatorT>
-Exact<DispatchT, LockPolicyT, AllocatorT>::Exact(const AllocatorT& alloc) :
+MatchedStamp<DispatchT, LockPolicyT, AllocatorT>::MatchedStamp(const AllocatorT& alloc) :
   PolicyType{alloc}
 {
 }
@@ -25,7 +25,7 @@ Exact<DispatchT, LockPolicyT, AllocatorT>::Exact(const AllocatorT& alloc) :
 
 template<typename DispatchT, typename LockPolicyT, typename AllocatorT>
 template<typename OutputDispatchIteratorT>
-State Exact<DispatchT, LockPolicyT, AllocatorT>::capture_follower_impl(OutputDispatchIteratorT output,
+State MatchedStamp<DispatchT, LockPolicyT, AllocatorT>::capture_follower_impl(OutputDispatchIteratorT output,
                                                                        const CaptureRange<stamp_type>& range)
 {
   // Remove all elements before leading time
@@ -47,7 +47,7 @@ State Exact<DispatchT, LockPolicyT, AllocatorT>::capture_follower_impl(OutputDis
 
 
 template<typename DispatchT, typename LockPolicyT, typename AllocatorT>
-void Exact<DispatchT, LockPolicyT, AllocatorT>::abort_follower_impl(const stamp_type& t_abort)
+void MatchedStamp<DispatchT, LockPolicyT, AllocatorT>::abort_follower_impl(const stamp_type& t_abort)
 {
   PolicyType::queue_.remove_before(t_abort);
 }
@@ -55,4 +55,4 @@ void Exact<DispatchT, LockPolicyT, AllocatorT>::abort_follower_impl(const stamp_
 }  // namespace follower
 }  // namespace flow
 
-#endif  // FLOW_FOLLOWER_IMPL_EXACT_HPP
+#endif  // FLOW_FOLLOWER_IMPL_MATCHED_STAMP_HPP
