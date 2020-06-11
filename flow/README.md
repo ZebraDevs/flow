@@ -116,7 +116,7 @@ This captor will wait for _N_-messages before and _M_-messages after the capture
 ________________
 
 
-### `flow::follower::Exact`
+### `flow::follower::MatchedStamp`
 
 
 ![Exact](doc/flow_captor_exact.png)

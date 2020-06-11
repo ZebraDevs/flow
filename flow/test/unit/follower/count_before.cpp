@@ -1,0 +1,137 @@
+/**
+ * @copyright 2020 Fetch Robotics Inc.
+ * @author Brian Cairl
+ */
+#ifndef DOXYGEN_SKIP
+
+// C++ Standard Library
+#include <cstdint>
+#include <iterator>
+#include <vector>
+
+// GTest
+#include <gtest/gtest.h>
+
+// Flow
+#include <flow/follower/count_before.h>
+
+using namespace flow;
+using namespace flow::follower;
+
+
+struct FollowerCountBefore : ::testing::Test, CountBefore<Dispatch<int, int>, NoLock>
+{
+  static constexpr int COUNT = 3;
+  static constexpr int DELAY = 3;
+
+  FollowerCountBefore() :
+    CountBefore<Dispatch<int, int>, NoLock>{COUNT, DELAY}
+  {}
+
+  void SetUp() final
+  {
+    this->reset();
+  }
+};
+constexpr int FollowerCountBefore::COUNT;
+constexpr int FollowerCountBefore::DELAY;
+
+
+TEST_F(FollowerCountBefore, RetryOnEmpty)
+{
+  std::vector<Dispatch<int, int>> data;
+  CaptureRange<int> t_range{0, 0};
+  ASSERT_EQ(State::RETRY, this->capture(std::back_inserter(data), t_range));
+}
+
+
+TEST_F(FollowerCountBefore, RetryOnToFewBefore)
+{
+  std::size_t N = COUNT - 1;
+
+  int t = 0 - (COUNT + DELAY);
+  while (N--)
+  {
+    this->inject(Dispatch<int, int>{t, t});
+    t++;
+  }
+
+  std::vector<Dispatch<int, int>> data;
+  CaptureRange<int> t_range{0, 0};
+
+  const auto size_before_capture = this->size();
+  ASSERT_EQ(State::RETRY, this->capture(std::back_inserter(data), t_range));
+  ASSERT_EQ(size_before_capture, this->size());
+}
+
+
+TEST_F(FollowerCountBefore, AbortOnToFewBeforeWithDataAfter)
+{
+  std::size_t N = COUNT;
+
+  int t = 0;
+  while (N--)
+  {
+    this->inject(Dispatch<int, int>{t, t});
+    t++;
+  }
+
+  std::vector<Dispatch<int, int>> data;
+  CaptureRange<int> t_range{0, 0};
+
+  const auto size_before_capture = this->size();
+  ASSERT_EQ(State::ABORT, this->capture(std::back_inserter(data), t_range));
+  ASSERT_EQ(size_before_capture, this->size());
+}
+
+
+TEST_F(FollowerCountBefore, PrimedWithExactBefore)
+{
+  std::size_t N = COUNT;
+
+  int t = 0 - (COUNT + DELAY);
+  while (N--)
+  {
+    this->inject(Dispatch<int, int>{t, t});
+    t++;
+  }
+
+  std::vector<Dispatch<int, int>> data;
+  CaptureRange<int> t_range{0, 0};
+  const auto size_before_capture = this->size();
+  ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
+  ASSERT_EQ(size_before_capture, this->size());
+  ASSERT_EQ(data.size(), static_cast<std::size_t>(COUNT));
+}
+
+
+TEST_F(FollowerCountBefore, PrimedWithExcessBefore)
+{
+  constexpr static std::size_t EXCESS = 2;
+
+  std::size_t N = COUNT + EXCESS;
+
+  int t = 0 - static_cast<int>(COUNT + EXCESS + DELAY);
+  while (N--)
+  {
+    this->inject(Dispatch<int, int>{t, t});
+    t++;
+  }
+
+  std::vector<Dispatch<int, int>> data;
+  CaptureRange<int> t_range{0, 0};
+  const auto size_before_capture = this->size();
+  ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
+  ASSERT_EQ(size_before_capture - EXCESS, this->size());
+  ASSERT_EQ(data.size(), static_cast<std::size_t>(COUNT));
+
+  for (const auto& dispatch : data)
+  {
+    const auto offset = dispatch.stamp() + DELAY;
+    ASSERT_LT(offset, 0);
+    ASSERT_GE(offset, -COUNT);
+  }
+}
+
+
+#endif  // DOXYGEN_SKIP
