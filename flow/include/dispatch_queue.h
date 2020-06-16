@@ -112,7 +112,7 @@ public:
    *
    * @warning Undefined behavior when <code>empty() == true</code>
    */
-  inline const stamp_type& oldest_stamp() const
+  inline stamp_type oldest_stamp() const
   {
     return queue_.front().stamp();
   }
@@ -123,7 +123,7 @@ public:
    *
    * @warning Undefined behavior when <code>empty() == true</code>
    */
-  inline const stamp_type& newest_stamp() const
+  inline stamp_type newest_stamp() const
   {
     return queue_.back().stamp();
   }
