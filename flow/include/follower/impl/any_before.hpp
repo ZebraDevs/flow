@@ -55,6 +55,13 @@ State AnyBefore<DispatchT, LockPolicyT, AllocatorT>::capture_follower_impl(Outpu
 
 
 template<typename DispatchT, typename LockPolicyT, typename AllocatorT>
+State AnyBefore<DispatchT, LockPolicyT, AllocatorT>::dry_capture_follower_impl(const CaptureRange<stamp_type>& range) const
+{
+  return State::PRIMED;
+}
+
+
+template<typename DispatchT, typename LockPolicyT, typename AllocatorT>
 void AnyBefore<DispatchT, LockPolicyT, AllocatorT>::abort_follower_impl(const stamp_type& t_abort)
 {
   PolicyType::queue_.remove_before(t_abort - delay_);

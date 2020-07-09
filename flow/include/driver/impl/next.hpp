@@ -24,19 +24,32 @@ template<typename OutputDispatchIteratorT>
 State Next<DispatchT, LockPolicyT, AllocatorT>::capture_driver_impl(OutputDispatchIteratorT output,
                                                                     CaptureRange<stamp_type>& range)
 {
-  // Abort if there are no queued dispatches
+  const State state = this->dry_capture_driver_impl(range);
+
+  if (state == State::PRIMED)
+  {
+    // Get next element
+    *(output++) = PolicyType::queue_.pop();
+  }
+
+  return state;
+}
+
+
+template<typename DispatchT, typename LockPolicyT, typename AllocatorT>
+State Next<DispatchT, LockPolicyT, AllocatorT>::dry_capture_driver_impl(CaptureRange<stamp_type>& range) const
+{
   if (PolicyType::queue_.empty())
   {
     return State::RETRY;
   }
+  else
+  {
+    range.lower_stamp = PolicyType::queue_.oldest_stamp();
+    range.upper_stamp = range.lower_stamp;
 
-  // Set time range
-  range.lower_stamp = PolicyType::queue_.oldest_stamp();
-  range.upper_stamp = range.lower_stamp;
-
-  // Get next element
-  *(output++) = PolicyType::queue_.pop();
-  return State::PRIMED;
+    return State::PRIMED;
+  }
 }
 
 

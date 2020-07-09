@@ -32,7 +32,7 @@ struct DriverNext : ::testing::Test, Next<Dispatch<int, int>, NoLock>
 };
 
 
-TEST_F(DriverNext, RetryOnEmpty)
+TEST_F(DriverNext, CaptureRetryOnEmpty)
 {
   std::vector<Dispatch<int, int>> data;
   CaptureRange<int> t_range{0, 0};
@@ -40,7 +40,7 @@ TEST_F(DriverNext, RetryOnEmpty)
 }
 
 
-TEST_F(DriverNext, PrimedWithOldest)
+TEST_F(DriverNext, CapturePrimedWithOldest)
 {
   const int t = 1;
   this->inject(Dispatch<int, int>{t+0, 1});
@@ -50,7 +50,27 @@ TEST_F(DriverNext, PrimedWithOldest)
   CaptureRange<int> t_range{0, 0};
   ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
 
-  ASSERT_EQ(this->size(), 1U);
+  EXPECT_EQ(t_range.lower_stamp, t);
+  EXPECT_EQ(t_range.upper_stamp, t);
+}
+
+
+TEST_F(DriverNext, DryCaptureRetryOnEmpty)
+{
+  CaptureRange<int> t_range{0, 0};
+  ASSERT_EQ(State::RETRY, this->dry_capture(t_range));
+}
+
+
+TEST_F(DriverNext, DryCapturePrimedWithOldest)
+{
+  const int t = 1;
+  this->inject(Dispatch<int, int>{t+0, 1});
+  this->inject(Dispatch<int, int>{t+1, 2});
+
+  CaptureRange<int> t_range{0, 0};
+  ASSERT_EQ(State::PRIMED, this->dry_capture(t_range));
+
   EXPECT_EQ(t_range.lower_stamp, t);
   EXPECT_EQ(t_range.upper_stamp, t);
 }

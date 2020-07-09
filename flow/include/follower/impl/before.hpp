@@ -67,6 +67,14 @@ State Before<DispatchT, LockPolicyT, AllocatorT>::capture_follower_impl(OutputDi
 
 
 template<typename DispatchT, typename LockPolicyT, typename AllocatorT>
+State Before<DispatchT, LockPolicyT, AllocatorT>::dry_capture_follower_impl(const CaptureRange<stamp_type>& range) const
+{
+  const stamp_type boundary = range.upper_stamp - delay_;
+  return (PolicyType::queue_.empty() or PolicyType::queue_.newest_stamp() < boundary) ? State::RETRY : State::PRIMED;
+}
+
+
+template<typename DispatchT, typename LockPolicyT, typename AllocatorT>
 void Before<DispatchT, LockPolicyT, AllocatorT>::abort_follower_impl(const stamp_type& t_abort)
 {
   PolicyType::queue_.remove_before(t_abort - delay_);

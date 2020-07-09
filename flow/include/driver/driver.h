@@ -72,6 +72,12 @@ private:
   inline State capture_policy_impl(OutputDispatchIteratorT&& output, CaptureRange<stamp_type>& range);
 
   /**
+   * @copydoc CaptorInterface::dry_capture
+   * @note Sets data capture/sequencing range for following captors
+   */
+  inline State dry_capture_policy_impl(CaptureRange<stamp_type>& range);
+
+  /**
    * @brief Defines Captor behavior on <code>ABORT</code>
    *
    *        Triggers data removal before \p t_abort

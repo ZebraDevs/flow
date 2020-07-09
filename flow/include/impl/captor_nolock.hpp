@@ -141,6 +141,15 @@ private:
   }
 
   /**
+   * @copydoc CaptorInterface::dry_capture
+   */
+  template<typename CaptureRangeT>
+  State dry_capture_impl(CaptureRangeT&& range)
+  {
+    return derived()->dry_capture_policy_impl(std::forward<CaptureRangeT>(range));
+  }
+
+  /**
    * @copydoc CaptorInterface::capture
    */
   template<typename InpectCallbackT>

@@ -10,7 +10,6 @@
 // C++ Standard Library
 #include <iterator>
 
-
 namespace flow
 {
 namespace follower
@@ -26,7 +25,22 @@ MatchedStamp<DispatchT, LockPolicyT, AllocatorT>::MatchedStamp(const AllocatorT&
 template<typename DispatchT, typename LockPolicyT, typename AllocatorT>
 template<typename OutputDispatchIteratorT>
 State MatchedStamp<DispatchT, LockPolicyT, AllocatorT>::capture_follower_impl(OutputDispatchIteratorT output,
-                                                                       const CaptureRange<stamp_type>& range)
+                                                                              const CaptureRange<stamp_type>& range)
+{
+  const State state = this->dry_capture_follower_impl(range);
+
+  if (state == State::PRIMED)
+  {
+    // When primed, next element should be captured without removal
+    *(output++) = *PolicyType::queue_.begin();
+  }
+
+  return state;
+}
+
+
+template<typename DispatchT, typename LockPolicyT, typename AllocatorT>
+State MatchedStamp<DispatchT, LockPolicyT, AllocatorT>::dry_capture_follower_impl(const CaptureRange<stamp_type>& range)
 {
   // Remove all elements before leading time
   PolicyType::queue_.remove_before(range.lower_stamp);
@@ -41,7 +55,6 @@ State MatchedStamp<DispatchT, LockPolicyT, AllocatorT>::capture_follower_impl(Ou
   }
 
   // Assign matching element
-  *(output++) = PolicyType::queue_.pop();
   return State::PRIMED;
 }
 

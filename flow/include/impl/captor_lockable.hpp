@@ -174,6 +174,16 @@ State Captor<CaptorT, LockableT>::capture_impl(OutputDispatchIteratorT&& output,
 
 
 template<typename CaptorT, typename LockableT>
+template<typename CaptureRangeT>
+State Captor<CaptorT, LockableT>::dry_capture_impl(CaptureRangeT&& range)
+{
+  LockableT lock{capture_mutex_};
+
+  return derived()->dry_capture_policy_impl(std::forward<CaptureRangeT>(range));
+}
+
+
+template<typename CaptorT, typename LockableT>
 template<typename InpectCallbackT>
 void Captor<CaptorT, LockableT>::inspect_impl(InpectCallbackT&& inspect_dispatch_cb) const
 {

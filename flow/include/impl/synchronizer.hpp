@@ -65,7 +65,6 @@ public:
     timeout_{timeout}
   {}
 
-  /// Abort caller for driving captors (which don't require wait timeouts)
   template<typename PolicyT, typename OutputIteratorT>
   inline std::enable_if_t<is_polling<PolicyT>::value> operator()(Driver<PolicyT>& c, OutputIteratorT output)
   {
@@ -79,7 +78,6 @@ public:
     }
   }
 
-  /// Abort caller for follower captors (which don't require wait timeouts)
   template<typename PolicyT, typename OutputIteratorT>
   inline std::enable_if_t<is_polling<PolicyT>::value> operator()(Follower<PolicyT>& c, OutputIteratorT output)
   {
@@ -90,7 +88,6 @@ public:
     }
   }
 
-  /// Abort caller for driving captors
   template<typename PolicyT, typename OutputIteratorT>
   inline std::enable_if_t<!is_polling<PolicyT>::value> operator()(Driver<PolicyT>& c, OutputIteratorT output)
   {
@@ -104,7 +101,6 @@ public:
     }
   }
 
-  /// Abort caller for follower captors
   template<typename PolicyT, typename OutputIteratorT>
   inline std::enable_if_t<!is_polling<PolicyT>::value> operator()(Follower<PolicyT>& c, OutputIteratorT output)
   {
@@ -117,13 +113,56 @@ public:
 
 private:
   /// Capture result
-  ResultT* result_;
+  ResultT* const result_;
 
   /// Known latest sequence stamp
   StampT t_latest_;
 
   /// Time at which data waits should end
   TimePointT timeout_;
+};
+
+
+
+/// captor::dry_capture call helper
+template<typename ResultT, typename StampT>
+class DryCaptureHelper
+{
+public:
+  DryCaptureHelper(ResultT& result, const StampT& t_latest) :
+    result_{std::addressof(result)},
+    t_latest_{t_latest}
+  {}
+
+  template<typename PolicyT>
+  inline void operator()(Driver<PolicyT>& c)
+  {
+    // Get capture state
+    result_->state = c.dry_capture(result_->range);
+
+    // Set aborted state if driving sequence range violates monotonicity guard
+    if (result_->state == State::PRIMED and result_->range.upper_stamp < t_latest_)
+    {
+      result_->state = State::ABORT;
+    }
+  }
+
+  template<typename PolicyT>
+  inline void operator()(Follower<PolicyT>& c)
+  {
+    // Get capture state alias
+    if (result_->state == State::PRIMED)
+    {
+      result_->state = c.dry_capture(result_->range);
+    }
+  }
+
+private:
+  /// Capture result
+  ResultT* const result_;
+
+  /// Known latest sequence stamp
+  StampT t_latest_;
 };
 
 }  // namespace detail
@@ -179,6 +218,19 @@ Synchronizer<CaptorTs...>::capture(CaptorTupleT&& captors, OutputIteratorTupleT&
   return this->capture(std::forward<CaptorTupleT>(captors),
                        std::forward<OutputIteratorTupleT>(outputs),
                        std::chrono::steady_clock::time_point::max());
+}
+
+
+template<typename... CaptorTs>
+typename
+Synchronizer<CaptorTs...>::Result
+Synchronizer<CaptorTs...>::dry_capture(const std::tuple<CaptorTs&...>& captors) const
+{
+  // Capture next input set
+  Result result;
+  apply_every(detail::DryCaptureHelper<Result, stamp_type>{result, latest_stamp_}, captors);
+
+  return result;
 }
 
 

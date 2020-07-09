@@ -78,6 +78,11 @@ private:
   inline State capture_follower_impl(OutputDispatchIteratorT&& output, const CaptureRange<stamp_type>& range);
 
   /**
+   * @copydoc Follower::dry_capture_policy_impl
+   */
+  inline State dry_capture_follower_impl(const CaptureRange<stamp_type>& range);
+
+  /**
    * @brief Defines behavior on <code>ABORT</code>
    * @param t_abort  sequencing stamp at which abort was signaled
    */
@@ -87,6 +92,21 @@ private:
    * @brief Defines Captor reset behavior
    */
   inline void reset_follower_impl() noexcept(true) {}
+
+  /**
+   * @brief Finds iterator after first in capture sequence
+   *
+   * @param range  data capture/sequencing range
+   */
+  inline auto find_after_first(const CaptureRange<stamp_type>& range) const;
+
+  /**
+   * @brief Finds iterator before last in capture sequence
+   *
+   * @param range  data capture/sequencing range
+   */
+  template<typename QueueIteratorT>
+  inline auto find_before_last(const CaptureRange<stamp_type>& range, const QueueIteratorT after_first) const;
 
   /// Capture delay
   offset_type delay_;

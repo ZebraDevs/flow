@@ -169,6 +169,20 @@ public:
   template<typename CaptorTupleT, typename OutputIteratorTupleT>
   inline Result capture(CaptorTupleT&& captors, OutputIteratorTupleT&& outputs);
 
+  /**
+   * @brief Runs event input capture dry-run
+   *
+   *        Tests active next capture state without actually capturing elements. Any data
+   *        changes that occur are such that the next call to <code>Synchronizer::capture</code>
+   *        will be valid, and will have the same capture result if no changes have been made
+   *        to data in the capture queues.
+   *
+   * @param captors  tuple of captors used to perform synchronization
+   *
+   * @return dry capture/synchronization details
+   */
+  Result dry_capture(const std::tuple<CaptorTs&...>& captors) const;
+
 private:
   /// Sequencing stamp of the latest valid result
   stamp_type latest_stamp_;

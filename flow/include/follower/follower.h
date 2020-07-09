@@ -83,6 +83,11 @@ protected:
   inline State capture_policy_impl(OutputDispatchIteratorT&& output, const CaptureRange<stamp_type>& range);
 
   /**
+   * @copydoc CaptorInterface::dry_capture
+   */
+  inline State dry_capture_policy_impl(const CaptureRange<stamp_type>& range);
+
+  /**
    * @brief Defines Captor behavior on <code>ABORT</code>
    *
    *        Triggers data removal before \p t_abort

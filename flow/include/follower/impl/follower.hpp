@@ -57,6 +57,13 @@ State Follower<PolicyT>::capture_policy_impl(OutputDispatchIteratorT&& output,
 
 
 template<typename PolicyT>
+State Follower<PolicyT>::dry_capture_policy_impl(const CaptureRange<stamp_type>& range)
+{
+  return derived()->dry_capture_follower_impl(range);
+}
+
+
+template<typename PolicyT>
 void Follower<PolicyT>::abort_policy_impl(const stamp_type& t_abort)
 {
   // Reset loop-back

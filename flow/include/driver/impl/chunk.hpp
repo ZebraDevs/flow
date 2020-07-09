@@ -8,6 +8,8 @@
 #define FLOW_DRIVER_IMPL_CHUNK_HPP
 
 // C++ Standard Library
+#include <algorithm>
+#include <iterator>
 #include <stdexcept>
 
 namespace flow
@@ -38,36 +40,40 @@ template<typename OutputDispatchIteratorT>
 State Chunk<DispatchT, LockPolicyT, AllocatorT>::capture_driver_impl(OutputDispatchIteratorT output,
                                                                      CaptureRange<stamp_type>& range)
 {
-  if (PolicyType::queue_.size() < chunk_size_)
+  const State state = this->dry_capture_driver_impl(range);
+
+  if (state == State::PRIMED)
+  {
+    // Collect dispatches
+    std::copy_n(std::make_move_iterator(PolicyType::queue_.begin()), chunk_size_, output);
+
+    // Remove captured elements
+    for (size_type i = 0; i < chunk_size_; ++i)
+    {
+      PolicyType::queue_.pop();
+    }
+  }
+
+  return state;
+}
+
+template<typename DispatchT, typename LockPolicyT, typename AllocatorT>
+State Chunk<DispatchT, LockPolicyT, AllocatorT>::dry_capture_driver_impl(CaptureRange<stamp_type>& range) const
+{
+  if (PolicyType::queue_.size() >= chunk_size_)
+  {
+    auto oldest_itr = PolicyType::queue_.begin();
+
+    range.lower_stamp = oldest_itr->stamp();
+    range.upper_stamp = std::next(oldest_itr, chunk_size_ - 1)->stamp();
+
+    return State::PRIMED;
+  }
+  else
   {
     return State::RETRY;
   }
-
-  // Collect dispatches
-  range.lower_stamp = PolicyType::queue_.oldest_stamp();
-
-  size_type count = 0;
-  while (!PolicyType::queue_.empty())
-  {
-    // Store data to output; abort when batch has been captured
-    if (count == chunk_size_)
-    {
-      break;
-    }
-
-    ++count;
-
-    auto d = PolicyType::queue_.pop();
-
-    // Get latest stamp
-    range.upper_stamp = d.stamp();
-
-    // Store data to output
-    *(output++) = std::move(d);
-  }
-  return State::PRIMED;
 }
-
 
 template<typename DispatchT, typename LockPolicyT, typename AllocatorT>
 void Chunk<DispatchT, LockPolicyT, AllocatorT>::abort_driver_impl(const stamp_type& t_abort)

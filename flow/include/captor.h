@@ -277,6 +277,23 @@ public:
   }
 
   /**
+   * @brief Queries state that <code>capture</code> would return without data modification
+   *
+   *        May remove data to prepare next possible capture
+   *
+   * @tparam CaptureRangeT  message capture stamp range type
+   *
+   * @param[in,out] range  data capture/sequencing range
+   *
+   * @return capture directive code
+   */
+  template<typename CaptureRangeT>
+  inline State dry_capture(CaptureRangeT&& range)
+  {
+    return derived()->dry_capture_impl(std::forward<CaptureRangeT>(range));
+  }
+
+  /**
    * @brief Runs inspection callback all messages available in the current queue
    *
    *        The queue and its contents will be immutable during inspection
@@ -392,6 +409,12 @@ private:
   inline State capture_impl(OutputDispatchIteratorT&& output,
                             CaptureRangeT&& range,
                             const std::chrono::time_point<ClockT, DurationT> timeout);
+
+  /**
+   * @copydoc CaptorInterface::dry_capture_impl
+   */
+  template<typename CaptureRangeT>
+  inline State dry_capture_impl(CaptureRangeT&& range);
 
   /**
    * @copydoc CaptorInterface::inspect

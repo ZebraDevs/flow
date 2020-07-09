@@ -35,7 +35,7 @@ struct DriverBatch : ::testing::Test, Batch<Dispatch<int, int>, NoLock>
 constexpr std::size_t DriverBatch::CHUNK_SIZE;
 
 
-TEST_F(DriverBatch, RetryOnEmpty)
+TEST_F(DriverBatch, CaptureRetryOnEmpty)
 {
   std::vector<Dispatch<int, int>> data;
   CaptureRange<int> t_range;
@@ -45,7 +45,7 @@ TEST_F(DriverBatch, RetryOnEmpty)
 }
 
 
-TEST_F(DriverBatch, ContinueLTBatchSize)
+TEST_F(DriverBatch, CaptureContinueLTBatchSize)
 {
   // Start injecting data
   const int t0 = 0;
@@ -68,7 +68,7 @@ TEST_F(DriverBatch, ContinueLTBatchSize)
 }
 
 
-TEST_F(DriverBatch, PrimedEQBatchSize)
+TEST_F(DriverBatch, CapturePrimedEQBatchSize)
 {
   // Start injecting data
   const int t0 = 0;
@@ -95,7 +95,7 @@ TEST_F(DriverBatch, PrimedEQBatchSize)
 }
 
 
-TEST_F(DriverBatch, PrimedGTBatchSize)
+TEST_F(DriverBatch, CapturePrimedGTBatchSize)
 {
   // Start injecting data
   const int t0 = 0;
@@ -116,6 +116,79 @@ TEST_F(DriverBatch, PrimedGTBatchSize)
   ASSERT_EQ(this->size(), CHUNK_SIZE + CHUNK_SIZE / 2 - 1);
 
   ASSERT_EQ(data.size(), CHUNK_SIZE);
+  EXPECT_EQ(t_range.lower_stamp, static_cast<int>(t0));
+  EXPECT_EQ(t_range.upper_stamp, static_cast<int>(t0 + CHUNK_SIZE - 1));
+}
+
+
+TEST_F(DriverBatch, DryCaptureRetryOnEmpty)
+{
+  CaptureRange<int> t_range;
+
+  ASSERT_EQ(State::RETRY, this->dry_capture(t_range));
+}
+
+
+TEST_F(DriverBatch, DryCaptureContinueLTBatchSize)
+{
+  // Start injecting data
+  const int t0 = 0;
+  int t = t0;
+  int N = CHUNK_SIZE / 2;
+  while (N--)
+  {
+    this->inject(Dispatch<int, int>{t, 1});
+    t += 1;
+  }
+
+  ASSERT_EQ(this->size(), CHUNK_SIZE / 2);
+
+  // Start processing
+  CaptureRange<int> t_range;
+
+  ASSERT_EQ(State::RETRY, this->dry_capture(t_range));
+}
+
+
+TEST_F(DriverBatch, DryCapturePrimedEQBatchSize)
+{
+  // Start injecting data
+  const int t0 = 0;
+  int t = t0;
+  int N = CHUNK_SIZE;
+  while (N--)
+  {
+    this->inject(Dispatch<int, int>{t, 1});
+    t += 1;
+  }
+
+  // Start processing
+  CaptureRange<int> t_range;
+
+  ASSERT_EQ(State::PRIMED, this->dry_capture(t_range));
+
+  EXPECT_EQ(t_range.lower_stamp, static_cast<int>(t0));
+  EXPECT_EQ(t_range.upper_stamp, static_cast<int>(t0 + CHUNK_SIZE - 1));
+}
+
+
+TEST_F(DriverBatch, DryCapturePrimedGTBatchSize)
+{
+  // Start injecting data
+  const int t0 = 0;
+  int t = t0;
+  int N = CHUNK_SIZE + CHUNK_SIZE / 2;
+  while (N--)
+  {
+    this->inject(Dispatch<int, int>{t, 1});
+    t += 1;
+  }
+
+  // Start processing
+  CaptureRange<int> t_range;
+
+  ASSERT_EQ(State::PRIMED, this->dry_capture(t_range));
+
   EXPECT_EQ(t_range.lower_stamp, static_cast<int>(t0));
   EXPECT_EQ(t_range.upper_stamp, static_cast<int>(t0 + CHUNK_SIZE - 1));
 }

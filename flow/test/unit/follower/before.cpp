@@ -34,7 +34,7 @@ struct FollowerBefore : ::testing::Test, Before<Dispatch<int, int>, NoLock>
 constexpr int FollowerBefore::DELAY;
 
 
-TEST_F(FollowerBefore, RetryOnEmpty)
+TEST_F(FollowerBefore, CaptureRetryOnEmpty)
 {
   std::vector<Dispatch<int, int>> data;
   CaptureRange<int> t_range{0, 0};
@@ -42,7 +42,7 @@ TEST_F(FollowerBefore, RetryOnEmpty)
 }
 
 
-TEST_F(FollowerBefore, PrimedOnDataAtBoundary)
+TEST_F(FollowerBefore, CapturePrimedOnDataAtBoundary)
 {
   std::vector<Dispatch<int, int>> data;
   CaptureRange<int> t_range{0, 0};
@@ -57,7 +57,7 @@ TEST_F(FollowerBefore, PrimedOnDataAtBoundary)
 }
 
 
-TEST_F(FollowerBefore, PrimedOnDataAfterBoundary)
+TEST_F(FollowerBefore, CapturePrimedOnDataAfterBoundary)
 {
   std::vector<Dispatch<int, int>> data;
   CaptureRange<int> t_range{0, 0};
@@ -72,7 +72,7 @@ TEST_F(FollowerBefore, PrimedOnDataAfterBoundary)
 }
 
 
-TEST_F(FollowerBefore, RetryOnDataBeforeBoundary)
+TEST_F(FollowerBefore, CaptureRetryOnDataBeforeBoundary)
 {
   std::vector<Dispatch<int, int>> data;
   CaptureRange<int> t_range{0, 0};
@@ -87,7 +87,7 @@ TEST_F(FollowerBefore, RetryOnDataBeforeBoundary)
 }
 
 
-TEST_F(FollowerBefore, PrimedOnDataBeforeAndAfterBoundary)
+TEST_F(FollowerBefore, CapturePrimedOnDataBeforeAndAfterBoundary)
 {
   std::vector<Dispatch<int, int>> data;
   CaptureRange<int> t_range{0, 0};
@@ -103,7 +103,7 @@ TEST_F(FollowerBefore, PrimedOnDataBeforeAndAfterBoundary)
 }
 
 
-TEST_F(FollowerBefore, PrimedOnDataBeforeAndAtBoundary)
+TEST_F(FollowerBefore, CapturePrimedOnDataBeforeAndAtBoundary)
 {
   std::vector<Dispatch<int, int>> data;
   CaptureRange<int> t_range{0, 0};
@@ -119,7 +119,7 @@ TEST_F(FollowerBefore, PrimedOnDataBeforeAndAtBoundary)
 }
 
 
-TEST_F(FollowerBefore, PrimedMultiDataBeforeBoundary)
+TEST_F(FollowerBefore, CapturePrimedMultiDataBeforeBoundary)
 {
   std::vector<Dispatch<int, int>> data;
   CaptureRange<int> t_range{0, 0};
@@ -136,7 +136,7 @@ TEST_F(FollowerBefore, PrimedMultiDataBeforeBoundary)
 }
 
 
-TEST_F(FollowerBefore, PrimedMultiDataBeforeAndAtBoundary)
+TEST_F(FollowerBefore, CapturePrimedMultiDataBeforeAndAtBoundary)
 {
   std::vector<Dispatch<int, int>> data;
   CaptureRange<int> t_range{0, 0};
@@ -150,6 +150,89 @@ TEST_F(FollowerBefore, PrimedMultiDataBeforeAndAtBoundary)
   ASSERT_EQ(this->size(), 1U);
 
   ASSERT_EQ(data.size(), 2U);
+}
+
+
+TEST_F(FollowerBefore, DryCaptureRetryOnEmpty)
+{
+  CaptureRange<int> t_range{0, 0};
+  ASSERT_EQ(State::RETRY, this->dry_capture(t_range));
+}
+
+
+TEST_F(FollowerBefore, DryCapturePrimedOnDataAtBoundary)
+{
+  CaptureRange<int> t_range{0, 0};
+
+  this->inject(Dispatch<int, int>{-DELAY, 1});
+
+  ASSERT_EQ(State::PRIMED, this->dry_capture(t_range));
+}
+
+
+TEST_F(FollowerBefore, DryCapturePrimedOnDataAfterBoundary)
+{
+  CaptureRange<int> t_range{0, 0};
+
+  this->inject(Dispatch<int, int>{-DELAY + 1, 1});
+
+  ASSERT_EQ(State::PRIMED, this->dry_capture(t_range));
+}
+
+
+TEST_F(FollowerBefore, DryCaptureRetryOnDataBeforeBoundary)
+{
+  CaptureRange<int> t_range{0, 0};
+
+  this->inject(Dispatch<int, int>{-DELAY - 1, 1});
+
+  ASSERT_EQ(State::RETRY, this->dry_capture(t_range));
+}
+
+
+TEST_F(FollowerBefore, DryCapturePrimedOnDataBeforeAndAfterBoundary)
+{
+  CaptureRange<int> t_range{0, 0};
+
+  this->inject(Dispatch<int, int>{-DELAY - 1, 1});
+  this->inject(Dispatch<int, int>{-DELAY + 1, 1});
+
+  ASSERT_EQ(State::PRIMED, this->dry_capture(t_range));
+}
+
+
+TEST_F(FollowerBefore, DryCapturePrimedOnDataBeforeAndAtBoundary)
+{
+  CaptureRange<int> t_range{0, 0};
+
+  this->inject(Dispatch<int, int>{-DELAY - 1, 1});
+  this->inject(Dispatch<int, int>{-DELAY, 1});
+
+  ASSERT_EQ(State::PRIMED, this->dry_capture(t_range));
+}
+
+
+TEST_F(FollowerBefore, DryCapturePrimedMultiDataBeforeBoundary)
+{
+  CaptureRange<int> t_range{0, 0};
+
+  this->inject(Dispatch<int, int>{-DELAY - 1, 1});
+  this->inject(Dispatch<int, int>{-DELAY - 2, 1});
+  this->inject(Dispatch<int, int>{-DELAY + 1, 1});
+
+  ASSERT_EQ(State::PRIMED, this->dry_capture(t_range));
+}
+
+
+TEST_F(FollowerBefore, DryCapturePrimedMultiDataBeforeAndAtBoundary)
+{
+  CaptureRange<int> t_range{0, 0};
+
+  this->inject(Dispatch<int, int>{-DELAY - 0, 1});
+  this->inject(Dispatch<int, int>{-DELAY - 1, 1});
+  this->inject(Dispatch<int, int>{-DELAY - 2, 1});
+
+  ASSERT_EQ(State::PRIMED, this->dry_capture(t_range));
 }
 
 
