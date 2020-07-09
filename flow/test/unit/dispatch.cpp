@@ -4,6 +4,9 @@
  */
 #ifndef DOXYGEN_SKIP
 
+// C++ Standard Library
+#include <string>
+
 // GTest
 #include <gtest/gtest.h>
 
