@@ -85,6 +85,11 @@ private:
   inline State capture_driver_impl(OutputDispatchIteratorT output, CaptureRange<stamp_type>& range);
 
   /**
+   * @copydoc Driver::dry_capture_policy_impl
+   */
+  inline State dry_capture_driver_impl(CaptureRange<stamp_type>& range) const;
+
+  /**
    * @brief Defines behavior on <code>ABORT</code>
    * @param t_abort  sequencing stamp at which abort was signaled
    */

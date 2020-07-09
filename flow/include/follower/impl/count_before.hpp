@@ -8,9 +8,9 @@
 #define FLOW_FOLLOWER_IMPL_COUNT_BEFORE_HPP
 
 // C++ Standard Library
+#include <algorithm>
 #include <cstdint>
 #include <stdexcept>
-
 
 namespace flow
 {
@@ -47,6 +47,21 @@ template<typename OutputDispatchIteratorT>
 State CountBefore<DispatchT, LockPolicyT, AllocatorT>::capture_follower_impl(OutputDispatchIteratorT output,
                                                                              const CaptureRange<stamp_type>& range)
 {
+  const State state = this->dry_capture_follower_impl(range);
+
+  if (state == State::PRIMED)
+  {
+    // When primed, next n-elements should be captured without removal
+    std::copy_n(PolicyType::queue_.begin(), count_, output);
+  }
+
+  return state;
+}
+
+
+template<typename DispatchT, typename LockPolicyT, typename AllocatorT>
+State CountBefore<DispatchT, LockPolicyT, AllocatorT>::dry_capture_follower_impl(const CaptureRange<stamp_type>& range)
+{
   // Retry if queue has no data
   if (PolicyType::queue_.empty())
   {
@@ -70,8 +85,7 @@ State CountBefore<DispatchT, LockPolicyT, AllocatorT>::capture_follower_impl(Out
 
   if (before_boundary_count >= count_)
   {
-    auto first_itr = std::prev(itr, count_);
-    std::copy(first_itr, itr, output);
+    const auto first_itr = std::prev(itr, count_);
     PolicyType::queue_.remove_before(first_itr->stamp());
     return State::PRIMED;
   }
@@ -79,7 +93,10 @@ State CountBefore<DispatchT, LockPolicyT, AllocatorT>::capture_follower_impl(Out
   {
     return State::ABORT;
   }
-  return State::RETRY;
+  else
+  {
+    return State::RETRY;
+  }
 }
 
 }  // namespace follower

@@ -38,24 +38,33 @@ template<typename OutputDispatchIteratorT>
 State Throttled<DispatchT, LockPolicyT, AllocatorT>::capture_driver_impl(OutputDispatchIteratorT output,
                                                                          CaptureRange<stamp_type>& range)
 {
-  // Abort if there are no queued dispatches
-  if (PolicyType::queue_.empty())
+  const State state = this->dry_capture_driver_impl(range);
+
+  if (state == State::PRIMED)
   {
-    return State::RETRY;
+    // Remove all elements before lower stamp, first
+    PolicyType::queue_.remove_before(range.lower_stamp);
+
+    // Cache previous stamp
+    previous_stamp_ = range.lower_stamp;
+
+    // Get next element and remove
+    *(output++) = PolicyType::queue_.pop();
   }
 
-  // Capture message which falls within throttling period
+  return state;
+}
+
+
+template<typename DispatchT, typename LockPolicyT, typename AllocatorT>
+State Throttled<DispatchT, LockPolicyT, AllocatorT>::dry_capture_driver_impl(CaptureRange<stamp_type>& range) const
+{
   for (const auto& dispatch : PolicyType::queue_)
   {
     if (previous_stamp_ == StampTraits<stamp_type>::min() or (dispatch.stamp() - previous_stamp_) >= throttle_period_)
     {
       range.lower_stamp = dispatch.stamp();
       range.upper_stamp = range.lower_stamp;
-
-      *(output++) = dispatch;
-
-      previous_stamp_ = range.lower_stamp;
-      PolicyType::queue_.remove_at_before(range.lower_stamp);
 
       return State::PRIMED;
     }

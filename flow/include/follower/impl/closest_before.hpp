@@ -7,9 +7,6 @@
 #ifndef FLOW_FOLLOWER_IMPL_CLOSEST_BEFORE_HPP
 #define FLOW_FOLLOWER_IMPL_CLOSEST_BEFORE_HPP
 
-// C++ Standard Library
-#include <chrono>
-
 namespace flow
 {
 namespace follower
@@ -41,10 +38,25 @@ template<typename OutputDispatchIteratorT>
 State ClosestBefore<DispatchT, LockPolicyT, AllocatorT>::capture_follower_impl(OutputDispatchIteratorT output,
                                                                                const CaptureRange<stamp_type>& range)
 {
+  const State state = this->dry_capture_follower_impl(range);
+
+  if (state == State::PRIMED)
+  {
+    // When primed, next element should be captured without removal
+    *(output++) = *PolicyType::queue_.begin();
+  }
+
+  return state;
+}
+
+
+template<typename DispatchT, typename LockPolicyT, typename AllocatorT>
+State ClosestBefore<DispatchT, LockPolicyT, AllocatorT>::dry_capture_follower_impl(const CaptureRange<stamp_type>& range)
+{
   // The boundary before which messages are valid and after which they are not. Non-inclusive.
   const stamp_type boundary = range.lower_stamp - delay_;
 
-  // Starting from the oldest data, return on when data found within periodic windowp
+  // Starting from the oldest data, return on when data found within periodic window
   auto capture_itr = PolicyType::queue_.end();
   for (auto itr = PolicyType::queue_.begin(); itr != PolicyType::queue_.end(); ++itr)
   {
@@ -61,21 +73,17 @@ State ClosestBefore<DispatchT, LockPolicyT, AllocatorT>::capture_follower_impl(O
     }
   }
 
-  // Check if inputs were captured
+  // Check if inputs are capturable
   // NOTE: If no capture input was set, then all data is at or after boundary
-  if (capture_itr == PolicyType::queue_.end())
+  if (capture_itr != PolicyType::queue_.end())
   {
-    return State::RETRY;
+    PolicyType::queue_.remove_before(capture_itr->stamp());
+    return State::PRIMED;
   }
   else
   {
-    // Set captured data
-    *output = *capture_itr;
-
-    // Remove old data
-    PolicyType::queue_.remove_before(capture_itr->stamp());
+    return State::RETRY;
   }
-  return State::PRIMED;
 }
 
 

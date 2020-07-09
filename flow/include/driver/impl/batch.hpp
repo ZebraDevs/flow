@@ -8,6 +8,8 @@
 #define FLOW_DRIVER_IMPL_BATCH_HPP
 
 // C++ Standard Library
+#include <algorithm>
+#include <iterator>
 #include <stdexcept>
 
 namespace flow
@@ -37,36 +39,37 @@ template<typename OutputDispatchIteratorT>
 State Batch<DispatchT, LockPolicyT, AllocatorT>::capture_driver_impl(OutputDispatchIteratorT output,
                                                                      CaptureRange<stamp_type>& range)
 {
-  // Continue waiting for data if queue does not yet contain enough elements
-  if (PolicyType::queue_.size() < batch_size_)
+  const State state = this->dry_capture_driver_impl(range);
+
+  if (state == State::PRIMED)
+  {
+    // Collect dispatches
+    std::copy_n(std::make_move_iterator(PolicyType::queue_.begin()), batch_size_, output);
+
+    // Pop last element
+    PolicyType::queue_.pop();
+  }
+
+  return state;
+}
+
+
+template<typename DispatchT, typename LockPolicyT, typename AllocatorT>
+State Batch<DispatchT, LockPolicyT, AllocatorT>::dry_capture_driver_impl(CaptureRange<stamp_type>& range) const
+{
+  if (PolicyType::queue_.size() >= batch_size_)
+  {
+    auto oldest_itr = PolicyType::queue_.begin();
+
+    range.lower_stamp = oldest_itr->stamp();
+    range.upper_stamp = std::next(oldest_itr, batch_size_ - 1)->stamp();
+
+    return State::PRIMED;
+  }
+  else
   {
     return State::RETRY;
   }
-
-  // Collect dispatches
-  range.lower_stamp = PolicyType::queue_.oldest_stamp();
-
-  size_type count = 0;
-  for (auto& d : PolicyType::queue_)
-  {
-    // Abort when batch has been captured
-    if (count == batch_size_)
-    {
-      break;
-    }
-
-    ++count;
-
-    // Store data to output
-    *(output++) = d;
-
-    // Get latest stamp
-    range.upper_stamp = d.stamp();
-  }
-
-  // Pop last element
-  PolicyType::queue_.pop();
-  return State::PRIMED;
 }
 
 

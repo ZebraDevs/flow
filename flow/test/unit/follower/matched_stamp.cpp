@@ -32,15 +32,14 @@ struct FollowerMatchedStamp : ::testing::Test, MatchedStamp<Dispatch<int, int>, 
 };
 
 
-TEST_F(FollowerMatchedStamp, RetryOnEmpty)
+TEST_F(FollowerMatchedStamp, CaptureRetryOnEmpty)
 {
   std::vector<Dispatch<int, int>> data;
   CaptureRange<int> t_range{0, 0};
   ASSERT_EQ(State::RETRY, this->capture(std::back_inserter(data), t_range));
 }
 
-
-TEST_F(FollowerMatchedStamp, RetryOnDataTooOld)
+TEST_F(FollowerMatchedStamp, CaptureRetryOnDataTooOld)
 {
   std::vector<Dispatch<int, int>> data;
 
@@ -52,7 +51,7 @@ TEST_F(FollowerMatchedStamp, RetryOnDataTooOld)
 }
 
 
-TEST_F(FollowerMatchedStamp, AbortOnDataTooNew)
+TEST_F(FollowerMatchedStamp, CaptureAbortOnDataTooNew)
 {
   std::vector<Dispatch<int, int>> data;
 
@@ -61,6 +60,54 @@ TEST_F(FollowerMatchedStamp, AbortOnDataTooNew)
   CaptureRange<int> t_range{0, 0};
 
   ASSERT_EQ(State::ABORT, this->capture(std::back_inserter(data), t_range));
+}
+
+TEST_F(FollowerMatchedStamp, CapturePrimedOnExact)
+{
+  std::vector<Dispatch<int, int>> data;
+
+  this->inject(Dispatch<int, int>{0, 0});
+
+  CaptureRange<int> t_range{0, 0};
+
+  ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
+  ASSERT_EQ(data.size(), 1UL);
+  ASSERT_EQ(this->size(), 1UL);
+}
+
+TEST_F(FollowerMatchedStamp, DryCaptureRetryOnEmpty)
+{
+  CaptureRange<int> t_range{0, 0};
+  ASSERT_EQ(State::RETRY, this->dry_capture(t_range));
+}
+
+
+TEST_F(FollowerMatchedStamp, DryCaptureRetryOnDataTooOld)
+{
+  this->inject(Dispatch<int, int>{0, 0});
+
+  CaptureRange<int> t_range{1, 0};
+
+  ASSERT_EQ(State::RETRY, this->dry_capture(t_range));
+}
+
+
+TEST_F(FollowerMatchedStamp, DryCaptureAbortOnDataTooNew)
+{
+  this->inject(Dispatch<int, int>{1, 0});
+
+  CaptureRange<int> t_range{0, 0};
+
+  ASSERT_EQ(State::ABORT, this->dry_capture(t_range));
+}
+
+TEST_F(FollowerMatchedStamp, DryCapturePrimedOnExact)
+{
+  this->inject(Dispatch<int, int>{0, 0});
+
+  CaptureRange<int> t_range{0, 0};
+
+  ASSERT_EQ(State::PRIMED, this->dry_capture(t_range));
 }
 
 

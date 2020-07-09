@@ -152,6 +152,16 @@ private:
   }
 
   /**
+   * @copydoc CaptorInterface::dry_capture
+   */
+  template<typename CaptureRangeT>
+  inline State dry_capture_impl(CaptureRangeT&& range) const
+  {
+    BasicLockableT lock{queue_mutex_};
+    return derived()->dry_capture_policy_impl(std::forward<CaptureRangeT>(range));
+  }
+
+  /**
    * @copydoc CaptorInterface::capture
    */
   template<typename InpectCallbackT>

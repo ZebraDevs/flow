@@ -37,6 +37,13 @@ State Driver<PolicyT>::capture_policy_impl(OutputDispatchIteratorT&& output, Cap
 
 
 template<typename PolicyT>
+State Driver<PolicyT>::dry_capture_policy_impl(CaptureRange<stamp_type>& range)
+{
+  return derived()->dry_capture_driver_impl(range);
+}
+
+
+template<typename PolicyT>
 void Driver<PolicyT>::abort_policy_impl(const stamp_type& t_abort)
 {
   derived()->abort_driver_impl(t_abort);

@@ -37,7 +37,7 @@ constexpr int FollowerCountBefore::COUNT;
 constexpr int FollowerCountBefore::DELAY;
 
 
-TEST_F(FollowerCountBefore, RetryOnEmpty)
+TEST_F(FollowerCountBefore, CaptureRetryOnEmpty)
 {
   std::vector<Dispatch<int, int>> data;
   CaptureRange<int> t_range{0, 0};
@@ -45,7 +45,7 @@ TEST_F(FollowerCountBefore, RetryOnEmpty)
 }
 
 
-TEST_F(FollowerCountBefore, RetryOnToFewBefore)
+TEST_F(FollowerCountBefore, CaptureRetryOnToFewBefore)
 {
   std::size_t N = COUNT - 1;
 
@@ -65,7 +65,7 @@ TEST_F(FollowerCountBefore, RetryOnToFewBefore)
 }
 
 
-TEST_F(FollowerCountBefore, AbortOnToFewBeforeWithDataAfter)
+TEST_F(FollowerCountBefore, CaptureAbortOnToFewBeforeWithDataAfter)
 {
   std::size_t N = COUNT;
 
@@ -85,7 +85,7 @@ TEST_F(FollowerCountBefore, AbortOnToFewBeforeWithDataAfter)
 }
 
 
-TEST_F(FollowerCountBefore, PrimedWithExactBefore)
+TEST_F(FollowerCountBefore, CapturePrimedWithExactBefore)
 {
   std::size_t N = COUNT;
 
@@ -102,6 +102,63 @@ TEST_F(FollowerCountBefore, PrimedWithExactBefore)
   ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
   ASSERT_EQ(size_before_capture, this->size());
   ASSERT_EQ(data.size(), static_cast<std::size_t>(COUNT));
+}
+
+
+TEST_F(FollowerCountBefore, DryCaptureRetryOnEmpty)
+{
+  CaptureRange<int> t_range{0, 0};
+  ASSERT_EQ(State::RETRY, this->dry_capture(t_range));
+}
+
+
+TEST_F(FollowerCountBefore, DryCaptureRetryOnToFewBefore)
+{
+  std::size_t N = COUNT - 1;
+
+  int t = 0 - (COUNT + DELAY);
+  while (N--)
+  {
+    this->inject(Dispatch<int, int>{t, t});
+    t++;
+  }
+
+  CaptureRange<int> t_range{0, 0};
+
+  ASSERT_EQ(State::RETRY, this->dry_capture(t_range));
+}
+
+
+TEST_F(FollowerCountBefore, DryCaptureAbortOnToFewBeforeWithDataAfter)
+{
+  std::size_t N = COUNT;
+
+  int t = 0;
+  while (N--)
+  {
+    this->inject(Dispatch<int, int>{t, t});
+    t++;
+  }
+
+  CaptureRange<int> t_range{0, 0};
+
+  ASSERT_EQ(State::ABORT,this->dry_capture(t_range));
+}
+
+
+TEST_F(FollowerCountBefore, DryCapturePrimedWithExactBefore)
+{
+  std::size_t N = COUNT;
+
+  int t = 0 - (COUNT + DELAY);
+  while (N--)
+  {
+    this->inject(Dispatch<int, int>{t, t});
+    t++;
+  }
+
+  CaptureRange<int> t_range{0, 0};
+  ASSERT_EQ(State::PRIMED, this->dry_capture(t_range));
 }
 
 

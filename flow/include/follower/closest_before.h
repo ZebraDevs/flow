@@ -91,6 +91,11 @@ private:
   inline State capture_follower_impl(OutputDispatchIteratorT output, const CaptureRange<stamp_type>& range);
 
   /**
+   * @copydoc Follower::dry_capture_policy_impl
+   */
+  inline State dry_capture_follower_impl(const CaptureRange<stamp_type>& range);
+
+  /**
    * @brief Defines behavior on <code>ABORT</code>
    * @param t_abort  sequencing stamp at which abort was signaled
    */

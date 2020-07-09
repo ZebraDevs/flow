@@ -38,6 +38,21 @@ template<typename OutputDispatchIteratorT>
 State Latched<DispatchT, LockPolicyT, AllocatorT>::capture_follower_impl(OutputDispatchIteratorT output,
                                                                          const CaptureRange<stamp_type>& range)
 {
+  const State state = this->dry_capture_follower_impl(range);
+
+  if (state == State::PRIMED)
+  {
+    // When primed, latched element should be captured
+    *(output++) = *latched_;
+  }
+
+  return state;
+}
+
+
+template<typename DispatchT, typename LockPolicyT, typename AllocatorT>
+State Latched<DispatchT, LockPolicyT, AllocatorT>::dry_capture_follower_impl(const CaptureRange<stamp_type>& range)
+{
   if (PolicyType::queue_.empty())
   {
     if (latched_ == nullptr)
@@ -48,7 +63,6 @@ State Latched<DispatchT, LockPolicyT, AllocatorT>::capture_follower_impl(OutputD
     else
     {
       // If we have latched data, return that and report ready state
-      *(output++) = *latched_;
       return State::PRIMED;
     }
   }
@@ -67,7 +81,6 @@ State Latched<DispatchT, LockPolicyT, AllocatorT>::capture_follower_impl(OutputD
     else
     {
       // If we have latched data, return that and report ready state
-      *(output++) = *latched_;
       return State::PRIMED;
     }
   }
@@ -83,13 +96,11 @@ State Latched<DispatchT, LockPolicyT, AllocatorT>::capture_follower_impl(OutputD
 
   // Set latched element
   latched_ = std::addressof(*prev_qitr);
-  *(output++) = *latched_;
 
   // Remove all elements before latched element
   PolicyType::queue_.remove_before(latched_->stamp());
   return State::PRIMED;
 }
-
 
 template<typename DispatchT, typename LockPolicyT, typename AllocatorT>
 void Latched<DispatchT, LockPolicyT, AllocatorT>::abort_follower_impl(const stamp_type& t_abort)
