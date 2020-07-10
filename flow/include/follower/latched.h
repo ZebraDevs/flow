@@ -100,7 +100,7 @@ private:
   inline void abort_follower_impl(const stamp_type& t_abort);
 
   /**
-   * @brief Defines Captor reset behavior
+   * @copydoc Follower::reset_policy_impl
    */
   inline void reset_follower_impl() noexcept(true);
 

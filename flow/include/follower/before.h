@@ -82,13 +82,12 @@ private:
   inline State dry_capture_follower_impl(const CaptureRange<stamp_type>& range) const;
 
   /**
-   * @brief Defines behavior on <code>ABORT</code>
-   * @param t_abort  sequencing stamp at which abort was signaled
+   * @copydoc Follower::abort_policy_impl
    */
   inline void abort_follower_impl(const stamp_type& t_abort);
 
   /**
-   * @brief Defines Captor reset behavior
+   * @copydoc Follower::reset_policy_impl
    */
   inline void reset_follower_impl() noexcept(true) {}
 

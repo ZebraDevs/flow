@@ -9,8 +9,6 @@
 
 // C++ Standard Library
 #include <chrono>
-#include <memory>
-#include <ostream>
 #include <tuple>
 
 // Flow
@@ -21,153 +19,115 @@
 namespace flow
 {
 
-// Forward decl
-template<typename... CaptorTs>
-class Synchronizer;
-
-
 /**
- * @brief Synchronizer type traits helper
- * @tparam SynchronizerT  synchronizer object type
+ * @brief Event synchronization results
+ *
+ * @tparam StampT  capture sequencing stamp type
  */
-template<typename SynchronizerT>
-struct SynchronizerTraits
-#ifndef DOXYGEN_SKIP
-;
-template<typename... CaptorTs>
-struct SynchronizerTraits<Synchronizer<CaptorTs...>>
-#endif  // DOXYGEN_SKIP
+template<typename StampT>
+struct Result
 {
-  /// Synchronizer stamp type
-  using stamp_type = decltype(detail::check_stamp_type<CaptorTs...>());
+  /// Captor state on exit
+  State state;
 
-  /// Synchronizer captor types
-  using CaptorTypes = std::tuple<CaptorTs...>;
+  /// Driving sequencing stamp range
+  CaptureRange<StampT> range;
+
+  /// Default constructor
+  inline Result() : state{State::RETRY} {}
+
+  /**
+   * @brief Operator overload to check if synchronization succeeded from details
+   */
+  inline operator bool() const { return state == State::PRIMED; }
 };
 
-
-/// Convenience using template to access Synchronizer time stamp type
-template<typename SynchronizerT>
-using sync_stamp_type_t = typename SynchronizerTraits<SynchronizerT>::stamp_type;
-
-
-/// Convenience using template to access tuple of Synchronizer captor types
-template<typename SynchronizerT>
-using sync_captors_t = typename SynchronizerTraits<SynchronizerT>::CaptorTypes;
-
-
 /**
- * @brief Data synchronization block
- *
- *        An Synchronizer synchronizes data across several capture buffers
- *
- * @tparam CaptorTs...  A pack of input capture buffer types. The first type in this pack
- *                      is required to fulfill the requirements of a driving capture buffer
- *                      (Driver). The remaining types must fulfill the requirements of a
- *                      following capture buffer (Follower)
+ * @brief Provides facilities to synchronize data across several Captors
  */
-template<typename... CaptorTs>
 class Synchronizer
 {
 public:
-  /// Captor dispatch sequence stamp type
-  using stamp_type = sync_stamp_type_t<Synchronizer>;
+  /// Selects type of lesser size to use when passing arguments
+  template<typename T>
+  using arg_t = std::conditional_t<(sizeof(T) <= sizeof(T&)), T, T&>;
 
   /**
-   * @brief Event synchronization results
+   * @brief Stamp type from capture sequence alias
    */
-  struct Result
-  {
-    /// Captor state on exit
-    State state;
-
-    /// Driving sequencing stamp range
-    CaptureRange<stamp_type> range;
-
-    /// Default constructor
-    inline Result() :
-      state{State::RETRY}
-    {}
-
-    /**
-     * @brief Operator overload to check if synchronization succeeded from details
-     */
-    inline operator bool() const
-    {
-      return state == State::PRIMED;
-    }
-  };
+  template<typename CaptorTupleT>
+  using stamp_t =
+    typename CaptorTraits<
+      std::remove_reference_t<
+        std::tuple_element_t<0UL, CaptorTupleT>
+      >
+    >::stamp_type;
 
   /**
-   * @brief Initialization constructor
-   * @param latest_stamp  initial time-guard value
+   * @brief Stamp argument type from capture sequence alias
    */
-  explicit Synchronizer(const stamp_type latest_stamp = StampTraits<stamp_type>::min());
+  template<typename CaptorTupleT>
+  using stamp_arg_t = arg_t<stamp_t<CaptorTupleT>>;
 
   /**
-   * @brief Copy constructor
+   * @brief Result type from captor sequence alias
    */
-  Synchronizer(const Synchronizer&) = default;
-
-  /**
-   * @brief Move constructor
-   */
-  Synchronizer(Synchronizer&&) = default;
-
-  /**
-   * @brief Deconstructor
-   * @note Calls <code>Synchronizer::shutdown</code>
-   */
-  ~Synchronizer();
+  template<typename CaptorTupleT>
+  using result_t = Result<stamp_t<CaptorTupleT>>;
 
   /**
    * @brief Abort active capture at and before \p t_abort
    *
-   *        Call will result in captors removing buffered data according to thier
-   *        specific abort policy. This method may be used to skip capture frames
-   *        if input data capture does not happen within a particular timeout period.
+   *        If a capture uses a data wait, this will notify the wait
+   *        Captors will removing buffered data according to their specific abort policy.
    *
-  *
    * @param captors  tuple of captors used to perform synchronization
    * @param t_abort  abort time point
-   *
-   * @warning  Calling this method may result in data loss
    */
-  void abort(const std::tuple<CaptorTs&...>& captors, const stamp_type t_abort);
+  template<typename CaptorTupleT>
+  static void abort(CaptorTupleT&& captors, const stamp_arg_t<CaptorTupleT> t_abort);
 
   /**
-   * @brief Release all internal input capture waits
+   * @brief Resets internal captors states and removes all buffered data
+   *
+   *        If a capture uses a data wait, this will notify the wait
    *
    * @param captors  tuple of captors used to perform synchronization
-   *
-   * @note  Calling this method will reset all captor states
    */
-  void reset(const std::tuple<CaptorTs&...>& captors);
+  template<typename CaptorTupleT>
+  static void reset(CaptorTupleT&& captors);
 
   /**
    * @brief Runs event input capture
    *
    * @param captors  tuple of captors used to perform synchronization
-   * @param outputs  tuple of dispath output iterators, order w.r.t <code>CaptorTs</code>
+   * @param outputs  tuple of dispatch output iterators, order w.r.t <code>CaptorTs</code>
+   * @param lower_bound  synchronization stamp lower bound, forces all captured data to have associated
+   *                     stamps which are greater than <code>lower_bound</code>
    * @param timeout  synchronization timeout for captors which require a data wait
    *
    * @return capture/synchronization details
    */
-  template<typename ClockT, typename DurationT, typename... OutputIteratorTs>
-  Result capture(const std::tuple<CaptorTs&...>& captors,
-                 const std::tuple<OutputIteratorTs...> outputs,
-                 const std::chrono::time_point<ClockT, DurationT> timeout);
+  template<typename CaptorTupleT, typename OutputIteratorTupleT, typename ClockT, typename DurationT>
+  static result_t<CaptorTupleT> capture(CaptorTupleT&& captors,
+                                        OutputIteratorTupleT&& outputs,
+                                        const stamp_arg_t<CaptorTupleT> lower_bound,
+                                        const std::chrono::time_point<ClockT, DurationT>& timeout);
 
   /**
-   * @brief Runs event input capture without explicit timeout point
+   * @brief Runs event input capture
    *
    * @param captors  tuple of captors used to perform synchronization
-   * @param outputs  tuple of dispath output iterators, order w.r.t <code>CaptorTs</code>
+   * @param outputs  tuple of dispatch output iterators, order w.r.t <code>CaptorTs</code>
+   * @param lower_bound  synchronization stamp lower bound, forces all captured data to have associated
+   *                     stamps which are greater than <code>lower_bound</code>
    *
    * @return capture/synchronization details
    */
   template<typename CaptorTupleT, typename OutputIteratorTupleT>
-  inline Result capture(CaptorTupleT&& captors, OutputIteratorTupleT&& outputs);
+  static result_t<CaptorTupleT> capture(CaptorTupleT&& captors,
+                                        OutputIteratorTupleT&& outputs,
+                                        const stamp_arg_t<CaptorTupleT> lower_bound);
 
   /**
    * @brief Runs event input capture dry-run
@@ -178,25 +138,15 @@ public:
    *        to data in the capture queues.
    *
    * @param captors  tuple of captors used to perform synchronization
+   * @param lower_bound  synchronization stamp lower bound, force all captured data to have associated
+   *                      stamps which are greater than <code>lower_bound</code>
    *
    * @return dry capture/synchronization details
    */
-  Result dry_capture(const std::tuple<CaptorTs&...>& captors) const;
-
-private:
-  /// Sequencing stamp of the latest valid result
-  stamp_type latest_stamp_;
-
-  /**
-   * @brief Output stream overload for <code>Synchronizer::Result</code> codes
-   * @param[in,out] os  output stream
-   * @param result  Synchronizer result object
-   * @return os
-   */
-  friend inline std::ostream& operator<<(std::ostream& os, const Synchronizer::Result& result)
-  {
-    return os << "state: " << result.state << ", range: " << result.range;
-  }
+  template<typename CaptorTupleT>
+  static result_t<CaptorTupleT> dry_capture(CaptorTupleT&& captors,
+                                            const stamp_arg_t<CaptorTupleT> lower_bound =
+                                              StampTraits<stamp_t<CaptorTupleT>>::min());
 };
 
 }  // namespace flow

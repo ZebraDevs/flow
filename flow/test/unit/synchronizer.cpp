@@ -30,10 +30,6 @@ public:
   using Follower1 = follower::ClosestBefore<Dispatch<int, double>, NoLock>;
   using Follower2 = follower::Before<Dispatch<int, std::string>, NoLock>;
 
-  using Block = Synchronizer<Driver,
-                           Follower1,
-                           Follower2>;
-
   /// Persistent capture buffer resources
   std::shared_ptr<Driver> driver;
   std::shared_ptr<Follower1> follower1;
@@ -61,26 +57,21 @@ public:
 
 TEST_F(SynchronizerTestSuite, Reset)
 {
-  // Create synchronizer
-  Synchronizer<Driver, Follower1, Follower2> synchronizer;
-
-  synchronizer.reset(std::forward_as_tuple(*driver, *follower1, *follower2));
+  Synchronizer::reset(std::forward_as_tuple(*driver, *follower1, *follower2));
 }
 
 
 TEST_F(SynchronizerTestSuite, CaptureCannotPrimeRetry)
 {
-  // Create synchronizer
-  Synchronizer<Driver, Follower1, Follower2> synchronizer;
-
   std::vector<Dispatch<int, int>> driver_output_data;
   std::vector<Dispatch<int, double>> follower1_output_data;
   std::vector<Dispatch<int, std::string>> follower2_output_data;
 
-  const auto result = synchronizer.capture(std::forward_as_tuple(*driver, *follower1, *follower2),
-                                           std::forward_as_tuple(std::back_inserter(driver_output_data),
-                                                                 std::back_inserter(follower1_output_data),
-                                                                 std::back_inserter(follower2_output_data)));
+  const auto result = Synchronizer::capture(std::forward_as_tuple(*driver, *follower1, *follower2),
+                                            std::forward_as_tuple(std::back_inserter(driver_output_data),
+                                                                  std::back_inserter(follower1_output_data),
+                                                                  std::back_inserter(follower2_output_data)),
+                                            0);
 
   ASSERT_FALSE(result);
   ASSERT_EQ(result.state, State::RETRY);
@@ -89,9 +80,6 @@ TEST_F(SynchronizerTestSuite, CaptureCannotPrimeRetry)
 
 TEST_F(SynchronizerTestSuite, CaptureCannotPrimeAbort)
 {
-  // Create synchronizer
-  Synchronizer<Driver, Follower1, Follower2> synchronizer;
-
   driver->inject(Dispatch<int, int>{1, 1});
   follower1->inject(Dispatch<int, double>{7, 2.0});
   follower2->inject(Dispatch<int, std::string>{0, "ok"});
@@ -100,10 +88,11 @@ TEST_F(SynchronizerTestSuite, CaptureCannotPrimeAbort)
   std::vector<Dispatch<int, double>> follower1_output_data;
   std::vector<Dispatch<int, std::string>> follower2_output_data;
 
-  const auto result = synchronizer.capture(std::forward_as_tuple(*driver, *follower1, *follower2),
-                                           std::forward_as_tuple(std::back_inserter(driver_output_data),
-                                                                 std::back_inserter(follower1_output_data),
-                                                                 std::back_inserter(follower2_output_data)));
+  const auto result = Synchronizer::capture(std::forward_as_tuple(*driver, *follower1, *follower2),
+                                            std::forward_as_tuple(std::back_inserter(driver_output_data),
+                                                                  std::back_inserter(follower1_output_data),
+                                                                  std::back_inserter(follower2_output_data)),
+                                            0);
 
   ASSERT_FALSE(result);
   ASSERT_EQ(result.state, State::ABORT);
@@ -112,9 +101,6 @@ TEST_F(SynchronizerTestSuite, CaptureCannotPrimeAbort)
 
 TEST_F(SynchronizerTestSuite, CaptureCanPrime)
 {
-  // Create synchronizer
-  Synchronizer<Driver, Follower1, Follower2> synchronizer;
-
   driver->inject(Dispatch<int, int>{10, 10});
   follower1->inject(Dispatch<int, double>{0, 2.0});
   follower1->inject(Dispatch<int, double>{9, 2.0});
@@ -124,10 +110,11 @@ TEST_F(SynchronizerTestSuite, CaptureCanPrime)
   std::vector<Dispatch<int, double>> follower1_output_data;
   std::vector<Dispatch<int, std::string>> follower2_output_data;
 
-  const auto result = synchronizer.capture(std::forward_as_tuple(*driver, *follower1, *follower2),
-                                           std::forward_as_tuple(std::back_inserter(driver_output_data),
-                                                                 std::back_inserter(follower1_output_data),
-                                                                 std::back_inserter(follower2_output_data)));
+  const auto result = Synchronizer::capture(std::forward_as_tuple(*driver, *follower1, *follower2),
+                                            std::forward_as_tuple(std::back_inserter(driver_output_data),
+                                                                  std::back_inserter(follower1_output_data),
+                                                                  std::back_inserter(follower2_output_data)),
+                                            0);
 
   ASSERT_TRUE(result);
   ASSERT_EQ(result.state, State::PRIMED);
@@ -140,10 +127,7 @@ TEST_F(SynchronizerTestSuite, CaptureCanPrime)
 
 TEST_F(SynchronizerTestSuite, DryCaptureCannotPrimeRetry)
 {
-  // Create synchronizer
-  Synchronizer<Driver, Follower1, Follower2> synchronizer;
-
-  const auto result = synchronizer.dry_capture(std::forward_as_tuple(*driver, *follower1, *follower2));
+  const auto result = Synchronizer::dry_capture(std::forward_as_tuple(*driver, *follower1, *follower2), 0);
 
   ASSERT_FALSE(result);
   ASSERT_EQ(result.state, State::RETRY);
@@ -152,14 +136,11 @@ TEST_F(SynchronizerTestSuite, DryCaptureCannotPrimeRetry)
 
 TEST_F(SynchronizerTestSuite, DryCaptureCannotPrimeAbort)
 {
-  // Create synchronizer
-  Synchronizer<Driver, Follower1, Follower2> synchronizer;
-
   driver->inject(Dispatch<int, int>{1, 1});
   follower1->inject(Dispatch<int, double>{7, 2.0});
   follower2->inject(Dispatch<int, std::string>{0, "ok"});
 
-  const auto result = synchronizer.dry_capture(std::forward_as_tuple(*driver, *follower1, *follower2));
+  const auto result = Synchronizer::dry_capture(std::forward_as_tuple(*driver, *follower1, *follower2), 0);
 
   ASSERT_FALSE(result);
   ASSERT_EQ(result.state, State::ABORT);
@@ -168,15 +149,12 @@ TEST_F(SynchronizerTestSuite, DryCaptureCannotPrimeAbort)
 
 TEST_F(SynchronizerTestSuite, DryCaptureCanPrime)
 {
-  // Create synchronizer
-  Synchronizer<Driver, Follower1, Follower2> synchronizer;
-
   driver->inject(Dispatch<int, int>{10, 10});
   follower1->inject(Dispatch<int, double>{0, 2.0});
   follower1->inject(Dispatch<int, double>{9, 2.0});
   follower2->inject(Dispatch<int, std::string>{20, "ok"});
 
-  const auto result = synchronizer.dry_capture(std::forward_as_tuple(*driver, *follower1, *follower2));
+  const auto result = Synchronizer::dry_capture(std::forward_as_tuple(*driver, *follower1, *follower2), 0);
 
   ASSERT_TRUE(result);
   ASSERT_EQ(result.state, State::PRIMED);

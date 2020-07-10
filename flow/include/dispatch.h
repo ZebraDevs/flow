@@ -190,8 +190,6 @@ struct CaptureRange
    *
    * @param _lower_stamp  lower sequencing stamp bound
    * @param _upper_stamp  upper sequencing stamp bound
-   * @param _newest_follower_stamp  stamp used to limit difference in current driving
-   *                                stamp and oldest sequence stamp in following captor
    */
   CaptureRange(const StampT _lower_stamp = StampTraits<StampT>::max(),
                const StampT _upper_stamp = StampTraits<StampT>::min()) :

@@ -87,13 +87,12 @@ private:
   inline State dry_capture_driver_impl(CaptureRange<stamp_type>& range) const;
 
   /**
-   * @brief Defines behavior on <code>ABORT</code>
-   * @param t_abort  sequencing stamp at which abort was signaled
+   * @copydoc Driver::abort_policy_impl
    */
   inline void abort_driver_impl(const stamp_type& t_abort);
 
   /**
-   * @brief Defines Captor reset behavior
+   * @copydoc Driver::reset_policy_impl
    */
   inline void reset_driver_impl();
 
