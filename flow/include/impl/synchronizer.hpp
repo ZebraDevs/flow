@@ -8,6 +8,7 @@
 #define FLOW_IMPL_SYNCHRONIZER_HPP
 
 // C++ Standard Library
+#include <ostream>
 #include <type_traits>
 #include <tuple>
 #include <utility>
@@ -58,10 +59,10 @@ class CaptureHelper
 {
 public:
   CaptureHelper(ResultT& result,
-                const StampT& t_latest,
+                const StampT lower_bound,
                 const TimePointT timeout) :
     result_{std::addressof(result)},
-    t_latest_{t_latest},
+    lower_bound_{lower_bound},
     timeout_{timeout}
   {}
 
@@ -72,7 +73,7 @@ public:
     result_->state = c.capture(output, result_->range);
 
     // Set aborted state if driving sequence range violates monotonicity guard
-    if (result_->state == State::PRIMED and result_->range.upper_stamp < t_latest_)
+    if (result_->state == State::PRIMED and result_->range.upper_stamp < lower_bound_)
     {
       result_->state = State::ABORT;
     }
@@ -95,7 +96,7 @@ public:
     result_->state = c.capture(output, result_->range, timeout_);
 
     // Set aborted state if driving sequence range violates monotonicity guard
-    if (result_->state == State::PRIMED and result_->range.upper_stamp < t_latest_)
+    if (result_->state == State::PRIMED and result_->range.upper_stamp < lower_bound_)
     {
       result_->state = State::ABORT;
     }
@@ -116,7 +117,7 @@ private:
   ResultT* const result_;
 
   /// Known latest sequence stamp
-  StampT t_latest_;
+  StampT lower_bound_;
 
   /// Time at which data waits should end
   TimePointT timeout_;
@@ -129,9 +130,9 @@ template<typename ResultT, typename StampT>
 class DryCaptureHelper
 {
 public:
-  DryCaptureHelper(ResultT& result, const StampT& t_latest) :
+  DryCaptureHelper(ResultT& result, const StampT lower_bound) :
     result_{std::addressof(result)},
-    t_latest_{t_latest}
+    lower_bound_{lower_bound}
   {}
 
   template<typename PolicyT>
@@ -141,7 +142,7 @@ public:
     result_->state = c.dry_capture(result_->range);
 
     // Set aborted state if driving sequence range violates monotonicity guard
-    if (result_->state == State::PRIMED and result_->range.upper_stamp < t_latest_)
+    if (result_->state == State::PRIMED and result_->range.upper_stamp < lower_bound_)
     {
       result_->state = State::ABORT;
     }
@@ -162,90 +163,159 @@ private:
   ResultT* const result_;
 
   /// Known latest sequence stamp
-  StampT t_latest_;
+  StampT lower_bound_;
 };
+
+/// Checks that captor stamp types are consistnet
+template<typename... CaptorTs>
+struct captor_stamp_types_consistent;
+
+template<typename CaptorT>
+struct captor_stamp_types_consistent<CaptorT> : std::integral_constant<bool, true> {};
+
+template<typename Captor1T, typename Captor2T, typename... OtherCaptorTs>
+struct captor_stamp_types_consistent<Captor1T, Captor2T, OtherCaptorTs...> :
+  std::integral_constant<
+    bool,
+    std::is_same<
+      typename CaptorTraits<std::remove_reference_t<Captor1T>>::stamp_type,
+      typename CaptorTraits<std::remove_reference_t<Captor2T>>::stamp_type
+    >::value and
+    captor_stamp_types_consistent<OtherCaptorTs...>::value
+  >
+{};
+
+/// Checks that a squence of types are all follower captor types (or type sequence is empty)
+template<typename... FollowerTs>
+struct all_captors_are_followers : std::integral_constant<bool, true> {};
+
+template<typename FollowerT, typename... OtherFollowerTs>
+struct all_captors_are_followers<FollowerT, OtherFollowerTs...> :
+  std::integral_constant<
+    bool,
+    is_follower<std::remove_reference_t<FollowerT>>::value and
+    all_captors_are_followers<OtherFollowerTs...>::value
+  >
+{};
+
+/// Checks that a squence of types is (CaptorT, FollowerTs...)
+template<typename CaptorTupleT>
+struct captor_sequence_valid : std::integral_constant<bool, false> {};
+
+template<template<typename...> class TupleLikeTmpl, typename DriverT, typename... FollowerTs>
+struct captor_sequence_valid<TupleLikeTmpl<DriverT, FollowerTs...>> :
+  std::integral_constant<
+    bool,
+    is_driver<std::remove_reference_t<DriverT>>::value and
+    all_captors_are_followers<FollowerTs...>::value
+  >
+{};
 
 }  // namespace detail
 #endif  // DOXYGEN_SKIP
 
 
-template<typename... CaptorTs>
-Synchronizer<CaptorTs...>::Synchronizer(const stamp_type latest_stamp) :
-  latest_stamp_{latest_stamp}
-{
-  // Make sure that 'stamp_type's for all captors are the same
-  detail::check_stamp_type<CaptorTs...>();
-}
+#define FLOW_STATIC_ASSERT_EMPH(msg) "\n\n--->\n\n" msg "\n\n<---\n\n"
 
 
-template<typename... CaptorTs>
-Synchronizer<CaptorTs...>::~Synchronizer()
-{
-}
-
-
-template<typename... CaptorTs>
-template<typename ClockT, typename DurationT, typename... OutputIteratorTs>
+template<typename CaptorTupleT, typename OutputIteratorTupleT, typename ClockT, typename DurationT>
 typename
-Synchronizer<CaptorTs...>::Result
-Synchronizer<CaptorTs...>::capture(const std::tuple<CaptorTs&...>& captors,
-                                   const std::tuple<OutputIteratorTs...> outputs,
-                                   const std::chrono::time_point<ClockT, DurationT> timeout)
+Synchronizer::result_t<CaptorTupleT>
+Synchronizer::capture(CaptorTupleT&& captors,
+                      OutputIteratorTupleT&& outputs,
+                      const stamp_arg_t<CaptorTupleT> lower_bound,
+                      const std::chrono::time_point<ClockT, DurationT>& timeout)
 {
   using time_point_type = std::chrono::time_point<ClockT, DurationT>;
 
-  // Capture next input set
-  Result result;
-  apply_every(detail::CaptureHelper<Result, stamp_type, time_point_type>{result, latest_stamp_, timeout},
-              captors,
-              outputs);
+  // Sanity check captors and outputs
+  constexpr auto N_CAPTORS = std::tuple_size<std::remove_reference_t<CaptorTupleT>>();
+  constexpr auto N_OUTPUTS = std::tuple_size<std::remove_reference_t<OutputIteratorTupleT>>();
+  static_assert(
+    N_OUTPUTS == N_CAPTORS,
+    FLOW_STATIC_ASSERT_EMPH("[Synchronizer] Number of outputs must match number of captors."));
 
-  // Update sequence monotonicity guard
-  if (result.range and result.state != State::RETRY)
-  {
-    latest_stamp_ = std::max(result.range.lower_stamp, latest_stamp_);
-  }
+  // Sanity check captor sequence
+  static_assert(
+    detail::captor_sequence_valid<CaptorTupleT>(),
+    FLOW_STATIC_ASSERT_EMPH("[Synchronizer] Captor sequence is invalid. Must have (DriverType, FollowerTypes...). "
+                            "0 or more FollowerTypes allowed."));
+
+  // Sanity check captor stamp types
+  static_assert(
+    detail::captor_stamp_types_consistent<CaptorTupleT>(),
+    FLOW_STATIC_ASSERT_EMPH("[Synchronizer] Associated captor stamp types do not match between all captors"));
+
+  using ResultType = result_t<CaptorTupleT>;
+  using StampType = stamp_t<CaptorTupleT>;
+
+  ResultType result;
+  apply_every(detail::CaptureHelper<ResultType, StampType, time_point_type>{result, lower_bound, timeout},
+              std::forward<CaptorTupleT>(captors),
+              std::forward<OutputIteratorTupleT>(outputs));
+
   return result;
 }
 
 
-template<typename... CaptorTs>
 template<typename CaptorTupleT, typename OutputIteratorTupleT>
 typename
-Synchronizer<CaptorTs...>::Result
-Synchronizer<CaptorTs...>::capture(CaptorTupleT&& captors, OutputIteratorTupleT&& outputs)
+Synchronizer::result_t<CaptorTupleT>
+Synchronizer::capture(CaptorTupleT&& captors,
+                      OutputIteratorTupleT&& outputs,
+                      const stamp_arg_t<CaptorTupleT> lower_bound)
 {
-  return this->capture(std::forward<CaptorTupleT>(captors),
-                       std::forward<OutputIteratorTupleT>(outputs),
-                       std::chrono::steady_clock::time_point::max());
+  return capture(std::forward<CaptorTupleT>(captors),
+                 std::forward<OutputIteratorTupleT>(outputs),
+                 lower_bound,
+                 std::chrono::steady_clock::time_point::max());
 }
 
 
-template<typename... CaptorTs>
+template<typename CaptorTupleT>
 typename
-Synchronizer<CaptorTs...>::Result
-Synchronizer<CaptorTs...>::dry_capture(const std::tuple<CaptorTs&...>& captors) const
+Synchronizer::result_t<CaptorTupleT>
+Synchronizer::dry_capture(CaptorTupleT&& captors, const stamp_arg_t<CaptorTupleT> lower_bound)
 {
+  using ResultType = result_t<CaptorTupleT>;
+  using StampType = stamp_t<CaptorTupleT>;
+
   // Capture next input set
-  Result result;
-  apply_every(detail::DryCaptureHelper<Result, stamp_type>{result, latest_stamp_}, captors);
+  ResultType result;
+  apply_every(detail::DryCaptureHelper<ResultType, StampType>{result, lower_bound},
+              std::forward<CaptorTupleT>(captors));
 
   return result;
 }
 
 
-template<typename... CaptorTs>
-void Synchronizer<CaptorTs...>::abort(const std::tuple<CaptorTs&...>& captors, const stamp_type t_abort)
+template<typename CaptorTupleT>
+void Synchronizer::abort(CaptorTupleT&& captors, const stamp_arg_t<CaptorTupleT> t_abort)
 {
-  apply_every(detail::AbortHelper<stamp_type>{t_abort}, captors);
+  using StampType = stamp_t<CaptorTupleT>;
+  apply_every(detail::AbortHelper<StampType>{t_abort},
+              std::forward<CaptorTupleT>(captors));
 }
 
 
-template<typename... CaptorTs>
-void Synchronizer<CaptorTs...>::reset(const std::tuple<CaptorTs&...>& captors)
+template<typename CaptorTupleT>
+void Synchronizer::reset(CaptorTupleT&& captors)
 {
-  latest_stamp_ = StampTraits<stamp_type>::min();
-  apply_every(detail::ResetHelper{}, captors);
+  apply_every(detail::ResetHelper{},
+              std::forward<CaptorTupleT>(captors));
+}
+
+
+/**
+ * @brief Output stream overload for <code>Result</code>
+ * @param[in,out] os  output stream
+ * @param result  Synchronizer result object
+ * @return os
+ */
+template<typename StampT>
+inline std::ostream& operator<<(std::ostream& os, const Result<StampT>& result)
+{
+  return os << "state: " << result.state << ", range: " << result.range;
 }
 
 }  // namespace flow

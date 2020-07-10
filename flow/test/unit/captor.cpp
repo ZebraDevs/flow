@@ -22,23 +22,6 @@
 using namespace flow;
 
 
-TEST(CaptorCheckStampType, SingleCaptor)
-{
-  using C1 = driver::Next<Dispatch<int, int>>;
-
-  detail::check_stamp_type<C1>();
-}
-
-
-TEST(CaptorCheckStampType, MultiCaptor)
-{
-  using C1 = driver::Next<Dispatch<int, int>>;
-  using C2 = follower::Before<Dispatch<int, int>>;
-
-  detail::check_stamp_type<C1, C2>();
-}
-
-
 TEST(CaptorCheckStampType, DefaultCapacity)
 {
   driver::Next<Dispatch<int, int>> captor{};
