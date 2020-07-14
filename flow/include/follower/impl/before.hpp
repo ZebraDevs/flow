@@ -18,25 +18,23 @@ namespace flow
 namespace follower
 {
 
-template<typename DispatchT, typename LockPolicyT, typename AllocatorT>
-Before<DispatchT, LockPolicyT, AllocatorT>::Before(const offset_type& delay) :
-  delay_{delay}
-{
-}
+template <typename DispatchT, typename LockPolicyT, typename AllocatorT>
+Before<DispatchT, LockPolicyT, AllocatorT>::Before(const offset_type& delay) : delay_{delay}
+{}
 
 
-template<typename DispatchT, typename LockPolicyT, typename AllocatorT>
+template <typename DispatchT, typename LockPolicyT, typename AllocatorT>
 Before<DispatchT, LockPolicyT, AllocatorT>::Before(const offset_type& delay, const AllocatorT& alloc) :
-  PolicyType{alloc},
-  delay_{delay}
-{
-}
+    PolicyType{alloc},
+    delay_{delay}
+{}
 
 
-template<typename DispatchT, typename LockPolicyT, typename AllocatorT>
-template<typename OutputDispatchIteratorT>
-State Before<DispatchT, LockPolicyT, AllocatorT>::capture_follower_impl(OutputDispatchIteratorT output,
-                                                                        const CaptureRange<stamp_type>& range)
+template <typename DispatchT, typename LockPolicyT, typename AllocatorT>
+template <typename OutputDispatchIteratorT>
+State Before<DispatchT, LockPolicyT, AllocatorT>::capture_follower_impl(
+  OutputDispatchIteratorT output,
+  const CaptureRange<stamp_type>& range)
 {
   // Retry if queue has no data
   if (PolicyType::queue_.empty())
@@ -66,7 +64,7 @@ State Before<DispatchT, LockPolicyT, AllocatorT>::capture_follower_impl(OutputDi
 }
 
 
-template<typename DispatchT, typename LockPolicyT, typename AllocatorT>
+template <typename DispatchT, typename LockPolicyT, typename AllocatorT>
 State Before<DispatchT, LockPolicyT, AllocatorT>::dry_capture_follower_impl(const CaptureRange<stamp_type>& range) const
 {
   const stamp_type boundary = range.upper_stamp - delay_;
@@ -74,7 +72,7 @@ State Before<DispatchT, LockPolicyT, AllocatorT>::dry_capture_follower_impl(cons
 }
 
 
-template<typename DispatchT, typename LockPolicyT, typename AllocatorT>
+template <typename DispatchT, typename LockPolicyT, typename AllocatorT>
 void Before<DispatchT, LockPolicyT, AllocatorT>::abort_follower_impl(const stamp_type& t_abort)
 {
   PolicyType::queue_.remove_before(t_abort - delay_);

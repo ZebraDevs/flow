@@ -1,7 +1,7 @@
 /**
  * @copyright 2020 Fetch Robotics Inc.
  * @author Brian Cairl
- * 
+ *
  * @warning IMPLEMENTATION ONLY: THIS FILE SHOULD NEVER BE INCLUDED DIRECTLY!
  */
 #ifndef FLOW_CAPTURE_IMPL_CAPTOR_POLLING_HPP
@@ -23,8 +23,9 @@ namespace flow
  *       using a <code>std::lock_gaurd</code> which protects data input/output,
  *       but allows for polling with <code>Captor::capture</code>
  */
-template<typename CaptorT, typename BasicLockableT>
-class Captor<CaptorT, PollingLock<BasicLockableT>> : public CaptorInterface<Captor<CaptorT, PollingLock<BasicLockableT>>>
+template <typename CaptorT, typename BasicLockableT>
+class Captor<CaptorT, PollingLock<BasicLockableT>>
+    : public CaptorInterface<Captor<CaptorT, PollingLock<BasicLockableT>>>
 {
 public:
   /// Data dispatch type
@@ -53,9 +54,7 @@ public:
    *
    * @note Initializes data capacity with NO LIMITS on buffer size
    */
-  Captor(const DispatchAllocatorType& alloc) :
-    CaptorInterfaceType{0UL, alloc}
-  {}
+  Captor(const DispatchAllocatorType& alloc) : CaptorInterfaceType{0UL, alloc} {}
 
   /**
    * @brief Destructor
@@ -101,8 +100,7 @@ private:
   /**
    * @copydoc CaptorInterface::inject
    */
-  template<typename... DispatchConstructorArgTs>
-  inline void inject_impl(DispatchConstructorArgTs&&... dispatch_args)
+  template <typename... DispatchConstructorArgTs> inline void inject_impl(DispatchConstructorArgTs&&... dispatch_args)
   {
     BasicLockableT lock{queue_mutex_};
     CaptorInterfaceType::insert_and_limit(std::forward<DispatchConstructorArgTs>(dispatch_args)...);
@@ -111,11 +109,12 @@ private:
   /**
    * @copydoc CaptorInterface::insert
    */
-  template<typename FirstForwardDispatchIteratorT, typename LastForwardDispatchIteratorT>
+  template <typename FirstForwardDispatchIteratorT, typename LastForwardDispatchIteratorT>
   inline void insert_impl(FirstForwardDispatchIteratorT first, LastForwardDispatchIteratorT last)
   {
     BasicLockableT lock{queue_mutex_};
-    std::for_each(first, last, [this](const DispatchType& dispatch) { CaptorInterfaceType::insert_and_limit(dispatch); });
+    std::for_each(
+      first, last, [this](const DispatchType& dispatch) { CaptorInterfaceType::insert_and_limit(dispatch); });
   }
 
   /**
@@ -153,27 +152,25 @@ private:
   inline CaptureRange<stamp_type> get_available_stamp_range_impl() const
   {
     BasicLockableT lock{queue_mutex_};
-    return queue_.empty() ?
-           CaptureRange<stamp_type>{} :
-           CaptureRange<stamp_type>{queue_.oldest_stamp(), queue_.newest_stamp()};
+    return queue_.empty() ? CaptureRange<stamp_type>{}
+                          : CaptureRange<stamp_type>{queue_.oldest_stamp(), queue_.newest_stamp()};
   }
 
   /**
    * @copydoc CaptorInterface::capture
    */
-  template<typename OutputDispatchIteratorT, typename CaptureRangeT>
+  template <typename OutputDispatchIteratorT, typename CaptureRangeT>
   inline State capture_impl(OutputDispatchIteratorT&& output, CaptureRangeT&& range)
   {
     BasicLockableT lock{queue_mutex_};
-    return derived()->capture_policy_impl(std::forward<OutputDispatchIteratorT>(output),
-                                          std::forward<CaptureRangeT>(range));
+    return derived()->capture_policy_impl(
+      std::forward<OutputDispatchIteratorT>(output), std::forward<CaptureRangeT>(range));
   }
 
   /**
    * @copydoc CaptorInterface::dry_capture
    */
-  template<typename CaptureRangeT>
-  inline State dry_capture_impl(CaptureRangeT&& range) const
+  template <typename CaptureRangeT> inline State dry_capture_impl(CaptureRangeT&& range) const
   {
     BasicLockableT lock{queue_mutex_};
     return derived()->dry_capture_policy_impl(std::forward<CaptureRangeT>(range));
@@ -182,8 +179,7 @@ private:
   /**
    * @copydoc CaptorInterface::capture
    */
-  template<typename InpectCallbackT>
-  void inspect_impl(InpectCallbackT&& inspect_dispatch_cb) const
+  template <typename InpectCallbackT> void inspect_impl(InpectCallbackT&& inspect_dispatch_cb) const
   {
     BasicLockableT lock{queue_mutex_};
     for (const auto& dispatch : CaptorInterfaceType::queue_)

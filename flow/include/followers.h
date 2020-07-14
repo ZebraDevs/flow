@@ -21,7 +21,8 @@ namespace flow
 /**
  * @brief Synchronization buffers with sequencing range-dependent policies
  */
-namespace follower {}
+namespace follower
+{}
 
 }  // flow
 

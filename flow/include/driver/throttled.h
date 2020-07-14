@@ -34,13 +34,12 @@ namespace driver
  *        <b>Data removal:</b> Captor will remove all elements before the captured data element
  *
  * @tparam DispatchT  data dispatch type
- * @tparam LockPolicyT  a BasicLockable (https://en.cppreference.com/w/cpp/named_req/BasicLockable) object or NoLock or PollingLock
+ * @tparam LockPolicyT  a BasicLockable (https://en.cppreference.com/w/cpp/named_req/BasicLockable) object or NoLock or
+ * PollingLock
  * @tparam AllocatorT  <code>DispatchT</code> allocator type
  * @tparam CaptureOutputT  captured output container type
  */
-template<typename DispatchT,
-         typename LockPolicyT = NoLock,
-         typename AllocatorT = std::allocator<DispatchT>>
+template <typename DispatchT, typename LockPolicyT = NoLock, typename AllocatorT = std::allocator<DispatchT>>
 class Throttled : public Driver<Throttled<DispatchT, LockPolicyT, AllocatorT>>
 {
 public:
@@ -59,7 +58,7 @@ public:
 
   /**
    * @brief Configuration constructor
-  *
+   *
    * @param throttle_period  capture throttling period
    * @param alloc  dispatch object allocator with some initial state
    */
@@ -78,7 +77,7 @@ private:
    * @retval State::PRIMED  next element has been captured
    * @retval State::RETRY  Captor should continue waiting for messages after prime attempt
    */
-  template<typename OutputDispatchIteratorT>
+  template <typename OutputDispatchIteratorT>
   inline State capture_driver_impl(OutputDispatchIteratorT output, CaptureRange<stamp_type>& range);
 
   /**
@@ -110,13 +109,12 @@ private:
  * @copydoc CaptorTraits
  *
  * @tparam DispatchT  data dispatch type
- * @tparam LockPolicyT  a BasicLockable (https://en.cppreference.com/w/cpp/named_req/BasicLockable) object or NoLock or PollingLock
+ * @tparam LockPolicyT  a BasicLockable (https://en.cppreference.com/w/cpp/named_req/BasicLockable) object or NoLock or
+ * PollingLock
  * @tparam AllocatorT  <code>DispatchT</code> allocator type
  * @tparam CaptureOutputT  output capture container type
  */
-template<typename DispatchT,
-         typename LockPolicyT,
-         typename AllocatorT>
+template <typename DispatchT, typename LockPolicyT, typename AllocatorT>
 struct CaptorTraits<driver::Throttled<DispatchT, LockPolicyT, AllocatorT>> : CaptorTraitsFromDispatch<DispatchT>
 {
   /// Dispatch object allocation type

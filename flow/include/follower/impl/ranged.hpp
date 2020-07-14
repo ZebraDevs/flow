@@ -18,27 +18,23 @@ namespace flow
 namespace follower
 {
 
-template<typename DispatchT, typename LockPolicyT, typename AllocatorT>
-Ranged<DispatchT, LockPolicyT, AllocatorT>::Ranged(const offset_type& delay) :
-  PolicyType{},
-  delay_{delay}
-{
-}
+template <typename DispatchT, typename LockPolicyT, typename AllocatorT>
+Ranged<DispatchT, LockPolicyT, AllocatorT>::Ranged(const offset_type& delay) : PolicyType{}, delay_{delay}
+{}
 
 
-template<typename DispatchT, typename LockPolicyT, typename AllocatorT>
-Ranged<DispatchT, LockPolicyT, AllocatorT>::Ranged(const offset_type& delay,
-                                                   const AllocatorT& alloc) :
-  PolicyType{alloc},
-  delay_{delay}
-{
-}
+template <typename DispatchT, typename LockPolicyT, typename AllocatorT>
+Ranged<DispatchT, LockPolicyT, AllocatorT>::Ranged(const offset_type& delay, const AllocatorT& alloc) :
+    PolicyType{alloc},
+    delay_{delay}
+{}
 
 
-template<typename DispatchT, typename LockPolicyT, typename AllocatorT>
-template<typename OutputDispatchIteratorT>
-State Ranged<DispatchT, LockPolicyT, AllocatorT>::capture_follower_impl(OutputDispatchIteratorT&& output,
-                                                                        const CaptureRange<stamp_type>& range)
+template <typename DispatchT, typename LockPolicyT, typename AllocatorT>
+template <typename OutputDispatchIteratorT>
+State Ranged<DispatchT, LockPolicyT, AllocatorT>::capture_follower_impl(
+  OutputDispatchIteratorT&& output,
+  const CaptureRange<stamp_type>& range)
 {
   // Abort early on empty queue
   if (PolicyType::queue_.empty())
@@ -78,7 +74,7 @@ State Ranged<DispatchT, LockPolicyT, AllocatorT>::capture_follower_impl(OutputDi
 }
 
 
-template<typename DispatchT, typename LockPolicyT, typename AllocatorT>
+template <typename DispatchT, typename LockPolicyT, typename AllocatorT>
 State Ranged<DispatchT, LockPolicyT, AllocatorT>::dry_capture_follower_impl(const CaptureRange<stamp_type>& range)
 {
   // Abort early on empty queue
@@ -108,27 +104,34 @@ State Ranged<DispatchT, LockPolicyT, AllocatorT>::dry_capture_follower_impl(cons
   }
 }
 
-template<typename DispatchT, typename LockPolicyT, typename AllocatorT>
+template <typename DispatchT, typename LockPolicyT, typename AllocatorT>
 auto Ranged<DispatchT, LockPolicyT, AllocatorT>::find_after_first(const CaptureRange<stamp_type>& range) const
 {
   return std::find_if(
     PolicyType::queue_.begin(),
     PolicyType::queue_.end(),
-    [offset_lower_stamp=(range.lower_stamp - delay_)](const DispatchT& dispatch) {return dispatch.stamp() >= offset_lower_stamp;});
+    [offset_lower_stamp = (range.lower_stamp - delay_)](const DispatchT& dispatch) {
+      return dispatch.stamp() >= offset_lower_stamp;
+    });
 }
 
-template<typename DispatchT, typename LockPolicyT, typename AllocatorT>
-template<typename QueueIteratorT>
-auto Ranged<DispatchT, LockPolicyT, AllocatorT>::find_before_last(const CaptureRange<stamp_type>& range, const QueueIteratorT after_first) const
+template <typename DispatchT, typename LockPolicyT, typename AllocatorT>
+template <typename QueueIteratorT>
+auto Ranged<DispatchT, LockPolicyT, AllocatorT>::find_before_last(
+  const CaptureRange<stamp_type>& range,
+  const QueueIteratorT after_first) const
 {
   return std::find_if_not(
     after_first == PolicyType::queue_.end() ? PolicyType::queue_.begin() : after_first,
     PolicyType::queue_.end(),
-    [offset_upper_stamp=(range.upper_stamp - delay_)](const DispatchT& dispatch) {return dispatch.stamp() <= offset_upper_stamp;});
+    [offset_upper_stamp = (range.upper_stamp - delay_)](const DispatchT& dispatch) {
+      return dispatch.stamp() <= offset_upper_stamp;
+    });
 }
 
-template<typename DispatchT, typename LockPolicyT, typename AllocatorT>
-void Ranged<DispatchT, LockPolicyT, AllocatorT>::abort_follower_impl(const stamp_type& t_abort) {}
+template <typename DispatchT, typename LockPolicyT, typename AllocatorT>
+void Ranged<DispatchT, LockPolicyT, AllocatorT>::abort_follower_impl(const stamp_type& t_abort)
+{}
 
 }  // namespace follower
 }  // namespace flow

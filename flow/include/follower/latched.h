@@ -33,19 +33,18 @@ namespace follower
  *        <b>Data removal:</b> Captor will remove all data before currently "latched" data element
  *
  * @tparam DispatchT  data dispatch type
- * @tparam LockPolicyT  a BasicLockable (https://en.cppreference.com/w/cpp/named_req/BasicLockable) object or NoLock or PollingLock
+ * @tparam LockPolicyT  a BasicLockable (https://en.cppreference.com/w/cpp/named_req/BasicLockable) object or NoLock or
+ * PollingLock
  * @tparam AllocatorT  <code>DispatchT</code> allocator type
  *
  * @note Latched won't behave non-deterministically if actual input period (difference between successive
- *       dispatch stamps) is greater than <code>min_period</code>. However, newer data values will not be captured if they
- *       are within a <code>min_period<code> offset of <code>range.lower_stamp</code>
+ *       dispatch stamps) is greater than <code>min_period</code>. However, newer data values will not be captured if
+ * they are within a <code>min_period<code> offset of <code>range.lower_stamp</code>
  *
- * @warn Latched may never enter a READY state if data never becomes available. Calling application may need to implement a
- *       synchronization timeout behavior
+ * @warn Latched may never enter a READY state if data never becomes available. Calling application may need to
+ * implement a synchronization timeout behavior
  */
-template<typename DispatchT,
-         typename LockPolicyT = NoLock,
-         typename AllocatorT = std::allocator<DispatchT>>
+template <typename DispatchT, typename LockPolicyT = NoLock, typename AllocatorT = std::allocator<DispatchT>>
 class Latched : public Follower<Latched<DispatchT, LockPolicyT, AllocatorT>>
 {
 public:
@@ -86,7 +85,7 @@ private:
    * @retval RETRY   If data element is not available at or before <code>range.lower_stamp - min_period</code>
    * @retval ABORT   If data elements are only available after <code>range.lower_stamp - min_period</code>
    */
-  template<typename OutputDispatchIteratorT>
+  template <typename OutputDispatchIteratorT>
   inline State capture_follower_impl(OutputDispatchIteratorT output, const CaptureRange<stamp_type>& range);
 
   /**
@@ -119,13 +118,12 @@ private:
  * @copydoc CaptorTraits
  *
  * @tparam DispatchT  data dispatch type
- * @tparam LockPolicyT  a BasicLockable (https://en.cppreference.com/w/cpp/named_req/BasicLockable) object or NoLock or PollingLock
+ * @tparam LockPolicyT  a BasicLockable (https://en.cppreference.com/w/cpp/named_req/BasicLockable) object or NoLock or
+ * PollingLock
  * @tparam AllocatorT  <code>DispatchT</code> allocator type
  * @tparam CaptureOutputT  output capture container type
  */
-template<typename DispatchT,
-         typename LockPolicyT,
-         typename AllocatorT>
+template <typename DispatchT, typename LockPolicyT, typename AllocatorT>
 struct CaptorTraits<follower::Latched<DispatchT, LockPolicyT, AllocatorT>> : CaptorTraitsFromDispatch<DispatchT>
 {
   /// Dispatch object allocation type

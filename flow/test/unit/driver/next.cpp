@@ -21,14 +21,9 @@ using namespace flow::driver;
 
 struct DriverNext : ::testing::Test, Next<Dispatch<int, int>, NoLock>
 {
-  DriverNext() :
-    Next<Dispatch<int, int>, NoLock>{}
-  {}
+  DriverNext() : Next<Dispatch<int, int>, NoLock>{} {}
 
-  void SetUp() final
-  {
-    this->reset();
-  }
+  void SetUp() final { this->reset(); }
 };
 
 
@@ -43,8 +38,8 @@ TEST_F(DriverNext, CaptureRetryOnEmpty)
 TEST_F(DriverNext, CapturePrimedWithOldest)
 {
   const int t = 1;
-  this->inject(Dispatch<int, int>{t+0, 1});
-  this->inject(Dispatch<int, int>{t+1, 2});
+  this->inject(Dispatch<int, int>{t + 0, 1});
+  this->inject(Dispatch<int, int>{t + 1, 2});
 
   std::vector<Dispatch<int, int>> data;
   CaptureRange<int> t_range{0, 0};
@@ -65,8 +60,8 @@ TEST_F(DriverNext, DryCaptureRetryOnEmpty)
 TEST_F(DriverNext, DryCapturePrimedWithOldest)
 {
   const int t = 1;
-  this->inject(Dispatch<int, int>{t+0, 1});
-  this->inject(Dispatch<int, int>{t+1, 2});
+  this->inject(Dispatch<int, int>{t + 0, 1});
+  this->inject(Dispatch<int, int>{t + 1, 2});
 
   CaptureRange<int> t_range{0, 0};
   ASSERT_EQ(State::PRIMED, this->dry_capture(t_range));

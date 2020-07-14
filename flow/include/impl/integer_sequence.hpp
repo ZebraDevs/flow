@@ -13,8 +13,8 @@
 #ifndef DOXYGEN_SKIP
 
 // C++ Standard Library
-#include <utility>
 #include <type_traits>
+#include <utility>
 
 namespace flow
 {
@@ -24,17 +24,14 @@ namespace flow
  * @tparam IntT  integer element type
  * @tparam Ns...  pack of integer values of type \p IntT
  */
-template<typename IntT, IntT... Ns> struct integer_sequence
+template <typename IntT, IntT... Ns> struct integer_sequence
 {
   static_assert(std::is_integral<IntT>(), "'IntT' should be an integral type");
 
   /**
    * @brief Returns the number of elements in <code>IntT... Ns</code>
    */
-  static constexpr size_t size() noexcept
-  {
-    return sizeof...(Ns);
-  }
+  static constexpr size_t size() noexcept { return sizeof...(Ns); }
 };
 
 namespace detail
@@ -42,22 +39,20 @@ namespace detail
 /**
  * @brief Helper which simplifies creation of <code>sequence</code>
  */
-template<typename IntT, size_t... Ns> struct make_sequence;
+template <typename IntT, size_t... Ns> struct make_sequence;
 
 /**
  * @copydoc make_sequence
  */
-template<typename IntT, size_t Index, size_t... Ns>
-struct make_sequence<IntT, Index, Ns...>
+template <typename IntT, size_t Index, size_t... Ns> struct make_sequence<IntT, Index, Ns...>
 {
-  using type = typename make_sequence<IntT, Index-1, Index-1, Ns...>::type;
+  using type = typename make_sequence<IntT, Index - 1, Index - 1, Ns...>::type;
 };
 
 /**
  * @copydoc make_sequence
  */
-template<typename IntT, size_t... Ns>
-struct make_sequence<IntT, 0, Ns...>
+template <typename IntT, size_t... Ns> struct make_sequence<IntT, 0, Ns...>
 {
   using type = integer_sequence<IntT, Ns...>;
 };
@@ -69,29 +64,25 @@ struct make_sequence<IntT, 0, Ns...>
  * @tparam IntT  integer element type
  * @tparam N  number of indices in sequence, i.e. <code>[0, 1, ..., N-2, N-1]</code>
  */
-template<typename IntT, size_t N>
-using make_integer_sequence = typename detail::make_sequence<IntT, N>::type;
+template <typename IntT, size_t N> using make_integer_sequence = typename detail::make_sequence<IntT, N>::type;
 
 /**
  * @brief Integer sequence where the integer type is <code>size_t</code>
  * @tparam Ns...  pack of integer values of type <code>std::size_t</code>
  */
-template<size_t... Ns>
-using index_sequence = integer_sequence<size_t, Ns...>;
+template <size_t... Ns> using index_sequence = integer_sequence<size_t, Ns...>;
 
 /**
  * @brief Makes an integer sequence where the integer type is <code>size_t</code>
  * @tparam N  number of indices in sequence, i.e. <code>[0, 1, ..., N-2, N-1]</code>
  */
-template<size_t N>
-using make_index_sequence = make_integer_sequence<size_t, N>;
+template <size_t N> using make_index_sequence = make_integer_sequence<size_t, N>;
 
 /**
  * @brief Makes an index sequence type with elements for each type in <code>T...</code>
  * @param TPack...  pack of arbitrary types
  */
-template<class... TPack>
-using index_sequence_for = make_integer_sequence<size_t, sizeof...(TPack)>;
+template <class... TPack> using index_sequence_for = make_integer_sequence<size_t, sizeof...(TPack)>;
 
 }  // namespace flow
 

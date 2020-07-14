@@ -24,14 +24,9 @@ struct FollowerClosestBefore : ::testing::Test, ClosestBefore<Dispatch<int, int>
   static constexpr int PERIOD = 5;
   static constexpr int DELAY = 3;
 
-  FollowerClosestBefore() :
-    ClosestBefore<Dispatch<int, int>, NoLock>{PERIOD, DELAY}
-  {}
+  FollowerClosestBefore() : ClosestBefore<Dispatch<int, int>, NoLock>{PERIOD, DELAY} {}
 
-  void SetUp() final
-  {
-    this->reset();
-  }
+  void SetUp() final { this->reset(); }
 };
 constexpr int FollowerClosestBefore::PERIOD;
 constexpr int FollowerClosestBefore::DELAY;

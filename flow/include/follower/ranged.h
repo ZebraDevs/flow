@@ -25,12 +25,11 @@ namespace follower
  *        before the lower sequence stamp (<code>range.lower_stamp</code>)
  *
  * @tparam DispatchT  data dispatch type
- * @tparam LockPolicyT  a BasicLockable (https://en.cppreference.com/w/cpp/named_req/BasicLockable) object or NoLock or PollingLock
+ * @tparam LockPolicyT  a BasicLockable (https://en.cppreference.com/w/cpp/named_req/BasicLockable) object or NoLock or
+ * PollingLock
  * @tparam AllocatorT  <code>DispatchT</code> allocator type
  */
-template<typename DispatchT,
-         typename LockPolicyT = NoLock,
-         typename AllocatorT = std::allocator<DispatchT>>
+template <typename DispatchT, typename LockPolicyT = NoLock, typename AllocatorT = std::allocator<DispatchT>>
 class Ranged : public Follower<Ranged<DispatchT, LockPolicyT, AllocatorT>>
 {
 public:
@@ -74,7 +73,7 @@ private:
    * @retval RETRY   If N-elements exist before <code>range.lower_stamp</code> but
    *                 M-elements do not exist after <code>range.upper_stamp</code>
    */
-  template<typename OutputDispatchIteratorT>
+  template <typename OutputDispatchIteratorT>
   inline State capture_follower_impl(OutputDispatchIteratorT&& output, const CaptureRange<stamp_type>& range);
 
   /**
@@ -104,7 +103,7 @@ private:
    *
    * @param range  data capture/sequencing range
    */
-  template<typename QueueIteratorT>
+  template <typename QueueIteratorT>
   inline auto find_before_last(const CaptureRange<stamp_type>& range, const QueueIteratorT after_first) const;
 
   /// Capture delay
@@ -118,20 +117,20 @@ private:
  * @copydoc CaptorTraits
  *
  * @tparam DispatchT  data dispatch type
- * @tparam LockPolicyT  a BasicLockable (https://en.cppreference.com/w/cpp/named_req/BasicLockable) object or NoLock or PollingLock
+ * @tparam LockPolicyT  a BasicLockable (https://en.cppreference.com/w/cpp/named_req/BasicLockable) object or NoLock or
+ * PollingLock
  * @tparam AllocatorT  <code>DispatchT</code> allocator type
  * @tparam CaptureOutputT  output capture container type
  */
-template<typename DispatchT,
-         typename LockPolicyT,
-         typename AllocatorT>
+template <typename DispatchT, typename LockPolicyT, typename AllocatorT>
 struct CaptorTraits<follower::Ranged<DispatchT, LockPolicyT, AllocatorT>> : CaptorTraitsFromDispatch<DispatchT>
 {
   /// Dispatch object allocation type
   using DispatchAllocatorType = AllocatorT;
 
   /// Thread locking policy type
-  using LockPolicyType = LockPolicyT;;
+  using LockPolicyType = LockPolicyT;
+  ;
 };
 
 }  // namespace flow

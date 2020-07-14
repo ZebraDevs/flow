@@ -28,8 +28,7 @@ namespace flow
  * @tparam DispatchT  data dipatch type
  * @tparam AllocatorT <code>DispatchT</code> allocator type
  */
-template<typename DispatchT, typename AllocatorT = std::allocator<DispatchT>>
-class DispatchQueue
+template <typename DispatchT, typename AllocatorT = std::allocator<DispatchT>> class DispatchQueue
 {
 public:
   /// Dispatch stamp type
@@ -74,37 +73,25 @@ public:
    * @brief Returns first iterator to underlying ordered data structure
    * @return <code>const_iterator</code> to first Dispatch resource
    */
-  inline const_iterator begin() const
-  {
-    return queue_.cbegin();
-  }
+  inline const_iterator begin() const { return queue_.cbegin(); }
 
   /**
    * @brief Returns last iterator to underlying ordered data structure
    * @return <code>const_iterator</code> to one element past Dispatch resource
    */
-  inline const_iterator end() const
-  {
-    return queue_.cend();
-  }
+  inline const_iterator end() const { return queue_.cend(); }
 
   /**
    * @brief Returns first iterator to reversed underlying ordered data structure
    * @return <code>const_reverse_iterator</code> to first Dispatch resource
    */
-  inline const_reverse_iterator rbegin() const
-  {
-    return queue_.crbegin();
-  }
+  inline const_reverse_iterator rbegin() const { return queue_.crbegin(); }
 
   /**
    * @brief Returns last iterator to reversed underlying ordered data structure
    * @return <code>const_reverse_iterator</code> to one element past Dispatch resource
    */
-  inline const_reverse_iterator rend() const
-  {
-    return queue_.crend();
-  }
+  inline const_reverse_iterator rend() const { return queue_.crend(); }
 
   /**
    * @brief Sequencing stamp associated with the oldest data
@@ -112,10 +99,7 @@ public:
    *
    * @warning Undefined behavior when <code>empty() == true</code>
    */
-  inline stamp_type oldest_stamp() const
-  {
-    return queue_.front().stamp();
-  }
+  inline stamp_type oldest_stamp() const { return queue_.front().stamp(); }
 
   /**
    * @brief Sequencing stamp associated with the newest data
@@ -123,10 +107,7 @@ public:
    *
    * @warning Undefined behavior when <code>empty() == true</code>
    */
-  inline stamp_type newest_stamp() const
-  {
-    return queue_.back().stamp();
-  }
+  inline stamp_type newest_stamp() const { return queue_.back().stamp(); }
 
   /**
    * @brief Removes the oldest element and returns associated Dispatch
@@ -167,8 +148,7 @@ public:
    *
    * @warning elements with stamps identical to existing element stamps are not added
    */
-  template<typename... DispatchConstructorArgTs>
-  inline void insert(DispatchConstructorArgTs&&... dispatch_args);
+  template <typename... DispatchConstructorArgTs> inline void insert(DispatchConstructorArgTs&&... dispatch_args);
 
   /**
    * @brief Returns the allocator associated with the container

@@ -21,14 +21,9 @@ using namespace flow::follower;
 
 struct FollowerMatchedStamp : ::testing::Test, MatchedStamp<Dispatch<int, int>, NoLock>
 {
-  FollowerMatchedStamp() :
-    MatchedStamp<Dispatch<int, int>, NoLock>{}
-  {}
+  FollowerMatchedStamp() : MatchedStamp<Dispatch<int, int>, NoLock>{} {}
 
-  void SetUp() final
-  {
-    this->reset();
-  }
+  void SetUp() final { this->reset(); }
 };
 
 

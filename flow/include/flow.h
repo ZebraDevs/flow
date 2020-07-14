@@ -15,6 +15,7 @@
 /**
  * @brief Flow input synchronization library components
  */
-namespace flow {}
+namespace flow
+{}
 
 #endif  // FLOW_FLOW_H

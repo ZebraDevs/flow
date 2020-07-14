@@ -16,7 +16,6 @@
 using namespace flow;
 
 
-
 TEST(Dispatch, GetData)
 {
   Dispatch<int, std::string> d{2, "test-value"};

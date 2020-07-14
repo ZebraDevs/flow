@@ -18,15 +18,15 @@ namespace flow
 {
 
 // Forward declaration
-template<typename PolicyT> class Follower;
+template <typename PolicyT> class Follower;
 
 
 /**
  * @copydoc CaptorTraits
  * @tparam PolicyT  CRTP-derived captor with specialized capture policy
  */
-template<typename PolicyT>
-struct CaptorTraits<Follower<PolicyT>> : CaptorTraits<PolicyT> {};
+template <typename PolicyT> struct CaptorTraits<Follower<PolicyT>> : CaptorTraits<PolicyT>
+{};
 
 
 /**
@@ -37,7 +37,7 @@ struct CaptorTraits<Follower<PolicyT>> : CaptorTraits<PolicyT> {};
  *
  * @tparam PolicyT  CRTP-derived captor with specialized capture policy
  */
-template<typename PolicyT>
+template <typename PolicyT>
 class Follower : public Captor<Follower<PolicyT>, typename CaptorTraits<PolicyT>::LockPolicyType>
 {
 public:
@@ -79,7 +79,7 @@ protected:
    * @retval State::PRIMED    Data have been captured
    * @retval State::RETRY  Captor should continue waiting for messages after prime attempt
    */
-  template<typename OutputDispatchIteratorT>
+  template <typename OutputDispatchIteratorT>
   inline State capture_policy_impl(OutputDispatchIteratorT&& output, const CaptureRange<stamp_type>& range);
 
   /**
@@ -122,8 +122,9 @@ protected:
  * @brief Checks if captor object derived from a Follower base
  * @param CaptorT  object to test
  */
-template<typename CaptorT>
-struct is_follower : std::integral_constant<bool, std::is_base_of<Follower<CaptorT>, CaptorT>::value> {};
+template <typename CaptorT>
+struct is_follower : std::integral_constant<bool, std::is_base_of<Follower<CaptorT>, CaptorT>::value>
+{};
 
 }  // namespace flow
 

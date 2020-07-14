@@ -34,7 +34,8 @@ namespace follower
  *        closest data element
  *
  * @tparam DispatchT  data dispatch type
- * @tparam LockPolicyT  a BasicLockable (https://en.cppreference.com/w/cpp/named_req/BasicLockable) object or NoLock or PollingLock
+ * @tparam LockPolicyT  a BasicLockable (https://en.cppreference.com/w/cpp/named_req/BasicLockable) object or NoLock or
+ * PollingLock
  * @tparam AllocatorT  <code>DispatchT</code> allocator type
  *
  * @warn ClosestBefore will behave non-deterministically if actual input period (difference between successive
@@ -42,9 +43,7 @@ namespace follower
  *       if <code>period</code> is too large, than multiple inputs could appear before the driving range, causing
  *       for different data on two or more iterations where the "latest" data was assumed to have been the same
  */
-template<typename DispatchT,
-         typename LockPolicyT = NoLock,
-         typename AllocatorT = std::allocator<DispatchT>>
+template <typename DispatchT, typename LockPolicyT = NoLock, typename AllocatorT = std::allocator<DispatchT>>
 class ClosestBefore : public Follower<ClosestBefore<DispatchT, LockPolicyT, AllocatorT>>
 {
 public:
@@ -87,7 +86,7 @@ private:
    *                 there is a data element within the expected duration window before
    *                 <code>range.upper_stamp</code>
    */
-  template<typename OutputDispatchIteratorT>
+  template <typename OutputDispatchIteratorT>
   inline State capture_follower_impl(OutputDispatchIteratorT output, const CaptureRange<stamp_type>& range);
 
   /**
@@ -119,20 +118,20 @@ private:
  * @copydoc CaptorTraits
  *
  * @tparam DispatchT  data dispatch type
- * @tparam LockPolicyT  a BasicLockable (https://en.cppreference.com/w/cpp/named_req/BasicLockable) object or NoLock or PollingLock
+ * @tparam LockPolicyT  a BasicLockable (https://en.cppreference.com/w/cpp/named_req/BasicLockable) object or NoLock or
+ * PollingLock
  * @tparam AllocatorT  <code>DispatchT</code> allocator type
  * @tparam CaptureOutputT  output capture container type
  */
-template<typename DispatchT,
-         typename LockPolicyT,
-         typename AllocatorT>
+template <typename DispatchT, typename LockPolicyT, typename AllocatorT>
 struct CaptorTraits<follower::ClosestBefore<DispatchT, LockPolicyT, AllocatorT>> : CaptorTraitsFromDispatch<DispatchT>
 {
   /// Dispatch object allocation type
   using DispatchAllocatorType = AllocatorT;
 
   /// Thread locking policy type
-  using LockPolicyType = LockPolicyT;;
+  using LockPolicyType = LockPolicyT;
+  ;
 };
 
 }  // namespace flow
