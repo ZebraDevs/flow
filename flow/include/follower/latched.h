@@ -9,6 +9,7 @@
 
 // Flow
 #include <flow/follower/follower.h>
+#include <flow/impl/optional.hpp>
 
 namespace flow
 {
@@ -105,7 +106,10 @@ private:
   inline void reset_follower_impl() noexcept(true);
 
   /// Latched dispatch
-  const DispatchT* latched_;
+  ::flow::optional<DispatchT> latched_;
+
+  /// Flag to indicate that latched value has been set
+  bool latched_value_is_set_;
 
   /// Number of message before target to accept before ready
   offset_type min_period_;
