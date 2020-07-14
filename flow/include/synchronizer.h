@@ -76,6 +76,15 @@ public:
   using result_t = Result<stamp_t<CaptorTupleT>>;
 
   /**
+   * @brief Removes all data at and before \p t_data
+   *
+   * @param captors  tuple of captors used to perform synchronization
+   * @param t_remove  data removal time point
+   */
+  template<typename CaptorTupleT>
+  static void remove(CaptorTupleT&& captors, const stamp_arg_t<CaptorTupleT> t_remove);
+
+  /**
    * @brief Abort active capture at and before \p t_abort
    *
    *        If a capture uses a data wait, this will notify the wait

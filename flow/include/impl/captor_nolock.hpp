@@ -110,6 +110,15 @@ private:
   }
 
   /**
+   * @copydoc CaptorInterface::remove
+   */
+  inline void remove_impl(const stamp_type& t_remove)
+  {
+    // Remove all data before this time
+    CaptorInterfaceType::queue_.remove_before(t_remove);
+  }
+
+  /**
    * @copydoc CaptorInterface::set_capacity
    */
   inline void set_capacity_impl(const size_type capacity)
