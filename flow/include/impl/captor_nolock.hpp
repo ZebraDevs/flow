@@ -67,7 +67,11 @@ private:
    */
   inline void reset_impl()
   {
+    // Run reset behavior specific to this captor
     derived()->reset_policy_impl();
+
+    // Remove all data
+    CaptorInterfaceType::queue_.clear();
   }
 
   /**
@@ -75,6 +79,7 @@ private:
    */
   inline void abort_impl(const stamp_type& t_abort)
   {
+    // Run abort behavior specific to this captor
     derived()->abort_policy_impl(t_abort);
   }
 
