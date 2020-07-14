@@ -51,9 +51,21 @@ Captor<CaptorT, LockableT>::size_impl() const
 template<typename CaptorT, typename LockableT>
 void Captor<CaptorT, LockableT>::reset_impl()
 {
-  LockableT lock{capture_mutex_};
-  derived()->reset_policy_impl();
-  CaptorInterfaceType::queue_.clear();
+  {
+    LockableT lock{capture_mutex_};
+
+    // Indicate that capture should stop
+    capturing_ = false;
+
+    // Run reset behavior specific to this captor
+    derived()->reset_policy_impl();
+
+    // Remove all data
+    CaptorInterfaceType::queue_.clear();
+  }
+
+  // Release capture waits
+  capture_cv_.notify_one();
 }
 
 
@@ -66,7 +78,7 @@ void Captor<CaptorT, LockableT>::abort_impl(const stamp_type& t_abort)
     // Indicate that capture should stop
     capturing_ = false;
 
-    // Run abort behavior for this captor
+    // Run abort behavior specific to this captor
     derived()->abort_policy_impl(t_abort);
   }
 
@@ -142,20 +154,18 @@ State Captor<CaptorT, LockableT>::capture_impl(OutputDispatchIteratorT&& output,
 {
   LockableT lock{capture_mutex_};
 
-  // Reset flag if cancelled externally on previous capture
-  capturing_ = true;
-
   // Wait for data and attempt capture when data is available
-  do
+  State state{State::ABORT};
+  while (capturing_)
   {
     // Attempt data capture
-    const State state = derived()->capture_policy_impl(std::forward<OutputDispatchIteratorT>(output),
-                                                       std::forward<CaptureRangeT>(range));
+    state = derived()->capture_policy_impl(std::forward<OutputDispatchIteratorT>(output),
+                                           std::forward<CaptureRangeT>(range));
 
     // Check capture state, and whether or not a data wait is needed
     if (state != State::RETRY)
     {
-      return state;
+      break;
     }
     else if (std::chrono::time_point<ClockT, DurationT>::max() == timeout)
     {
@@ -163,13 +173,22 @@ State Captor<CaptorT, LockableT>::capture_impl(OutputDispatchIteratorT&& output,
     }
     else if (std::cv_status::timeout == capture_cv_.wait_until(lock, timeout))
     {
-      return State::TIMEOUT;
+      state = State::TIMEOUT;
+      break;
     }
   }
-  while (capturing_);
 
-  // Make sure capturing flag is reset under lock before next capture attempt
-  return State::ABORT;
+  if (capturing_)
+  {
+    // Return state set in capture loop if not aborted externally
+    return state;
+  }
+  else
+  {
+    // Make sure capturing flag is reset under lock before next capture attempt
+    capturing_ = true;
+    return State::ABORT;
+  }
 }
 
 

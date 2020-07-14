@@ -127,7 +127,8 @@ public:
   template<typename CaptorTupleT, typename OutputIteratorTupleT>
   static result_t<CaptorTupleT> capture(CaptorTupleT&& captors,
                                         OutputIteratorTupleT&& outputs,
-                                        const stamp_arg_t<CaptorTupleT> lower_bound);
+                                        const stamp_arg_t<CaptorTupleT> lower_bound =
+                                          StampTraits<stamp_t<CaptorTupleT>>::min());
 
   /**
    * @brief Runs event input capture dry-run
