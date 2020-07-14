@@ -18,7 +18,6 @@ namespace follower
 template<typename DispatchT, typename LockPolicyT, typename AllocatorT>
 Latched<DispatchT, LockPolicyT, AllocatorT>::Latched(const offset_type min_period) :
   PolicyType{},
-  latched_{nullptr},
   min_period_{min_period}
 {
 }
@@ -27,7 +26,6 @@ Latched<DispatchT, LockPolicyT, AllocatorT>::Latched(const offset_type min_perio
 template<typename DispatchT, typename LockPolicyT, typename AllocatorT>
 Latched<DispatchT, LockPolicyT, AllocatorT>::Latched(const offset_type min_period, const AllocatorT& alloc) :
   PolicyType{alloc},
-  latched_{nullptr},
   min_period_{min_period}
 {
 }
@@ -55,15 +53,15 @@ State Latched<DispatchT, LockPolicyT, AllocatorT>::dry_capture_follower_impl(con
 {
   if (PolicyType::queue_.empty())
   {
-    if (latched_ == nullptr)
-    {
-      // Retry if queue has no data and there is no latched data
-      return State::RETRY;
-    }
-    else
+    if (latched_)
     {
       // If we have latched data, return that and report ready state
       return State::PRIMED;
+    }
+    else
+    {
+      // Retry if queue has no data and there is no latched data
+      return State::RETRY;
     }
   }
 
@@ -73,19 +71,20 @@ State Latched<DispatchT, LockPolicyT, AllocatorT>::dry_capture_follower_impl(con
   // Retry if priming is not possible
   if (PolicyType::queue_.oldest_stamp() > boundary)
   {
-    if (latched_ == nullptr)
-    {
-      // Abort if queue has no data and there is no latched data
-      return State::ABORT;
-    }
-    else
+    if (latched_)
     {
       // If we have latched data, return that and report ready state
       return State::PRIMED;
     }
+    else
+    {
+      // Abort if queue has no data and there is no latched data
+      return State::ABORT;
+    }
   }
 
   // Find data closest to boundary, starting from oldest
+  // curr_qitr will never start at queue_.end() due to previous empty check
   auto curr_qitr = PolicyType::queue_.begin();
   auto prev_qitr = curr_qitr;
   while (curr_qitr != PolicyType::queue_.end() and curr_qitr->stamp() <= boundary)
@@ -95,10 +94,11 @@ State Latched<DispatchT, LockPolicyT, AllocatorT>::dry_capture_follower_impl(con
   }
 
   // Set latched element
-  latched_ = std::addressof(*prev_qitr);
+  latched_ = *prev_qitr;
 
   // Remove all elements before latched element
-  PolicyType::queue_.remove_before(latched_->stamp());
+  const auto prev_stamp = prev_qitr->stamp();
+  PolicyType::queue_.remove_before(prev_stamp);
   return State::PRIMED;
 }
 
@@ -112,7 +112,7 @@ void Latched<DispatchT, LockPolicyT, AllocatorT>::abort_follower_impl(const stam
 template<typename DispatchT, typename LockPolicyT, typename AllocatorT>
 void Latched<DispatchT, LockPolicyT, AllocatorT>::reset_follower_impl() noexcept(true)
 {
-  latched_ = nullptr;
+  latched_value_is_set_ = false;
 }
 
 }  // namespace follower
