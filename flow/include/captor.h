@@ -187,9 +187,20 @@ public:
   }
 
   /**
-   * @brief Defines Captor behavior on <code>ABORT</code>
+   * @brief Removal before \p t_remove
+   *
+   * @param t_abort  time before which data should be removed
+   */
+  inline void remove(const stamp_type& t_remove)
+  {
+    return derived()->remove_impl(t_remove);
+  }
+
+  /**
+   * @brief Defines Captor behavior during an external abort
    *
    *        Triggers data removal before \p t_abort
+   *        Notifies any data waits for capture under a lock
    *
    * @param t_abort  time at which abort was signaled
    */
@@ -396,6 +407,11 @@ private:
    */
   template<typename FirstForwardDispatchIteratorT, typename LastForwardDispatchIteratorT>
   inline void insert_impl(FirstForwardDispatchIteratorT first, LastForwardDispatchIteratorT last);
+
+  /**
+   * @copydoc CaptorInterface::remove
+   */
+  inline void remove_impl(const stamp_type& t_remove);
 
   /**
    * @copydoc CaptorInterface::abort

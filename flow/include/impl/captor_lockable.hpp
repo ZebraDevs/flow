@@ -118,6 +118,16 @@ void Captor<CaptorT, LockableT>::insert_impl(FirstForwardDispatchIteratorT first
 
 
 template<typename CaptorT, typename LockableT>
+void Captor<CaptorT, LockableT>::remove_impl(const stamp_type& t_remove)
+{
+  LockableT lock{capture_mutex_};
+
+  // Remove all data before this time
+  CaptorInterfaceType::queue_.remove_before(t_remove);
+}
+
+
+template<typename CaptorT, typename LockableT>
 void Captor<CaptorT, LockableT>::set_capacity_impl(size_type capacity)
 {
   LockableT lock{capture_mutex_};
@@ -187,7 +197,7 @@ State Captor<CaptorT, LockableT>::capture_impl(OutputDispatchIteratorT&& output,
   {
     // Make sure capturing flag is reset under lock before next capture attempt
     capturing_ = true;
-    return State::ABORT;
+    return (state == State::RETRY) ? State::ABORT : state;
   }
 }
 
