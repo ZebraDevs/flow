@@ -320,6 +320,14 @@ public:
     return derived()->inspect_impl(std::forward<InpectCallbackT>(inspect_dispatch_cb));
   }
 
+  /**
+   * @brief Returns the allocator associated with the underlying dispatch queue
+   */
+  inline DispatchAllocatorType get_allocator() const noexcept
+  {
+    return queue_.get_allocator();
+  }
+
   // Sanity check to ensure that DispatchType is copyable
   static_assert(std::is_copy_constructible<DispatchType>(), "'DispatchType' must be a copyable type");
 

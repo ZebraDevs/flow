@@ -1,5 +1,5 @@
 /**
- * @copyright 2019 Fetch Robotics Inc.
+ * @copyright 2020 Fetch Robotics Inc.
  * @author Brian Cairl
  */
 #ifndef DOXYGEN_SKIP
@@ -31,15 +31,5 @@ TEST(Dispatch, GetStamp)
 
   EXPECT_EQ(d.stamp(), 3);
 }
-
-
-TEST(Dispatch, LessThan)
-{
-  Dispatch<int, std::string> lhs_data{2, "test-value"};
-  Dispatch<int, std::string> rhs_data{3, "test-value"};
-
-  EXPECT_LT(lhs_data, rhs_data);
-}
-
 
 #endif  // DOXYGEN_SKIP
