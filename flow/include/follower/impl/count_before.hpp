@@ -17,10 +17,10 @@ namespace flow
 namespace follower
 {
 
-template<typename DispatchT, typename LockPolicyT, typename AllocatorT>
+template <typename DispatchT, typename LockPolicyT, typename AllocatorT>
 CountBefore<DispatchT, LockPolicyT, AllocatorT>::CountBefore(const size_type count, const offset_type& delay) :
-  count_{count},
-  delay_{delay}
+    count_{count},
+    delay_{delay}
 {
   if (count_ == 0)
   {
@@ -29,11 +29,14 @@ CountBefore<DispatchT, LockPolicyT, AllocatorT>::CountBefore(const size_type cou
 }
 
 
-template<typename DispatchT, typename LockPolicyT, typename AllocatorT>
-CountBefore<DispatchT, LockPolicyT, AllocatorT>::CountBefore(const size_type count, const offset_type& delay, const AllocatorT& alloc) :
-  PolicyType{alloc},
-  count_{count},
-  delay_{delay}
+template <typename DispatchT, typename LockPolicyT, typename AllocatorT>
+CountBefore<DispatchT, LockPolicyT, AllocatorT>::CountBefore(
+  const size_type count,
+  const offset_type& delay,
+  const AllocatorT& alloc) :
+    PolicyType{alloc},
+    count_{count},
+    delay_{delay}
 {
   if (count_ == 0)
   {
@@ -42,10 +45,11 @@ CountBefore<DispatchT, LockPolicyT, AllocatorT>::CountBefore(const size_type cou
 }
 
 
-template<typename DispatchT, typename LockPolicyT, typename AllocatorT>
-template<typename OutputDispatchIteratorT>
-State CountBefore<DispatchT, LockPolicyT, AllocatorT>::capture_follower_impl(OutputDispatchIteratorT output,
-                                                                             const CaptureRange<stamp_type>& range)
+template <typename DispatchT, typename LockPolicyT, typename AllocatorT>
+template <typename OutputDispatchIteratorT>
+State CountBefore<DispatchT, LockPolicyT, AllocatorT>::capture_follower_impl(
+  OutputDispatchIteratorT output,
+  const CaptureRange<stamp_type>& range)
 {
   const State state = this->dry_capture_follower_impl(range);
 
@@ -59,7 +63,7 @@ State CountBefore<DispatchT, LockPolicyT, AllocatorT>::capture_follower_impl(Out
 }
 
 
-template<typename DispatchT, typename LockPolicyT, typename AllocatorT>
+template <typename DispatchT, typename LockPolicyT, typename AllocatorT>
 State CountBefore<DispatchT, LockPolicyT, AllocatorT>::dry_capture_follower_impl(const CaptureRange<stamp_type>& range)
 {
   // Retry if queue has no data

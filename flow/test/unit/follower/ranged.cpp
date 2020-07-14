@@ -24,10 +24,7 @@ struct FollowerRangedTest : ::testing::TestWithParam<::std::tuple<int>>
 {
   using CaptorType = Ranged<Dispatch<int, int>, NoLock>;
 
-  void SetUp() final
-  {
-    p_delay = std::get<0>(GetParam());
-  }
+  void SetUp() final { p_delay = std::get<0>(GetParam()); }
 
   int p_delay = 0;
 };
@@ -51,8 +48,8 @@ TEST_P(FollowerRangedTest, CaptureAbortOnTooFewBeforeZeroRange)
 
   std::vector<Dispatch<int, int>> data;
 
-  captor.inject(-p_delay+1, 100);
-  captor.inject(-p_delay+2, 100);
+  captor.inject(-p_delay + 1, 100);
+  captor.inject(-p_delay + 2, 100);
 
   CaptureRange<int> t_range{0, 0};
   ASSERT_EQ(State::ABORT, captor.capture(std::back_inserter(data), t_range));
@@ -66,8 +63,8 @@ TEST_P(FollowerRangedTest, CaptureAbortOnTooFewBeforeNonZeroRange)
 
   std::vector<Dispatch<int, int>> data;
 
-  captor.inject(-p_delay+1, 100);
-  captor.inject(-p_delay+2, 100);
+  captor.inject(-p_delay + 1, 100);
+  captor.inject(-p_delay + 2, 100);
 
   CaptureRange<int> t_range{0, 1};
   ASSERT_EQ(State::ABORT, captor.capture(std::back_inserter(data), t_range));
@@ -81,8 +78,8 @@ TEST_P(FollowerRangedTest, CaptureRetryOnNoneAfterZeroRange)
 
   std::vector<Dispatch<int, int>> data;
 
-  captor.inject(-p_delay-1, 100);
-  captor.inject(-p_delay-2, 100);
+  captor.inject(-p_delay - 1, 100);
+  captor.inject(-p_delay - 2, 100);
 
   CaptureRange<int> t_range{0, 0};
   ASSERT_EQ(State::RETRY, captor.capture(std::back_inserter(data), t_range));
@@ -96,8 +93,8 @@ TEST_P(FollowerRangedTest, CaptureRetryOnNoneAfterNonZeroRange)
 
   std::vector<Dispatch<int, int>> data;
 
-  captor.inject(-p_delay-1, 100);
-  captor.inject(-p_delay+1, 100);
+  captor.inject(-p_delay - 1, 100);
+  captor.inject(-p_delay + 1, 100);
 
   CaptureRange<int> t_range{0, 1};
   ASSERT_EQ(State::RETRY, captor.capture(std::back_inserter(data), t_range));
@@ -111,8 +108,8 @@ TEST_P(FollowerRangedTest, CaptureOnZeroRange)
 
   std::vector<Dispatch<int, int>> data;
 
-  captor.inject(-p_delay-1, 100);
-  captor.inject(-p_delay+1, 100);
+  captor.inject(-p_delay - 1, 100);
+  captor.inject(-p_delay + 1, 100);
 
   CaptureRange<int> t_range{0, 0};
   ASSERT_EQ(State::PRIMED, captor.capture(std::back_inserter(data), t_range));
@@ -126,9 +123,9 @@ TEST_P(FollowerRangedTest, CaptureOnZeroRangeWithIntermediate)
 
   std::vector<Dispatch<int, int>> data;
 
-  captor.inject(-p_delay-1, 100);
+  captor.inject(-p_delay - 1, 100);
   captor.inject(-p_delay, 100);
-  captor.inject(-p_delay+1, 100);
+  captor.inject(-p_delay + 1, 100);
 
   CaptureRange<int> t_range{0, 0};
   ASSERT_EQ(State::PRIMED, captor.capture(std::back_inserter(data), t_range));
@@ -142,8 +139,8 @@ TEST_P(FollowerRangedTest, CaptureOnNonZeroRange)
 
   std::vector<Dispatch<int, int>> data;
 
-  captor.inject(-p_delay-1, 100);
-  captor.inject(-p_delay+2, 100);
+  captor.inject(-p_delay - 1, 100);
+  captor.inject(-p_delay + 2, 100);
 
   CaptureRange<int> t_range{0, 1};
   ASSERT_EQ(State::PRIMED, captor.capture(std::back_inserter(data), t_range));
@@ -157,10 +154,10 @@ TEST_P(FollowerRangedTest, CaptureOnNonZeroRangeWithIntermediate)
 
   std::vector<Dispatch<int, int>> data;
 
-  captor.inject(-p_delay-1, 100);
+  captor.inject(-p_delay - 1, 100);
   captor.inject(-p_delay, 100);
-  captor.inject(-p_delay+1, 100);
-  captor.inject(-p_delay+2, 100);
+  captor.inject(-p_delay + 1, 100);
+  captor.inject(-p_delay + 2, 100);
 
   CaptureRange<int> t_range{0, 1};
   ASSERT_EQ(State::PRIMED, captor.capture(std::back_inserter(data), t_range));
@@ -181,8 +178,8 @@ TEST_P(FollowerRangedTest, DryCaptureAbortOnTooFewBeforeZeroRange)
 {
   CaptorType captor{p_delay};
 
-  captor.inject(-p_delay+1, 100);
-  captor.inject(-p_delay+2, 100);
+  captor.inject(-p_delay + 1, 100);
+  captor.inject(-p_delay + 2, 100);
 
   CaptureRange<int> t_range{0, 0};
   ASSERT_EQ(State::ABORT, captor.dry_capture(t_range));
@@ -193,8 +190,8 @@ TEST_P(FollowerRangedTest, DryCaptureAbortOnTooFewBeforeNonZeroRange)
 {
   CaptorType captor{p_delay};
 
-  captor.inject(-p_delay+1, 100);
-  captor.inject(-p_delay+2, 100);
+  captor.inject(-p_delay + 1, 100);
+  captor.inject(-p_delay + 2, 100);
 
   CaptureRange<int> t_range{0, 1};
   ASSERT_EQ(State::ABORT, captor.dry_capture(t_range));
@@ -205,8 +202,8 @@ TEST_P(FollowerRangedTest, DryCaptureRetryOnNoneAfterZeroRange)
 {
   CaptorType captor{p_delay};
 
-  captor.inject(-p_delay-1, 100);
-  captor.inject(-p_delay-2, 100);
+  captor.inject(-p_delay - 1, 100);
+  captor.inject(-p_delay - 2, 100);
 
   CaptureRange<int> t_range{0, 0};
   ASSERT_EQ(State::RETRY, captor.dry_capture(t_range));
@@ -217,8 +214,8 @@ TEST_P(FollowerRangedTest, DryCaptureRetryOnNoneAfterNonZeroRange)
 {
   CaptorType captor{p_delay};
 
-  captor.inject(-p_delay-1, 100);
-  captor.inject(-p_delay+1, 100);
+  captor.inject(-p_delay - 1, 100);
+  captor.inject(-p_delay + 1, 100);
 
   CaptureRange<int> t_range{0, 1};
   ASSERT_EQ(State::RETRY, captor.dry_capture(t_range));
@@ -229,8 +226,8 @@ TEST_P(FollowerRangedTest, DryCaptureOnZeroRange)
 {
   CaptorType captor{p_delay};
 
-  captor.inject(-p_delay-1, 100);
-  captor.inject(-p_delay+1, 100);
+  captor.inject(-p_delay - 1, 100);
+  captor.inject(-p_delay + 1, 100);
 
   CaptureRange<int> t_range{0, 0};
   ASSERT_EQ(State::PRIMED, captor.dry_capture(t_range));
@@ -241,9 +238,9 @@ TEST_P(FollowerRangedTest, DryCaptureOnZeroRangeWithIntermediate)
 {
   CaptorType captor{p_delay};
 
-  captor.inject(-p_delay-1, 100);
+  captor.inject(-p_delay - 1, 100);
   captor.inject(-p_delay, 100);
-  captor.inject(-p_delay+1, 100);
+  captor.inject(-p_delay + 1, 100);
 
   CaptureRange<int> t_range{0, 0};
   ASSERT_EQ(State::PRIMED, captor.dry_capture(t_range));
@@ -254,8 +251,8 @@ TEST_P(FollowerRangedTest, DryCaptureOnNonZeroRange)
 {
   CaptorType captor{p_delay};
 
-  captor.inject(-p_delay-1, 100);
-  captor.inject(-p_delay+2, 100);
+  captor.inject(-p_delay - 1, 100);
+  captor.inject(-p_delay + 2, 100);
 
   CaptureRange<int> t_range{0, 1};
   ASSERT_EQ(State::PRIMED, captor.dry_capture(t_range));
@@ -266,10 +263,10 @@ TEST_P(FollowerRangedTest, DryCaptureOnNonZeroRangeWithIntermediate)
 {
   CaptorType captor{p_delay};
 
-  captor.inject(-p_delay-1, 100);
+  captor.inject(-p_delay - 1, 100);
   captor.inject(-p_delay, 100);
-  captor.inject(-p_delay+1, 100);
-  captor.inject(-p_delay+2, 100);
+  captor.inject(-p_delay + 1, 100);
+  captor.inject(-p_delay + 2, 100);
 
   CaptureRange<int> t_range{0, 1};
   ASSERT_EQ(State::PRIMED, captor.dry_capture(t_range));
@@ -279,8 +276,7 @@ TEST_P(FollowerRangedTest, DryCaptureOnNonZeroRangeWithIntermediate)
 INSTANTIATE_TEST_SUITE_P(
   FollowerRangedTestSweep,
   FollowerRangedTest,
-  testing::Combine(
-    testing::ValuesIn(std::vector<int>{0, 1, 2})  // delay
-  ));
+  testing::Combine(testing::ValuesIn(std::vector<int>{0, 1, 2})  // delay
+                   ));
 
 #endif  // DOXYGEN_SKIP

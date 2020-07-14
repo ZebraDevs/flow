@@ -14,28 +14,25 @@
 namespace flow
 {
 
-template<typename DispatchT, typename AllocatorT>
-DispatchQueue<DispatchT, AllocatorT>::DispatchQueue(const AllocatorT& alloc) :
-  queue_{alloc}
+template <typename DispatchT, typename AllocatorT>
+DispatchQueue<DispatchT, AllocatorT>::DispatchQueue(const AllocatorT& alloc) : queue_{alloc}
 {}
 
-template<typename DispatchT, typename AllocatorT>
-typename DispatchQueue<DispatchT, AllocatorT>::
-size_type DispatchQueue<DispatchT, AllocatorT>::size() const
+template <typename DispatchT, typename AllocatorT>
+typename DispatchQueue<DispatchT, AllocatorT>::size_type DispatchQueue<DispatchT, AllocatorT>::size() const
 {
   return queue_.size();
 }
 
 
-template<typename DispatchT, typename AllocatorT>
-bool DispatchQueue<DispatchT, AllocatorT>::empty() const
+template <typename DispatchT, typename AllocatorT> bool DispatchQueue<DispatchT, AllocatorT>::empty() const
 {
   return !size();
 }
 
 
-template<typename DispatchT, typename AllocatorT>
-template<typename... DispatchConstructorArgTs>
+template <typename DispatchT, typename AllocatorT>
+template <typename... DispatchConstructorArgTs>
 void DispatchQueue<DispatchT, AllocatorT>::insert(DispatchConstructorArgTs&&... dispatch_args)
 {
   DispatchT dispatch{std::forward<DispatchConstructorArgTs>(dispatch_args)...};
@@ -50,7 +47,7 @@ void DispatchQueue<DispatchT, AllocatorT>::insert(DispatchConstructorArgTs&&... 
 
   // Find next best placement
   auto qitr = queue_.end();
-  while((--qitr)->stamp() > dispatch.stamp())
+  while ((--qitr)->stamp() > dispatch.stamp())
   {
     if (qitr == queue_.begin())
     {
@@ -67,8 +64,7 @@ void DispatchQueue<DispatchT, AllocatorT>::insert(DispatchConstructorArgTs&&... 
 }
 
 
-template<typename DispatchT, typename AllocatorT>
-DispatchT DispatchQueue<DispatchT, AllocatorT>::pop()
+template <typename DispatchT, typename AllocatorT> DispatchT DispatchQueue<DispatchT, AllocatorT>::pop()
 {
   const auto retval = std::move(queue_.front());
   queue_.pop_front();
@@ -76,14 +72,13 @@ DispatchT DispatchQueue<DispatchT, AllocatorT>::pop()
 }
 
 
-template<typename DispatchT, typename AllocatorT>
-void DispatchQueue<DispatchT, AllocatorT>::clear()
+template <typename DispatchT, typename AllocatorT> void DispatchQueue<DispatchT, AllocatorT>::clear()
 {
   queue_.clear();
 }
 
 
-template<typename DispatchT, typename AllocatorT>
+template <typename DispatchT, typename AllocatorT>
 void DispatchQueue<DispatchT, AllocatorT>::remove_before(const stamp_type& t)
 {
   while (!queue_.empty() and queue_.front().stamp() < t)
@@ -93,7 +88,7 @@ void DispatchQueue<DispatchT, AllocatorT>::remove_before(const stamp_type& t)
 }
 
 
-template<typename DispatchT, typename AllocatorT>
+template <typename DispatchT, typename AllocatorT>
 void DispatchQueue<DispatchT, AllocatorT>::remove_at_before(const stamp_type& t)
 {
   while (!queue_.empty() and queue_.front().stamp() <= t)
@@ -103,8 +98,7 @@ void DispatchQueue<DispatchT, AllocatorT>::remove_at_before(const stamp_type& t)
 }
 
 
-template<typename DispatchT, typename AllocatorT>
-void DispatchQueue<DispatchT, AllocatorT>::shrink_to_fit(size_type n)
+template <typename DispatchT, typename AllocatorT> void DispatchQueue<DispatchT, AllocatorT>::shrink_to_fit(size_type n)
 {
   while (queue_.size() > n)
   {
@@ -113,7 +107,7 @@ void DispatchQueue<DispatchT, AllocatorT>::shrink_to_fit(size_type n)
 }
 
 
-template<typename DispatchT, typename AllocatorT>
+template <typename DispatchT, typename AllocatorT>
 AllocatorT DispatchQueue<DispatchT, AllocatorT>::get_allocator() const noexcept
 {
   return queue_.get_allocator();

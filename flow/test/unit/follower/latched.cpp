@@ -23,14 +23,9 @@ struct FollowerLatched : ::testing::Test, Latched<Dispatch<int, int>, NoLock>
 {
   static constexpr int MIN_PERIOD = 5;
 
-  FollowerLatched() :
-    Latched<Dispatch<int, int>, NoLock>{MIN_PERIOD}
-  {}
+  FollowerLatched() : Latched<Dispatch<int, int>, NoLock>{MIN_PERIOD} {}
 
-  void SetUp() final
-  {
-    this->reset();
-  }
+  void SetUp() final { this->reset(); }
 };
 constexpr int FollowerLatched::MIN_PERIOD;
 
@@ -52,7 +47,7 @@ TEST_F(FollowerLatched, CaptureAbortOnDataTooNew)
 
   this->inject(Dispatch<int, int>{0, 0});
 
-  CaptureRange<int> t_range{MIN_PERIOD-1, MIN_PERIOD-1};
+  CaptureRange<int> t_range{MIN_PERIOD - 1, MIN_PERIOD - 1};
 
   ASSERT_EQ(State::ABORT, this->capture(std::back_inserter(data), t_range));
   ASSERT_EQ(data.size(), 0UL);
@@ -80,7 +75,7 @@ TEST_F(FollowerLatched, CapturePrimedOnBeforeMinPeriodStamp)
 
   this->inject(Dispatch<int, int>{0, 232});
 
-  CaptureRange<int> t_range{MIN_PERIOD+1, MIN_PERIOD+1};
+  CaptureRange<int> t_range{MIN_PERIOD + 1, MIN_PERIOD + 1};
 
   ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
   ASSERT_EQ(this->size(), 1UL);
@@ -96,7 +91,7 @@ TEST_F(FollowerLatched, CapturePrimedOnBeforeMinPeriodStampTakeNewer)
   this->inject(Dispatch<int, int>{0, 232});
   this->inject(Dispatch<int, int>{1, 233});
 
-  CaptureRange<int> t_range{MIN_PERIOD+1, MIN_PERIOD+1};
+  CaptureRange<int> t_range{MIN_PERIOD + 1, MIN_PERIOD + 1};
 
   ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
   ASSERT_EQ(this->size(), 1UL);
@@ -117,7 +112,7 @@ TEST_F(FollowerLatched, DryCaptureAbortOnDataTooNew)
 {
   this->inject(Dispatch<int, int>{0, 0});
 
-  CaptureRange<int> t_range{MIN_PERIOD-1, MIN_PERIOD-1};
+  CaptureRange<int> t_range{MIN_PERIOD - 1, MIN_PERIOD - 1};
 
   ASSERT_EQ(State::ABORT, this->dry_capture(t_range));
 }
@@ -137,7 +132,7 @@ TEST_F(FollowerLatched, DryCapturePrimedOnBeforeMinPeriodStamp)
 {
   this->inject(Dispatch<int, int>{0, 232});
 
-  CaptureRange<int> t_range{MIN_PERIOD+1, MIN_PERIOD+1};
+  CaptureRange<int> t_range{MIN_PERIOD + 1, MIN_PERIOD + 1};
 
   ASSERT_EQ(State::PRIMED, this->dry_capture(t_range));
 }
@@ -148,7 +143,7 @@ TEST_F(FollowerLatched, DryCapturePrimedOnBeforeMinPeriodStampTakeNewer)
   this->inject(Dispatch<int, int>{0, 232});
   this->inject(Dispatch<int, int>{1, 233});
 
-  CaptureRange<int> t_range{MIN_PERIOD+1, MIN_PERIOD+1};
+  CaptureRange<int> t_range{MIN_PERIOD + 1, MIN_PERIOD + 1};
 
   ASSERT_EQ(State::PRIMED, this->dry_capture(t_range));
 }
@@ -166,7 +161,7 @@ TEST_F(FollowerLatched, PrimedWithLatchedValue)
 
   this->inject(Dispatch<int, int>{MIN_PERIOD, 233});
 
-  CaptureRange<int> t_range_successor{MIN_PERIOD+1, MIN_PERIOD+1};
+  CaptureRange<int> t_range_successor{MIN_PERIOD + 1, MIN_PERIOD + 1};
 
   data.clear();
 

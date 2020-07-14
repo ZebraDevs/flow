@@ -23,14 +23,9 @@ struct DriverChunk : ::testing::Test, Chunk<Dispatch<int, int>, NoLock>
 {
   static constexpr std::size_t CHUNK_SIZE = 10;
 
-  DriverChunk() :
-    Chunk<Dispatch<int, int>, NoLock>{CHUNK_SIZE}
-  {}
+  DriverChunk() : Chunk<Dispatch<int, int>, NoLock>{CHUNK_SIZE} {}
 
-  void SetUp() final
-  {
-    this->reset();
-  }
+  void SetUp() final { this->reset(); }
 };
 constexpr std::size_t DriverChunk::CHUNK_SIZE;
 

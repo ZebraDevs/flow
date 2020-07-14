@@ -15,17 +15,16 @@ namespace flow
 namespace follower
 {
 
-template<typename DispatchT, typename LockPolicyT, typename AllocatorT>
-MatchedStamp<DispatchT, LockPolicyT, AllocatorT>::MatchedStamp(const AllocatorT& alloc) :
-  PolicyType{alloc}
-{
-}
+template <typename DispatchT, typename LockPolicyT, typename AllocatorT>
+MatchedStamp<DispatchT, LockPolicyT, AllocatorT>::MatchedStamp(const AllocatorT& alloc) : PolicyType{alloc}
+{}
 
 
-template<typename DispatchT, typename LockPolicyT, typename AllocatorT>
-template<typename OutputDispatchIteratorT>
-State MatchedStamp<DispatchT, LockPolicyT, AllocatorT>::capture_follower_impl(OutputDispatchIteratorT output,
-                                                                              const CaptureRange<stamp_type>& range)
+template <typename DispatchT, typename LockPolicyT, typename AllocatorT>
+template <typename OutputDispatchIteratorT>
+State MatchedStamp<DispatchT, LockPolicyT, AllocatorT>::capture_follower_impl(
+  OutputDispatchIteratorT output,
+  const CaptureRange<stamp_type>& range)
 {
   const State state = this->dry_capture_follower_impl(range);
 
@@ -39,7 +38,7 @@ State MatchedStamp<DispatchT, LockPolicyT, AllocatorT>::capture_follower_impl(Ou
 }
 
 
-template<typename DispatchT, typename LockPolicyT, typename AllocatorT>
+template <typename DispatchT, typename LockPolicyT, typename AllocatorT>
 State MatchedStamp<DispatchT, LockPolicyT, AllocatorT>::dry_capture_follower_impl(const CaptureRange<stamp_type>& range)
 {
   // Remove all elements before leading time
@@ -59,7 +58,7 @@ State MatchedStamp<DispatchT, LockPolicyT, AllocatorT>::dry_capture_follower_imp
 }
 
 
-template<typename DispatchT, typename LockPolicyT, typename AllocatorT>
+template <typename DispatchT, typename LockPolicyT, typename AllocatorT>
 void MatchedStamp<DispatchT, LockPolicyT, AllocatorT>::abort_follower_impl(const stamp_type& t_abort)
 {
   PolicyType::queue_.remove_before(t_abort);

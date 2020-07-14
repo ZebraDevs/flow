@@ -16,34 +16,29 @@
 namespace flow
 {
 
-template<typename PolicyT>
-Follower<PolicyT>::Follower() :
-  CaptorType{},
-  loopback_enabled_{false},
-  loopback_primed_{true}
+template <typename PolicyT>
+Follower<PolicyT>::Follower() : CaptorType{}, loopback_enabled_{false}, loopback_primed_{true}
 {}
 
 
-template<typename PolicyT>
+template <typename PolicyT>
 Follower<PolicyT>::Follower(const DispatchAllocatorType& alloc) :
-  CaptorType{alloc},
-  loopback_enabled_{false},
-  loopback_primed_{true}
+    CaptorType{alloc},
+    loopback_enabled_{false},
+    loopback_primed_{true}
 {}
 
 
-template<typename PolicyT>
-void Follower<PolicyT>::setLoopBackMode(bool enabled)
+template <typename PolicyT> void Follower<PolicyT>::setLoopBackMode(bool enabled)
 {
   loopback_enabled_ = enabled;
   loopback_primed_ = !enabled;
 }
 
 
-template<typename PolicyT>
-template<typename OutputDispatchIteratorT>
-State Follower<PolicyT>::capture_policy_impl(OutputDispatchIteratorT&& output,
-                                             const CaptureRange<stamp_type>& range)
+template <typename PolicyT>
+template <typename OutputDispatchIteratorT>
+State Follower<PolicyT>::capture_policy_impl(OutputDispatchIteratorT&& output, const CaptureRange<stamp_type>& range)
 {
   // Get prime-attempt result
   const State st = derived()->capture_follower_impl(std::forward<OutputDispatchIteratorT>(output), range);
@@ -56,15 +51,13 @@ State Follower<PolicyT>::capture_policy_impl(OutputDispatchIteratorT&& output,
 }
 
 
-template<typename PolicyT>
-State Follower<PolicyT>::dry_capture_policy_impl(const CaptureRange<stamp_type>& range)
+template <typename PolicyT> State Follower<PolicyT>::dry_capture_policy_impl(const CaptureRange<stamp_type>& range)
 {
   return derived()->dry_capture_follower_impl(range);
 }
 
 
-template<typename PolicyT>
-void Follower<PolicyT>::abort_policy_impl(const stamp_type& t_abort)
+template <typename PolicyT> void Follower<PolicyT>::abort_policy_impl(const stamp_type& t_abort)
 {
   // Reset loop-back
   setLoopBackMode(loopback_enabled_);
@@ -73,8 +66,7 @@ void Follower<PolicyT>::abort_policy_impl(const stamp_type& t_abort)
 }
 
 
-template<typename PolicyT>
-void Follower<PolicyT>::reset_policy_impl()
+template <typename PolicyT> void Follower<PolicyT>::reset_policy_impl()
 {
   // Reset loop-back
   setLoopBackMode(loopback_enabled_);

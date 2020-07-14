@@ -1,7 +1,7 @@
 /**
  * @copyright 2020 Fetch Robotics Inc.
  * @author Brian Cairl
- * 
+ *
  * @warning IMPLEMENTATION ONLY: THIS FILE SHOULD NEVER BE INCLUDED DIRECTLY!
  */
 #ifndef FLOW_CAPTURE_IMPL_CAPTOR_INTERFACE_HPP
@@ -17,21 +17,18 @@
 namespace flow
 {
 
-template<typename CaptorT>
-CaptorInterface<CaptorT>::CaptorInterface(const size_type capacity) :
-  capacity_{capacity}
-{}
+template <typename CaptorT> CaptorInterface<CaptorT>::CaptorInterface(const size_type capacity) : capacity_{capacity} {}
 
 
-template<typename CaptorT>
+template <typename CaptorT>
 CaptorInterface<CaptorT>::CaptorInterface(const size_type capacity, const DispatchAllocatorType& alloc) :
-  capacity_{capacity},
-  queue_{alloc}
+    capacity_{capacity},
+    queue_{alloc}
 {}
 
 
-template<typename CaptorT>
-template<typename... InsertArgTs>
+template <typename CaptorT>
+template <typename... InsertArgTs>
 void CaptorInterface<CaptorT>::insert_and_limit(InsertArgTs&&... args)
 {
   queue_.insert(std::forward<InsertArgTs>(args)...);

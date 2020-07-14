@@ -9,8 +9,8 @@
 
 // C++ Standard Library
 #include <chrono>
-#include <ostream>
 #include <limits>
+#include <ostream>
 #include <type_traits>
 #include <utility>
 
@@ -27,8 +27,7 @@ namespace flow
  *
  * @tparam StampT  sequence stamp type
  */
-template<typename StampT>
-struct StampTraits
+template <typename StampT> struct StampTraits
 {
   static_assert(std::is_fundamental<StampT>(), "'StampT' must be fundemental type");
 
@@ -39,10 +38,10 @@ struct StampTraits
   using offset_type = typename std::make_signed<StampT>::type;
 
   /// Returns minimum stamp value
-  static constexpr StampT min() { return std::numeric_limits<StampT>::min();};
+  static constexpr StampT min() { return std::numeric_limits<StampT>::min(); };
 
   /// Returns maximum stamp value
-  static constexpr StampT max() { return std::numeric_limits<StampT>::max();};
+  static constexpr StampT max() { return std::numeric_limits<StampT>::max(); };
 };
 
 
@@ -52,8 +51,7 @@ struct StampTraits
  * @tparam ClockT     clock on which this time point is measured
  * @tparam DurationT  <code>std::chrono::duration</code> type used to measure the time since epoch
  */
-template<typename ClockT, typename DurationT>
-struct StampTraits<std::chrono::time_point<ClockT, DurationT>>
+template <typename ClockT, typename DurationT> struct StampTraits<std::chrono::time_point<ClockT, DurationT>>
 {
   /// Stamp type
   using stamp_type = std::chrono::time_point<ClockT, DurationT>;
@@ -62,10 +60,10 @@ struct StampTraits<std::chrono::time_point<ClockT, DurationT>>
   using offset_type = DurationT;
 
   /// Returns minimum stamp value
-  static constexpr stamp_type min() { return stamp_type::min();};
+  static constexpr stamp_type min() { return stamp_type::min(); };
 
   /// Returns maximum stamp value
-  static constexpr stamp_type max() { return stamp_type::max();};
+  static constexpr stamp_type max() { return stamp_type::max(); };
 };
 
 
@@ -85,8 +83,7 @@ struct StampTraits<std::chrono::time_point<ClockT, DurationT>>
  * @tparam StampT  sequencing stamp type; used for data ordering (e.g. time, sequence number, etc.)
  * @tparam ValueT  data value type; must be copyable
  */
-template<typename StampT, typename ValueT>
-class Dispatch
+template <typename StampT, typename ValueT> class Dispatch
 {
 public:
   Dispatch() = default;
@@ -94,27 +91,21 @@ public:
   /**
    * @brief Dispatch value constructor (move enabled)
    */
-  template<typename... ValueArgsTs>
+  template <typename... ValueArgsTs>
   explicit Dispatch(const StampT& stamp, ValueArgsTs&&... value_args) :
-    stamp_{stamp},
-    value_{std::forward<ValueArgsTs>(value_args)...}
+      stamp_{stamp},
+      value_{std::forward<ValueArgsTs>(value_args)...}
   {}
 
   /**
    * @brief Returns sequencing stamp associated with data element
    */
-  inline const StampT& stamp() const
-  {
-    return stamp_;
-  }
+  inline const StampT& stamp() const { return stamp_; }
 
   /**
    * @brief Returns const reference to underlying data element
    */
-  inline const ValueT& data() const
-  {
-    return value_;
-  }
+  inline const ValueT& data() const { return value_; }
 
 private:
   /// Sequencing stamp associated with data
@@ -139,12 +130,11 @@ private:
 /**
  * @brief Dispatch type traits struct
  */
-template<typename DispatchT>
+template <typename DispatchT>
 struct DispatchTraits
 #ifndef DOXYGEN_SKIP
-;
-template<typename StampT, typename ValueT>
-struct DispatchTraits<Dispatch<StampT, ValueT>>
+  ;
+template <typename StampT, typename ValueT> struct DispatchTraits<Dispatch<StampT, ValueT>>
 #endif  // DOXYGEN_SKIP
 {
   /// Dispatch stamp type
@@ -163,8 +153,7 @@ struct DispatchTraits<Dispatch<StampT, ValueT>>
  *
  * @tparam StampT  sequence stamp type
  */
-template<typename StampT>
-struct CaptureRange
+template <typename StampT> struct CaptureRange
 {
   /// Target sequence stamp produced from captured data associated with oldest captured element
   StampT lower_stamp;
@@ -178,10 +167,11 @@ struct CaptureRange
    * @param _lower_stamp  lower sequencing stamp bound
    * @param _upper_stamp  upper sequencing stamp bound
    */
-  CaptureRange(const StampT _lower_stamp = StampTraits<StampT>::max(),
-               const StampT _upper_stamp = StampTraits<StampT>::min()) :
-    lower_stamp{_lower_stamp},
-    upper_stamp{_upper_stamp}
+  CaptureRange(
+    const StampT _lower_stamp = StampTraits<StampT>::max(),
+    const StampT _upper_stamp = StampTraits<StampT>::min()) :
+      lower_stamp{_lower_stamp},
+      upper_stamp{_upper_stamp}
   {}
 
   /**
@@ -190,18 +180,12 @@ struct CaptureRange
    * @retval true  if upper_stamp >= lower_stamp
    * @retval false  otherwise
    */
-  inline bool valid() const
-  {
-    return upper_stamp >= lower_stamp;
-  }
+  inline bool valid() const { return upper_stamp >= lower_stamp; }
 
   /**
    * @copydoc CaptureRange::valid
    */
-  inline operator bool() const
-  {
-    return valid();
-  }
+  inline operator bool() const { return valid(); }
 
   /**
    * @brief Output stream overload for <code>CaptureRange</code> codes

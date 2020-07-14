@@ -15,7 +15,8 @@ namespace flow
 {
 
 /**
- * @brief The class template std::optional manages an optional contained value, i.e. a value that may or may not be present
+ * @brief The class template std::optional manages an optional contained value, i.e. a value that may or may not be
+ * present
  *
  *        See: https://en.cppreference.com/w/cpp/utility/optional
  * \n

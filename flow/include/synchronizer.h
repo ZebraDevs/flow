@@ -24,8 +24,7 @@ namespace flow
  *
  * @tparam StampT  capture sequencing stamp type
  */
-template<typename StampT>
-struct Result
+template <typename StampT> struct Result
 {
   /// Captor state on exit
   State state;
@@ -49,31 +48,23 @@ class Synchronizer
 {
 public:
   /// Selects type of lesser size to use when passing arguments
-  template<typename T>
-  using arg_t = std::conditional_t<(sizeof(T) <= sizeof(T&)), T, T&>;
+  template <typename T> using arg_t = std::conditional_t<(sizeof(T) <= sizeof(T&)), T, T&>;
 
   /**
    * @brief Stamp type from capture sequence alias
    */
-  template<typename CaptorTupleT>
-  using stamp_t =
-    typename CaptorTraits<
-      std::remove_reference_t<
-        std::tuple_element_t<0UL, CaptorTupleT>
-      >
-    >::stamp_type;
+  template <typename CaptorTupleT>
+  using stamp_t = typename CaptorTraits<std::remove_reference_t<std::tuple_element_t<0UL, CaptorTupleT>>>::stamp_type;
 
   /**
    * @brief Stamp argument type from capture sequence alias
    */
-  template<typename CaptorTupleT>
-  using stamp_arg_t = arg_t<stamp_t<CaptorTupleT>>;
+  template <typename CaptorTupleT> using stamp_arg_t = arg_t<stamp_t<CaptorTupleT>>;
 
   /**
    * @brief Result type from captor sequence alias
    */
-  template<typename CaptorTupleT>
-  using result_t = Result<stamp_t<CaptorTupleT>>;
+  template <typename CaptorTupleT> using result_t = Result<stamp_t<CaptorTupleT>>;
 
   /**
    * @brief Removes all possible synchronization frames at and before \p t_remove
@@ -83,8 +74,7 @@ public:
    * @param captors  tuple of captors used to perform synchronization
    * @param t_remove  data removal time point
    */
-  template<typename CaptorTupleT>
-  static void remove(CaptorTupleT&& captors, const stamp_arg_t<CaptorTupleT> t_remove);
+  template <typename CaptorTupleT> static void remove(CaptorTupleT&& captors, const stamp_arg_t<CaptorTupleT> t_remove);
 
   /**
    * @brief Abort active capture at and before \p t_abort
@@ -95,8 +85,7 @@ public:
    * @param captors  tuple of captors used to perform synchronization
    * @param t_abort  abort time point
    */
-  template<typename CaptorTupleT>
-  static void abort(CaptorTupleT&& captors, const stamp_arg_t<CaptorTupleT> t_abort);
+  template <typename CaptorTupleT> static void abort(CaptorTupleT&& captors, const stamp_arg_t<CaptorTupleT> t_abort);
 
   /**
    * @brief Resets internal captors states and removes all buffered data
@@ -105,8 +94,7 @@ public:
    *
    * @param captors  tuple of captors used to perform synchronization
    */
-  template<typename CaptorTupleT>
-  static void reset(CaptorTupleT&& captors);
+  template <typename CaptorTupleT> static void reset(CaptorTupleT&& captors);
 
   /**
    * @brief Runs event input capture
@@ -119,11 +107,12 @@ public:
    *
    * @return capture/synchronization details
    */
-  template<typename CaptorTupleT, typename OutputIteratorTupleT, typename ClockT, typename DurationT>
-  static result_t<CaptorTupleT> capture(CaptorTupleT&& captors,
-                                        OutputIteratorTupleT&& outputs,
-                                        const stamp_arg_t<CaptorTupleT> lower_bound,
-                                        const std::chrono::time_point<ClockT, DurationT>& timeout);
+  template <typename CaptorTupleT, typename OutputIteratorTupleT, typename ClockT, typename DurationT>
+  static result_t<CaptorTupleT> capture(
+    CaptorTupleT&& captors,
+    OutputIteratorTupleT&& outputs,
+    const stamp_arg_t<CaptorTupleT> lower_bound,
+    const std::chrono::time_point<ClockT, DurationT>& timeout);
 
   /**
    * @brief Runs event input capture
@@ -135,11 +124,11 @@ public:
    *
    * @return capture/synchronization details
    */
-  template<typename CaptorTupleT, typename OutputIteratorTupleT>
-  static result_t<CaptorTupleT> capture(CaptorTupleT&& captors,
-                                        OutputIteratorTupleT&& outputs,
-                                        const stamp_arg_t<CaptorTupleT> lower_bound =
-                                          StampTraits<stamp_t<CaptorTupleT>>::min());
+  template <typename CaptorTupleT, typename OutputIteratorTupleT>
+  static result_t<CaptorTupleT> capture(
+    CaptorTupleT&& captors,
+    OutputIteratorTupleT&& outputs,
+    const stamp_arg_t<CaptorTupleT> lower_bound = StampTraits<stamp_t<CaptorTupleT>>::min());
 
   /**
    * @brief Runs event input capture dry-run
@@ -155,10 +144,10 @@ public:
    *
    * @return dry capture/synchronization details
    */
-  template<typename CaptorTupleT>
-  static result_t<CaptorTupleT> dry_capture(CaptorTupleT&& captors,
-                                            const stamp_arg_t<CaptorTupleT> lower_bound =
-                                              StampTraits<stamp_t<CaptorTupleT>>::min());
+  template <typename CaptorTupleT>
+  static result_t<CaptorTupleT> dry_capture(
+    CaptorTupleT&& captors,
+    const stamp_arg_t<CaptorTupleT> lower_bound = StampTraits<stamp_t<CaptorTupleT>>::min());
 };
 
 }  // namespace flow

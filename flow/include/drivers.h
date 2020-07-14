@@ -18,7 +18,8 @@ namespace flow
 /**
  * @brief Synchronizations buffer with policies which produce sequencing ranges
  */
-namespace driver {}
+namespace driver
+{}
 
 }  // flow
 

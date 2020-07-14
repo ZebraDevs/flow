@@ -8,9 +8,9 @@
 #define FLOW_CAPTOR_H
 
 // C++ Standard Library
-#include <cstdint>
 #include <chrono>
 #include <condition_variable>
+#include <cstdint>
 #include <memory>
 #include <mutex>
 #include <thread>
@@ -31,8 +31,7 @@ namespace flow
  *
  *        Implements basic captor qualities and queuing interfaces
  */
-template<typename Derived>
-class CaptorBase;
+template <typename Derived> class CaptorBase;
 
 
 /**
@@ -41,7 +40,8 @@ class CaptorBase;
  *        Used in place of a TimedLockable (https://en.cppreference.com/w/cpp/named_req/TimedLockable)
  *        object used to specify a locking policy
  */
-struct NoLock {};
+struct NoLock
+{};
 
 
 /**
@@ -51,11 +51,10 @@ struct NoLock {};
  *        do not wait on a condition variable for new inputs before attempting to run a synchronization policy.
  *        This allows for polling with the <code>Captor::capture</code> method
  * \n
- *        See https://en.cppreference.com/w/cpp/named_req/TimedLockable for more information on <code>BasicLockableT</code>
- *        criteria
+ *        See https://en.cppreference.com/w/cpp/named_req/TimedLockable for more information on
+ * <code>BasicLockableT</code> criteria
  */
-template<typename BasicLockableT = std::lock_guard<std::mutex>>
-struct PollingLock
+template <typename BasicLockableT = std::lock_guard<std::mutex>> struct PollingLock
 {
   using type = BasicLockableT;
 };
@@ -66,8 +65,7 @@ struct PollingLock
  *
  * @tparam DispatchT  data dispatch object type
  */
-template<typename DispatchT>
-struct CaptorTraitsFromDispatch
+template <typename DispatchT> struct CaptorTraitsFromDispatch
 {
   /// Dispatch type
   using DispatchType = DispatchT;
@@ -98,15 +96,13 @@ struct CaptorTraitsFromDispatch
  *
  * @tparam CaptorT  captor type with CRTP base <code>Captor</code>
  */
-template<typename CaptorT>
-struct CaptorTraits;
+template <typename CaptorT> struct CaptorTraits;
 
 
 /**
  * @brief CRTP-base which defines basic captor interface
  */
-template<typename CaptorT>
-class CaptorInterface
+template <typename CaptorT> class CaptorInterface
 {
 public:
   /// Data dispatch type
@@ -139,18 +135,12 @@ public:
   /**
    * @brief Clears all captor data and resets all states
    */
-  inline void reset()
-  {
-    derived()->reset_impl();
-  }
+  inline void reset() { derived()->reset_impl(); }
 
   /**
    * @brief Returns the number of buffered elements
    */
-  inline size_type size() const
-  {
-    return derived()->size_impl();
-  }
+  inline size_type size() const { return derived()->size_impl(); }
 
   /**
    * @brief Injects new data into Captor queue
@@ -162,8 +152,7 @@ public:
    *
    * @param dispatch_args  dispatch constructor arguments
    */
-  template<typename... DispatchConstructorArgTs>
-  inline void inject(DispatchConstructorArgTs&&... dispatch_args)
+  template <typename... DispatchConstructorArgTs> inline void inject(DispatchConstructorArgTs&&... dispatch_args)
   {
     return derived()->inject_impl(std::forward<DispatchConstructorArgTs>(dispatch_args)...);
   }
@@ -179,11 +168,11 @@ public:
    *
    * @param dispatch_args  dispatch constructor arguments
    */
-  template<typename FirstForwardDispatchIteratorT, typename LastForwardDispatchIteratorT>
+  template <typename FirstForwardDispatchIteratorT, typename LastForwardDispatchIteratorT>
   inline void insert(FirstForwardDispatchIteratorT&& first, LastForwardDispatchIteratorT&& last)
   {
-    return derived()->insert_impl(std::forward<FirstForwardDispatchIteratorT>(first),
-                                  std::forward<LastForwardDispatchIteratorT>(last));
+    return derived()->insert_impl(
+      std::forward<FirstForwardDispatchIteratorT>(first), std::forward<LastForwardDispatchIteratorT>(last));
   }
 
   /**
@@ -191,10 +180,7 @@ public:
    *
    * @param t_abort  time before which data should be removed
    */
-  inline void remove(const stamp_type& t_remove)
-  {
-    return derived()->remove_impl(t_remove);
-  }
+  inline void remove(const stamp_type& t_remove) { return derived()->remove_impl(t_remove); }
 
   /**
    * @brief Defines Captor behavior during an external abort
@@ -204,10 +190,7 @@ public:
    *
    * @param t_abort  time at which abort was signaled
    */
-  inline void abort(const stamp_type& t_abort)
-  {
-    return derived()->abort_impl(t_abort);
-  }
+  inline void abort(const stamp_type& t_abort) { return derived()->abort_impl(t_abort); }
 
   /**
    * @brief Sets the maximum number of elements
@@ -218,10 +201,7 @@ public:
    * @param capacity  maximum number of buffered elements; <code>capacity == 0</code>
    *                  signifies that there will be no limit on buffer capacity
    */
-  inline void set_capacity(const size_type capacity)
-  {
-    return derived()->set_capacity_impl(capacity);
-  }
+  inline void set_capacity(const size_type capacity) { return derived()->set_capacity_impl(capacity); }
 
   /**
    * @brief Gets the maximum number of elements
@@ -231,10 +211,7 @@ public:
    *
    * @see <code>set_capacity</code>
    */
-  inline size_type get_capacity() const
-  {
-    return derived()->get_capacity_impl();
-  }
+  inline size_type get_capacity() const { return derived()->get_capacity_impl(); }
 
   /**
    * @brief Gets the time range between oldest/newest buffered messages
@@ -247,7 +224,8 @@ public:
   /**
    * @brief Waits for ready state and captures inputs
    *
-   * @tparam OutputDispatchIteratorT  output iterator type for a value type which supports assignment with <code>DispatchType</code>
+   * @tparam OutputDispatchIteratorT  output iterator type for a value type which supports assignment with
+   * <code>DispatchType</code>
    * @tparam CaptureRangeT  message capture stamp range type
    * @tparam ClockT  clock type associated with time-point representation
    * @tparam DurationT  duration type associated with time-point representation
@@ -258,20 +236,21 @@ public:
    *
    * @return capture directive code
    */
-  template<typename OutputDispatchIteratorT, typename CaptureRangeT, typename ClockT, typename DurationT>
-  inline State capture(OutputDispatchIteratorT&& output,
-                       CaptureRangeT&& range,
-                       const std::chrono::time_point<ClockT, DurationT> timeout = std::chrono::time_point<ClockT, DurationT>::max())
+  template <typename OutputDispatchIteratorT, typename CaptureRangeT, typename ClockT, typename DurationT>
+  inline State capture(
+    OutputDispatchIteratorT&& output,
+    CaptureRangeT&& range,
+    const std::chrono::time_point<ClockT, DurationT> timeout = std::chrono::time_point<ClockT, DurationT>::max())
   {
-    return derived()->capture_impl(std::forward<OutputDispatchIteratorT>(output),
-                                   std::forward<CaptureRangeT>(range),
-                                   timeout);
+    return derived()->capture_impl(
+      std::forward<OutputDispatchIteratorT>(output), std::forward<CaptureRangeT>(range), timeout);
   }
 
   /**
    * @brief Waits for ready state and captures inputs
    *
-   * @tparam OutputDispatchIteratorT  output iterator type for a value type which supports assignment with <code>DispatchType</code>
+   * @tparam OutputDispatchIteratorT  output iterator type for a value type which supports assignment with
+   * <code>DispatchType</code>
    * @tparam CaptureRangeT  message capture stamp range type
    *
    * @param[out] output  output data iterator
@@ -279,12 +258,10 @@ public:
    *
    * @return capture directive code
    */
-  template<typename OutputDispatchIteratorT, typename CaptureRangeT>
-  inline State capture(OutputDispatchIteratorT&& output,
-                       CaptureRangeT&& range)
+  template <typename OutputDispatchIteratorT, typename CaptureRangeT>
+  inline State capture(OutputDispatchIteratorT&& output, CaptureRangeT&& range)
   {
-    return derived()->capture_impl(std::forward<OutputDispatchIteratorT>(output),
-                                   std::forward<CaptureRangeT>(range));
+    return derived()->capture_impl(std::forward<OutputDispatchIteratorT>(output), std::forward<CaptureRangeT>(range));
   }
 
   /**
@@ -298,8 +275,7 @@ public:
    *
    * @return capture directive code
    */
-  template<typename CaptureRangeT>
-  inline State dry_capture(CaptureRangeT&& range)
+  template <typename CaptureRangeT> inline State dry_capture(CaptureRangeT&& range)
   {
     return derived()->dry_capture_impl(std::forward<CaptureRangeT>(range));
   }
@@ -314,8 +290,7 @@ public:
    *
    * @param inspect_dispatch_cb  callback invoked for each available dispatch
    */
-  template<typename InpectCallbackT>
-  inline void inspect(InpectCallbackT&& inspect_dispatch_cb) const
+  template <typename InpectCallbackT> inline void inspect(InpectCallbackT&& inspect_dispatch_cb) const
   {
     return derived()->inspect_impl(std::forward<InpectCallbackT>(inspect_dispatch_cb));
   }
@@ -323,10 +298,7 @@ public:
   /**
    * @brief Returns the allocator associated with the underlying dispatch queue
    */
-  inline DispatchAllocatorType get_allocator() const noexcept
-  {
-    return queue_.get_allocator();
-  }
+  inline DispatchAllocatorType get_allocator() const noexcept { return queue_.get_allocator(); }
 
   // Sanity check to ensure that DispatchType is copyable
   static_assert(std::is_copy_constructible<DispatchType>(), "'DispatchType' must be a copyable type");
@@ -339,8 +311,7 @@ protected:
    *
    * @return capture directive code
    */
-  template<typename... InsertArgTs>
-  inline void insert_and_limit(InsertArgTs&&... args);
+  template <typename... InsertArgTs> inline void insert_and_limit(InsertArgTs&&... args);
 
   /// Data dispatch queue
   DispatchQueue<DispatchType, DispatchAllocatorType> queue_;
@@ -357,10 +328,10 @@ protected:
  *
  * @tparam CaptorT  CRTP-derived Captor type
  * @tparam LockableT  a TimedLockable (https://en.cppreference.com/w/cpp/named_req/TimedLockable) object;
-                      specializations are available which replace <code>LockableT</code> with <code>NoLock</code> or <code>PollingLock</code>
+                      specializations are available which replace <code>LockableT</code> with <code>NoLock</code> or
+ <code>PollingLock</code>
  */
-template<typename CaptorT, typename LockableT>
-class Captor : public CaptorInterface<Captor<CaptorT, LockableT>>
+template <typename CaptorT, typename LockableT> class Captor : public CaptorInterface<Captor<CaptorT, LockableT>>
 {
 public:
   /// Data dispatch type
@@ -407,13 +378,12 @@ private:
   /**
    * @copydoc CaptorInterface::inject
    */
-  template<typename... DispatchConstructorArgTs>
-  inline void inject_impl(DispatchConstructorArgTs&&... dispatch_args);
+  template <typename... DispatchConstructorArgTs> inline void inject_impl(DispatchConstructorArgTs&&... dispatch_args);
 
   /**
    * @copydoc CaptorInterface::insert
    */
-  template<typename FirstForwardDispatchIteratorT, typename LastForwardDispatchIteratorT>
+  template <typename FirstForwardDispatchIteratorT, typename LastForwardDispatchIteratorT>
   inline void insert_impl(FirstForwardDispatchIteratorT first, LastForwardDispatchIteratorT last);
 
   /**
@@ -429,22 +399,21 @@ private:
   /**
    * @copydoc CaptorInterface::capture
    */
-  template<typename OutputDispatchIteratorT, typename CaptureRangeT, typename ClockT, typename DurationT>
-  inline State capture_impl(OutputDispatchIteratorT&& output,
-                            CaptureRangeT&& range,
-                            const std::chrono::time_point<ClockT, DurationT> timeout);
+  template <typename OutputDispatchIteratorT, typename CaptureRangeT, typename ClockT, typename DurationT>
+  inline State capture_impl(
+    OutputDispatchIteratorT&& output,
+    CaptureRangeT&& range,
+    const std::chrono::time_point<ClockT, DurationT> timeout);
 
   /**
    * @copydoc CaptorInterface::dry_capture_impl
    */
-  template<typename CaptureRangeT>
-  inline State dry_capture_impl(CaptureRangeT&& range);
+  template <typename CaptureRangeT> inline State dry_capture_impl(CaptureRangeT&& range);
 
   /**
    * @copydoc CaptorInterface::inspect
    */
-  template<typename InpectCallbackT>
-  inline void inspect_impl(InpectCallbackT&& inspect_dispatch_cb) const;
+  template <typename InpectCallbackT> inline void inspect_impl(InpectCallbackT&& inspect_dispatch_cb) const;
 
   /**
    * @copydoc CaptorInterface::set_capacity
@@ -477,8 +446,7 @@ private:
   mutable typename std::conditional<
     std::is_same<std::unique_lock<std::mutex>, LockableT>::value,
     std::condition_variable,
-    std::condition_variable_any
-  >::type capture_cv_;
+    std::condition_variable_any>::type capture_cv_;
 
   using CaptorInterfaceType = CaptorInterface<Captor<CaptorT, LockableT>>;
   friend CaptorInterfaceType;
@@ -495,8 +463,8 @@ protected:
  *
  * @tparam PolicyT  CRTP-derived captor with specialized capture policy
  */
-template<typename CaptorT, typename LockableT>
-struct CaptorTraits<Captor<CaptorT, LockableT>> : CaptorTraits<CaptorT> {};
+template <typename CaptorT, typename LockableT> struct CaptorTraits<Captor<CaptorT, LockableT>> : CaptorTraits<CaptorT>
+{};
 
 
 /**
@@ -504,8 +472,7 @@ struct CaptorTraits<Captor<CaptorT, LockableT>> : CaptorTraits<CaptorT> {};
  *
  * @tparam CaptorT  object to test
  */
-template<typename CaptorT>
-struct is_driver;
+template <typename CaptorT> struct is_driver;
 
 
 /**
@@ -513,8 +480,7 @@ struct is_driver;
  *
  * @tparam CaptorT  object to test
  */
-template<typename CaptorT>
-struct is_follower;
+template <typename CaptorT> struct is_follower;
 
 
 /**
@@ -522,8 +488,8 @@ struct is_follower;
  *
  * @tparam CaptorT  object to test
  */
-template<typename LockableT>
-struct is_no_lock : std::integral_constant<bool, std::is_same<LockableT, NoLock>::value> {};
+template <typename LockableT> struct is_no_lock : std::integral_constant<bool, std::is_same<LockableT, NoLock>::value>
+{};
 
 
 /**
@@ -531,15 +497,15 @@ struct is_no_lock : std::integral_constant<bool, std::is_same<LockableT, NoLock>
  *
  * @tparam CaptorT  object to test
  */
-template<typename LockableT>
-struct is_polling_lock : std::integral_constant<bool, false> {};
+template <typename LockableT> struct is_polling_lock : std::integral_constant<bool, false>
+{};
 
 
 /**
  * @copydoc is_polling_lock
  */
-template<typename LockableT>
-struct is_polling_lock<PollingLock<LockableT>> : std::integral_constant<bool, true> {};
+template <typename LockableT> struct is_polling_lock<PollingLock<LockableT>> : std::integral_constant<bool, true>
+{};
 
 
 /**
@@ -547,11 +513,11 @@ struct is_polling_lock<PollingLock<LockableT>> : std::integral_constant<bool, tr
  *
  * @tparam CaptorT  object to test
  */
-template<typename CaptorT>
+template <typename CaptorT>
 struct is_polling : std::integral_constant<
-  bool,
-  is_polling_lock<typename CaptorTraits<CaptorT>::LockPolicyType>::value or
-  is_no_lock<typename CaptorTraits<CaptorT>::LockPolicyType>::value>
+                      bool,
+                      is_polling_lock<typename CaptorTraits<CaptorT>::LockPolicyType>::value or
+                        is_no_lock<typename CaptorTraits<CaptorT>::LockPolicyType>::value>
 {};
 
 }  // namespace flow

@@ -22,14 +22,9 @@ struct FollowerAnyBefore : ::testing::Test, AnyBefore<Dispatch<int, int>, NoLock
 {
   static constexpr int DELAY = 1;
 
-  FollowerAnyBefore() :
-    AnyBefore<Dispatch<int, int>, NoLock>{DELAY}
-  {}
+  FollowerAnyBefore() : AnyBefore<Dispatch<int, int>, NoLock>{DELAY} {}
 
-  void SetUp() final
-  {
-    this->reset();
-  }
+  void SetUp() final { this->reset(); }
 };
 constexpr int FollowerAnyBefore::DELAY;
 

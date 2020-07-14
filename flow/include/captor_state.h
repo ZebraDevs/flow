@@ -10,8 +10,8 @@
 // C++ Standard Library
 #include <array>
 #include <cstdint>
-#include <ostream>
 #include <iomanip>
+#include <ostream>
 
 namespace flow
 {
@@ -23,11 +23,11 @@ namespace flow
  */
 enum class State : int
 {
-  RETRY,         ///< Captor should continue waiting for data after prime attempt
-  PRIMED,        ///< Captor has captured data and its ready
-  ABORT,         ///< Captor has requested to abort current capture attempt
-  TIMEOUT,       ///< Captor has hit a data-wait timeout
-  _N_STATES,     ///< Total number of captor states
+  RETRY,  ///< Captor should continue waiting for data after prime attempt
+  PRIMED,  ///< Captor has captured data and its ready
+  ABORT,  ///< Captor has requested to abort current capture attempt
+  TIMEOUT,  ///< Captor has hit a data-wait timeout
+  _N_STATES,  ///< Total number of captor states
 };
 
 
@@ -41,11 +41,16 @@ inline std::ostream& operator<<(std::ostream& os, State state)
 {
   switch (state)
   {
-    case State::RETRY    : return os << "RETRY";
-    case State::PRIMED   : return os << "PRIMED";
-    case State::ABORT    : return os << "ABORT";
-    case State::TIMEOUT  : return os << "TIMEOUT";
-    default: return os;
+  case State::RETRY:
+    return os << "RETRY";
+  case State::PRIMED:
+    return os << "PRIMED";
+  case State::ABORT:
+    return os << "ABORT";
+  case State::TIMEOUT:
+    return os << "TIMEOUT";
+  default:
+    return os;
   }
 }
 

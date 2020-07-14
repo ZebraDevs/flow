@@ -24,14 +24,9 @@ struct FollowerCountBefore : ::testing::Test, CountBefore<Dispatch<int, int>, No
   static constexpr int COUNT = 3;
   static constexpr int DELAY = 3;
 
-  FollowerCountBefore() :
-    CountBefore<Dispatch<int, int>, NoLock>{COUNT, DELAY}
-  {}
+  FollowerCountBefore() : CountBefore<Dispatch<int, int>, NoLock>{COUNT, DELAY} {}
 
-  void SetUp() final
-  {
-    this->reset();
-  }
+  void SetUp() final { this->reset(); }
 };
 constexpr int FollowerCountBefore::COUNT;
 constexpr int FollowerCountBefore::DELAY;
@@ -142,7 +137,7 @@ TEST_F(FollowerCountBefore, DryCaptureAbortOnToFewBeforeWithDataAfter)
 
   CaptureRange<int> t_range{0, 0};
 
-  ASSERT_EQ(State::ABORT,this->dry_capture(t_range));
+  ASSERT_EQ(State::ABORT, this->dry_capture(t_range));
 }
 
 

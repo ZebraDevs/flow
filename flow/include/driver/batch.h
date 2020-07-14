@@ -28,16 +28,15 @@ namespace driver
  *        Produces a target sequencing stamp range using the newest and oldest
  *        elements in the captured data window.
  * \n
-*         <b>Data removal:</b> Captor will remove a single data element
+ *         <b>Data removal:</b> Captor will remove a single data element
  *        on each new capture attempt after N-elements have been captured
  *
  * @tparam DispatchT  data dispatch type
- * @tparam LockPolicyT  a BasicLockable (https://en.cppreference.com/w/cpp/named_req/BasicLockable) object or NoLock or PollingLock
+ * @tparam LockPolicyT  a BasicLockable (https://en.cppreference.com/w/cpp/named_req/BasicLockable) object or NoLock or
+ * PollingLock
  * @tparam AllocatorT  <code>DispatchT</code> allocator type
  */
-template<typename DispatchT,
-         typename LockPolicyT = NoLock,
-         typename AllocatorT = std::allocator<DispatchT>>
+template <typename DispatchT, typename LockPolicyT = NoLock, typename AllocatorT = std::allocator<DispatchT>>
 class Batch : public Driver<Batch<DispatchT, LockPolicyT, AllocatorT>>
 {
 public:
@@ -81,7 +80,7 @@ private:
    * @retval State::PRIMED    N-elements have been captured
    * @retval State::RETRY  Captor should continue waiting for messages after prime attempt
    */
-  template<typename OutputDispatchIteratorT>
+  template <typename OutputDispatchIteratorT>
   inline State capture_driver_impl(OutputDispatchIteratorT output, CaptureRange<stamp_type>& range);
 
   /**
@@ -115,13 +114,12 @@ private:
  * @copydoc CaptorTraits
  *
  * @tparam DispatchT  data dispatch type
- * @tparam LockPolicyT  a BasicLockable (https://en.cppreference.com/w/cpp/named_req/BasicLockable) object or NoLock or PollingLock
+ * @tparam LockPolicyT  a BasicLockable (https://en.cppreference.com/w/cpp/named_req/BasicLockable) object or NoLock or
+ * PollingLock
  * @tparam AllocatorT  <code>DispatchT</code> allocator type
  * @tparam CaptureOutputT  output capture container type
  */
-template<typename DispatchT,
-         typename LockPolicyT,
-         typename AllocatorT>
+template <typename DispatchT, typename LockPolicyT, typename AllocatorT>
 struct CaptorTraits<driver::Batch<DispatchT, LockPolicyT, AllocatorT>> : CaptorTraitsFromDispatch<DispatchT>
 {
   /// Dispatch object allocation type

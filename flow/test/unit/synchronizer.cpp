@@ -6,8 +6,8 @@
 
 // C++ Standard Library
 #include <deque>
-#include <list>
 #include <iterator>
+#include <list>
 #include <tuple>
 #include <utility>
 #include <vector>
@@ -16,9 +16,9 @@
 #include <gtest/gtest.h>
 
 // Flow
-#include <flow/synchronizer.h>
-#include <flow/followers.h>
 #include <flow/drivers.h>
+#include <flow/followers.h>
+#include <flow/synchronizer.h>
 
 using namespace flow;
 
@@ -55,10 +55,7 @@ public:
 };
 
 
-TEST_F(SynchronizerTestSuite, Reset)
-{
-  Synchronizer::reset(std::forward_as_tuple(*driver, *follower1, *follower2));
-}
+TEST_F(SynchronizerTestSuite, Reset) { Synchronizer::reset(std::forward_as_tuple(*driver, *follower1, *follower2)); }
 
 
 TEST_F(SynchronizerTestSuite, CaptureCannotPrimeRetry)
@@ -67,11 +64,13 @@ TEST_F(SynchronizerTestSuite, CaptureCannotPrimeRetry)
   std::vector<Dispatch<int, double>> follower1_output_data;
   std::vector<Dispatch<int, std::string>> follower2_output_data;
 
-  const auto result = Synchronizer::capture(std::forward_as_tuple(*driver, *follower1, *follower2),
-                                            std::forward_as_tuple(std::back_inserter(driver_output_data),
-                                                                  std::back_inserter(follower1_output_data),
-                                                                  std::back_inserter(follower2_output_data)),
-                                            0);
+  const auto result = Synchronizer::capture(
+    std::forward_as_tuple(*driver, *follower1, *follower2),
+    std::forward_as_tuple(
+      std::back_inserter(driver_output_data),
+      std::back_inserter(follower1_output_data),
+      std::back_inserter(follower2_output_data)),
+    0);
 
   ASSERT_FALSE(result);
   ASSERT_EQ(result.state, State::RETRY);
@@ -88,11 +87,13 @@ TEST_F(SynchronizerTestSuite, CaptureCannotPrimeAbort)
   std::vector<Dispatch<int, double>> follower1_output_data;
   std::vector<Dispatch<int, std::string>> follower2_output_data;
 
-  const auto result = Synchronizer::capture(std::forward_as_tuple(*driver, *follower1, *follower2),
-                                            std::forward_as_tuple(std::back_inserter(driver_output_data),
-                                                                  std::back_inserter(follower1_output_data),
-                                                                  std::back_inserter(follower2_output_data)),
-                                            0);
+  const auto result = Synchronizer::capture(
+    std::forward_as_tuple(*driver, *follower1, *follower2),
+    std::forward_as_tuple(
+      std::back_inserter(driver_output_data),
+      std::back_inserter(follower1_output_data),
+      std::back_inserter(follower2_output_data)),
+    0);
 
   ASSERT_FALSE(result);
   ASSERT_EQ(result.state, State::ABORT);
@@ -110,11 +111,13 @@ TEST_F(SynchronizerTestSuite, CaptureCanPrime)
   std::vector<Dispatch<int, double>> follower1_output_data;
   std::vector<Dispatch<int, std::string>> follower2_output_data;
 
-  const auto result = Synchronizer::capture(std::forward_as_tuple(*driver, *follower1, *follower2),
-                                            std::forward_as_tuple(std::back_inserter(driver_output_data),
-                                                                  std::back_inserter(follower1_output_data),
-                                                                  std::back_inserter(follower2_output_data)),
-                                            0);
+  const auto result = Synchronizer::capture(
+    std::forward_as_tuple(*driver, *follower1, *follower2),
+    std::forward_as_tuple(
+      std::back_inserter(driver_output_data),
+      std::back_inserter(follower1_output_data),
+      std::back_inserter(follower2_output_data)),
+    0);
 
   ASSERT_TRUE(result);
   ASSERT_EQ(result.state, State::PRIMED);
@@ -166,8 +169,7 @@ using sequencing_type = int;
 
 
 // Sequencing stamp + data
-template<typename T>
-using MyDispatch = Dispatch<sequencing_type, T>;
+template <typename T> using MyDispatch = Dispatch<sequencing_type, T>;
 
 
 TEST(Synchronizer, UsageExampleExampleSingleThreaded)
@@ -192,10 +194,10 @@ TEST(Synchronizer, UsageExampleExampleSingleThreaded)
   for (int n = 0; n < 20; ++n)
   {
     next_driver.inject(n, n);
-    closest_follower.inject(n-2, static_cast<double>(n) + 0.1234);
-    before_follower.inject(n-4, "flow" + std::to_string(n));
+    closest_follower.inject(n - 2, static_cast<double>(n) + 0.1234);
+    before_follower.inject(n - 4, "flow" + std::to_string(n));
   }
- 
+
   static constexpr std::size_t EXPECTED_SYNC_COUNT = 17;
   std::size_t sync_count = 0;
 
@@ -212,27 +214,28 @@ TEST(Synchronizer, UsageExampleExampleSingleThreaded)
     // Run data capture
     const auto result = Synchronizer::capture(
       std::forward_as_tuple(next_driver, closest_follower, before_follower),
-      std::forward_as_tuple(std::back_inserter(next_driver_data),
-                            std::back_inserter(closest_follower_data),
-                            std::back_inserter(before_follower_data)));
+      std::forward_as_tuple(
+        std::back_inserter(next_driver_data),
+        std::back_inserter(closest_follower_data),
+        std::back_inserter(before_follower_data)));
 
     switch (result.state)
     {
-      case State::PRIMED:
-        // do stuff with synchronized data
-        ++sync_count;
-        break;
-      case State::ABORT:
-        // could not synchronize with current data
-        break;
-      case State::RETRY:
-        // need newer data to synchronize
-        working = false;
-        break;
-      case State::TIMEOUT: // multithreading only
-        break;
-      default:
-        break;
+    case State::PRIMED:
+      // do stuff with synchronized data
+      ++sync_count;
+      break;
+    case State::ABORT:
+      // could not synchronize with current data
+      break;
+    case State::RETRY:
+      // need newer data to synchronize
+      working = false;
+      break;
+    case State::TIMEOUT:  // multithreading only
+      break;
+    default:
+      break;
     }
   }
 
@@ -277,58 +280,56 @@ TEST(Synchronizer, UsageExampleExampleMultiThreaded)
   std::size_t sync_count = 0;
 
   // Synchronize
-  std::thread synchronizer_thread{
-    [&]
+  std::thread synchronizer_thread{[&] {
+    bool working = true;
+    while (working)
     {
-      bool working = true;
-      while (working)
+      // Any iterable container can be used to capture data (even raw buffers!). Capturing through
+      // iterators allows the end user to specify their own memory handling
+      std::vector<MyDispatch<int>> next_driver_data;
+      std::list<MyDispatch<double>> closest_follower_data;
+      std::deque<MyDispatch<std::string>> before_follower_data;
+
+      // Run data capture
+      const auto result = Synchronizer::capture(
+        std::forward_as_tuple(next_driver, closest_follower, before_follower),
+        std::forward_as_tuple(
+          std::back_inserter(next_driver_data),
+          std::back_inserter(closest_follower_data),
+          std::back_inserter(before_follower_data)));
+
+      switch (result.state)
       {
-        // Any iterable container can be used to capture data (even raw buffers!). Capturing through
-        // iterators allows the end user to specify their own memory handling
-        std::vector<MyDispatch<int>> next_driver_data;
-        std::list<MyDispatch<double>> closest_follower_data;
-        std::deque<MyDispatch<std::string>> before_follower_data;
-
-        // Run data capture
-        const auto result = Synchronizer::capture(
-          std::forward_as_tuple(next_driver, closest_follower, before_follower),
-          std::forward_as_tuple(std::back_inserter(next_driver_data),
-                                std::back_inserter(closest_follower_data),
-                                std::back_inserter(before_follower_data)));
-
-        switch (result.state)
+      case State::PRIMED:
+        // do stuff with synchronized data
+        ++sync_count;
+        if (sync_count == EXPECTED_SYNC_COUNT)
         {
-          case State::PRIMED:
-            // do stuff with synchronized data
-            ++sync_count;
-            if (sync_count == EXPECTED_SYNC_COUNT)
-            {
-              progress_cv.notify_one();
-              working = false;
-            }
-            break;
-          case State::ABORT:
-            // could not synchronize with current data
-            // normally we could keep working, but we want the test to end
-            break;
-          case State::RETRY: // polling-mode only
-            break;
-          case State::TIMEOUT:
-            break;
-          default:
-            break;
+          progress_cv.notify_one();
+          working = false;
         }
+        break;
+      case State::ABORT:
+        // could not synchronize with current data
+        // normally we could keep working, but we want the test to end
+        break;
+      case State::RETRY:  // polling-mode only
+        break;
+      case State::TIMEOUT:
+        break;
+      default:
+        break;
       }
-      progress_cv.notify_all();
     }
-  };
+    progress_cv.notify_all();
+  }};
 
   // Add some data
   for (int n = 0; n < 20; ++n)
   {
     next_driver.inject(n, n);
-    closest_follower.inject(n-2, static_cast<double>(n) + 0.1234);
-    before_follower.inject(n-4, "flow" + std::to_string(n));
+    closest_follower.inject(n - 2, static_cast<double>(n) + 0.1234);
+    before_follower.inject(n - 4, "flow" + std::to_string(n));
   }
 
   // Wait for sync pogress
