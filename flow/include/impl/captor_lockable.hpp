@@ -120,10 +120,14 @@ void Captor<CaptorT, LockableT>::insert_impl(FirstForwardDispatchIteratorT first
 template<typename CaptorT, typename LockableT>
 void Captor<CaptorT, LockableT>::remove_impl(const stamp_type& t_remove)
 {
-  LockableT lock{capture_mutex_};
+  {
+    // Remove all data before this time
+    LockableT lock{capture_mutex_};
+    CaptorInterfaceType::queue_.remove_before(t_remove);
+  }
 
-  // Remove all data before this time
-  CaptorInterfaceType::queue_.remove_before(t_remove);
+  // Notify that data has changed
+  capture_cv_.notify_one();
 }
 
 

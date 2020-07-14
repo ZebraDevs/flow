@@ -41,11 +41,16 @@ public:
     t_remove_{t_remove}
   {}
 
-  template<typename CaptorT, typename LockPolicyT>
-  inline void operator()(Captor<CaptorT, LockPolicyT>& c)
+
+  template<typename PolicyT>
+  inline void operator()(Driver<PolicyT>& c)
   {
     c.remove(t_remove_);
   }
+
+  template<typename PolicyT>
+  constexpr void operator()(Follower<PolicyT>& c) const {}
+
 private:
   /// Remove stamp
   StampT t_remove_;
@@ -65,6 +70,7 @@ public:
   {
     c.abort(t_abort_);
   }
+
 private:
   /// Abort stamp
   StampT t_abort_;
