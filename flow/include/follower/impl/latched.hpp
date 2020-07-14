@@ -112,7 +112,7 @@ void Latched<DispatchT, LockPolicyT, AllocatorT>::abort_follower_impl(const stam
 template<typename DispatchT, typename LockPolicyT, typename AllocatorT>
 void Latched<DispatchT, LockPolicyT, AllocatorT>::reset_follower_impl() noexcept(true)
 {
-  latched_value_is_set_ = false;
+  latched_.reset();
 }
 
 }  // namespace follower
