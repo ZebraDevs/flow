@@ -77,11 +77,6 @@ struct StampTraits<std::chrono::time_point<ClockT, DurationT>>
  *        long as they implement the following methods:
  *        - <code>DispatchT::stamp()</code>: returns data sequencing stamp
  *        - <code>DispatchT::data()</code>: returns an immutable reference to the data itself
- *        - Standard relational operators <code><, >, <=, >=, ==, !=</code>. Note that the
- *          provided <code>Dispatch</code> template only considers the data sequencing stamp
- *          when performing comparisons, as relational operators are mainly meant for data
- *          ordered purposes. Additionally, data elements with different stamps are to be
- *          considered unique, though repeating stamps are allowed in flow capture queues.
  * \n
  *        Custom dispatch types must also specialize the <code>DispatchTraits</code> helper
  *        struct, which is used to provide core <code>stamp_type</code> and <code>value_type</code>
@@ -119,14 +114,6 @@ public:
   inline const ValueT& data() const
   {
     return value_;
-  }
-
-  /**
-   * @brief LT relational overload
-   */
-  inline bool operator<(const Dispatch& other) const
-  {
-    return this->stamp_ < other.stamp_;
   }
 
 private:
@@ -179,10 +166,10 @@ struct DispatchTraits<Dispatch<StampT, ValueT>>
 template<typename StampT>
 struct CaptureRange
 {
-  /// Target time stamp produced from captured data associated with oldest captured element
+  /// Target sequence stamp produced from captured data associated with oldest captured element
   StampT lower_stamp;
 
-  /// Target time stamp produced from captured data associated with newest captured element
+  /// Target sequence stamp produced from captured data associated with newest captured element
   StampT upper_stamp;
 
   /**

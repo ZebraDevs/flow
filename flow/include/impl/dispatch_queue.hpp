@@ -112,6 +112,13 @@ void DispatchQueue<DispatchT, AllocatorT>::shrink_to_fit(size_type n)
   }
 }
 
+
+template<typename DispatchT, typename AllocatorT>
+AllocatorT DispatchQueue<DispatchT, AllocatorT>::get_allocator() const noexcept
+{
+  return queue_.get_allocator();
+}
+
 }  // namespace flow
 
 #endif  // FLOW_CAPTURE_IMPL_DISPATCH_QUEUE_HPP

@@ -170,6 +170,11 @@ public:
   template<typename... DispatchConstructorArgTs>
   inline void insert(DispatchConstructorArgTs&&... dispatch_args);
 
+  /**
+   * @brief Returns the allocator associated with the container
+   */
+  inline AllocatorT get_allocator() const noexcept;
+
 private:
   /// Queued data dispatches
   BaseContainerType queue_;
