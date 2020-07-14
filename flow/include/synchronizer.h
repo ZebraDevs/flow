@@ -76,7 +76,9 @@ public:
   using result_t = Result<stamp_t<CaptorTupleT>>;
 
   /**
-   * @brief Removes all data at and before \p t_data
+   * @brief Removes all possible synchronization frames at and before \p t_remove
+   *
+   *        This does not necessarily remove data from all captors
    *
    * @param captors  tuple of captors used to perform synchronization
    * @param t_remove  data removal time point
