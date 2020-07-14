@@ -31,3 +31,19 @@ flow_cc_gtest(
     deps=["//flow:flow"],
     timeout="short",
 )
+
+
+flow_cc_gtest(
+    name="synchronizer_mt_example",
+    srcs=["synchronizer_mt_example.cpp"],
+    deps=["//flow:flow"],
+    timeout="short",
+)
+
+
+flow_cc_gtest(
+    name="synchronizer_st_example",
+    srcs=["synchronizer_st_example.cpp"],
+    deps=["//flow:flow"],
+    timeout="short",
+)
