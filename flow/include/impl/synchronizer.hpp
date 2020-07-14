@@ -32,6 +32,24 @@ struct ResetHelper
   }
 };
 
+/// captor::remove call helper
+template<typename StampT>
+class RemoveHelper
+{
+public:
+  explicit RemoveHelper(const StampT t_remove) :
+    t_remove_{t_remove}
+  {}
+
+  template<typename CaptorT, typename LockPolicyT>
+  inline void operator()(Captor<CaptorT, LockPolicyT>& c)
+  {
+    c.remove(t_remove_);
+  }
+private:
+  /// Remove stamp
+  StampT t_remove_;
+};
 
 /// captor::abort call helper
 template<typename StampT>
@@ -286,6 +304,15 @@ Synchronizer::dry_capture(CaptorTupleT&& captors, const stamp_arg_t<CaptorTupleT
               std::forward<CaptorTupleT>(captors));
 
   return result;
+}
+
+
+template<typename CaptorTupleT>
+void Synchronizer::remove(CaptorTupleT&& captors, const stamp_arg_t<CaptorTupleT> t_remove)
+{
+  using StampType = stamp_t<CaptorTupleT>;
+  apply_every(detail::RemoveHelper<StampType>{t_remove},
+              std::forward<CaptorTupleT>(captors));
 }
 
 
