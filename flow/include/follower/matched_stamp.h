@@ -16,19 +16,9 @@ namespace follower
 {
 
 /**
- * @brief Captures next inputs with a sequencing stamp which exactly matches the
- *        upper stamp of driving range
+ * @brief Captures one element with a stamp which exactly matches the capture range lower bound.
  *
- *        If the oldest data in the queue is newer than the lower driving time stamp
- *        (<code>range.lower_stamp</code>), the capture sequence is aborted. If all data is older than the
- *        upper driving time stamp (<code>range.upper_stamp</code>) this captor will continue to wait
- *        for data with an exact stamp
- * \n
- *        with the same stamp, then <i>ALL</i> such elements will be captured
- *        If the driving time stamp is a range, all data elements with stamps which fall into
- *        that range will be captured
- * \n
- *        <b>Data removal:</b> Captor will remove all data at and before the captured element
+ *        All older elements are removed.
  *
  * @tparam DispatchT  data dispatch type
  * @tparam LockPolicyT  a BasicLockable (https://en.cppreference.com/w/cpp/named_req/BasicLockable) object or NoLock or

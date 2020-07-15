@@ -16,13 +16,9 @@ namespace follower
 {
 
 /**
- * @brief Captures 1 -element before and 1 element after a sequencing range, and all element which fall between
+ * @brief Captures one one element before the capture range lower bound; one element after the capture range upper bound.
  *
- *        Also captures all data with associated sequencing stamps between
- *        the lower and upper sequencing stamps
- *
- *        <b>Data removal:</b> Captor will remove all data before N-th element
- *        before the lower sequence stamp (<code>range.lower_stamp</code>)
+ *        All elements in between are also captured. All older elements are removed.
  *
  * @tparam DispatchT  data dispatch type
  * @tparam LockPolicyT  a BasicLockable (https://en.cppreference.com/w/cpp/named_req/BasicLockable) object or NoLock or

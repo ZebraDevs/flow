@@ -19,9 +19,8 @@ namespace flow
 
 /**
  * @copydoc Captor
- * @note Queue-only lock captor implementation. Implements a simple locking policy
- *       using a <code>std::lock_gaurd</code> which protects data input/output,
- *       but allows for polling with <code>Captor::capture</code>
+ * @note Implements a simple locking policy using a <code>BasicLockableT</code> which
+ *       protects data input/output, meant for polling with <code>Captor::capture</code>.
  */
 template <typename CaptorT, typename BasicLockableT>
 class Captor<CaptorT, PollingLock<BasicLockableT>>

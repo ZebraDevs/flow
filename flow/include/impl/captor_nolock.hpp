@@ -19,7 +19,7 @@ namespace flow
 
 /**
  * @copydoc Captor
- * @note No-lock captor implementation
+ * @note No-lock captor implementation meant for polling with <code>Captor::capture</code>.
  */
 template <typename CaptorT> class Captor<CaptorT, NoLock> : public CaptorInterface<Captor<CaptorT, NoLock>>
 {

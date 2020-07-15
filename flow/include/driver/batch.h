@@ -22,14 +22,11 @@ namespace driver
 {
 
 /**
- * @brief Batching input-capture object
+ * @brief Captures the N oldest data elements
  *
- *        Captures a sliding window of <i>N</i> elements, in sequence.
- *        Produces a target sequencing stamp range using the newest and oldest
- *        elements in the captured data window.
- * \n
- *         <b>Data removal:</b> Captor will remove a single data element
- *        on each new capture attempt after N-elements have been captured
+ *        Establishes a sequencing range with where <code>range.lower_stamp</code> is the stamp of
+ *        the oldest captured element, and <code>range.upper_stamp</code> is the stamp of the newest.
+ *        Removes oldest captured element from buffer.
  *
  * @tparam DispatchT  data dispatch type
  * @tparam LockPolicyT  a BasicLockable (https://en.cppreference.com/w/cpp/named_req/BasicLockable) object or NoLock or

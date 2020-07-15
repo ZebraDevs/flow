@@ -22,13 +22,10 @@ namespace driver
 {
 
 /**
- * @brief Next element driving capture object
+ * @brief Captures the next oldest data element
  *
- *        Captures the next oldest data element.
- *        Produces a target sequencing stamp range using the stamp associated with
- *        the captured element (<code>range.lower_stamp == range.upper_stamp</code>)
- * \n
- *        <b>Data removal:</b> Captor will remove a single data element on each new capture attempt
+ *        Establishes a sequencing range with <code>range.lower_stamp == range.upper_stamp</code> equal to
+ *        the captured element stamp. Removes captured element from buffer.
  *
  * @tparam DispatchT  data dispatch type
  * @tparam LockPolicyT  a BasicLockable (https://en.cppreference.com/w/cpp/named_req/BasicLockable) object or NoLock or
