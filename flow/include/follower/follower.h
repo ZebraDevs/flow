@@ -58,18 +58,7 @@ public:
    */
   explicit Follower(const DispatchAllocatorType& alloc);
 
-  /**
-   * @brief Sets enabled Follower loop-back
-   *
-   *        This parameter is used to configure a channel with a loop-back configuration
-   *        (input-output feedback loop). This allows data from this captor to be temporarily
-   *        <i>optional</i> before output data has been looped back.
-   *
-   * @param enabled  enabled loop-back behavior
-   */
-  inline void setLoopBackMode(bool enabled);
-
-protected:
+private:
   /**
    * @brief Checks if buffer is in ready state and collects data based on a target time
    *
@@ -101,17 +90,10 @@ protected:
    */
   inline void reset_policy_impl();
 
-private:
   FLOW_IMPLEMENT_CRTP_BASE(PolicyT);
 
   using CaptorType = Captor<Follower, typename CaptorTraits<PolicyT>::LockPolicyType>;
   friend CaptorType;
-
-  /// Loop-back toggling flag
-  bool loopback_enabled_;
-
-  /// Loop-back initial prime tracking flag
-  bool loopback_primed_;
 
 protected:
   using CaptorType::queue_;

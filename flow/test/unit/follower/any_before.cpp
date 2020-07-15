@@ -230,24 +230,4 @@ TEST_F(FollowerAnyBefore, DryCapturePrimedMultiDataAnyBeforeAndAtBoundary)
   ASSERT_EQ(State::PRIMED, this->dry_capture(t_range));
 }
 
-
-TEST_F(FollowerAnyBefore, PrimedOnInitialLoopBackCapture)
-{
-  std::vector<Dispatch<int, int>> data;
-  CaptureRange<int> t_range{0, 0};
-
-  this->inject(Dispatch<int, int>{-DELAY + 1, 1});
-  this->inject(Dispatch<int, int>{-DELAY + 2, 1});
-
-  this->setLoopBackMode(true);
-
-  ASSERT_EQ(this->size(), 2U);
-  ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
-  ASSERT_EQ(this->size(), 2U);
-  ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
-  ASSERT_EQ(this->size(), 2U);
-
-  ASSERT_EQ(data.size(), 0U);
-}
-
 #endif  // DOXYGEN_SKIP
