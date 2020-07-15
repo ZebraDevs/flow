@@ -20,7 +20,6 @@
 
 // C++ Standard Library
 #include <algorithm>
-#include <iterator>
 #include <stdexcept>
 
 namespace flow
@@ -55,7 +54,7 @@ State Batch<DispatchT, LockPolicyT, AllocatorT>::capture_driver_impl(
   if (state == State::PRIMED)
   {
     // Collect dispatches
-    std::copy_n(std::make_move_iterator(PolicyType::queue_.begin()), batch_size_, output);
+    std::copy_n(PolicyType::queue_.begin(), batch_size_, output);
 
     // Pop last element
     PolicyType::queue_.pop();
