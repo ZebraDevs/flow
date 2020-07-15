@@ -1,12 +1,22 @@
+// Copyright (C) 2020, Fetch Robotics Inc.
+//
+// This file is part of Flow.
+//
+// Flow is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Flow is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Flow.  If not, see <https://www.gnu.org/licenses/>.
+
 /**
- * @copyright 2020 Fetch Robotics Inc.
- * @author Brian Cairl
- *
- * @brief Implements the C++17 utility <code>std::integer_sequence</code> and related
- *        compile-time utility objects
- *
- *        For reference on how this works, see
- *        <a href="https://blog.galowicz.de/2016/06/24/integer_sequences_at_compile_time/</a>.
+ * For reference, see https://en.cppreference.com/w/cpp/utility/integer_sequence
  */
 #ifndef FLOW_IMPL_INTEGER_SEQUENCE_H
 #define FLOW_IMPL_INTEGER_SEQUENCE_H
