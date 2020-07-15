@@ -82,4 +82,19 @@ TEST(Captor, AvailableStampRangeNonEmpty)
   ASSERT_EQ(range.lower_stamp, 1);
   ASSERT_EQ(range.upper_stamp, 10);
 }
+
+
+TEST(Captor, RemoveAllOnReset)
+{
+  driver::Next<Dispatch<int, int>> captor{};
+  captor.inject(1, 1);
+  captor.inject(10, 1);
+
+  ASSERT_EQ(captor.size(), 2UL);
+
+  captor.reset();
+
+  ASSERT_EQ(captor.size(), 0UL);
+}
+
 #endif  // DOXYGEN_SKIP
