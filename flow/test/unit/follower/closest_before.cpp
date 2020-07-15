@@ -267,28 +267,4 @@ TEST_F(FollowerClosestBefore, DryCaptureAbortClosestBeforeDataAfterPeriod)
   ASSERT_EQ(State::ABORT, this->dry_capture(t_range));
 }
 
-
-TEST_F(FollowerClosestBefore, PrimedOnInitialLoopBackCapture)
-{
-  int t = 0;
-
-  std::size_t N = 10;
-  while (N--)
-  {
-    t += 1;
-    this->inject(Dispatch<int, int>{t - DELAY - 1, t});
-  }
-  const int t_target = t;
-
-  ASSERT_EQ(this->size(), 10U);
-
-  std::vector<Dispatch<int, int>> data;
-  CaptureRange<int> t_range{t_target, t_target};
-
-  this->setLoopBackMode(true);
-
-  ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
-  ASSERT_EQ(this->size(), 5UL);
-}
-
 #endif  // DOXYGEN_SKIP
