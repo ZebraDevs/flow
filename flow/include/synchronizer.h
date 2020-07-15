@@ -20,7 +20,7 @@ namespace flow
 {
 
 /**
- * @brief Event synchronization results
+ * @brief Event synchronization result summary
  *
  * @tparam StampT  capture sequencing stamp type
  */
@@ -41,6 +41,7 @@ template <typename StampT> struct Result
   inline operator bool() const { return state == State::PRIMED; }
 };
 
+
 /**
  * @brief Provides facilities to synchronize data across several Captors
  */
@@ -52,17 +53,23 @@ public:
 
   /**
    * @brief Stamp type from capture sequence alias
+   *
+   * @tparam CaptorTupleT  tuple-like type of captors which supports access with <code>std::get</code>
    */
   template <typename CaptorTupleT>
   using stamp_t = typename CaptorTraits<std::remove_reference_t<std::tuple_element_t<0UL, CaptorTupleT>>>::stamp_type;
 
   /**
    * @brief Stamp argument type from capture sequence alias
+   *
+   * @tparam CaptorTupleT  tuple-like type of captors which supports access with <code>std::get</code>
    */
   template <typename CaptorTupleT> using stamp_arg_t = arg_t<stamp_t<CaptorTupleT>>;
 
   /**
    * @brief Result type from captor sequence alias
+   *
+   * @tparam CaptorTupleT  tuple-like type of captors which supports access with <code>std::get</code>
    */
   template <typename CaptorTupleT> using result_t = Result<stamp_t<CaptorTupleT>>;
 
@@ -70,6 +77,8 @@ public:
    * @brief Removes all possible synchronization frames at and before \p t_remove
    *
    *        This does not necessarily remove data from all captors
+   *
+   * @tparam CaptorTupleT  tuple-like type of captors which supports access with <code>std::get</code>
    *
    * @param captors  tuple of captors used to perform synchronization
    * @param t_remove  data removal time point
@@ -82,6 +91,8 @@ public:
    *        If a capture uses a data wait, this will notify the wait
    *        Captors will removing buffered data according to their specific abort policy.
    *
+   * @tparam CaptorTupleT  tuple-like type of captors which supports access with <code>std::get</code>
+   *
    * @param captors  tuple of captors used to perform synchronization
    * @param t_abort  abort time point
    */
@@ -92,15 +103,22 @@ public:
    *
    *        If a capture uses a data wait, this will notify the wait
    *
+   * @tparam CaptorTupleT  tuple-like type of captors which supports access with <code>std::get</code>
+   *
    * @param captors  tuple of captors used to perform synchronization
    */
   template <typename CaptorTupleT> static void reset(CaptorTupleT&& captors);
 
   /**
-   * @brief Runs event input capture
+   * @brief Runs synchronization and data capture across all captors
+   *
+   * @tparam CaptorTupleT  tuple-like type of captors which supports access with <code>std::get</code>
+   * @tparam OutputIteratorTupleT  tuple-like type of iterators which supports access with <code>std::get</code>
+   * @tparam ClockT  clock type associated with <code>time_point</code>
+   * @tparam DurationT  duration type associated with <code>time_point</code>
    *
    * @param captors  tuple of captors used to perform synchronization
-   * @param outputs  tuple of dispatch output iterators, order w.r.t <code>CaptorTs</code>
+   * @param outputs  tuple of dispatch output iterators, ordered w.r.t associated Captor
    * @param lower_bound  synchronization stamp lower bound, forces all captured data to have associated
    *                     stamps which are greater than <code>lower_bound</code>
    * @param timeout  synchronization timeout for captors which require a data wait
@@ -115,10 +133,13 @@ public:
     const std::chrono::time_point<ClockT, DurationT>& timeout);
 
   /**
-   * @brief Runs event input capture
+   * @brief Runs synchronization and data capture across all captors
+   *
+   * @tparam CaptorTupleT  tuple-like type of captors which supports access with <code>std::get</code>
+   * @tparam OutputIteratorTupleT  tuple-like type of iterators which supports access with <code>std::get</code>
    *
    * @param captors  tuple of captors used to perform synchronization
-   * @param outputs  tuple of dispatch output iterators, order w.r.t <code>CaptorTs</code>
+   * @param outputs  tuple of dispatch output iterators, ordered w.r.t associated Captor
    * @param lower_bound  synchronization stamp lower bound, forces all captured data to have associated
    *                     stamps which are greater than <code>lower_bound</code>
    *
@@ -131,16 +152,18 @@ public:
     const stamp_arg_t<CaptorTupleT> lower_bound = StampTraits<stamp_t<CaptorTupleT>>::min());
 
   /**
-   * @brief Runs event input capture dry-run
+   * @brief Runs synchronization dry-run across all captors
    *
    *        Tests active next capture state without actually capturing elements. Any data
    *        changes that occur are such that the next call to <code>Synchronizer::capture</code>
    *        will be valid, and will have the same capture result if no changes have been made
    *        to data in the capture queues.
    *
+   * @tparam CaptorTupleT  tuple-like type of captors which supports access with <code>std::get</code>
+   *
    * @param captors  tuple of captors used to perform synchronization
-   * @param lower_bound  synchronization stamp lower bound, force all captured data to have associated
-   *                      stamps which are greater than <code>lower_bound</code>
+   * @param lower_bound  synchronization stamp lower bound; forces all captured data to have associated
+   *                     stamps which are greater than <code>lower_bound</code>
    *
    * @return dry capture/synchronization details
    */

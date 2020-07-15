@@ -16,19 +16,10 @@ namespace follower
 {
 
 /**
- * @brief Captures all data elements from a delay before the driving sequencing stamp
+ * @brief Captures all  elements before the capture range lower bound, minus a delay period.
  *
- *        This capture buffer will capture data which is behind the driving upper
- *        sequence stamp (<code>range.upper_stamp</code>) by some sequencing delay
- *        w.r.t a driver-provided target time. It will return all data at and before
- *        that sequencing boundary that has not previously been captured.
- * \n
- *        This capture buffer becomes ready when any data with a sequencing stamp greater
- *        than or equal to the upper sequencing stamp, minus the specified delay duration,
- *        is available.
- * \n
- *        <b>Data removal:</b> Captor will remove all data before the driving time
- *        message minus the delay
+ *        Once at least a single element is available after said sequencing boundary.
+ *        All of the captured elements are removed.
  *
  * @tparam DispatchT  data dispatch type
  * @tparam LockPolicyT  a BasicLockable (https://en.cppreference.com/w/cpp/named_req/BasicLockable) object or NoLock or

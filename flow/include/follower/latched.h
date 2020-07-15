@@ -17,20 +17,11 @@ namespace follower
 {
 
 /**
- * @brief Captures a single element before a sequencing range and holds its value
+ * @brief Captures one element before the capture range lower bound, minus a minimum period
  *
- *        This captor is meant for inputs which receive new data infrequently, specifically
- *        less frequently than some <code>min_period</code>, specified on construction.
- * \n
- *        If a value older than <code>range.lower_stamp - min_period</code> is available for
- *        capture it is returned capture and the captor signals a RETRY state.
- * \n
- *        If no value older than <code>range.lower_stamp - min_period</code> is available for
- *        capture nothing is returned capture and the captor signals a PRIMED state.
- * \n
- *        Any value younger than <code>range.lower_stamp - min_period</code> is never captured.
- *
- *        <b>Data removal:</b> Captor will remove all data before currently "latched" data element
+ *        All older elements are removed. If no newer elements are present on the next capture attempt,
+ *        then the last captured element is returned. If a newer element is present on a subsequent capture attempt,
+ *        meeting the aforementioned qualifications, this elements is captured and replaces "latched" element state.
  *
  * @tparam DispatchT  data dispatch type
  * @tparam LockPolicyT  a BasicLockable (https://en.cppreference.com/w/cpp/named_req/BasicLockable) object or NoLock or
@@ -95,12 +86,15 @@ private:
 
   /**
    * @brief Defines behavior on <code>ABORT</code>
+   *
    * @param t_abort  sequencing stamp at which abort was signaled
    */
   inline void abort_follower_impl(const stamp_type& t_abort);
 
   /**
    * @copydoc Follower::reset_policy_impl
+   *
+   * @note clears latched data
    */
   inline void reset_follower_impl() noexcept(true);
 

@@ -25,13 +25,10 @@ namespace driver
  * @brief Throttled next element driving capture object
  *
  *        Captures the next oldest data element, limited to a max expected period. This means that some elements
- *        are skipped if the input rate indicated by data sequence stamps is higher than the throttled rate, then
- *        some messages will be ignored and not captured.
+ *        are skipped if the input rate indicated by data sequence stamps is higher than the throttled rate.
  * \n
- *        This captor produces a target sequencing stamp range using the stamp associated with
- *        the captured element (<code>range.lower_stamp == range.upper_stamp</code>)
- * \n
- *        <b>Data removal:</b> Captor will remove all elements before the captured data element
+ *        Establishes a sequencing range with <code>range.lower_stamp == range.upper_stamp</code> equal to
+ *        the captured element stamp. Removes captured element from buffer.
  *
  * @tparam DispatchT  data dispatch type
  * @tparam LockPolicyT  a BasicLockable (https://en.cppreference.com/w/cpp/named_req/BasicLockable) object or NoLock or

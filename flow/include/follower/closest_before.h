@@ -16,22 +16,9 @@ namespace follower
 {
 
 /**
- * @brief Captures next closest data element based on a known input rate
+ * @brief Captures one element before the capture range lower bound, minus a delay period, within an expected period.
  *
- *        This capture buffer will search for data whose sequencing stamp is closest
- *        to the driving stamp (<code>range.upper_stamp</code>) which also occurred before the
- *        upper driving stamp.
- * \n
- *        If elements are available, but it is likely that incoming element will
- *        be closer to the target stamp (based on an expected sequencing rate provided
- *        on setup) the then buffer will wait for this input before becoming ready.
- * \n
- *        If an expected input does not arrive, and an element arrives after the upper driving
- *        sequence stamp, the last nearest data available within the specified time window
- *        will be used. If no such data is available
- * \n
- *        <b>Data removal:</b> Captor will remove all data before the resolved
- *        closest data element
+ *        All older elements are removed.
  *
  * @tparam DispatchT  data dispatch type
  * @tparam LockPolicyT  a BasicLockable (https://en.cppreference.com/w/cpp/named_req/BasicLockable) object or NoLock or
