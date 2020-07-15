@@ -171,4 +171,22 @@ TEST_F(FollowerLatched, PrimedWithLatchedValue)
   ASSERT_EQ(data.front().data(), 232);
 }
 
+
+TEST_F(FollowerLatched, RemovalOnAbort)
+{
+  // Start injecting data
+  const int t0 = 0;
+  int t = t0;
+  int N = 10;
+  while (N--)
+  {
+    this->inject(Dispatch<int, int>{t, 1});
+    t += 1;
+  }
+
+  this->abort(2);
+
+  ASSERT_EQ(this->size(), static_cast<std::size_t>(10));
+}
+
 #endif  // DOXYGEN_SKIP

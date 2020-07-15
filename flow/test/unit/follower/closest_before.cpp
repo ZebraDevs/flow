@@ -267,4 +267,22 @@ TEST_F(FollowerClosestBefore, DryCaptureAbortClosestBeforeDataAfterPeriod)
   ASSERT_EQ(State::ABORT, this->dry_capture(t_range));
 }
 
+
+TEST_F(FollowerClosestBefore, RemovalOnAbort)
+{
+  // Start injecting data
+  const int t0 = 0;
+  int t = t0;
+  int N = 10;
+  while (N--)
+  {
+    this->inject(Dispatch<int, int>{t, 1});
+    t += 1;
+  }
+
+  this->abort(2);
+
+  ASSERT_EQ(this->size(), static_cast<std::size_t>(PERIOD + DELAY + 2));
+}
+
 #endif  // DOXYGEN_SKIP

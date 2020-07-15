@@ -117,4 +117,22 @@ TEST_F(FollowerMatchedStamp, PrimedOnMatchedStamp)
   ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
 }
 
+
+TEST_F(FollowerMatchedStamp, RemovalOnAbort)
+{
+  // Start injecting data
+  const int t0 = 0;
+  int t = t0;
+  int N = 10;
+  while (N--)
+  {
+    this->inject(Dispatch<int, int>{t, 1});
+    t += 1;
+  }
+
+  this->abort(2);
+
+  ASSERT_EQ(this->size(), static_cast<std::size_t>(8));
+}
+
 #endif  // DOXYGEN_SKIP

@@ -280,4 +280,22 @@ TEST_F(DriverThrottled, DryCaptureNPrimedCapturesExactMessages)
   }
 }
 
+
+TEST_F(DriverThrottled, RemovalOnAbort)
+{
+  // Start injecting data
+  const int t0 = 0;
+  int t = t0;
+  int N = 10 + 1;
+  while (N--)
+  {
+    this->inject(Dispatch<int, int>{t, 1});
+    t += 1;
+  }
+
+  this->abort(10);
+
+  ASSERT_EQ(this->size(), 1UL);
+}
+
 #endif  // DOXYGEN_SKIP
