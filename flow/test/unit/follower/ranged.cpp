@@ -286,6 +286,26 @@ TEST_P(FollowerRangedTest, DryCaptureOnNonZeroRangeWithIntermediate)
 }
 
 
+TEST_P(FollowerRangedTest, RemovalOnAbort)
+{
+  CaptorType captor{p_delay};
+
+  // Start injecting data
+  const int t0 = 0;
+  int t = t0;
+  int N = 10;
+  while (N--)
+  {
+    captor.inject(Dispatch<int, int>{t, 1});
+    t += 1;
+  }
+
+  captor.abort(2);
+
+  ASSERT_EQ(captor.size(), static_cast<std::size_t>(10));
+}
+
+
 INSTANTIATE_TEST_SUITE_P(
   FollowerRangedTestSweep,
   FollowerRangedTest,

@@ -83,4 +83,22 @@ TEST_F(DriverNext, DryCapturePrimedWithOldest)
   EXPECT_EQ(t_range.upper_stamp, t);
 }
 
+
+TEST_F(DriverNext, RemovalOnAbort)
+{
+  // Start injecting data
+  const int t0 = 0;
+  int t = t0;
+  int N = 10 + 1;
+  while (N--)
+  {
+    this->inject(Dispatch<int, int>{t, 1});
+    t += 1;
+  }
+
+  this->abort(10);
+
+  ASSERT_EQ(this->size(), 1UL);
+}
+
 #endif  // DOXYGEN_SKIP

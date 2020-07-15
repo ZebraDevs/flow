@@ -202,4 +202,22 @@ TEST_F(DriverChunk, DryCapturePrimedGTChunkSize)
   EXPECT_EQ(t_range.upper_stamp, static_cast<int>(t0 + CHUNK_SIZE - 1));
 }
 
+
+TEST_F(DriverChunk, RemovalOnAbort)
+{
+  // Start injecting data
+  const int t0 = 0;
+  int t = t0;
+  int N = CHUNK_SIZE + 1;
+  while (N--)
+  {
+    this->inject(Dispatch<int, int>{t, 1});
+    t += 1;
+  }
+
+  this->abort(CHUNK_SIZE);
+
+  ASSERT_EQ(this->size(), 1UL);
+}
+
 #endif  // DOXYGEN_SKIP
