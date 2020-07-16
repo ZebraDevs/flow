@@ -6,15 +6,15 @@ C++14, header-only library for multi-stream data synchronization.
 
 ### Captors
 
-`flow::Captor` objects are data buffers with an associated synchronization policy. They are used in tuples to synchronize several streams of data. `flow::Captor` fall into two categories:
+`flow::Captor` objects are data buffers with an associated synchronization policy. They are used in tuples to synchronize several streams of data. `flow::Captor` objects fall into two categories:
 
-- `flow::Driver` captors, which establish a time range based on a next-set of data
+- `flow::Driver` captors, which establish a time range for synchronization
 - `flow::Follower` captors, which select buffered data based on a driving sequencing range
 
 `flow::Captor` objects from both categories will:
 
-- select data from their internal buffers to be returned on capture
-- remove data from their internal buffers when it is no longer needed. It is assumed that the driving capture sequencing range follows a monotonic capture sequence
+- select (capture) data from their internal buffers
+- remove data from their internal buffers when it is no longer needed
 - re-order data that is added to the internal buffer out of order _before_ data synchronization is attempted
 
 Additionally, `flow::Captor` objects were designed to:
@@ -25,11 +25,11 @@ Additionally, `flow::Captor` objects were designed to:
      + single-threaded with polling for capture (no locking overhead)
 - be [allocator-aware](https://en.cppreference.com/w/cpp/named_req/AllocatorAwareContainer)
 - support input data generically through the use of a `Dispatch` data wrapper concept (see below)
-- support data retrieval generically through use of [output iterators](https://en.cppreference.com/w/cpp/named_req/OutputIterator)
+- support generic data retrieval through use of [output iterators](https://en.cppreference.com/w/cpp/named_req/OutputIterator)
 
 ### Synchronizer
 
-`flow::Synchronizer` provides methods for operating on `flow::Captor` objects as a group (arranged as a tuple). The `flow::Synchronizer` can be used as follows to retrieve synchronized data between several like so:
+`flow::Synchronizer` provides methods for operating on `flow::Captor` objects as a group (arranged as a tuple). The `flow::Synchronizer` can be used to retrieve synchronized data between several buffers like so:
 
 ```c++
 // We have three captors for different types of data: driver, first_follower, second_follower
@@ -102,7 +102,7 @@ struct MyMessage
 };
 ```
 
-You can represent create a wrapper with an equivalent effective size object which looks like:
+You can represent create a wrapper (with an equivalent effective size) which looks like:
 
 ```c++
 struct MyMessageDispatch
@@ -200,9 +200,9 @@ Captures the oldest available `Dispatch` elements. Capture range is the stamp as
 
 #### `flow::follower::AnyBefore`
 
-Captures all `Dispatch` elements before the capture range lower bound, minus a `delay` period any time data is available. All of the captured elements are removed. 
+Captures all `Dispatch` elements before the capture range lower bound, minus a `delay` offset. All of the captured elements are removed. 
 
-Capture will report a `flow::state::PRIMED` state even if the buffer is empty, making this captor the ideal choice if you are working with a data stream that is "optional" for the current synchronization attempt.
+Capture will report a `flow::State::PRIMED` state even if the buffer is empty, making this captor the ideal choice if you are working with a data stream that is "optional" for the current synchronization attempt.
 
 It should be understood that the data captured by this captor is largely dependent on how data is add to the buffer and when `capture` is called.
 
@@ -213,7 +213,7 @@ It should be understood that the data captured by this captor is largely depende
 
 #### `flow::follower::Before`
 
-Captures all `Dispatch` elements before the capture range lower bound, minus a `delay` period, once at least a single element is available after said sequencing boundary. All of the captured elements are removed.
+Captures all `Dispatch` elements before the capture range lower bound, minus a `delay` offset, once at least a single element is available after said sequencing boundary. All of the captured elements are removed.
 
 ![Before](doc/follower/before.png)
 
@@ -221,7 +221,7 @@ Captures all `Dispatch` elements before the capture range lower bound, minus a `
 
 #### `flow::follower::ClosestBefore`
 
-Captures one `Dispatch` element before the capture range lower bound, minus a `delay` period; and within a pre-configured data period as soon as this element is available. All older elements are removed.
+Captures one `Dispatch` element before the capture range lower bound, minus a `delay` offset, within a pre-configured data period. All older elements are removed.
 
 ![ClosestBefore](doc/follower/closest_before.png)
 
@@ -229,7 +229,7 @@ Captures one `Dispatch` element before the capture range lower bound, minus a `d
 
 #### `flow::follower::CountBefore`
 
-Captures N `Dispatch` elements before the capture range lower bound, minus a `delay` period as soon as these elements are available. All older elements are removed.
+Captures N `Dispatch` elements before the capture range lower bound, minus a `delay` offset. All older elements are removed.
 
 ![CountBefore](doc/follower/count_before.png)
 
@@ -237,7 +237,7 @@ Captures N `Dispatch` elements before the capture range lower bound, minus a `de
 
 #### `flow::follower::Latched`
 
-Captures one `Dispatch` element before the capture range lower bound, minus a minimum period as soon as these elements are available. All older elements are removed. If no newer elements are present on the next capture attempt, then the last captured element is returned. If a newer element is present on a subsequent capture attempt, meeting the aforementioned qualifications, this elements is captured and replaces "latched" element state.
+Captures one `Dispatch` element before the capture range lower bound, minus a minimum period. All older elements are removed. If no newer elements are present on the next capture attempt, then the last captured element is returned. If a newer element is present on a subsequent capture attempt, meeting the aforementioned qualifications, this elements is captured and replaces "latched" element state.
 
 Latched element is cleared on reset.
 
