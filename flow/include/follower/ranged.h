@@ -16,7 +16,8 @@ namespace follower
 {
 
 /**
- * @brief Captures one one element before the capture range lower bound; one element after the capture range upper bound.
+ * @brief Captures one one element before the capture range lower bound; one element after the capture range upper
+ * bound.
  *
  *        All elements in between are also captured. All older elements are removed.
  *

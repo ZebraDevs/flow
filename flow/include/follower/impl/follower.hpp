@@ -16,15 +16,10 @@
 namespace flow
 {
 
-template <typename PolicyT>
-Follower<PolicyT>::Follower() : CaptorType{}
-{}
+template <typename PolicyT> Follower<PolicyT>::Follower() : CaptorType{} {}
 
 
-template <typename PolicyT>
-Follower<PolicyT>::Follower(const DispatchAllocatorType& alloc) :
-    CaptorType{alloc}
-{}
+template <typename PolicyT> Follower<PolicyT>::Follower(const DispatchAllocatorType& alloc) : CaptorType{alloc} {}
 
 
 template <typename PolicyT>
@@ -47,10 +42,7 @@ template <typename PolicyT> void Follower<PolicyT>::abort_policy_impl(const stam
 }
 
 
-template <typename PolicyT> void Follower<PolicyT>::reset_policy_impl()
-{
-  derived()->reset_follower_impl();
-}
+template <typename PolicyT> void Follower<PolicyT>::reset_policy_impl() { derived()->reset_follower_impl(); }
 
 }  // namespace flow
 
