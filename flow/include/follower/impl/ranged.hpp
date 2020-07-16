@@ -79,7 +79,7 @@ State Ranged<DispatchT, LockPolicyT, AllocatorT>::capture_follower_impl(
   std::copy(first_itr, last_itr, std::forward<OutputDispatchIteratorT>(output));
 
   // Remove data before first captured element
-  PolicyType::queue_.remove_before(first_itr->stamp());
+  PolicyType::queue_.remove_before(get_stamp(*first_itr));
 
   return State::PRIMED;
 }
@@ -110,7 +110,7 @@ State Ranged<DispatchT, LockPolicyT, AllocatorT>::dry_capture_follower_impl(cons
   else
   {
     // Remove data before first captured element
-    PolicyType::queue_.remove_before(std::prev(after_first_itr)->stamp());
+    PolicyType::queue_.remove_before(get_stamp(*std::prev(after_first_itr)));
     return State::PRIMED;
   }
 }
@@ -122,7 +122,7 @@ auto Ranged<DispatchT, LockPolicyT, AllocatorT>::find_after_first(const CaptureR
     PolicyType::queue_.begin(),
     PolicyType::queue_.end(),
     [offset_lower_stamp = (range.lower_stamp - delay_)](const DispatchT& dispatch) {
-      return dispatch.stamp() >= offset_lower_stamp;
+      return get_stamp(dispatch) >= offset_lower_stamp;
     });
 }
 
@@ -136,7 +136,7 @@ auto Ranged<DispatchT, LockPolicyT, AllocatorT>::find_before_last(
     after_first == PolicyType::queue_.end() ? PolicyType::queue_.begin() : after_first,
     PolicyType::queue_.end(),
     [offset_upper_stamp = (range.upper_stamp - delay_)](const DispatchT& dispatch) {
-      return dispatch.stamp() <= offset_upper_stamp;
+      return get_stamp(dispatch) <= offset_upper_stamp;
     });
 }
 

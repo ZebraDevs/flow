@@ -89,7 +89,7 @@ State CountBefore<DispatchT, LockPolicyT, AllocatorT>::dry_capture_follower_impl
   // Scroll to element boundary
   size_type before_boundary_count = 0;
   auto itr = PolicyType::queue_.begin();
-  while (itr != PolicyType::queue_.end() and boundary > itr->stamp())
+  while (itr != PolicyType::queue_.end() and boundary > get_stamp(*itr))
   {
     ++before_boundary_count;
     ++itr;
@@ -101,7 +101,7 @@ State CountBefore<DispatchT, LockPolicyT, AllocatorT>::dry_capture_follower_impl
   if (before_boundary_count >= count_)
   {
     const auto first_itr = std::prev(itr, count_);
-    PolicyType::queue_.remove_before(first_itr->stamp());
+    PolicyType::queue_.remove_before(get_stamp(*first_itr));
     return State::PRIMED;
   }
   else if (at_or_after_boundary_count)

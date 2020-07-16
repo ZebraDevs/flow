@@ -110,7 +110,7 @@ public:
    *
    * @warning Undefined behavior when <code>empty() == true</code>
    */
-  inline stamp_type oldest_stamp() const { return queue_.front().stamp(); }
+  inline stamp_type oldest_stamp() const { return get_stamp(queue_.front()); }
 
   /**
    * @brief Sequencing stamp associated with the newest data
@@ -118,7 +118,7 @@ public:
    *
    * @warning Undefined behavior when <code>empty() == true</code>
    */
-  inline stamp_type newest_stamp() const { return queue_.back().stamp(); }
+  inline stamp_type newest_stamp() const { return get_stamp(queue_.back()); }
 
   /**
    * @brief Removes the oldest element and returns associated Dispatch

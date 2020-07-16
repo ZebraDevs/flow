@@ -192,7 +192,7 @@ TEST_F(FollowerCountBefore, PrimedWithExcessBefore)
 
   for (const auto& dispatch : data)
   {
-    const auto offset = dispatch.stamp() + DELAY;
+    const auto offset = get_stamp(dispatch) + DELAY;
     ASSERT_LT(offset, 0);
     ASSERT_GE(offset, -COUNT);
   }

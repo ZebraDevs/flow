@@ -52,7 +52,7 @@ void DispatchQueue<DispatchT, AllocatorT>::insert(DispatchConstructorArgTs&&... 
 
   // If data to add is ordered with respect to current queue,
   // add to back (as newest element)
-  if (queue_.empty() or (queue_.back().stamp() < dispatch.stamp()))
+  if (queue_.empty() or (get_stamp(queue_.back()) < get_stamp(dispatch)))
   {
     queue_.emplace_back(std::move(dispatch));
     return;
@@ -60,7 +60,7 @@ void DispatchQueue<DispatchT, AllocatorT>::insert(DispatchConstructorArgTs&&... 
 
   // Find next best placement
   auto qitr = queue_.end();
-  while ((--qitr)->stamp() > dispatch.stamp())
+  while (get_stamp(*(--qitr)) > get_stamp(dispatch))
   {
     if (qitr == queue_.begin())
     {
@@ -70,7 +70,7 @@ void DispatchQueue<DispatchT, AllocatorT>::insert(DispatchConstructorArgTs&&... 
   }
 
   // Insert only if this element does not duplicate an existing element
-  if (qitr->stamp() != dispatch.stamp())
+  if (get_stamp(*qitr) != get_stamp(dispatch))
   {
     queue_.emplace(std::next(qitr), std::move(dispatch));
   }
@@ -94,7 +94,7 @@ template <typename DispatchT, typename AllocatorT> void DispatchQueue<DispatchT,
 template <typename DispatchT, typename AllocatorT>
 void DispatchQueue<DispatchT, AllocatorT>::remove_before(const stamp_type& t)
 {
-  while (!queue_.empty() and queue_.front().stamp() < t)
+  while (!queue_.empty() and get_stamp(queue_.front()) < t)
   {
     queue_.pop_front();
   }
@@ -104,7 +104,7 @@ void DispatchQueue<DispatchT, AllocatorT>::remove_before(const stamp_type& t)
 template <typename DispatchT, typename AllocatorT>
 void DispatchQueue<DispatchT, AllocatorT>::remove_at_before(const stamp_type& t)
 {
-  while (!queue_.empty() and queue_.front().stamp() <= t)
+  while (!queue_.empty() and get_stamp(queue_.front()) <= t)
   {
     queue_.pop_front();
   }

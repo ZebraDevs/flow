@@ -33,7 +33,7 @@ TEST(Dispatch, GetData)
 {
   Dispatch<int, std::string> d{2, "test-value"};
 
-  EXPECT_EQ(d.data(), "test-value");
+  EXPECT_EQ(get_value(d), "test-value");
 }
 
 
@@ -41,7 +41,7 @@ TEST(Dispatch, GetStamp)
 {
   Dispatch<int, std::string> d{3, "test-value"};
 
-  EXPECT_EQ(d.stamp(), 3);
+  EXPECT_EQ(get_stamp(d), 3);
 }
 
 #endif  // DOXYGEN_SKIP
