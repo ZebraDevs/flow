@@ -37,8 +37,8 @@ TEST(Captor, InspectCallback)
   std::size_t call_count = 0;
   captor.inspect([&call_count](const Dispatch<int, int>& dispatch) {
     ++call_count;
-    ASSERT_EQ(dispatch.stamp(), 0);
-    ASSERT_EQ(dispatch.data(), 1);
+    ASSERT_EQ(get_stamp(dispatch), 0);
+    ASSERT_EQ(get_value(dispatch), 1);
   });
 
   ASSERT_EQ(call_count, 1UL);

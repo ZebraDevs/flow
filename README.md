@@ -24,7 +24,7 @@ Additionally, `flow::Captor` objects were designed to:
      + multi-threaded with polling for capture
      + single-threaded with polling for capture (no locking overhead)
 - be [allocator-aware](https://en.cppreference.com/w/cpp/named_req/AllocatorAwareContainer)
-- support input data generically through the use of a `Dispatch` data wrapper concept (see below)
+- support input data generically through the use of a `Dispatch` concept and flexible data access (see below)
 - support generic data retrieval through use of [output iterators](https://en.cppreference.com/w/cpp/named_req/OutputIterator)
 
 ### Synchronizer
@@ -79,20 +79,27 @@ if (result == flow::State::PRIMED)
 
 ### Dispatch
 
-A `Dispatch` is a conceptual data wrapper used to represent and access key information about data within `flow::Captor` buffers. Namely, these wrappers provide access to sequencing stamp associated with data. `Dispatch` wrappers can be customized per use case. In order to fulfill the requirements of the `Dispatch` concept, wrappers must provide the following accessors:
+A `Dispatch` is a conceptual object used to represent and access key information about data within `flow::Captor` buffers. Essentially, `Dispatch` objects provide information about the data and its sequencing information, and are use to inform managing entities about data ordering. `Dispatch` objects can be customized per use case. In order to fulfill the requirements of the `Dispatch` concept, users must provide the following specialization for their data type:
 
 ```c++
-struct Dispatch
+namespace flow
+{
+
+struct DispatchAccess<::MyType>
 {
   // Accesses sequencing stamp associated with data element
-  const StampT& stamp() const;
+  static StampType stamp(const ::MyType& dispatch);
 
-  // Accesses underlying data element
-  const ValueT& data() const;
+  // Accesses underlying value
+  static ValueType value(const ::MyType& dispatch); // could just be a passthrough for ::MyType
 };
+
+}  // namespace flow
 ```
 
-This library provides a default `flow::Dispatch<StampT, DataT>` object template, which is essentially just a [stamp, data value] pair. If your data already has an embedded sequencing value, you need only provide the appropriate access through a `Dispatch` wrapper. Take the following example:
+This library provides a default `flow::Dispatch<StampT, DataT>` object template, which is essentially just a slightly more descriptive `std::pair` for a stamp and a value. All required companion facilities have been provided for this template. This library also provides default accessors for `std::pair<StampT, ValueT>`.
+
+If your data already has an embedded sequencing value, you need only provide the appropriate access through a `Dispatch` wrapper. Take the following example:
 
 ```c++
 struct MyMessage
@@ -102,17 +109,20 @@ struct MyMessage
 };
 ```
 
-You can represent create a wrapper (with an equivalent effective size) which looks like:
+You can specify access to stamp and message payload values with:
 
 ```c++
-struct MyMessageDispatch
+namespace flow
 {
-  const StampType& stamp() const { return message.stamp; }
 
-  const MessageData& data() const { return message.meaningful_data; }
+struct DispatchAccess<::MyMessage>
+{
+  static const ::StampType& stamp(const ::MyMessage& dispatch) { return message.stamp; }
 
-  MyMessage message;
+  static const ::MessageData& value(const ::MyMessage& dispatch) { return message.meaningful_data; }
 };
+
+}  // namespace flow
 ```
 
 Additionally, you must provide a specialization of `flow::DispatchTraits`, which will be used to specify required type info used by `flow::Captor` objects:

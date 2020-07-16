@@ -63,8 +63,8 @@ State Chunk<DispatchT, LockPolicyT, AllocatorT>::dry_capture_driver_impl(Capture
   {
     auto oldest_itr = PolicyType::queue_.begin();
 
-    range.lower_stamp = oldest_itr->stamp();
-    range.upper_stamp = std::next(oldest_itr, chunk_size_ - 1)->stamp();
+    range.lower_stamp = get_stamp(*oldest_itr);
+    range.upper_stamp = get_stamp(*std::next(oldest_itr, chunk_size_ - 1));
 
     return State::PRIMED;
   }

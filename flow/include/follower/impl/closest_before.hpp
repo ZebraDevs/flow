@@ -60,12 +60,12 @@ State ClosestBefore<DispatchT, LockPolicyT, AllocatorT>::dry_capture_follower_im
   auto capture_itr = PolicyType::queue_.end();
   for (auto itr = PolicyType::queue_.begin(); itr != PolicyType::queue_.end(); ++itr)
   {
-    if (itr->stamp() >= boundary)
+    if (get_stamp(*itr) >= boundary)
     {
       // If oldest element is far ahead of boundary, abort
       return State::ABORT;
     }
-    else if (itr->stamp() + period_ >= boundary)
+    else if (get_stamp(*itr) + period_ >= boundary)
     {
       // If oldest element is first within period, collect
       capture_itr = itr;
@@ -77,7 +77,7 @@ State ClosestBefore<DispatchT, LockPolicyT, AllocatorT>::dry_capture_follower_im
   // NOTE: If no capture input was set, then all data is at or after boundary
   if (capture_itr != PolicyType::queue_.end())
   {
-    PolicyType::queue_.remove_before(capture_itr->stamp());
+    PolicyType::queue_.remove_before(get_stamp(*capture_itr));
     return State::PRIMED;
   }
   else

@@ -194,8 +194,8 @@ TEST(DispatchQueue, InsertDuplicateTimeBehavior)
 
   const auto p0 = queue.pop();
 
-  EXPECT_EQ(p0.stamp(), t0);
-  EXPECT_EQ(p0.data(), 1);
+  EXPECT_EQ(get_stamp(p0), t0);
+  EXPECT_EQ(get_value(p0), 1);
 }
 
 
@@ -219,8 +219,8 @@ TEST(DispatchQueue, InsertOrdered)
   const auto p1 = queue.pop();
   const auto p2 = queue.pop();
 
-  EXPECT_LT(p0.stamp(), p1.stamp());
-  EXPECT_LT(p1.stamp(), p2.stamp());
+  EXPECT_LT(get_stamp(p0), get_stamp(p1));
+  EXPECT_LT(get_stamp(p1), get_stamp(p2));
 }
 
 
@@ -244,8 +244,8 @@ TEST(DispatchQueue, InsertUnordered)
   const auto p1 = queue.pop();
   const auto p2 = queue.pop();
 
-  EXPECT_LT(p0.stamp(), p1.stamp());
-  EXPECT_LT(p1.stamp(), p2.stamp());
+  EXPECT_LT(get_stamp(p0), get_stamp(p1));
+  EXPECT_LT(get_stamp(p1), get_stamp(p2));
 }
 
 

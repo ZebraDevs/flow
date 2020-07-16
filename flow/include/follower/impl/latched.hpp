@@ -86,7 +86,7 @@ State Latched<DispatchT, LockPolicyT, AllocatorT>::dry_capture_follower_impl(con
   // curr_qitr will never start at queue_.end() due to previous empty check
   auto curr_qitr = PolicyType::queue_.begin();
   auto prev_qitr = curr_qitr;
-  while (curr_qitr != PolicyType::queue_.end() and curr_qitr->stamp() <= boundary)
+  while (curr_qitr != PolicyType::queue_.end() and get_stamp(*curr_qitr) <= boundary)
   {
     prev_qitr = curr_qitr;
     ++curr_qitr;
@@ -96,7 +96,7 @@ State Latched<DispatchT, LockPolicyT, AllocatorT>::dry_capture_follower_impl(con
   latched_ = *prev_qitr;
 
   // Remove all elements before latched element
-  const auto prev_stamp = prev_qitr->stamp();
+  const auto prev_stamp = get_stamp(*prev_qitr);
   PolicyType::queue_.remove_before(prev_stamp);
   return State::PRIMED;
 }

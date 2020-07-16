@@ -65,7 +65,7 @@ TEST_F(FollowerLatched, CapturePrimedOnMinPeriodStamp)
   ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
   ASSERT_EQ(this->size(), 1UL);
   ASSERT_EQ(data.size(), 1UL);
-  ASSERT_EQ(data.front().data(), 232);
+  ASSERT_EQ(get_value(data.front()), 232);
 }
 
 
@@ -80,7 +80,7 @@ TEST_F(FollowerLatched, CapturePrimedOnBeforeMinPeriodStamp)
   ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
   ASSERT_EQ(this->size(), 1UL);
   ASSERT_EQ(data.size(), 1UL);
-  ASSERT_EQ(data.front().data(), 232);
+  ASSERT_EQ(get_value(data.front()), 232);
 }
 
 
@@ -96,7 +96,7 @@ TEST_F(FollowerLatched, CapturePrimedOnBeforeMinPeriodStampTakeNewer)
   ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
   ASSERT_EQ(this->size(), 1UL);
   ASSERT_EQ(data.size(), 1UL);
-  ASSERT_EQ(data.front().data(), 233);
+  ASSERT_EQ(get_value(data.front()), 233);
 }
 
 
@@ -168,7 +168,7 @@ TEST_F(FollowerLatched, PrimedWithLatchedValue)
   ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range_successor));
   ASSERT_EQ(this->size(), 2UL);
   ASSERT_EQ(data.size(), 1UL);
-  ASSERT_EQ(data.front().data(), 232);
+  ASSERT_EQ(get_value(data.front()), 232);
 }
 
 

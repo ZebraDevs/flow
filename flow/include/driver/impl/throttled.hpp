@@ -62,9 +62,10 @@ State Throttled<DispatchT, LockPolicyT, AllocatorT>::dry_capture_driver_impl(Cap
 {
   for (const auto& dispatch : PolicyType::queue_)
   {
-    if (previous_stamp_ == StampTraits<stamp_type>::min() or (dispatch.stamp() - previous_stamp_) >= throttle_period_)
+    if (
+      previous_stamp_ == StampTraits<stamp_type>::min() or (get_stamp(dispatch) - previous_stamp_) >= throttle_period_)
     {
-      range.lower_stamp = dispatch.stamp();
+      range.lower_stamp = get_stamp(dispatch);
       range.upper_stamp = range.lower_stamp;
 
       return State::PRIMED;

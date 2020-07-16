@@ -71,10 +71,7 @@ template <typename ClockT, typename DurationT> struct StampTraits<std::chrono::t
  * @brief Dispatch data wrapper
  *
  *        Custom "dispatching" objects may be used with this library in lieu of
- *        the standard <code>Dispatch</code> template provided in this file, so
- *        long as they implement the following methods:
- *        - <code>DispatchT::stamp()</code>: returns data sequencing stamp
- *        - <code>DispatchT::data()</code>: returns an immutable reference to the data itself
+ *        the standard <code>Dispatch</code> template provided in this file
  * \n
  *        Custom dispatch types must also specialize the <code>DispatchTraits</code> helper
  *        struct, which is used to provide core <code>stamp_type</code> and <code>value_type</code>
@@ -92,50 +89,44 @@ public:
    * @brief Dispatch value constructor (move enabled)
    */
   template <typename... ValueArgsTs>
-  explicit Dispatch(const StampT& stamp, ValueArgsTs&&... value_args) :
-      stamp_{stamp},
-      value_{std::forward<ValueArgsTs>(value_args)...}
+  explicit Dispatch(const StampT& _stamp, ValueArgsTs&&... _value_args) :
+      stamp{_stamp},
+      value{std::forward<ValueArgsTs>(_value_args)...}
   {}
 
-  /**
-   * @brief Returns sequencing stamp associated with data element
-   */
-  inline const StampT& stamp() const { return stamp_; }
-
-  /**
-   * @brief Returns const reference to underlying data element
-   */
-  inline const ValueT& data() const { return value_; }
-
-private:
   /// Sequencing stamp associated with data
-  StampT stamp_;
+  StampT stamp;
 
   /// Data element
-  ValueT value_;
-
-  /**
-   * @brief Output stream overload for <code>Dispatch</code> codes
-   * @param[in,out] os  output stream
-   * @param dispatch  dispatch object
-   * @return os
-   */
-  friend inline std::ostream& operator<<(std::ostream& os, const Dispatch& dispatch)
-  {
-    return os << "stamp: " << dispatch.stamp_ << "\nvalue: " << dispatch.value_;
-  }
+  ValueT value;
 };
+
+
+/**
+ * @brief Output stream overload for <code>Dispatch</code> codes
+ * @param[in,out] os  output stream
+ * @param dispatch  dispatch object
+ * @return os
+ */
+template <typename StampT, typename ValueT>
+inline std::ostream& operator<<(std::ostream& os, const Dispatch<StampT, ValueT>& dispatch)
+{
+  return os << "stamp: " << dispatch.stamp << "\nvalue: " << dispatch.value;
+}
 
 
 /**
  * @brief Dispatch type traits struct
  */
-template <typename DispatchT>
-struct DispatchTraits
-#ifndef DOXYGEN_SKIP
-  ;
+template <typename DispatchT> struct DispatchTraits;
+
+
+/**
+ * @copydoc DispatchTraits
+ *
+ * @note partial specialization for Dispatch
+ */
 template <typename StampT, typename ValueT> struct DispatchTraits<Dispatch<StampT, ValueT>>
-#endif  // DOXYGEN_SKIP
 {
   /// Dispatch stamp type
   using stamp_type = StampT;
@@ -143,6 +134,79 @@ template <typename StampT, typename ValueT> struct DispatchTraits<Dispatch<Stamp
   /// Dispatch data type
   using value_type = ValueT;
 };
+
+
+/**
+ * @copydoc DispatchTraits
+ *
+ * @note partial specialization for <code>::std::pair</code>
+ */
+template <typename StampT, typename ValueT> struct DispatchTraits<::std::pair<StampT, ValueT>>
+{
+  /// Dispatch stamp type
+  using stamp_type = StampT;
+
+  /// Dispatch data type
+  using value_type = ValueT;
+};
+
+
+/**
+ * @brief Dispatch access helper
+ */
+template <typename DispatchT> struct DispatchAccess;
+
+
+/**
+ * @copydoc DispatchAccess
+ *
+ * @note partial specialization for Dispatch
+ */
+template <typename StampT, typename ValueT> struct DispatchAccess<Dispatch<StampT, ValueT>>
+{
+  /// Selects type of lesser size to use when returning values
+  template <typename T> using return_t = std::conditional_t<(sizeof(T) <= sizeof(T&)), T, const T&>;
+
+  static constexpr return_t<StampT> stamp(const Dispatch<StampT, ValueT>& dispatch) { return dispatch.stamp; }
+
+  static constexpr return_t<ValueT> value(const Dispatch<StampT, ValueT>& dispatch) { return dispatch.value; }
+};
+
+
+/**
+ * @copydoc DispatchAccess
+ *
+ * @note partial specialization for <code>::std::pair</code>
+ */
+template <typename StampT, typename ValueT> struct DispatchAccess<::std::pair<StampT, ValueT>>
+{
+  /// Selects type of lesser size to use when returning values
+  template <typename T> using return_t = std::conditional_t<(sizeof(T) <= sizeof(T&)), T, const T&>;
+
+  static constexpr return_t<StampT> stamp(const ::std::pair<StampT, ValueT>& dispatch) { return dispatch.first; }
+
+  static constexpr return_t<ValueT> value(const ::std::pair<StampT, ValueT>& dispatch) { return dispatch.second; }
+};
+
+
+/**
+ * @brief Accesses Dispatch stamp through appropriate accessors
+ */
+template <typename DispatchT> constexpr auto get_stamp(DispatchT&& dispatch)
+{
+  using D = std::remove_const_t<std::remove_reference_t<DispatchT>>;
+  return DispatchAccess<D>::stamp(std::forward<DispatchT>(dispatch));
+}
+
+
+/**
+ * @brief Accesses Dispatch value through appropriate accessors
+ */
+template <typename DispatchT> constexpr auto get_value(DispatchT&& dispatch)
+{
+  using D = std::remove_const_t<std::remove_reference_t<DispatchT>>;
+  return DispatchAccess<D>::value(std::forward<DispatchT>(dispatch));
+}
 
 
 /**
@@ -183,19 +247,20 @@ template <typename StampT> struct CaptureRange
    * @copydoc CaptureRange::valid
    */
   inline operator bool() const { return valid(); }
-
-  /**
-   * @brief Output stream overload for <code>CaptureRange</code> codes
-   *
-   * @param[in,out] os  output stream
-   * @param range  capture stamp range
-   * @return os
-   */
-  friend inline std::ostream& operator<<(std::ostream& os, const CaptureRange& range)
-  {
-    return os << "lower_stamp: " << range.lower_stamp << ", upper_stamp: " << range.upper_stamp;
-  }
 };
+
+
+/**
+ * @brief Output stream overload for <code>CaptureRange</code> codes
+ *
+ * @param[in,out] os  output stream
+ * @param range  capture stamp range
+ * @return os
+ */
+template <typename StampT> inline std::ostream& operator<<(std::ostream& os, const CaptureRange<StampT>& range)
+{
+  return os << "lower_stamp: " << range.lower_stamp << ", upper_stamp: " << range.upper_stamp;
+}
 
 }  // namespace flow
 
