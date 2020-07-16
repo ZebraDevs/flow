@@ -18,8 +18,8 @@
 #ifndef DOXYGEN_SKIP
 
 // C++ Standard Library
-#include <condition_variable>
 #include <chrono>
+#include <condition_variable>
 #include <deque>
 #include <iterator>
 #include <list>
