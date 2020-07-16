@@ -8,9 +8,7 @@
 #define FLOW_CAPTOR_DISPATCH_H
 
 // C++ Standard Library
-#include <chrono>
 #include <limits>
-#include <ostream>
 #include <type_traits>
 #include <utility>
 
@@ -42,28 +40,6 @@ template <typename StampT> struct StampTraits
 
   /// Returns maximum stamp value
   static constexpr StampT max() { return std::numeric_limits<StampT>::max(); };
-};
-
-
-/**
- * @brief Helper struct used to specify stamp attributes for <chrono> time types
- *
- * @tparam ClockT     clock on which this time point is measured
- * @tparam DurationT  <code>std::chrono::duration</code> type used to measure the time since epoch
- */
-template <typename ClockT, typename DurationT> struct StampTraits<std::chrono::time_point<ClockT, DurationT>>
-{
-  /// Stamp type
-  using stamp_type = std::chrono::time_point<ClockT, DurationT>;
-
-  /// Associated duration/offset type
-  using offset_type = DurationT;
-
-  /// Returns minimum stamp value
-  static constexpr stamp_type min() { return stamp_type::min(); };
-
-  /// Returns maximum stamp value
-  static constexpr stamp_type max() { return stamp_type::max(); };
 };
 
 
@@ -103,19 +79,6 @@ public:
 
 
 /**
- * @brief Output stream overload for <code>Dispatch</code> codes
- * @param[in,out] os  output stream
- * @param dispatch  dispatch object
- * @return os
- */
-template <typename StampT, typename ValueT>
-inline std::ostream& operator<<(std::ostream& os, const Dispatch<StampT, ValueT>& dispatch)
-{
-  return os << "stamp: " << dispatch.stamp << "\nvalue: " << dispatch.value;
-}
-
-
-/**
  * @brief Dispatch type traits struct
  */
 template <typename DispatchT> struct DispatchTraits;
@@ -127,21 +90,6 @@ template <typename DispatchT> struct DispatchTraits;
  * @note partial specialization for Dispatch
  */
 template <typename StampT, typename ValueT> struct DispatchTraits<Dispatch<StampT, ValueT>>
-{
-  /// Dispatch stamp type
-  using stamp_type = StampT;
-
-  /// Dispatch data type
-  using value_type = ValueT;
-};
-
-
-/**
- * @copydoc DispatchTraits
- *
- * @note partial specialization for <code>::std::pair</code>
- */
-template <typename StampT, typename ValueT> struct DispatchTraits<::std::pair<StampT, ValueT>>
 {
   /// Dispatch stamp type
   using stamp_type = StampT;
@@ -170,22 +118,6 @@ template <typename StampT, typename ValueT> struct DispatchAccess<Dispatch<Stamp
   static constexpr return_t<StampT> stamp(const Dispatch<StampT, ValueT>& dispatch) { return dispatch.stamp; }
 
   static constexpr return_t<ValueT> value(const Dispatch<StampT, ValueT>& dispatch) { return dispatch.value; }
-};
-
-
-/**
- * @copydoc DispatchAccess
- *
- * @note partial specialization for <code>::std::pair</code>
- */
-template <typename StampT, typename ValueT> struct DispatchAccess<::std::pair<StampT, ValueT>>
-{
-  /// Selects type of lesser size to use when returning values
-  template <typename T> using return_t = std::conditional_t<(sizeof(T) <= sizeof(T&)), T, const T&>;
-
-  static constexpr return_t<StampT> stamp(const ::std::pair<StampT, ValueT>& dispatch) { return dispatch.first; }
-
-  static constexpr return_t<ValueT> value(const ::std::pair<StampT, ValueT>& dispatch) { return dispatch.second; }
 };
 
 
@@ -248,19 +180,6 @@ template <typename StampT> struct CaptureRange
    */
   inline operator bool() const { return valid(); }
 };
-
-
-/**
- * @brief Output stream overload for <code>CaptureRange</code> codes
- *
- * @param[in,out] os  output stream
- * @param range  capture stamp range
- * @return os
- */
-template <typename StampT> inline std::ostream& operator<<(std::ostream& os, const CaptureRange<StampT>& range)
-{
-  return os << "lower_stamp: " << range.lower_stamp << ", upper_stamp: " << range.upper_stamp;
-}
 
 }  // namespace flow
 
