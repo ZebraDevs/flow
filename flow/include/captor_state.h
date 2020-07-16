@@ -4,14 +4,8 @@
  *
  * @file captor_state.h
  */
-#ifndef FLOW_CAPTOR_STATE_HPP
-#define FLOW_CAPTOR_STATE_HPP
-
-// C++ Standard Library
-#include <array>
-#include <cstdint>
-#include <iomanip>
-#include <ostream>
+#ifndef FLOW_CAPTOR_STATE_H
+#define FLOW_CAPTOR_STATE_H
 
 namespace flow
 {
@@ -30,30 +24,6 @@ enum class State : int
   _N_STATES,  ///< Total number of captor states
 };
 
-
-/**
- * @brief Output stream overload for <code>State</code> codes
- * @param[in,out] os  output stream
- * @param state  state code
- * @return os
- */
-inline std::ostream& operator<<(std::ostream& os, State state)
-{
-  switch (state)
-  {
-  case State::RETRY:
-    return os << "RETRY";
-  case State::PRIMED:
-    return os << "PRIMED";
-  case State::ABORT:
-    return os << "ABORT";
-  case State::TIMEOUT:
-    return os << "TIMEOUT";
-  default:
-    return os;
-  }
-}
-
 }  // namespace flow
 
-#endif  // FLOW_CAPTOR_STATE_HPP
+#endif  // FLOW_CAPTOR_STATE_H
