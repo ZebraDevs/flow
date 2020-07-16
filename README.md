@@ -2,6 +2,21 @@
 
 C++14, header-only library for multi-stream data synchronization.
 
+## What is this used for?
+
+This library is meant for generating groups of data from separate series. The core problems it is meant to address are:
+
+- How do we know what elements of data across multiple input streams relate to one other?
+- How do we specify how data from different streams will relate to one another?
+- How do we know when this data is ready to be retrieved ("captured") for further use?
+- How do we capture different types of data uniformly and with minimal overhead?
+
+In addressing these problems, this library enables data-driven event execution using data collected from distinct streaming series.
+
+### Example use case
+
+At Fetch Robotics Inc., this library is used in tandem with ROS. ROS subscribers are used to feed data into `Flow` capture buffers with light message feeding callbacks. The callbacks transfer ROS messages into the appropriate `Flow` capture buffer. `Flow` entities are serviced separately to compute events from these messages. The resulting data frames from synchronization contain all messages needed to run a particular task. In this way, messages are also used as a pace-setting mechanism for core execution blocks.
+
 ## Components
 
 ### Captors
@@ -79,19 +94,21 @@ if (result == flow::State::PRIMED)
 
 ### Dispatch
 
-A `Dispatch` is a conceptual object used to represent and access key information about data within `flow::Captor` buffers. Essentially, `Dispatch` objects provide information about the data and its sequencing information, and are use to inform managing entities about data ordering. `Dispatch` objects can be customized per use case. In order to fulfill the requirements of the `Dispatch` concept, users must provide the following specialization for their data type:
+A `Dispatch` is a conceptual object used to represent and access key information about data within `flow::Captor` buffers. Essentially, `Dispatch` objects have both data payload and sequencing information. An implementation which fulfills the `Dispatch` concept can be customized per use case.
+
+In order to fulfill the requirements of the `Dispatch` concept, users must provide the following companion template specialization for their data type:
 
 ```c++
 namespace flow
 {
 
-struct DispatchAccess<::MyType>
+template <> struct DispatchAccess<::MyType>
 {
   // Accesses sequencing stamp associated with data element
   static StampType stamp(const ::MyType& dispatch);
 
   // Accesses underlying value
-  static ValueType value(const ::MyType& dispatch); // could just be a passthrough for ::MyType
+  static ValueType value(const ::MyType& dispatch); // could just be a pass-through for ::MyType
 };
 
 }  // namespace flow
@@ -115,7 +132,7 @@ You can specify access to stamp and message payload values with:
 namespace flow
 {
 
-struct DispatchAccess<::MyMessage>
+template <> struct DispatchAccess<::MyMessage>
 {
   static const ::StampType& stamp(const ::MyMessage& dispatch) { return message.stamp; }
 
@@ -138,9 +155,6 @@ template <> struct DispatchTraits<::MyMessageDispatch>
 
   /// Dispatch data type
   using value_type = ::MessageData;
-
-  /// Associated duration/offset type
-  using offset_type = typename StampTraits<StampT>::offset_type;
 
 }  // namespace flow
 ```
