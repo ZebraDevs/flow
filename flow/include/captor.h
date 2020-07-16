@@ -88,7 +88,7 @@ template <typename DispatchT> struct CaptorTraitsFromDispatch
   using stamp_type = typename DispatchTraits<DispatchT>::stamp_type;
 
   /// Duration/offset type compatible with <code>stamp_type</code>
-  using offset_type = typename DispatchTraits<DispatchT>::offset_type;
+  using offset_type = typename StampTraits<stamp_type>::offset_type;
 
   /// Integer size type
   using size_type = std::size_t;

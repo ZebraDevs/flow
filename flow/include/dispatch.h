@@ -153,9 +153,6 @@ template <typename StampT, typename ValueT> struct DispatchTraits<Dispatch<Stamp
 
   /// Dispatch data type
   using value_type = ValueT;
-
-  /// Associated duration/offset type
-  using offset_type = typename StampTraits<StampT>::offset_type;
 };
 
 
