@@ -38,14 +38,6 @@ namespace flow
 {
 
 /**
- * @brief Underlying captor implementation
- *
- *        Implements basic captor qualities and queuing interfaces
- */
-template <typename Derived> class CaptorBase;
-
-
-/**
  * @brief Stand-in type used to signify that captors will be used in a single-threaded context
  *
  *        Used in place of a TimedLockable (https://en.cppreference.com/w/cpp/named_req/TimedLockable)
