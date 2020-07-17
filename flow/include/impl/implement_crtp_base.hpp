@@ -1,9 +1,8 @@
 /**
- * @copyright 2020 Fetch Robotics Inc. All rights reserved
+ * @copyright 2020 Fetch Robotics Inc.
  * @author Brian Cairl
  *
  * @file implement_crtp_base.hpp
- * @brief Defines a macro for CRTP-derived objects
  */
 #ifndef FLOW_IMPL_IMPLEMENT_CRTP_BASE_H
 #define FLOW_IMPL_IMPLEMENT_CRTP_BASE_H

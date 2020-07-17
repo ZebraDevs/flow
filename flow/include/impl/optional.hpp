@@ -1,5 +1,5 @@
 /**
- * @copyright 2020 Fetch Robotics Inc. All rights reserved
+ * @copyright 2020 Fetch Robotics Inc.
  * @author Brian Cairl
  *
  * @file optional.hpp
