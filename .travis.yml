@@ -10,9 +10,10 @@ addons:
       - ubuntu-toolchain-r-test
     packages:
       - doxygen
-      - pkg-config
       - curl
       - gnupg
+      - graphviz
+      - pkg-config
 
 before_install:
   - curl https://bazel.build/bazel-release.pub.gpg | sudo apt-key add -
