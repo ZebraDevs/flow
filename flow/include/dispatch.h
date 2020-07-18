@@ -30,7 +30,9 @@ namespace flow
  */
 template <typename StampT> struct StampTraits
 {
-  FLOW_STATIC_ASSERT(std::is_fundamental<StampT>(), "'StampT' must be fundemental type");
+  FLOW_STATIC_ASSERT(
+    (std::is_integral<StampT>() and !std::is_same<StampT, bool>()),
+    "'StampT' must be integral type (except `bool`)");
 
   /// Stamp type
   using stamp_type = StampT;
