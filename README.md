@@ -117,7 +117,7 @@ template <> struct DispatchAccess<::MyType>
 
 This library provides a default `flow::Dispatch<StampT, DataT>` object template, which is essentially just a slightly more descriptive `std::pair` for a stamp and a value. All required companion facilities have been provided for this template. This library also provides default accessors for `std::pair<StampT, ValueT>`.
 
-If your data already has an embedded sequencing value, you need only provide the appropriate access through a `Dispatch` wrapper. Take the following example:
+If your data already has an embedded sequencing value, you need only provide the appropriate access helpers. Take the following example:
 
 ```c++
 struct MyMessage
