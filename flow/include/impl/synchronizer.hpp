@@ -8,7 +8,6 @@
 #define FLOW_IMPL_SYNCHRONIZER_HPP
 
 // C++ Standard Library
-#include <ostream>
 #include <tuple>
 #include <type_traits>
 #include <utility>
@@ -346,18 +345,6 @@ template <typename CaptorTupleT> void Synchronizer::reset(CaptorTupleT&& captors
     "[Synchronizer::reset] Associated captor stamp types do not match between all captors");
 
   apply_every(detail::ResetHelper{}, std::forward<CaptorTupleT>(captors));
-}
-
-
-/**
- * @brief Output stream overload for <code>Result</code>
- * @param[in,out] os  output stream
- * @param result  Synchronizer result object
- * @return os
- */
-template <typename StampT> inline std::ostream& operator<<(std::ostream& os, const Result<StampT>& result)
-{
-  return os << "state: " << result.state << ", range: " << result.range;
 }
 
 }  // namespace flow
