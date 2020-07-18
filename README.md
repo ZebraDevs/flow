@@ -4,6 +4,10 @@
 
 C++14, header-only library for multi-stream data synchronization.
 
+## API Documentation
+
+Available [here](https://fetchrobotics.github.io/flow/doxygen-out/html/index.html).
+
 ## What is this used for?
 
 This library is meant for generating groups of data from separate series. The core problems it is meant to address are:
