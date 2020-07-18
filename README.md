@@ -164,7 +164,7 @@ template <> struct DispatchTraits<::MyMessageDispatch>
 }  // namespace flow
 ```
 
-If your associated sequence stamp type (`StampType` in the example above) is not a [non-fundamental](https://en.cppreference.com/w/cpp/types/is_fundamental) type then you must also specialize `flow::StampTraits`:
+If your associated sequence stamp type (`StampType` in the example above) is not a [non-integral](https://en.cppreference.com/w/cpp/types/is_integral) type (excluding `bool`), then you must also specialize `flow::StampTraits`:
 
 ```c++
 namespace flow
