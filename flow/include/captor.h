@@ -22,6 +22,7 @@
 #include <flow/dispatch.h>
 #include <flow/dispatch_queue.h>
 #include <flow/impl/implement_crtp_base.hpp>
+#include <flow/impl/static_assert.hpp>
 
 namespace flow
 {
@@ -293,7 +294,7 @@ public:
   inline DispatchAllocatorType get_allocator() const noexcept { return queue_.get_allocator(); }
 
   // Sanity check to ensure that DispatchType is copyable
-  static_assert(std::is_copy_constructible<DispatchType>(), "'DispatchType' must be a copyable type");
+  FLOW_STATIC_ASSERT(std::is_copy_constructible<DispatchType>(), "'DispatchType' must be a copyable type");
 
 protected:
   /**

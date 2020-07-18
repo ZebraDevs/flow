@@ -12,6 +12,9 @@
 #include <type_traits>
 #include <utility>
 
+// Flow
+#include <flow/impl/static_assert.hpp>
+
 namespace flow
 {
 
@@ -27,7 +30,7 @@ namespace flow
  */
 template <typename StampT> struct StampTraits
 {
-  static_assert(std::is_fundamental<StampT>(), "'StampT' must be fundemental type");
+  FLOW_STATIC_ASSERT(std::is_fundamental<StampT>(), "'StampT' must be fundemental type");
 
   /// Stamp type
   using stamp_type = StampT;

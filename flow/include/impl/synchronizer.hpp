@@ -15,6 +15,7 @@
 
 // Flow
 #include <flow/impl/apply.hpp>
+#include <flow/impl/static_assert.hpp>
 
 namespace flow
 {
@@ -226,20 +227,18 @@ typename Synchronizer::result_t<CaptorTupleT> Synchronizer::capture(
   // Sanity check captors and outputs
   constexpr auto N_CAPTORS = std::tuple_size<std::remove_reference_t<CaptorTupleT>>();
   constexpr auto N_OUTPUTS = std::tuple_size<std::remove_reference_t<OutputIteratorTupleT>>();
-  static_assert(
-    N_OUTPUTS == N_CAPTORS, FLOW_STATIC_ASSERT_EMPH("[Synchronizer] Number of outputs must match number of captors."));
+  FLOW_STATIC_ASSERT(N_OUTPUTS == N_CAPTORS, "[Synchronizer] Number of outputs must match number of captors.");
 
   // Sanity check captor sequence
-  static_assert(
+  FLOW_STATIC_ASSERT(
     detail::captor_sequence_valid<CaptorTupleT>(),
-    FLOW_STATIC_ASSERT_EMPH(
-      "[Synchronizer::capture] Captor sequence is invalid. Must have (DriverType, FollowerTypes...). "
-      "0 or more FollowerTypes allowed."));
+    "[Synchronizer::capture] Captor sequence is invalid. Must have (DriverType, FollowerTypes...). "
+    "0 or more FollowerTypes allowed.");
 
   // Sanity check captor stamp types
-  static_assert(
+  FLOW_STATIC_ASSERT(
     detail::captor_stamp_types_consistent<CaptorTupleT>(),
-    FLOW_STATIC_ASSERT_EMPH("[Synchronizer::capture] Associated captor stamp types do not match between all captors"));
+    "[Synchronizer::capture] Associated captor stamp types do not match between all captors");
 
   using ResultType = result_t<CaptorTupleT>;
   using StampType = stamp_t<CaptorTupleT>;
@@ -273,17 +272,15 @@ typename Synchronizer::result_t<CaptorTupleT>
 Synchronizer::dry_capture(CaptorTupleT&& captors, const stamp_arg_t<CaptorTupleT> lower_bound)
 {
   // Sanity check captor sequence
-  static_assert(
+  FLOW_STATIC_ASSERT(
     detail::captor_sequence_valid<CaptorTupleT>(),
-    FLOW_STATIC_ASSERT_EMPH(
-      "[Synchronizer::dry_capture] Captor sequence is invalid. Must have (DriverType, FollowerTypes...). "
-      "0 or more FollowerTypes allowed."));
+    "[Synchronizer::dry_capture] Captor sequence is invalid. Must have (DriverType, FollowerTypes...). "
+    "0 or more FollowerTypes allowed.");
 
   // Sanity check captor stamp types
-  static_assert(
+  FLOW_STATIC_ASSERT(
     detail::captor_stamp_types_consistent<CaptorTupleT>(),
-    FLOW_STATIC_ASSERT_EMPH(
-      "[Synchronizer::dry_capture] Associated captor stamp types do not match between all captors"));
+    "[Synchronizer::dry_capture] Associated captor stamp types do not match between all captors");
 
   using ResultType = result_t<CaptorTupleT>;
   using StampType = stamp_t<CaptorTupleT>;
@@ -301,16 +298,15 @@ template <typename CaptorTupleT>
 void Synchronizer::remove(CaptorTupleT&& captors, const stamp_arg_t<CaptorTupleT> t_remove)
 {
   // Sanity check captor sequence
-  static_assert(
+  FLOW_STATIC_ASSERT(
     detail::captor_sequence_valid<CaptorTupleT>(),
-    FLOW_STATIC_ASSERT_EMPH(
-      "[Synchronizer::remove] Captor sequence is invalid. Must have (DriverType, FollowerTypes...). "
-      "0 or more FollowerTypes allowed."));
+    "[Synchronizer::remove] Captor sequence is invalid. Must have (DriverType, FollowerTypes...). "
+    "0 or more FollowerTypes allowed.");
 
   // Sanity check captor stamp types
-  static_assert(
+  FLOW_STATIC_ASSERT(
     detail::captor_stamp_types_consistent<CaptorTupleT>(),
-    FLOW_STATIC_ASSERT_EMPH("[Synchronizer::remove] Associated captor stamp types do not match between all captors"));
+    "[Synchronizer::remove] Associated captor stamp types do not match between all captors");
 
   using StampType = stamp_t<CaptorTupleT>;
   apply_every(detail::RemoveHelper<StampType>{t_remove}, std::forward<CaptorTupleT>(captors));
@@ -321,16 +317,15 @@ template <typename CaptorTupleT>
 void Synchronizer::abort(CaptorTupleT&& captors, const stamp_arg_t<CaptorTupleT> t_abort)
 {
   // Sanity check captor sequence
-  static_assert(
+  FLOW_STATIC_ASSERT(
     detail::captor_sequence_valid<CaptorTupleT>(),
-    FLOW_STATIC_ASSERT_EMPH(
-      "[Synchronizer::abort] Captor sequence is invalid. Must have (DriverType, FollowerTypes...). "
-      "0 or more FollowerTypes allowed."));
+    "[Synchronizer::abort] Captor sequence is invalid. Must have (DriverType, FollowerTypes...). "
+    "0 or more FollowerTypes allowed.");
 
   // Sanity check captor stamp types
-  static_assert(
+  FLOW_STATIC_ASSERT(
     detail::captor_stamp_types_consistent<CaptorTupleT>(),
-    FLOW_STATIC_ASSERT_EMPH("[Synchronizer::abort] Associated captor stamp types do not match between all captors"));
+    "[Synchronizer::abort] Associated captor stamp types do not match between all captors");
 
   using StampType = stamp_t<CaptorTupleT>;
   apply_every(detail::AbortHelper<StampType>{t_abort}, std::forward<CaptorTupleT>(captors));
@@ -340,16 +335,15 @@ void Synchronizer::abort(CaptorTupleT&& captors, const stamp_arg_t<CaptorTupleT>
 template <typename CaptorTupleT> void Synchronizer::reset(CaptorTupleT&& captors)
 {
   // Sanity check captor sequence
-  static_assert(
+  FLOW_STATIC_ASSERT(
     detail::captor_sequence_valid<CaptorTupleT>(),
-    FLOW_STATIC_ASSERT_EMPH(
-      "[Synchronizer::reset] Captor sequence is invalid. Must have (DriverType, FollowerTypes...). "
-      "0 or more FollowerTypes allowed."));
+    "[Synchronizer::reset] Captor sequence is invalid. Must have (DriverType, FollowerTypes...). "
+    "0 or more FollowerTypes allowed.");
 
   // Sanity check captor stamp types
-  static_assert(
+  FLOW_STATIC_ASSERT(
     detail::captor_stamp_types_consistent<CaptorTupleT>(),
-    FLOW_STATIC_ASSERT_EMPH("[Synchronizer::reset] Associated captor stamp types do not match between all captors"));
+    "[Synchronizer::reset] Associated captor stamp types do not match between all captors");
 
   apply_every(detail::ResetHelper{}, std::forward<CaptorTupleT>(captors));
 }
