@@ -9,6 +9,7 @@ addons:
     sources:
       - ubuntu-toolchain-r-test
     packages:
+      - doxygen
       - pkg-config
       - curl
       - gnupg
@@ -25,9 +26,9 @@ after_script:
   - doxygen Doxyfile
 
 deploy:
+  strategy: git
   provider: pages
-  skip_cleanup: true
   local_dir: docs/html
-  github_token: $GH_REPO_TOKEN
+  token: $GH_REPO_TOKEN
   on:
     branch: master
