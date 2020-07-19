@@ -25,6 +25,9 @@ namespace detail
 /// captor::reset call helper
 struct ResetHelper
 {
+  /// No-op
+  template <typename StampT> constexpr void operator()(const CaptureRange<StampT>& range) const {}
+
   template <typename CaptorT, typename LockPolicyT> inline void operator()(Captor<CaptorT, LockPolicyT>& c)
   {
     c.reset();
@@ -37,8 +40,12 @@ template <typename StampT> class RemoveHelper
 public:
   explicit RemoveHelper(const StampT t_remove) : t_remove_{t_remove} {}
 
+  /// No-op
+  constexpr void operator()(const CaptureRange<StampT>& range) const {}
+
   template <typename PolicyT> inline void operator()(Driver<PolicyT>& c) { c.remove(t_remove_); }
 
+  /// No-op
   template <typename PolicyT> constexpr void operator()(Follower<PolicyT>& c) const {}
 
 private:
@@ -51,6 +58,9 @@ template <typename StampT> class AbortHelper
 {
 public:
   explicit AbortHelper(const StampT t_abort) : t_abort_{t_abort} {}
+
+  /// No-op
+  constexpr void operator()(const CaptureRange<StampT>& range) const {}
 
   template <typename CaptorT, typename LockPolicyT> inline void operator()(Captor<CaptorT, LockPolicyT>& c)
   {
@@ -72,6 +82,20 @@ public:
       lower_bound_{lower_bound},
       timeout_{timeout}
   {}
+
+  template <typename ExpectNoCaptureT>
+  inline void operator()(const CaptureRange<StampT>& range, const ExpectNoCaptureT output)
+  {
+    FLOW_STATIC_ASSERT(
+      (std::is_same<ExpectNoCaptureT, NoCapture>::value),
+      "When using a direct capture range, NoCapture should be used in place of output iterator");
+
+    // Initialize capture range
+    result_->range = range;
+
+    // Set aborted state if driving sequence range violates monotonicity guard
+    result_->state = range.upper_stamp < lower_bound_ ? State::ABORT : State::PRIMED;
+  }
 
   template <typename PolicyT, typename OutputIteratorT>
   inline std::enable_if_t<is_polling<PolicyT>::value> operator()(Driver<PolicyT>& c, OutputIteratorT output)
@@ -140,6 +164,19 @@ public:
       lower_bound_{lower_bound}
   {}
 
+  inline void operator()(const CaptureRange<StampT>& range)
+  {
+    // Initialize capture state and range
+    result_->state = State::PRIMED;
+    result_->range = range;
+
+    // Set aborted state if driving sequence range violates monotonicity guard
+    if (result_->state == State::PRIMED and result_->range.upper_stamp < lower_bound_)
+    {
+      result_->state = State::ABORT;
+    }
+  }
+
   template <typename PolicyT> inline void operator()(Driver<PolicyT>& c)
   {
     // Get capture state
@@ -169,12 +206,19 @@ private:
   StampT lower_bound_;
 };
 
-/// Checks that captor stamp types are consistnet
+/// Checks that captor stamp types are consistent
 template <typename... CaptorTs> struct captor_stamp_types_consistent;
 
+/// Partial specialization for single captor case
 template <typename CaptorT> struct captor_stamp_types_consistent<CaptorT> : std::integral_constant<bool, true>
 {};
 
+/// Partial specialization for capture range, only, case
+template <typename StampT>
+struct captor_stamp_types_consistent<CaptureRange<StampT>> : std::integral_constant<bool, true>
+{};
+
+/// Partial specialization for drivers + followers case
 template <typename Captor1T, typename Captor2T, typename... OtherCaptorTs>
 struct captor_stamp_types_consistent<Captor1T, Captor2T, OtherCaptorTs...>
     : std::integral_constant<
@@ -185,10 +229,20 @@ struct captor_stamp_types_consistent<Captor1T, Captor2T, OtherCaptorTs...>
           captor_stamp_types_consistent<OtherCaptorTs...>::value>
 {};
 
-/// Checks that a squence of types are all follower captor types (or type sequence is empty)
+/// Partial specialization for direct driving capture range specification
+template <typename StampT, typename Captor2T, typename... OtherCaptorTs>
+struct captor_stamp_types_consistent<CaptureRange<StampT>, Captor2T, OtherCaptorTs...>
+    : std::integral_constant<
+        bool,
+        std::is_same<StampT, typename CaptorTraits<std::remove_reference_t<Captor2T>>::stamp_type>::value and
+          captor_stamp_types_consistent<OtherCaptorTs...>::value>
+{};
+
+/// Checks that a sequence of types are all follower captor types (or type sequence is empty)
 template <typename... FollowerTs> struct all_captors_are_followers : std::integral_constant<bool, true>
 {};
 
+/// Partial specialization for recursive variadic checking
 template <typename FollowerT, typename... OtherFollowerTs>
 struct all_captors_are_followers<FollowerT, OtherFollowerTs...>
     : std::integral_constant<
@@ -196,15 +250,19 @@ struct all_captors_are_followers<FollowerT, OtherFollowerTs...>
         is_follower<std::remove_reference_t<FollowerT>>::value and all_captors_are_followers<OtherFollowerTs...>::value>
 {};
 
-/// Checks that a squence of types is (CaptorT, FollowerTs...)
+/// Fall-back case
 template <typename CaptorTupleT> struct captor_sequence_valid : std::integral_constant<bool, false>
 {};
 
+/// Checks that a sequence of types is (CaptorT, FollowerTs...)
 template <template <typename...> class TupleLikeTmpl, typename DriverT, typename... FollowerTs>
 struct captor_sequence_valid<TupleLikeTmpl<DriverT, FollowerTs...>>
     : std::integral_constant<
         bool,
-        is_driver<std::remove_reference_t<DriverT>>::value and all_captors_are_followers<FollowerTs...>::value>
+        ((is_capture_range<std::remove_const_t<std::remove_reference_t<DriverT>>>::value and
+          sizeof...(FollowerTs) > 0) or
+         (is_driver<std::remove_reference_t<DriverT>>::value)) and
+          all_captors_are_followers<FollowerTs...>::value>
 {};
 
 }  // namespace detail
@@ -231,8 +289,8 @@ typename Synchronizer::result_t<CaptorTupleT> Synchronizer::capture(
   // Sanity check captor sequence
   FLOW_STATIC_ASSERT(
     detail::captor_sequence_valid<CaptorTupleT>(),
-    "[Synchronizer::capture] Captor sequence is invalid. Must have (DriverType, FollowerTypes...). "
-    "0 or more FollowerTypes allowed.");
+    "[Synchronizer::capture] Captor sequence is invalid. Must have (DriverType, FollowerTypes...) with "
+    "0 or more FollowerTypes allowed, or (CaptureRange<StampT>, FollowerTypes...) with at least 1 FollowerTypes.");
 
   // Sanity check captor stamp types
   FLOW_STATIC_ASSERT(
@@ -273,8 +331,8 @@ Synchronizer::dry_capture(CaptorTupleT&& captors, const stamp_arg_t<CaptorTupleT
   // Sanity check captor sequence
   FLOW_STATIC_ASSERT(
     detail::captor_sequence_valid<CaptorTupleT>(),
-    "[Synchronizer::dry_capture] Captor sequence is invalid. Must have (DriverType, FollowerTypes...). "
-    "0 or more FollowerTypes allowed.");
+    "[Synchronizer::dry_capture] Captor sequence is invalid. Must have (DriverType, FollowerTypes...) with "
+    "0 or more FollowerTypes allowed, or (CaptureRange<StampT>, FollowerTypes...) with at least 1 FollowerTypes.");
 
   // Sanity check captor stamp types
   FLOW_STATIC_ASSERT(
@@ -299,8 +357,8 @@ void Synchronizer::remove(CaptorTupleT&& captors, const stamp_arg_t<CaptorTupleT
   // Sanity check captor sequence
   FLOW_STATIC_ASSERT(
     detail::captor_sequence_valid<CaptorTupleT>(),
-    "[Synchronizer::remove] Captor sequence is invalid. Must have (DriverType, FollowerTypes...). "
-    "0 or more FollowerTypes allowed.");
+    "[Synchronizer::remove] Captor sequence is invalid. Must have (DriverType, FollowerTypes...) with "
+    "0 or more FollowerTypes allowed, or (CaptureRange<StampT>, FollowerTypes...) with at least 1 FollowerTypes.");
 
   // Sanity check captor stamp types
   FLOW_STATIC_ASSERT(
@@ -318,8 +376,8 @@ void Synchronizer::abort(CaptorTupleT&& captors, const stamp_arg_t<CaptorTupleT>
   // Sanity check captor sequence
   FLOW_STATIC_ASSERT(
     detail::captor_sequence_valid<CaptorTupleT>(),
-    "[Synchronizer::abort] Captor sequence is invalid. Must have (DriverType, FollowerTypes...). "
-    "0 or more FollowerTypes allowed.");
+    "[Synchronizer::abort] Captor sequence is invalid. Must have (DriverType, FollowerTypes...) with "
+    "0 or more FollowerTypes allowed, or (CaptureRange<StampT>, FollowerTypes...) with at least 1 FollowerTypes.");
 
   // Sanity check captor stamp types
   FLOW_STATIC_ASSERT(
@@ -336,8 +394,8 @@ template <typename CaptorTupleT> void Synchronizer::reset(CaptorTupleT&& captors
   // Sanity check captor sequence
   FLOW_STATIC_ASSERT(
     detail::captor_sequence_valid<CaptorTupleT>(),
-    "[Synchronizer::reset] Captor sequence is invalid. Must have (DriverType, FollowerTypes...). "
-    "0 or more FollowerTypes allowed.");
+    "[Synchronizer::reset] Captor sequence is invalid. Must have (DriverType, FollowerTypes...) with "
+    "0 or more FollowerTypes allowed, or (CaptureRange<StampT>, FollowerTypes...) with at least 1 FollowerTypes.");
 
   // Sanity check captor stamp types
   FLOW_STATIC_ASSERT(

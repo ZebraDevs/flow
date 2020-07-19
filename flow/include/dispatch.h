@@ -186,6 +186,22 @@ template <typename StampT> struct CaptureRange
   inline operator bool() const { return valid(); }
 };
 
+
+/**
+ * @brief Checks if object type is an instance of CaptureRange
+ * @param RangeT  object type to test
+ */
+template <typename RangeT> struct is_capture_range : std::integral_constant<bool, false>
+{};
+
+
+/**
+ * @copydoc is_capture_range
+ */
+template <typename StampT> struct is_capture_range<CaptureRange<StampT>> : std::integral_constant<bool, true>
+{};
+
+
 }  // namespace flow
 
 #endif  // FLOW_CAPTOR_DISPATCH_H
