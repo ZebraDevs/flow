@@ -43,6 +43,47 @@ template <typename StampT> struct Result
 
 
 /**
+ * @brief Object used in place of output iterator as a placeholder with no data capture effects
+ */
+struct NoCapture
+{
+  /// No-op
+  constexpr NoCapture& operator*() { return *this; }
+
+  /// No-op
+  constexpr NoCapture& operator++() { return *this; }
+
+  /// No-op
+  constexpr NoCapture& operator++(int) { return *this; }
+
+  /// No-op
+  template <typename ValueT> constexpr NoCapture& operator=(ValueT&&) { return *this; }
+};
+
+
+/**
+ * @brief Resolves stamp type used by a captor
+ *
+ * @tparam CaptorT  captor object type
+ */
+template <typename CaptorT> struct SequenceStampType
+{
+  using type = typename CaptorTraits<CaptorT>::stamp_type;
+};
+
+
+/**
+ * @copydoc SequenceStampType
+ *
+ * @note partial specialization for CaptureRange
+ */
+template <typename StampT> struct SequenceStampType<CaptureRange<StampT>>
+{
+  using type = StampT;
+};
+
+
+/**
  * @brief Provides facilities to synchronize data across several Captors
  */
 class Synchronizer
@@ -57,7 +98,7 @@ public:
    * @tparam CaptorTupleT  tuple-like type of captors which supports access with <code>std::get</code>
    */
   template <typename CaptorTupleT>
-  using stamp_t = typename CaptorTraits<std::remove_reference_t<std::tuple_element_t<0UL, CaptorTupleT>>>::stamp_type;
+  using stamp_t = typename SequenceStampType<std::remove_reference_t<std::tuple_element_t<0UL, CaptorTupleT>>>::type;
 
   /**
    * @brief Stamp argument type from capture sequence alias
@@ -118,7 +159,7 @@ public:
    * @tparam DurationT  duration type associated with <code>time_point</code>
    *
    * @param captors  tuple of captors used to perform synchronization
-   * @param outputs  tuple of dispatch output iterators, ordered w.r.t associated Captor
+   * @param outputs  tuple of dispatch output iterators, or NoCapture, ordered w.r.t associated Captor
    * @param lower_bound  synchronization stamp lower bound, forces all captured data to have associated
    *                     stamps which are greater than <code>lower_bound</code>
    * @param timeout  synchronization timeout for captors which require a data wait
@@ -139,7 +180,7 @@ public:
    * @tparam OutputIteratorTupleT  tuple-like type of iterators which supports access with <code>std::get</code>
    *
    * @param captors  tuple of captors used to perform synchronization
-   * @param outputs  tuple of dispatch output iterators, ordered w.r.t associated Captor
+   * @param outputs  tuple of dispatch output iterators, or NoCapture, ordered w.r.t associated Captor
    * @param lower_bound  synchronization stamp lower bound, forces all captured data to have associated
    *                     stamps which are greater than <code>lower_bound</code>
    *

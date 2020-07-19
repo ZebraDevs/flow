@@ -102,7 +102,7 @@ protected:
 
 
 /**
- * @brief Checks if captor object derived from a Follower base
+ * @brief Checks if captor object derived from a Driver base
  * @param CaptorT  object to test
  */
 template <typename CaptorT>
