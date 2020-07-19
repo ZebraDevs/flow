@@ -23,8 +23,8 @@ Captor<CaptorT, LockableT>::Captor() : CaptorInterfaceType{0UL}, capturing_{true
 
 
 template <typename CaptorT, typename LockableT>
-Captor<CaptorT, LockableT>::Captor(const DispatchAllocatorType& alloc) :
-    CaptorInterfaceType{0UL, alloc},
+Captor<CaptorT, LockableT>::Captor(const DispatchContainerType& container) :
+    CaptorInterfaceType{0UL, container},
     capturing_{true}
 {}
 

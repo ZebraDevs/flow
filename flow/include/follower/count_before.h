@@ -23,10 +23,10 @@ namespace follower
  * @tparam DispatchT  data dispatch type
  * @tparam LockPolicyT  a BasicLockable (https://en.cppreference.com/w/cpp/named_req/BasicLockable) object or NoLock or
  * PollingLock
- * @tparam AllocatorT  <code>DispatchT</code> allocator type
+ * @tparam ContainerT  underlying <code>DispatchT</code> container type
  */
-template <typename DispatchT, typename LockPolicyT = NoLock, typename AllocatorT = std::allocator<DispatchT>>
-class CountBefore : public Follower<CountBefore<DispatchT, LockPolicyT, AllocatorT>>
+template <typename DispatchT, typename LockPolicyT = NoLock, typename ContainerT = DefaultContainer<DispatchT>>
+class CountBefore : public Follower<CountBefore<DispatchT, LockPolicyT, ContainerT>>
 {
 public:
   /// Integer size type
@@ -53,14 +53,14 @@ public:
    *
    * @param count  number of elements before to capture
    * @param delay  the delay with which to capture
-   * @param alloc  dispatch object allocator with some initial state
+   * @param container  dispatch object container (non-default initialization)
    *
    * @throws <code>std::invalid_argument</code> if <code>count == 0</code>
    */
-  CountBefore(const size_type count, const offset_type& delay, const AllocatorT& alloc);
+  CountBefore(const size_type count, const offset_type& delay, const ContainerT& container);
 
 private:
-  using PolicyType = Follower<CountBefore<DispatchT, LockPolicyT, AllocatorT>>;
+  using PolicyType = Follower<CountBefore<DispatchT, LockPolicyT, ContainerT>>;
   friend PolicyType;
 
   /**
@@ -108,14 +108,14 @@ private:
  * @tparam DispatchT  data dispatch type
  * @tparam LockPolicyT  a BasicLockable (https://en.cppreference.com/w/cpp/named_req/BasicLockable) object or NoLock or
  * PollingLock
- * @tparam AllocatorT  <code>DispatchT</code> allocator type
+ * @tparam ContainerT  underlying <code>DispatchT</code> container type
  * @tparam CaptureOutputT  output capture container type
  */
-template <typename DispatchT, typename LockPolicyT, typename AllocatorT>
-struct CaptorTraits<follower::CountBefore<DispatchT, LockPolicyT, AllocatorT>> : CaptorTraitsFromDispatch<DispatchT>
+template <typename DispatchT, typename LockPolicyT, typename ContainerT>
+struct CaptorTraits<follower::CountBefore<DispatchT, LockPolicyT, ContainerT>> : CaptorTraitsFromDispatch<DispatchT>
 {
-  /// Dispatch object allocation type
-  using DispatchAllocatorType = AllocatorT;
+  /// Underlying dispatch container type
+  using DispatchContainerType = ContainerT;
 
   /// Thread locking policy type
   using LockPolicyType = LockPolicyT;

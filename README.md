@@ -6,7 +6,7 @@ C++14, header-only library for multi-stream data synchronization.
 
 ## API Documentation
 
-Available [here](https://fetchrobotics.github.io/flow/doxygen-out/html/index.html).
+Documentation for latest version available [here](https://fetchrobotics.github.io/flow/doxygen-out/html/index.html).
 
 ## What is this used for?
 
@@ -43,7 +43,9 @@ Additionally, `flow::Captor` objects were designed to:
      + multi-threaded with blocking capture on asynchronous data injection
      + multi-threaded with polling for capture
      + single-threaded with polling for capture (no locking overhead)
-- be [allocator-aware](https://en.cppreference.com/w/cpp/named_req/AllocatorAwareContainer)
+- support customizable data storage
+     + users can supply custom underlying data containers (default is a [`std::deque`](https://en.cppreference.com/w/cpp/container/deque))
+     + in turn, this allows for easy specification of custom allocation methods
 - support input data generically through the use of a `Dispatch` concept and flexible data access (see below)
 - support generic data retrieval through use of [output iterators](https://en.cppreference.com/w/cpp/named_req/OutputIterator)
 
@@ -189,6 +191,30 @@ template <> struct DispatchTraits<::StampType>
 ```
 Partial specializations for [`std::chrono::time_point`](https://en.cppreference.com/w/cpp/chrono/time_point) templates are provided.
 
+
+### Data queue storage customization
+
+Captors utilize a `flow::DispatchQueue` for data ordering and retrieval. Users may supply a custom underlying container to manage this data. Refer to [`std::deque`](https://en.cppreference.com/w/cpp/container/deque) for more information on the listed requirements. The container type must supply the following:
+
+| Required member Type | Description |
+| -------------------- | ----------- |
+| `ContainerT::size_type`  | integer size type |
+| `ContainerT::const_iterator`  | immutable element iterator type |
+| `ContainerT::const_reverse_iterator`  | reverse-sequence immutable element iterator type |
+
+| Required method | Description |
+| --------------- | ----------- |
+| `ContainerT::cbegin`  | returns iterator to first immutable element |
+| `ContainerT::cend`  | returns iterator to one past last immutable element |
+| `ContainerT::crbegin`  | returns reverse iterator to last immutable element |
+| `ContainerT::crend` | returns reverse iterator to one past first immutable element
+| `ContainerT::emplace_back`  | constructs an element, in place, at last position in the container |
+| `ContainerT::emplace`  | constructs an element, in place, after a specified iterator position |
+| `ContainerT::size`  | returns the number of elements in the container |
+| `ContainerT::pop_front`  | removes first element in the container |
+| `ContainerT::front`  | returns immutable reference to first element in the container |
+| `ContainerT::back`  | returns immutable reference to last element in the container |
+| `ContainerT::clear`  | clears available container contents |
 
 ## Captor Synchronization Policies
 

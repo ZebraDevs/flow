@@ -15,23 +15,23 @@ namespace flow
 namespace follower
 {
 
-template <typename DispatchT, typename LockPolicyT, typename AllocatorT>
-Latched<DispatchT, LockPolicyT, AllocatorT>::Latched(const offset_type min_period) :
+template <typename DispatchT, typename LockPolicyT, typename ContainerT>
+Latched<DispatchT, LockPolicyT, ContainerT>::Latched(const offset_type min_period) :
     PolicyType{},
     min_period_{min_period}
 {}
 
 
-template <typename DispatchT, typename LockPolicyT, typename AllocatorT>
-Latched<DispatchT, LockPolicyT, AllocatorT>::Latched(const offset_type min_period, const AllocatorT& alloc) :
-    PolicyType{alloc},
+template <typename DispatchT, typename LockPolicyT, typename ContainerT>
+Latched<DispatchT, LockPolicyT, ContainerT>::Latched(const offset_type min_period, const ContainerT& container) :
+    PolicyType{container},
     min_period_{min_period}
 {}
 
 
-template <typename DispatchT, typename LockPolicyT, typename AllocatorT>
+template <typename DispatchT, typename LockPolicyT, typename ContainerT>
 template <typename OutputDispatchIteratorT>
-State Latched<DispatchT, LockPolicyT, AllocatorT>::capture_follower_impl(
+State Latched<DispatchT, LockPolicyT, ContainerT>::capture_follower_impl(
   OutputDispatchIteratorT output,
   const CaptureRange<stamp_type>& range)
 {
@@ -47,8 +47,8 @@ State Latched<DispatchT, LockPolicyT, AllocatorT>::capture_follower_impl(
 }
 
 
-template <typename DispatchT, typename LockPolicyT, typename AllocatorT>
-State Latched<DispatchT, LockPolicyT, AllocatorT>::dry_capture_follower_impl(const CaptureRange<stamp_type>& range)
+template <typename DispatchT, typename LockPolicyT, typename ContainerT>
+State Latched<DispatchT, LockPolicyT, ContainerT>::dry_capture_follower_impl(const CaptureRange<stamp_type>& range)
 {
   if (PolicyType::queue_.empty())
   {
@@ -101,15 +101,15 @@ State Latched<DispatchT, LockPolicyT, AllocatorT>::dry_capture_follower_impl(con
   return State::PRIMED;
 }
 
-template <typename DispatchT, typename LockPolicyT, typename AllocatorT>
-void Latched<DispatchT, LockPolicyT, AllocatorT>::abort_follower_impl(const stamp_type& t_abort)
+template <typename DispatchT, typename LockPolicyT, typename ContainerT>
+void Latched<DispatchT, LockPolicyT, ContainerT>::abort_follower_impl(const stamp_type& t_abort)
 {
   // don't remove anything abort
 }
 
 
-template <typename DispatchT, typename LockPolicyT, typename AllocatorT>
-void Latched<DispatchT, LockPolicyT, AllocatorT>::reset_follower_impl() noexcept(true)
+template <typename DispatchT, typename LockPolicyT, typename ContainerT>
+void Latched<DispatchT, LockPolicyT, ContainerT>::reset_follower_impl() noexcept(true)
 {
   latched_.reset();
 }

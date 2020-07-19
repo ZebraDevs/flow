@@ -11,7 +11,7 @@
 #include <chrono>
 #include <condition_variable>
 #include <cstdint>
-#include <memory>
+#include <deque>
 #include <mutex>
 #include <thread>
 #include <type_traits>
@@ -26,6 +26,12 @@
 
 namespace flow
 {
+
+/**
+ * @brief Default dispatch container template
+ */
+template <typename DispatchT> using DefaultContainer = std::deque<DispatchT>;
+
 
 /**
  * @brief Stand-in type used to signify that captors will be used in a single-threaded context
@@ -82,7 +88,7 @@ template <typename DispatchT> struct CaptorTraitsFromDispatch
  *
  *        Requires:
  *        - <code>DispatchType</code> : data dispatch object type
- *        - <code>DispatchAllocatorType</code> : allocator for <code>DispatchType</code>
+ *        - <code>DispatchContainerType</code> : container for <code>DispatchType</code>
  *        - <code>value_type</code> : data value type
  *        - <code>stamp_type</code> : sequence stamp type
  *        - <code>size_type</code> : integer sizing type
@@ -101,8 +107,8 @@ public:
   /// Data dispatch type
   using DispatchType = typename CaptorTraits<CaptorT>::DispatchType;
 
-  /// Data dispatch allocator type
-  using DispatchAllocatorType = typename CaptorTraits<CaptorT>::DispatchAllocatorType;
+  /// Data dispatch container type
+  using DispatchContainerType = typename CaptorTraits<CaptorT>::DispatchContainerType;
 
   /// Data stamp type
   using stamp_type = typename CaptorTraits<CaptorT>::stamp_type;
@@ -121,9 +127,9 @@ public:
    * @brief Full setup constructor
    *
    * @param capacity  maximum buffer capacity
-   * @param alloc  dispatch allocator type for underlying queue
+   * @param container  dispatch container type for underlying queue
    */
-  explicit CaptorInterface(const size_type capacity, const DispatchAllocatorType& alloc);
+  explicit CaptorInterface(const size_type capacity, const DispatchContainerType& container);
 
   /**
    * @brief Clears all captor data and resets all states
@@ -289,9 +295,9 @@ public:
   }
 
   /**
-   * @brief Returns the allocator associated with the underlying dispatch queue
+   * @brief Returns the container associated with the underlying dispatch queue
    */
-  inline DispatchAllocatorType get_allocator() const noexcept { return queue_.get_allocator(); }
+  inline const DispatchContainerType& get_container() const noexcept { return queue_.get_container(); }
 
   // Sanity check to ensure that DispatchType is copyable
   FLOW_STATIC_ASSERT(std::is_copy_constructible<DispatchType>(), "'DispatchType' must be a copyable type");
@@ -307,7 +313,7 @@ protected:
   template <typename... InsertArgTs> inline void insert_and_limit(InsertArgTs&&... args);
 
   /// Data dispatch queue
-  DispatchQueue<DispatchType, DispatchAllocatorType> queue_;
+  DispatchQueue<DispatchType, DispatchContainerType> queue_;
 
   /// Buffered data capacity
   size_type capacity_;
@@ -330,8 +336,8 @@ public:
   /// Data dispatch type
   using DispatchType = typename CaptorTraits<CaptorT>::DispatchType;
 
-  /// Data dispatch allocator type
-  using DispatchAllocatorType = typename CaptorTraits<CaptorT>::DispatchAllocatorType;
+  /// Data dispatch container type
+  using DispatchContainerType = typename CaptorTraits<CaptorT>::DispatchContainerType;
 
   /// Data stamp type
   using stamp_type = typename CaptorTraits<CaptorT>::stamp_type;
@@ -345,11 +351,11 @@ public:
   Captor();
 
   /**
-   * @brief Dispatch allocator constructor
+   * @brief Dispatch container constructor
    *
-   * @param alloc  allocator object with some initial state
+   * @param container  container object with some initial state
    */
-  explicit Captor(const DispatchAllocatorType& alloc);
+  explicit Captor(const DispatchContainerType& container);
 
   /**
    * @brief Destructor
