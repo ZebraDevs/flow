@@ -21,9 +21,9 @@ template <typename CaptorT> CaptorInterface<CaptorT>::CaptorInterface(const size
 
 
 template <typename CaptorT>
-CaptorInterface<CaptorT>::CaptorInterface(const size_type capacity, const DispatchAllocatorType& alloc) :
+CaptorInterface<CaptorT>::CaptorInterface(const size_type capacity, const DispatchContainerType& container) :
     capacity_{capacity},
-    queue_{alloc}
+    queue_{container}
 {}
 
 

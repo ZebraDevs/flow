@@ -22,13 +22,13 @@ namespace flow
  *
  *        FILO-type queue which orders data by sequence stamp, from oldest to newest. Provides
  *        useful methods for extracting data within stamped/counted ranges
- *
- *        This container is based on an <code>std::deque</code> and is allocator-aware
+ * \n
+ *        This template provides an interface wrapper around a specifiable container implementation.
  *
  * @tparam DispatchT  data dipatch type
- * @tparam AllocatorT <code>DispatchT</code> allocator type
+ * @tparam ContainerT  underlying <code>DispatchT</code> container timplementation
  */
-template <typename DispatchT, typename AllocatorT = std::allocator<DispatchT>> class DispatchQueue
+template <typename DispatchT, typename ContainerT = std::deque<DispatchT>> class DispatchQueue
 {
 public:
   /// Dispatch stamp type
@@ -37,17 +37,14 @@ public:
   /// Dispatch data value type
   using value_type = typename DispatchTraits<DispatchT>::value_type;
 
-  /// Underlying container alias
-  using BaseContainerType = std::deque<DispatchT>;
-
   /// Sizing type alias
-  using size_type = typename BaseContainerType::size_type;
+  using size_type = typename ContainerT::size_type;
 
   /// Iterator type for container Dispatch elements
-  using const_iterator = typename BaseContainerType::const_iterator;
+  using const_iterator = typename ContainerT::const_iterator;
 
   /// Iterator type for container Dispatch elements
-  using const_reverse_iterator = typename BaseContainerType::const_reverse_iterator;
+  using const_reverse_iterator = typename ContainerT::const_reverse_iterator;
 
   /**
    * @brief Default construtor
@@ -57,7 +54,7 @@ public:
   /**
    * @brief Allocator construtor
    */
-  explicit DispatchQueue(const AllocatorT& alloc);
+  explicit DispatchQueue(const ContainerT& container);
 
   /**
    * @brief Returns the number queued elements
@@ -65,7 +62,10 @@ public:
   inline size_type size() const;
 
   /**
-   * @brief Returns the number queued elements
+   * @brief Checks if queue is empty
+   *
+   * @retval true  if not elements remain in queue
+   * @retval false  otherwise
    */
   inline bool empty() const;
 
@@ -73,25 +73,25 @@ public:
    * @brief Returns first iterator to underlying ordered data structure
    * @return <code>const_iterator</code> to first Dispatch resource
    */
-  inline const_iterator begin() const { return queue_.cbegin(); }
+  inline const_iterator begin() const { return container_.cbegin(); }
 
   /**
    * @brief Returns last iterator to underlying ordered data structure
    * @return <code>const_iterator</code> to one element past Dispatch resource
    */
-  inline const_iterator end() const { return queue_.cend(); }
+  inline const_iterator end() const { return container_.cend(); }
 
   /**
    * @brief Returns first iterator to reversed underlying ordered data structure
    * @return <code>const_reverse_iterator</code> to first Dispatch resource
    */
-  inline const_reverse_iterator rbegin() const { return queue_.crbegin(); }
+  inline const_reverse_iterator rbegin() const { return container_.crbegin(); }
 
   /**
    * @brief Returns last iterator to reversed underlying ordered data structure
    * @return <code>const_reverse_iterator</code> to one element past Dispatch resource
    */
-  inline const_reverse_iterator rend() const { return queue_.crend(); }
+  inline const_reverse_iterator rend() const { return container_.crend(); }
 
   /**
    * @brief Sequencing stamp associated with the oldest data
@@ -99,7 +99,7 @@ public:
    *
    * @warning Undefined behavior when <code>empty() == true</code>
    */
-  inline stamp_type oldest_stamp() const { return get_stamp(queue_.front()); }
+  inline stamp_type oldest_stamp() const { return get_stamp(container_.front()); }
 
   /**
    * @brief Sequencing stamp associated with the newest data
@@ -107,7 +107,7 @@ public:
    *
    * @warning Undefined behavior when <code>empty() == true</code>
    */
-  inline stamp_type newest_stamp() const { return get_stamp(queue_.back()); }
+  inline stamp_type newest_stamp() const { return get_stamp(container_.back()); }
 
   /**
    * @brief Removes the oldest element and returns associated Dispatch
@@ -139,7 +139,7 @@ public:
    *
    * @param n  lower bound on total container size
    */
-  inline void shrink_to_fit(size_type n);
+  inline void shrink_to_fit(const size_type n);
 
   /**
    * @brief Inserts data in sequence stamp order as Dispatch
@@ -151,13 +151,13 @@ public:
   template <typename... DispatchConstructorArgTs> inline void insert(DispatchConstructorArgTs&&... dispatch_args);
 
   /**
-   * @brief Returns the allocator associated with the container
+   * @brief Returns the underlying storage container
    */
-  inline AllocatorT get_allocator() const noexcept;
+  inline const ContainerT& get_container() const noexcept;
 
 private:
   /// Queued data dispatches
-  BaseContainerType queue_;
+  ContainerT container_;
 };
 
 }  // namespace flow

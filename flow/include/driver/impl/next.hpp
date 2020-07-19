@@ -12,14 +12,14 @@ namespace flow
 namespace driver
 {
 
-template <typename DispatchT, typename LockPolicyT, typename AllocatorT>
-Next<DispatchT, LockPolicyT, AllocatorT>::Next(const AllocatorT& alloc) noexcept(false) : PolicyType{alloc}
+template <typename DispatchT, typename LockPolicyT, typename ContainerT>
+Next<DispatchT, LockPolicyT, ContainerT>::Next(const ContainerT& container) noexcept(false) : PolicyType{container}
 {}
 
 
-template <typename DispatchT, typename LockPolicyT, typename AllocatorT>
+template <typename DispatchT, typename LockPolicyT, typename ContainerT>
 template <typename OutputDispatchIteratorT>
-State Next<DispatchT, LockPolicyT, AllocatorT>::capture_driver_impl(
+State Next<DispatchT, LockPolicyT, ContainerT>::capture_driver_impl(
   OutputDispatchIteratorT output,
   CaptureRange<stamp_type>& range)
 {
@@ -35,8 +35,8 @@ State Next<DispatchT, LockPolicyT, AllocatorT>::capture_driver_impl(
 }
 
 
-template <typename DispatchT, typename LockPolicyT, typename AllocatorT>
-State Next<DispatchT, LockPolicyT, AllocatorT>::dry_capture_driver_impl(CaptureRange<stamp_type>& range) const
+template <typename DispatchT, typename LockPolicyT, typename ContainerT>
+State Next<DispatchT, LockPolicyT, ContainerT>::dry_capture_driver_impl(CaptureRange<stamp_type>& range) const
 {
   if (PolicyType::queue_.empty())
   {
@@ -52,8 +52,8 @@ State Next<DispatchT, LockPolicyT, AllocatorT>::dry_capture_driver_impl(CaptureR
 }
 
 
-template <typename DispatchT, typename LockPolicyT, typename AllocatorT>
-void Next<DispatchT, LockPolicyT, AllocatorT>::abort_driver_impl(const stamp_type& t_abort)
+template <typename DispatchT, typename LockPolicyT, typename ContainerT>
+void Next<DispatchT, LockPolicyT, ContainerT>::abort_driver_impl(const stamp_type& t_abort)
 {
   PolicyType::queue_.remove_before(t_abort);
 }

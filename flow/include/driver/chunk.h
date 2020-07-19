@@ -7,10 +7,6 @@
 #ifndef FLOW_DRIVER_CHUNK_H
 #define FLOW_DRIVER_CHUNK_H
 
-// C++ Standard Library
-#include <memory>
-#include <vector>
-
 // Flow
 #include <flow/captor.h>
 #include <flow/dispatch.h>
@@ -31,11 +27,11 @@ namespace driver
  * @tparam DispatchT  data dispatch type
  * @tparam LockPolicyT  a BasicLockable (https://en.cppreference.com/w/cpp/named_req/BasicLockable) object or NoLock or
  * PollingLock
- * @tparam AllocatorT  <code>DispatchT</code> allocator type
+ * @tparam ContainerT  underlying <code>DispatchT</code> container type
  * @tparam CaptureOutputT  captured output container type
  */
-template <typename DispatchT, typename LockPolicyT = NoLock, typename AllocatorT = std::allocator<DispatchT>>
-class Chunk : public Driver<Chunk<DispatchT, LockPolicyT, AllocatorT>>
+template <typename DispatchT, typename LockPolicyT = NoLock, typename ContainerT = DefaultContainer<DispatchT>>
+class Chunk : public Driver<Chunk<DispatchT, LockPolicyT, ContainerT>>
 {
 public:
   /// Integer size type
@@ -52,21 +48,21 @@ public:
    * @throws <code>std::invalid_argument</code> if <code>size == 0</code>
    * @throws <code>std::invalid_argument</code> if <code>CaptureOutputT</code> cannot hold \p size
    */
-  explicit Chunk(size_type size) noexcept(false);
+  explicit Chunk(const size_type size) noexcept(false);
 
   /**
    * @brief Configuration constructor
    *
    * @param size  number of elements to batch before becoming ready
-   * @param alloc  dispatch object allocator with some initial state
+   * @param container  dispatch object container (non-default initialization)
    *
    * @throws <code>std::invalid_argument</code> if <code>size == 0</code>
    * @throws <code>std::invalid_argument</code> if <code>CaptureOutputT</code> cannot hold \p size
    */
-  explicit Chunk(size_type size, const AllocatorT& alloc) noexcept(false);
+  explicit Chunk(const size_type size, const ContainerT& container) noexcept(false);
 
 private:
-  using PolicyType = Driver<Chunk<DispatchT, LockPolicyT, AllocatorT>>;
+  using PolicyType = Driver<Chunk<DispatchT, LockPolicyT, ContainerT>>;
   friend PolicyType;
 
   /**
@@ -114,14 +110,14 @@ private:
  * @tparam DispatchT  data dispatch type
  * @tparam LockPolicyT  a BasicLockable (https://en.cppreference.com/w/cpp/named_req/BasicLockable) object or NoLock or
  * PollingLock
- * @tparam AllocatorT  <code>DispatchT</code> allocator type
+ * @tparam ContainerT  underlying <code>DispatchT</code> container type
  * @tparam CaptureOutputT  output capture container type
  */
-template <typename DispatchT, typename LockPolicyT, typename AllocatorT>
-struct CaptorTraits<driver::Chunk<DispatchT, LockPolicyT, AllocatorT>> : CaptorTraitsFromDispatch<DispatchT>
+template <typename DispatchT, typename LockPolicyT, typename ContainerT>
+struct CaptorTraits<driver::Chunk<DispatchT, LockPolicyT, ContainerT>> : CaptorTraitsFromDispatch<DispatchT>
 {
-  /// Dispatch object allocation type
-  using DispatchAllocatorType = AllocatorT;
+  /// Underlying dispatch container type
+  using DispatchContainerType = ContainerT;
 
   /// Thread locking policy type
   using LockPolicyType = LockPolicyT;

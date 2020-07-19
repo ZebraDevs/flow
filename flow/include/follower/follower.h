@@ -41,8 +41,8 @@ template <typename PolicyT>
 class Follower : public Captor<Follower<PolicyT>, typename CaptorTraits<PolicyT>::LockPolicyType>
 {
 public:
-  /// Data dispatch allocator type
-  using DispatchAllocatorType = typename CaptorTraits<PolicyT>::DispatchAllocatorType;
+  /// Underlying dispatch container type
+  using DispatchContainerType = typename CaptorTraits<PolicyT>::DispatchContainerType;
 
   /// Data stamp type
   using stamp_type = typename CaptorTraits<PolicyT>::stamp_type;
@@ -54,9 +54,9 @@ public:
 
   /**
    * @brief Timeout specification constructor
-   * @param alloc  dispatch object allocator with some initial state
+   * @param container  dispatch object container (non-default initialization)
    */
-  explicit Follower(const DispatchAllocatorType& alloc);
+  explicit Follower(const DispatchContainerType& container);
 
 private:
   /**

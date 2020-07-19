@@ -30,8 +30,8 @@ public:
   /// Data dispatch type
   using DispatchType = typename CaptorTraits<CaptorT>::DispatchType;
 
-  /// Data dispatch allocator type
-  using DispatchAllocatorType = typename CaptorTraits<CaptorT>::DispatchAllocatorType;
+  /// Underlying dispatch container type
+  using DispatchContainerType = typename CaptorTraits<CaptorT>::DispatchContainerType;
 
   /// Data stamp type
   using stamp_type = typename CaptorTraits<CaptorT>::stamp_type;
@@ -47,13 +47,13 @@ public:
   Captor() : CaptorInterfaceType{0UL} {}
 
   /**
-   * @brief Dispatch allocator constructor
+   * @brief Dispatch container constructor
    *
-   * @param alloc  allocator object with some initial state
+   * @param container  container object with some initial state
    *
    * @note Initializes data capacity with NO LIMITS on buffer size
    */
-  Captor(const DispatchAllocatorType& alloc) : CaptorInterfaceType{0UL, alloc} {}
+  Captor(const DispatchContainerType& container) : CaptorInterfaceType{0UL, container} {}
 
   /**
    * @brief Destructor

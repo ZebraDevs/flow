@@ -17,8 +17,8 @@ namespace flow
 namespace follower
 {
 
-template <typename DispatchT, typename LockPolicyT, typename AllocatorT>
-CountBefore<DispatchT, LockPolicyT, AllocatorT>::CountBefore(const size_type count, const offset_type& delay) :
+template <typename DispatchT, typename LockPolicyT, typename ContainerT>
+CountBefore<DispatchT, LockPolicyT, ContainerT>::CountBefore(const size_type count, const offset_type& delay) :
     count_{count},
     delay_{delay}
 {
@@ -29,12 +29,12 @@ CountBefore<DispatchT, LockPolicyT, AllocatorT>::CountBefore(const size_type cou
 }
 
 
-template <typename DispatchT, typename LockPolicyT, typename AllocatorT>
-CountBefore<DispatchT, LockPolicyT, AllocatorT>::CountBefore(
+template <typename DispatchT, typename LockPolicyT, typename ContainerT>
+CountBefore<DispatchT, LockPolicyT, ContainerT>::CountBefore(
   const size_type count,
   const offset_type& delay,
-  const AllocatorT& alloc) :
-    PolicyType{alloc},
+  const ContainerT& container) :
+    PolicyType{container},
     count_{count},
     delay_{delay}
 {
@@ -45,9 +45,9 @@ CountBefore<DispatchT, LockPolicyT, AllocatorT>::CountBefore(
 }
 
 
-template <typename DispatchT, typename LockPolicyT, typename AllocatorT>
+template <typename DispatchT, typename LockPolicyT, typename ContainerT>
 template <typename OutputDispatchIteratorT>
-State CountBefore<DispatchT, LockPolicyT, AllocatorT>::capture_follower_impl(
+State CountBefore<DispatchT, LockPolicyT, ContainerT>::capture_follower_impl(
   OutputDispatchIteratorT output,
   const CaptureRange<stamp_type>& range)
 {
@@ -63,8 +63,8 @@ State CountBefore<DispatchT, LockPolicyT, AllocatorT>::capture_follower_impl(
 }
 
 
-template <typename DispatchT, typename LockPolicyT, typename AllocatorT>
-State CountBefore<DispatchT, LockPolicyT, AllocatorT>::dry_capture_follower_impl(const CaptureRange<stamp_type>& range)
+template <typename DispatchT, typename LockPolicyT, typename ContainerT>
+State CountBefore<DispatchT, LockPolicyT, ContainerT>::dry_capture_follower_impl(const CaptureRange<stamp_type>& range)
 {
   // Retry if queue has no data
   if (PolicyType::queue_.empty())

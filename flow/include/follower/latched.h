@@ -26,7 +26,7 @@ namespace follower
  * @tparam DispatchT  data dispatch type
  * @tparam LockPolicyT  a BasicLockable (https://en.cppreference.com/w/cpp/named_req/BasicLockable) object or NoLock or
  * PollingLock
- * @tparam AllocatorT  <code>DispatchT</code> allocator type
+ * @tparam ContainerT  underlying <code>DispatchT</code> container type
  *
  * @note Latched won't behave non-deterministically if actual input period (difference between successive
  *       dispatch stamps) is greater than <code>min_period</code>. However, newer data values will not be captured if
@@ -35,8 +35,8 @@ namespace follower
  * @warn Latched may never enter a READY state if data never becomes available. Calling application may need to
  * implement a synchronization timeout behavior
  */
-template <typename DispatchT, typename LockPolicyT = NoLock, typename AllocatorT = std::allocator<DispatchT>>
-class Latched : public Follower<Latched<DispatchT, LockPolicyT, AllocatorT>>
+template <typename DispatchT, typename LockPolicyT = NoLock, typename ContainerT = DefaultContainer<DispatchT>>
+class Latched : public Follower<Latched<DispatchT, LockPolicyT, ContainerT>>
 {
 public:
   /// Data stamp type
@@ -56,14 +56,14 @@ public:
    * @brief Setup constructor
    *
    * @param min_period  minimum expected difference between data stamps
-   * @param alloc  dispatch object allocator with some initial state
+   * @param container  dispatch object container (non-default initialization)
    *
    * @throw <code>std::invalid_argument</code> if <code>m_after < 1</code>
    */
-  Latched(const offset_type min_period, const AllocatorT& alloc);
+  Latched(const offset_type min_period, const ContainerT& container);
 
 private:
-  using PolicyType = Follower<Latched<DispatchT, LockPolicyT, AllocatorT>>;
+  using PolicyType = Follower<Latched<DispatchT, LockPolicyT, ContainerT>>;
   friend PolicyType;
 
   /**
@@ -114,14 +114,14 @@ private:
  * @tparam DispatchT  data dispatch type
  * @tparam LockPolicyT  a BasicLockable (https://en.cppreference.com/w/cpp/named_req/BasicLockable) object or NoLock or
  * PollingLock
- * @tparam AllocatorT  <code>DispatchT</code> allocator type
+ * @tparam ContainerT  underlying <code>DispatchT</code> container type
  * @tparam CaptureOutputT  output capture container type
  */
-template <typename DispatchT, typename LockPolicyT, typename AllocatorT>
-struct CaptorTraits<follower::Latched<DispatchT, LockPolicyT, AllocatorT>> : CaptorTraitsFromDispatch<DispatchT>
+template <typename DispatchT, typename LockPolicyT, typename ContainerT>
+struct CaptorTraits<follower::Latched<DispatchT, LockPolicyT, ContainerT>> : CaptorTraitsFromDispatch<DispatchT>
 {
-  /// Dispatch object allocation type
-  using DispatchAllocatorType = AllocatorT;
+  /// Underlying dispatch container type
+  using DispatchContainerType = ContainerT;
 
   /// Thread locking policy type
   using LockPolicyType = LockPolicyT;

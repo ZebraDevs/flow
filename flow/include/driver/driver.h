@@ -41,8 +41,8 @@ template <typename PolicyT>
 class Driver : public Captor<Driver<PolicyT>, typename CaptorTraits<PolicyT>::LockPolicyType>
 {
 public:
-  /// Data dispatch allocator type
-  using DispatchAllocatorType = typename CaptorTraits<PolicyT>::DispatchAllocatorType;
+  /// Underlying dispatch container type
+  using DispatchContainerType = typename CaptorTraits<PolicyT>::DispatchContainerType;
 
   /// Data stamp type
   using stamp_type = typename CaptorTraits<PolicyT>::stamp_type;
@@ -53,10 +53,10 @@ public:
   Driver();
 
   /**
-   * @brief Dispatch allocator constructor
-   * @param alloc  dispatch object allocator with some initial state
+   * @brief Dispatch container constructor
+   * @param container  dispatch object container (non-default initialization)
    */
-  explicit Driver(const DispatchAllocatorType& alloc);
+  explicit Driver(const DispatchContainerType& container);
 
 private:
   /**

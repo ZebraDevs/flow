@@ -14,44 +14,44 @@
 namespace flow
 {
 
-template <typename DispatchT, typename AllocatorT>
-DispatchQueue<DispatchT, AllocatorT>::DispatchQueue(const AllocatorT& alloc) : queue_{alloc}
+template <typename DispatchT, typename ContainerT>
+DispatchQueue<DispatchT, ContainerT>::DispatchQueue(const ContainerT& container) : container_{container}
 {}
 
-template <typename DispatchT, typename AllocatorT>
-typename DispatchQueue<DispatchT, AllocatorT>::size_type DispatchQueue<DispatchT, AllocatorT>::size() const
+template <typename DispatchT, typename ContainerT>
+typename DispatchQueue<DispatchT, ContainerT>::size_type DispatchQueue<DispatchT, ContainerT>::size() const
 {
-  return queue_.size();
+  return container_.size();
 }
 
 
-template <typename DispatchT, typename AllocatorT> bool DispatchQueue<DispatchT, AllocatorT>::empty() const
+template <typename DispatchT, typename ContainerT> bool DispatchQueue<DispatchT, ContainerT>::empty() const
 {
   return !size();
 }
 
 
-template <typename DispatchT, typename AllocatorT>
+template <typename DispatchT, typename ContainerT>
 template <typename... DispatchConstructorArgTs>
-void DispatchQueue<DispatchT, AllocatorT>::insert(DispatchConstructorArgTs&&... dispatch_args)
+void DispatchQueue<DispatchT, ContainerT>::insert(DispatchConstructorArgTs&&... dispatch_args)
 {
   DispatchT dispatch{std::forward<DispatchConstructorArgTs>(dispatch_args)...};
 
   // If data to add is ordered with respect to current queue,
   // add to back (as newest element)
-  if (queue_.empty() or (get_stamp(queue_.back()) < get_stamp(dispatch)))
+  if (container_.empty() or (get_stamp(container_.back()) < get_stamp(dispatch)))
   {
-    queue_.emplace_back(std::move(dispatch));
+    container_.emplace_back(std::move(dispatch));
     return;
   }
 
   // Find next best placement
-  auto qitr = queue_.end();
+  auto qitr = container_.end();
   while (get_stamp(*(--qitr)) > get_stamp(dispatch))
   {
-    if (qitr == queue_.begin())
+    if (qitr == container_.begin())
     {
-      queue_.emplace_front(std::move(dispatch));
+      container_.emplace_front(std::move(dispatch));
       return;
     }
   }
@@ -59,58 +59,59 @@ void DispatchQueue<DispatchT, AllocatorT>::insert(DispatchConstructorArgTs&&... 
   // Insert only if this element does not duplicate an existing element
   if (get_stamp(*qitr) != get_stamp(dispatch))
   {
-    queue_.emplace(std::next(qitr), std::move(dispatch));
+    container_.emplace(std::next(qitr), std::move(dispatch));
   }
 }
 
 
-template <typename DispatchT, typename AllocatorT> DispatchT DispatchQueue<DispatchT, AllocatorT>::pop()
+template <typename DispatchT, typename ContainerT> DispatchT DispatchQueue<DispatchT, ContainerT>::pop()
 {
-  const auto retval = std::move(queue_.front());
-  queue_.pop_front();
+  const auto retval = std::move(container_.front());
+  container_.pop_front();
   return retval;
 }
 
 
-template <typename DispatchT, typename AllocatorT> void DispatchQueue<DispatchT, AllocatorT>::clear()
+template <typename DispatchT, typename ContainerT> void DispatchQueue<DispatchT, ContainerT>::clear()
 {
-  queue_.clear();
+  container_.clear();
 }
 
 
-template <typename DispatchT, typename AllocatorT>
-void DispatchQueue<DispatchT, AllocatorT>::remove_before(const stamp_type& t)
+template <typename DispatchT, typename ContainerT>
+void DispatchQueue<DispatchT, ContainerT>::remove_before(const stamp_type& t)
 {
-  while (!queue_.empty() and get_stamp(queue_.front()) < t)
+  while (!container_.empty() and get_stamp(container_.front()) < t)
   {
-    queue_.pop_front();
+    container_.pop_front();
   }
 }
 
 
-template <typename DispatchT, typename AllocatorT>
-void DispatchQueue<DispatchT, AllocatorT>::remove_at_before(const stamp_type& t)
+template <typename DispatchT, typename ContainerT>
+void DispatchQueue<DispatchT, ContainerT>::remove_at_before(const stamp_type& t)
 {
-  while (!queue_.empty() and get_stamp(queue_.front()) <= t)
+  while (!container_.empty() and get_stamp(container_.front()) <= t)
   {
-    queue_.pop_front();
+    container_.pop_front();
   }
 }
 
 
-template <typename DispatchT, typename AllocatorT> void DispatchQueue<DispatchT, AllocatorT>::shrink_to_fit(size_type n)
+template <typename DispatchT, typename ContainerT>
+void DispatchQueue<DispatchT, ContainerT>::shrink_to_fit(const size_type n)
 {
-  while (queue_.size() > n)
+  while (container_.size() > n)
   {
-    queue_.pop_front();
+    container_.pop_front();
   }
 }
 
 
-template <typename DispatchT, typename AllocatorT>
-AllocatorT DispatchQueue<DispatchT, AllocatorT>::get_allocator() const noexcept
+template <typename DispatchT, typename ContainerT>
+const ContainerT& DispatchQueue<DispatchT, ContainerT>::get_container() const noexcept
 {
-  return queue_.get_allocator();
+  return container_.get_container();
 }
 
 }  // namespace flow

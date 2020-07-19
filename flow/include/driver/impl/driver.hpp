@@ -19,7 +19,7 @@ namespace flow
 template <typename PolicyT> Driver<PolicyT>::Driver() : CaptorType{} {}
 
 
-template <typename PolicyT> Driver<PolicyT>::Driver(const DispatchAllocatorType& alloc) : CaptorType{alloc} {}
+template <typename PolicyT> Driver<PolicyT>::Driver(const DispatchContainerType& container) : CaptorType{container} {}
 
 
 template <typename PolicyT>

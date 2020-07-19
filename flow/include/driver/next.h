@@ -7,10 +7,6 @@
 #ifndef FLOW_DRIVER_NEXT_H
 #define FLOW_DRIVER_NEXT_H
 
-// C++ Standard Library
-#include <memory>
-#include <vector>
-
 // Flow
 #include <flow/captor.h>
 #include <flow/dispatch.h>
@@ -30,11 +26,11 @@ namespace driver
  * @tparam DispatchT  data dispatch type
  * @tparam LockPolicyT  a BasicLockable (https://en.cppreference.com/w/cpp/named_req/BasicLockable) object or NoLock or
  * PollingLock
- * @tparam AllocatorT  <code>DispatchT</code> allocator type
+ * @tparam ContainerT  underlying <code>DispatchT</code> container type
  * @tparam CaptureOutputT  captured output container type
  */
-template <typename DispatchT, typename LockPolicyT = NoLock, typename AllocatorT = std::allocator<DispatchT>>
-class Next : public Driver<Next<DispatchT, LockPolicyT, AllocatorT>>
+template <typename DispatchT, typename LockPolicyT = NoLock, typename ContainerT = DefaultContainer<DispatchT>>
+class Next : public Driver<Next<DispatchT, LockPolicyT, ContainerT>>
 {
 public:
   /// Integer size type
@@ -50,12 +46,12 @@ public:
 
   /**
    * @brief Configuration constructor
-   * @param alloc  dispatch object allocator with some initial state
+   * @param container  dispatch object container (non-default initialization)
    */
-  explicit Next(const AllocatorT& alloc);
+  explicit Next(const ContainerT& container);
 
 private:
-  using PolicyType = Driver<Next<DispatchT, LockPolicyT, AllocatorT>>;
+  using PolicyType = Driver<Next<DispatchT, LockPolicyT, ContainerT>>;
   friend PolicyType;
 
   /**
@@ -95,14 +91,14 @@ private:
  * @tparam DispatchT  data dispatch type
  * @tparam LockPolicyT  a BasicLockable (https://en.cppreference.com/w/cpp/named_req/BasicLockable) object or NoLock or
  * PollingLock
- * @tparam AllocatorT  <code>DispatchT</code> allocator type
+ * @tparam ContainerT  underlying <code>DispatchT</code> container type
  * @tparam CaptureOutputT  output capture container type
  */
-template <typename DispatchT, typename LockPolicyT, typename AllocatorT>
-struct CaptorTraits<driver::Next<DispatchT, LockPolicyT, AllocatorT>> : CaptorTraitsFromDispatch<DispatchT>
+template <typename DispatchT, typename LockPolicyT, typename ContainerT>
+struct CaptorTraits<driver::Next<DispatchT, LockPolicyT, ContainerT>> : CaptorTraitsFromDispatch<DispatchT>
 {
-  /// Dispatch object allocation type
-  using DispatchAllocatorType = AllocatorT;
+  /// Underlying dispatch container type
+  using DispatchContainerType = ContainerT;
 
   /// Thread locking policy type
   using LockPolicyType = LockPolicyT;

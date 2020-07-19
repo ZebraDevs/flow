@@ -19,7 +19,8 @@ namespace flow
 template <typename PolicyT> Follower<PolicyT>::Follower() : CaptorType{} {}
 
 
-template <typename PolicyT> Follower<PolicyT>::Follower(const DispatchAllocatorType& alloc) : CaptorType{alloc} {}
+template <typename PolicyT> Follower<PolicyT>::Follower(const DispatchContainerType& container) : CaptorType{container}
+{}
 
 
 template <typename PolicyT>

@@ -23,11 +23,11 @@ namespace follower
  * @tparam DispatchT  data dispatch type
  * @tparam LockPolicyT  a BasicLockable (https://en.cppreference.com/w/cpp/named_req/BasicLockable) object or NoLock or
  * PollingLock
- * @tparam AllocatorT  <code>DispatchT</code> allocator type
+ * @tparam ContainerT  underlying <code>DispatchT</code> container type
  * @tparam CaptureOutputT  captured output container type
  */
-template <typename DispatchT, typename LockPolicyT = NoLock, typename AllocatorT = std::allocator<DispatchT>>
-class MatchedStamp : public Follower<MatchedStamp<DispatchT, LockPolicyT, AllocatorT>>
+template <typename DispatchT, typename LockPolicyT = NoLock, typename ContainerT = DefaultContainer<DispatchT>>
+class MatchedStamp : public Follower<MatchedStamp<DispatchT, LockPolicyT, ContainerT>>
 {
 public:
   /// Data stamp type
@@ -40,12 +40,12 @@ public:
 
   /**
    * @brief Setup constructor
-   * @param alloc  dispatch object allocator with some initial state
+   * @param container  dispatch object container (non-default initialization)
    */
-  explicit MatchedStamp(const AllocatorT& alloc);
+  explicit MatchedStamp(const ContainerT& container);
 
 private:
-  using PolicyType = Follower<MatchedStamp<DispatchT, LockPolicyT, AllocatorT>>;
+  using PolicyType = Follower<MatchedStamp<DispatchT, LockPolicyT, ContainerT>>;
   friend PolicyType;
 
   /**
@@ -89,14 +89,14 @@ private:
  * @tparam DispatchT  data dispatch type
  * @tparam LockPolicyT  a BasicLockable (https://en.cppreference.com/w/cpp/named_req/BasicLockable) object or NoLock or
  * PollingLock
- * @tparam AllocatorT  <code>DispatchT</code> allocator type
+ * @tparam ContainerT  underlying <code>DispatchT</code> container type
  * @tparam CaptureOutputT  output capture container type
  */
-template <typename DispatchT, typename LockPolicyT, typename AllocatorT>
-struct CaptorTraits<follower::MatchedStamp<DispatchT, LockPolicyT, AllocatorT>> : CaptorTraitsFromDispatch<DispatchT>
+template <typename DispatchT, typename LockPolicyT, typename ContainerT>
+struct CaptorTraits<follower::MatchedStamp<DispatchT, LockPolicyT, ContainerT>> : CaptorTraitsFromDispatch<DispatchT>
 {
-  /// Dispatch object allocation type
-  using DispatchAllocatorType = AllocatorT;
+  /// Underlying dispatch container type
+  using DispatchContainerType = ContainerT;
 
   /// Thread locking policy type
   using LockPolicyType = LockPolicyT;
