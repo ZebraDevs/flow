@@ -12,7 +12,7 @@ Documentation for latest version available [here](https://fetchrobotics.github.i
 
 This library is meant for generating groups of data from separate series. The core problems it is meant to address are:
 
-- How do we know what elements of data across multiple input streams relate to one other?
+- How do we know which elements of data relate to one other across multiple series?
 - How do we know when this data is ready to be retrieved ("captured") for further use?
 - How do we capture different types of data uniformly and with minimal overhead?
 
