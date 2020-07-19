@@ -17,7 +17,7 @@ namespace flow
 {
 
 /**
- * @brief Output stream overload for <code>Dispatch</code> codes
+ * @brief Output stream overload for <code>Dispatch</code>
  * @param[in,out] os  output stream
  * @param dispatch  dispatch object
  * @return os
@@ -30,7 +30,7 @@ inline std::ostream& operator<<(std::ostream& os, const Dispatch<StampT, ValueT>
 
 
 /**
- * @brief Output stream overload for <code>CaptureRange</code> codes
+ * @brief Output stream overload for <code>CaptureRange</code>
  *
  * @param[in,out] os  output stream
  * @param range  capture stamp range
