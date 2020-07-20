@@ -294,11 +294,6 @@ public:
     return derived()->inspect_impl(std::forward<InpectCallbackT>(inspect_dispatch_cb));
   }
 
-  /**
-   * @brief Returns the container associated with the underlying dispatch queue
-   */
-  inline const DispatchContainerType& get_container() const noexcept { return queue_.get_container(); }
-
   // Sanity check to ensure that DispatchType is copyable
   FLOW_STATIC_ASSERT(std::is_copy_constructible<DispatchType>(), "'DispatchType' must be a copyable type");
 
