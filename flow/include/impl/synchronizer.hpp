@@ -269,9 +269,6 @@ struct captor_sequence_valid<TupleLikeTmpl<DriverT, FollowerTs...>>
 #endif  // DOXYGEN_SKIP
 
 
-#define FLOW_STATIC_ASSERT_EMPH(msg) "\n\n--->\n\n" msg "\n\n<---\n\n"
-
-
 template <typename CaptorTupleT, typename OutputIteratorTupleT, typename ClockT, typename DurationT>
 typename Synchronizer::result_t<CaptorTupleT> Synchronizer::capture(
   CaptorTupleT&& captors,
