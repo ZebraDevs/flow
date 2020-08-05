@@ -22,6 +22,8 @@ In addressing these problems, this library enables data-driven event execution u
 
 At Fetch Robotics Inc., this library is used in tandem with ROS. ROS subscribers are used to feed data into `Flow` capture buffers with light message feeding callbacks. The callbacks transfer ROS messages into the appropriate `Flow` capture buffer. `Flow` entities are serviced separately to compute events from these messages. The resulting data frames from synchronization contain all messages needed to run a particular task. In this way, messages are also used as a pace-setting mechanism for core execution blocks.
 
+Check out the [Flow-ROS](https://github.com/fetchrobotics/flow_ros) wrapper library for more details.
+
 ## Components
 
 ### Captors
