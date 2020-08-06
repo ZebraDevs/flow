@@ -160,16 +160,14 @@ private:
    * @note participates in overload resolution if <code>T</code> can be trivially destroyed,
    *       e.g. held object is a POD type
    */
-  template<bool U = std::is_trivially_destructible<T>::value>
-  constexpr std::enable_if_t<U> destroy() {}
+  template <bool U = std::is_trivially_destructible<T>::value> constexpr std::enable_if_t<U> destroy() {}
 
   /**
    * @brief Calls deconstructor if optional object is set
    *
    * @note participates in overload resolution if <code>T</code> cannot be trivially destroyed
    */
-  template<bool U = std::is_trivially_destructible<T>::value>
-  inline std::enable_if_t<!U> destroy()
+  template <bool U = std::is_trivially_destructible<T>::value> inline std::enable_if_t<!U> destroy()
   {
     if (valid_)
     {
