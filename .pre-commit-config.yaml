@@ -1,7 +1,9 @@
 repos:
--   repo: git://github.com/doublify/pre-commit-clang-format
-    rev: 'f4c4ac5948aff384af2b439bfabb2bdd65d2b3ac'
+-   repo: local
     hooks:
     -   id: clang-format
+        name: clang-format-7
+        entry: clang-format-7 -i
+        language: system
         files: \.(c|cc|cxx|cpp|h|hpp|hxx)$
         args: [--style=file]
