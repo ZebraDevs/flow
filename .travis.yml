@@ -10,7 +10,6 @@ addons:
       - ubuntu-toolchain-r-test
     packages:
       - curl
-      - clang-format
       - gnupg
       - pkg-config
 
@@ -20,6 +19,7 @@ jobs:
     script: pre-commit run -a
     before_install:
       - pip install pre-commit
+      - sudo apt install clang-format-7
   - stage: unit_tests
     script: bazel test //flow/test/...
     before_install:
