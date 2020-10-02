@@ -206,12 +206,14 @@ Captors utilize a `flow::DispatchQueue` for data ordering and retrieval. Users m
 
 | Required method | Description |
 | --------------- | ----------- |
-| `ContainerT::cbegin`  | returns iterator to first immutable element |
-| `ContainerT::cend`  | returns iterator to one past last immutable element |
-| `ContainerT::crbegin`  | returns reverse iterator to last immutable element |
-| `ContainerT::crend` | returns reverse iterator to one past first immutable element
+| `ContainerT::begin/cbegin`  | returns iterator to first immutable element |
+| `ContainerT::end/cend`  | returns iterator to one past last immutable element |
+| `ContainerT::rbegin/crbegin`  | returns reverse iterator to last immutable element |
+| `ContainerT::rend/crend` | returns reverse iterator to one past first immutable element
+| `ContainerT::emplace_front`  | constructs an element, in place, at first position in the container |
 | `ContainerT::emplace_back`  | constructs an element, in place, at last position in the container |
 | `ContainerT::emplace`  | constructs an element, in place, after a specified iterator position |
+| `ContainerT::empty`  | returns `true` if container contains no elements |
 | `ContainerT::size`  | returns the number of elements in the container |
 | `ContainerT::pop_front`  | removes first element in the container |
 | `ContainerT::front`  | returns immutable reference to first element in the container |
