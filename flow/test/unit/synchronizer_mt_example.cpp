@@ -53,15 +53,16 @@ TEST(Synchronizer, UsageExampleExampleMultiThreaded)
   // Setup second following input captor
   BeforeType before_follower{1 /*delay offset*/};
 
-  std::mutex progress_mutex;
+  std::mutex working_mutex;
   std::condition_variable progress_cv;
 
   static constexpr std::size_t EXPECTED_SYNC_COUNT = 17;
   std::size_t sync_count = 0;
 
+  bool working = true;
+
   // Synchronize
   std::thread synchronizer_thread{[&] {
-    bool working = true;
     while (working)
     {
       // Any iterable container can be used to capture data (even raw buffers!). Capturing through
@@ -85,8 +86,11 @@ TEST(Synchronizer, UsageExampleExampleMultiThreaded)
         ++sync_count;
         if (sync_count == EXPECTED_SYNC_COUNT)
         {
+          {
+            std::lock_guard<std::mutex> lock{working_mutex};
+            working = false;
+          }
           progress_cv.notify_one();
-          working = false;
         }
         break;
       case State::ABORT:
@@ -113,8 +117,13 @@ TEST(Synchronizer, UsageExampleExampleMultiThreaded)
   }
 
   // Wait for sync pogress
-  std::unique_lock<std::mutex> lock{progress_mutex};
-  progress_cv.wait(lock);
+  std::unique_lock<std::mutex> lock{working_mutex};
+
+  // Only wait if still working
+  if (working)
+  {
+    progress_cv.wait(lock);
+  }
 
   // Cancel all data-waits; start a clean slate, if you need to
   Synchronizer::reset(std::forward_as_tuple(next_driver, closest_follower, before_follower));
@@ -149,15 +158,16 @@ TEST(Synchronizer, UsageExampleExampleMultiThreadedPolling)
   // Setup second following input captor
   BeforeType before_follower{1 /*delay offset*/};
 
-  std::mutex progress_mutex;
+  std::mutex working_mutex;
   std::condition_variable progress_cv;
 
   static constexpr std::size_t EXPECTED_SYNC_COUNT = 17;
   std::size_t sync_count = 0;
 
+  bool working = true;
+
   // Synchronize
   std::thread synchronizer_thread{[&] {
-    bool working = true;
     while (working)
     {
       // Any iterable container can be used to capture data (even raw buffers!). Capturing through
@@ -184,8 +194,11 @@ TEST(Synchronizer, UsageExampleExampleMultiThreadedPolling)
         ++sync_count;
         if (sync_count == EXPECTED_SYNC_COUNT)
         {
+          {
+            std::lock_guard<std::mutex> lock{working_mutex};
+            working = false;
+          }
           progress_cv.notify_one();
-          working = false;
         }
         break;
       case State::ABORT:
@@ -212,8 +225,13 @@ TEST(Synchronizer, UsageExampleExampleMultiThreadedPolling)
   }
 
   // Wait for sync pogress
-  std::unique_lock<std::mutex> lock{progress_mutex};
-  progress_cv.wait(lock);
+  std::unique_lock<std::mutex> lock{working_mutex};
+
+  // Only wait if still working
+  if (working)
+  {
+    progress_cv.wait(lock);
+  }
 
   // Cancel all data-waits; start a clean slate, if you need to
   Synchronizer::reset(std::forward_as_tuple(next_driver, closest_follower, before_follower));
