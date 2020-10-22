@@ -125,6 +125,10 @@ struct CaptorTraits<follower::Latched<DispatchT, LockPolicyT, ContainerT>> : Cap
 
   /// Thread locking policy type
   using LockPolicyType = LockPolicyT;
+
+  /// Indicates that data from this captor will NOT always be captured deterministically;
+  /// i.e. is always dependent on when data is injected, and when captrue is executed
+  static constexpr bool is_capture_deterministic = false;
 };
 
 }  // namespace flow

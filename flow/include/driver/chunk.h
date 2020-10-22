@@ -121,7 +121,10 @@ struct CaptorTraits<driver::Chunk<DispatchT, LockPolicyT, ContainerT>> : CaptorT
 
   /// Thread locking policy type
   using LockPolicyType = LockPolicyT;
-  ;
+
+  /// Indicates that data from this captor will always be captured deterministically, so long as data
+  /// injection is monotonically sequenced
+  static constexpr bool is_capture_deterministic = true;
 };
 
 }  // namespace flow
