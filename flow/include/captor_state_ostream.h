@@ -34,6 +34,8 @@ inline std::ostream& operator<<(std::ostream& os, const State state)
     return os << "ABORT";
   case State::TIMEOUT:
     return os << "TIMEOUT";
+  case State::ERROR_DRIVER_LOWER_BOUND_EXCEEDED:
+    return os << "ERROR_DRIVER_LOWER_BOUND_EXCEEDED";
   default:
     return os;
   }

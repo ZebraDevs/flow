@@ -16,6 +16,7 @@
 #include <gtest/gtest.h>
 
 // Flow
+#include <flow/captor_state_ostream.h>
 #include <flow/drivers.h>
 #include <flow/followers.h>
 #include <flow/synchronizer.h>
@@ -168,7 +169,7 @@ TEST_F(SynchronizerTestSuiteST, CaptureDirectCaptureRange)
 }
 
 
-TEST_F(SynchronizerTestSuiteST, CaptureAbortTimeGuard)
+TEST_F(SynchronizerTestSuiteST, CaptureErrorTimeGuard)
 {
   driver->inject(Dispatch<int, int>{10, 10});
   follower1->inject(Dispatch<int, double>{0, 2.0});
@@ -188,7 +189,7 @@ TEST_F(SynchronizerTestSuiteST, CaptureAbortTimeGuard)
     100 /*guard*/);
 
   ASSERT_FALSE(result);
-  ASSERT_EQ(result.state, State::ABORT);
+  ASSERT_EQ(result.state, State::ERROR_DRIVER_LOWER_BOUND_EXCEEDED);
 
   // Inputs may be captured, but capture is aborted after
   ASSERT_FALSE(driver_output_data.empty());

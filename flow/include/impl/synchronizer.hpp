@@ -106,7 +106,7 @@ public:
     // Set aborted state if driving sequence range violates monotonicity guard
     if (result_->state == State::PRIMED and result_->range.upper_stamp < lower_bound_)
     {
-      result_->state = State::ABORT;
+      result_->state = State::ERROR_DRIVER_LOWER_BOUND_EXCEEDED;
     }
   }
 
@@ -129,7 +129,7 @@ public:
     // Set aborted state if driving sequence range violates monotonicity guard
     if (result_->state == State::PRIMED and result_->range.upper_stamp < lower_bound_)
     {
-      result_->state = State::ABORT;
+      result_->state = State::ERROR_DRIVER_LOWER_BOUND_EXCEEDED;
     }
   }
 
