@@ -21,6 +21,7 @@ enum class State : int
   PRIMED,  ///< Captor has captured data and its ready
   ABORT,  ///< Captor has requested to abort current capture attempt
   TIMEOUT,  ///< Captor has hit a data-wait timeout
+  ERROR_DRIVER_LOWER_BOUND_EXCEEDED,  ///< Error code used to indicate that driving violated external lower bound
   _N_STATES,  ///< Total number of captor states
 };
 
