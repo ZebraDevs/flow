@@ -38,25 +38,28 @@ template <typename PolicyT> struct CaptorTraits<Follower<PolicyT>> : CaptorTrait
  * @tparam PolicyT  CRTP-derived captor with specialized capture policy
  */
 template <typename PolicyT>
-class Follower : public Captor<Follower<PolicyT>, typename CaptorTraits<PolicyT>::LockPolicyType>
+class Follower : public Captor<
+                   Follower<PolicyT>,
+                   typename CaptorTraits<PolicyT>::LockPolicyType,
+                   typename CaptorTraits<PolicyT>::DispatchQueueMonitorType>
 {
 public:
   /// Underlying dispatch container type
   using DispatchContainerType = typename CaptorTraits<PolicyT>::DispatchContainerType;
 
+  /// Queue monitor/capture preconditioning type
+  using DispatchQueueMonitorType = typename CaptorTraits<PolicyT>::DispatchQueueMonitorType;
+
   /// Data stamp type
   using stamp_type = typename CaptorTraits<PolicyT>::stamp_type;
 
   /**
-   * @brief Timeout specification constructor
+   * @brief Initialization constructor
+   *
+   * @param container  container object with some initial state
+   * @param queue_monitor  queue monitor with some initial state
    */
-  Follower();
-
-  /**
-   * @brief Timeout specification constructor
-   * @param container  dispatch object container (non-default initialization)
-   */
-  explicit Follower(const DispatchContainerType& container);
+  Follower(const DispatchContainerType& container, const DispatchQueueMonitorType& queue_monitor);
 
 private:
   /**
@@ -92,11 +95,15 @@ private:
 
   FLOW_IMPLEMENT_CRTP_BASE(PolicyT);
 
-  using CaptorType = Captor<Follower, typename CaptorTraits<PolicyT>::LockPolicyType>;
+  using CaptorType = Captor<
+    Follower,
+    typename CaptorTraits<PolicyT>::LockPolicyType,
+    typename CaptorTraits<PolicyT>::DispatchQueueMonitorType>;
   friend CaptorType;
 
 protected:
   using CaptorType::queue_;
+  using CaptorType::queue_monitor_;
 };
 
 

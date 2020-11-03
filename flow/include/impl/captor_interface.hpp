@@ -17,13 +17,14 @@
 namespace flow
 {
 
-template <typename CaptorT> CaptorInterface<CaptorT>::CaptorInterface(const size_type capacity) : capacity_{capacity} {}
-
-
 template <typename CaptorT>
-CaptorInterface<CaptorT>::CaptorInterface(const size_type capacity, const DispatchContainerType& container) :
+CaptorInterface<CaptorT>::CaptorInterface(
+  const size_type capacity,
+  const DispatchContainerType& container,
+  const DispatchQueueMonitorType& queue_monitor) :
     capacity_{capacity},
-    queue_{container}
+    queue_{container},
+    queue_monitor_{queue_monitor}
 {}
 
 
@@ -32,6 +33,7 @@ template <typename... InsertArgTs>
 void CaptorInterface<CaptorT>::insert_and_limit(InsertArgTs&&... args)
 {
   queue_.insert(std::forward<InsertArgTs>(args)...);
+
   if (capacity_)
   {
     queue_.shrink_to_fit(capacity_);

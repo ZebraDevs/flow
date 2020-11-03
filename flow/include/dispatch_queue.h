@@ -34,6 +34,10 @@ public:
   /// Dispatch stamp type
   using stamp_type = typename DispatchTraits<DispatchT>::stamp_type;
 
+  /// Stamp argument type
+  using stamp_const_arg_type =
+    std::conditional_t<sizeof(stamp_type) <= sizeof(stamp_type&), const stamp_type, const stamp_type&>;
+
   /// Dispatch data value type
   using value_type = typename DispatchTraits<DispatchT>::value_type;
 
@@ -70,6 +74,14 @@ public:
   inline bool empty() const;
 
   /**
+   * @brief Returns first iterator to element before stamp
+   *
+   *        Returns <code>end()</code> iterator if
+   * @return <code>const_iterator</code> to first Dispatch resource
+   */
+  inline const_iterator before(stamp_const_arg_type stamp) const;
+
+  /**
    * @brief Returns first iterator to underlying ordered data structure
    * @return <code>const_iterator</code> to first Dispatch resource
    */
@@ -80,6 +92,14 @@ public:
    * @return <code>const_iterator</code> to one element past Dispatch resource
    */
   inline const_iterator end() const { return container_.cend(); }
+
+  /**
+   * @brief Returns first reverse-iterator to element before stamp
+   *
+   *        Returns <code>rend()</code> iterator if
+   * @return <code>const_reverse_iterator</code> to first Dispatch resource
+   */
+  inline const_reverse_iterator rbefore(stamp_const_arg_type stamp) const;
 
   /**
    * @brief Returns first iterator to reversed underlying ordered data structure
@@ -125,14 +145,14 @@ public:
    *
    * @param stamp  lower bound on container sequence stamp
    */
-  inline void remove_before(const stamp_type& t);
+  inline void remove_before(stamp_const_arg_type t);
 
   /**
    * @brief Removes data with stamp older than or equal to some reference sequence stamp
    *
    * @param stamp  lower bound on container sequence stamp
    */
-  inline void remove_at_before(const stamp_type& t);
+  inline void remove_at_before(stamp_const_arg_type t);
 
   /**
    * @brief Removes oldest data until queue has less than or equal to N-elements

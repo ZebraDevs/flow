@@ -21,7 +21,8 @@ namespace flow
  * @copydoc Captor
  * @note No-lock captor implementation meant for polling with <code>Captor::capture</code>.
  */
-template <typename CaptorT> class Captor<CaptorT, NoLock> : public CaptorInterface<Captor<CaptorT, NoLock>>
+template <typename CaptorT, typename QueueMonitorT>
+class Captor<CaptorT, NoLock, QueueMonitorT> : public CaptorInterface<Captor<CaptorT, NoLock, QueueMonitorT>>
 {
 public:
   /// Data dispatch type
@@ -37,20 +38,16 @@ public:
   using size_type = typename CaptorTraits<CaptorT>::size_type;
 
   /**
-   * @brief Default constructor
-   *
-   * @note Initializes data capacity with NO LIMITS on buffer size
-   */
-  Captor() : CaptorInterfaceType{0UL} {}
-
-  /**
    * @brief Dispatch container constructor
    *
    * @param container  container object with some initial state
+   * @param queue_monitor  custom implementation for checking the state of the queue and preconditioning capture
    *
    * @note Initializes data capacity with NO LIMITS on buffer size
    */
-  Captor(const DispatchContainerType& container) : CaptorInterfaceType{0UL, container} {}
+  Captor(const DispatchContainerType& container, const QueueMonitorT& queue_monitor) :
+      CaptorInterfaceType{0UL, container, queue_monitor}
+  {}
 
   /**
    * @brief Destructor
@@ -160,7 +157,7 @@ private:
     }
   }
 
-  using CaptorInterfaceType = CaptorInterface<Captor<CaptorT, NoLock>>;
+  using CaptorInterfaceType = CaptorInterface<Captor<CaptorT, NoLock, QueueMonitorT>>;
   friend CaptorInterfaceType;
 
   FLOW_IMPLEMENT_CRTP_BASE(CaptorT);

@@ -28,7 +28,8 @@ struct ResetHelper
   /// No-op
   template <typename StampT> constexpr void operator()(const CaptureRange<StampT>& range) const {}
 
-  template <typename CaptorT, typename LockPolicyT> inline void operator()(Captor<CaptorT, LockPolicyT>& c)
+  template <typename CaptorT, typename LockPolicyT, typename QueueMonitorT>
+  inline void operator()(Captor<CaptorT, LockPolicyT, QueueMonitorT>& c)
   {
     c.reset();
   }
@@ -62,7 +63,8 @@ public:
   /// No-op
   constexpr void operator()(const CaptureRange<StampT>& range) const {}
 
-  template <typename CaptorT, typename LockPolicyT> inline void operator()(Captor<CaptorT, LockPolicyT>& c)
+  template <typename CaptorT, typename LockPolicyT, typename QueueMonitorT>
+  inline void operator()(Captor<CaptorT, LockPolicyT, QueueMonitorT>& c)
   {
     c.abort(t_abort_);
   }
@@ -108,6 +110,8 @@ public:
     {
       result_->state = State::ERROR_DRIVER_LOWER_BOUND_EXCEEDED;
     }
+
+    c.update_sync_state(result_->state);
   }
 
   template <typename PolicyT, typename OutputIteratorT>
@@ -118,6 +122,8 @@ public:
     {
       result_->state = c.capture(output, result_->range);
     }
+
+    c.update_sync_state(result_->state);
   }
 
   template <typename PolicyT, typename OutputIteratorT>
@@ -131,6 +137,8 @@ public:
     {
       result_->state = State::ERROR_DRIVER_LOWER_BOUND_EXCEEDED;
     }
+
+    c.update_sync_state(result_->state);
   }
 
   template <typename PolicyT, typename OutputIteratorT>
@@ -141,6 +149,8 @@ public:
     {
       result_->state = c.capture(output, result_->range, timeout_);
     }
+
+    c.update_sync_state(result_->state);
   }
 
 private:

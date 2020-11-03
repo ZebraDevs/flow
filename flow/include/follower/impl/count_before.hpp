@@ -17,24 +17,13 @@ namespace flow
 namespace follower
 {
 
-template <typename DispatchT, typename LockPolicyT, typename ContainerT>
-CountBefore<DispatchT, LockPolicyT, ContainerT>::CountBefore(const size_type count, const offset_type& delay) :
-    count_{count},
-    delay_{delay}
-{
-  if (count_ == 0)
-  {
-    throw std::invalid_argument{"'count' cannot be 0"};
-  }
-}
-
-
-template <typename DispatchT, typename LockPolicyT, typename ContainerT>
-CountBefore<DispatchT, LockPolicyT, ContainerT>::CountBefore(
+template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
+CountBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::CountBefore(
   const size_type count,
   const offset_type& delay,
-  const ContainerT& container) :
-    PolicyType{container},
+  const ContainerT& container,
+  const QueueMonitorT& queue_monitor) :
+    PolicyType{container, queue_monitor},
     count_{count},
     delay_{delay}
 {
@@ -45,9 +34,9 @@ CountBefore<DispatchT, LockPolicyT, ContainerT>::CountBefore(
 }
 
 
-template <typename DispatchT, typename LockPolicyT, typename ContainerT>
+template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
 template <typename OutputDispatchIteratorT>
-State CountBefore<DispatchT, LockPolicyT, ContainerT>::capture_follower_impl(
+State CountBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::capture_follower_impl(
   OutputDispatchIteratorT output,
   const CaptureRange<stamp_type>& range)
 {
@@ -63,8 +52,9 @@ State CountBefore<DispatchT, LockPolicyT, ContainerT>::capture_follower_impl(
 }
 
 
-template <typename DispatchT, typename LockPolicyT, typename ContainerT>
-State CountBefore<DispatchT, LockPolicyT, ContainerT>::dry_capture_follower_impl(const CaptureRange<stamp_type>& range)
+template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
+State CountBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::dry_capture_follower_impl(
+  const CaptureRange<stamp_type>& range)
 {
   // Retry if queue has no data
   if (PolicyType::queue_.empty())

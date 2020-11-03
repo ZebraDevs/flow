@@ -22,9 +22,9 @@ namespace flow
  * @note Implements a simple locking policy using a <code>BasicLockableT</code> which
  *       protects data input/output, meant for polling with <code>Captor::capture</code>.
  */
-template <typename CaptorT, typename BasicLockableT>
-class Captor<CaptorT, PollingLock<BasicLockableT>>
-    : public CaptorInterface<Captor<CaptorT, PollingLock<BasicLockableT>>>
+template <typename CaptorT, typename BasicLockableT, typename QueueMonitorT>
+class Captor<CaptorT, PollingLock<BasicLockableT>, QueueMonitorT>
+    : public CaptorInterface<Captor<CaptorT, PollingLock<BasicLockableT>, QueueMonitorT>>
 {
 public:
   /// Data dispatch type
@@ -40,20 +40,16 @@ public:
   using size_type = typename CaptorTraits<CaptorT>::size_type;
 
   /**
-   * @brief Default constructor
-   *
-   * @note Initializes data capacity with NO LIMITS on buffer size
-   */
-  Captor() : CaptorInterfaceType{0UL} {}
-
-  /**
    * @brief Dispatch container constructor
    *
    * @param container  container object with some initial state
+   * @param queue_monitor  custom implementation for checking the state of the queue and preconditioning capture
    *
    * @note Initializes data capacity with NO LIMITS on buffer size
    */
-  Captor(const DispatchContainerType& container) : CaptorInterfaceType{0UL, container} {}
+  Captor(const DispatchContainerType& container, const QueueMonitorT& queue_monitor) :
+      CaptorInterfaceType{0UL, container, queue_monitor}
+  {}
 
   /**
    * @brief Destructor
@@ -190,7 +186,7 @@ private:
   /// Mutex to protect queue ONLY
   mutable std::mutex queue_mutex_;
 
-  using CaptorInterfaceType = CaptorInterface<Captor<CaptorT, PollingLock<BasicLockableT>>>;
+  using CaptorInterfaceType = CaptorInterface<Captor<CaptorT, PollingLock<BasicLockableT>, QueueMonitorT>>;
   friend CaptorInterfaceType;
 
   FLOW_IMPLEMENT_CRTP_BASE(CaptorT);

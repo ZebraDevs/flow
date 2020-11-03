@@ -15,27 +15,20 @@ namespace flow
 namespace driver
 {
 
-template <typename DispatchT, typename LockPolicyT, typename ContainerT>
-Throttled<DispatchT, LockPolicyT, ContainerT>::Throttled(const offset_type throttle_period) noexcept(false) :
-    PolicyType{},
-    throttle_period_{throttle_period},
-    previous_stamp_{StampTraits<stamp_type>::min()}
-{}
-
-
-template <typename DispatchT, typename LockPolicyT, typename ContainerT>
-Throttled<DispatchT, LockPolicyT, ContainerT>::Throttled(
+template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
+Throttled<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::Throttled(
   const offset_type throttle_period,
-  const ContainerT& container) noexcept(false) :
-    PolicyType{container},
+  const ContainerT& container,
+  const QueueMonitorT& queue_monitor) noexcept(false) :
+    PolicyType{container, queue_monitor},
     throttle_period_{throttle_period},
     previous_stamp_{StampTraits<stamp_type>::min()}
 {}
 
 
-template <typename DispatchT, typename LockPolicyT, typename ContainerT>
+template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
 template <typename OutputDispatchIteratorT>
-State Throttled<DispatchT, LockPolicyT, ContainerT>::capture_driver_impl(
+State Throttled<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::capture_driver_impl(
   OutputDispatchIteratorT output,
   CaptureRange<stamp_type>& range)
 {
@@ -57,8 +50,9 @@ State Throttled<DispatchT, LockPolicyT, ContainerT>::capture_driver_impl(
 }
 
 
-template <typename DispatchT, typename LockPolicyT, typename ContainerT>
-State Throttled<DispatchT, LockPolicyT, ContainerT>::dry_capture_driver_impl(CaptureRange<stamp_type>& range) const
+template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
+State Throttled<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::dry_capture_driver_impl(
+  CaptureRange<stamp_type>& range) const
 {
   for (const auto& dispatch : PolicyType::queue_)
   {
@@ -75,15 +69,15 @@ State Throttled<DispatchT, LockPolicyT, ContainerT>::dry_capture_driver_impl(Cap
 }
 
 
-template <typename DispatchT, typename LockPolicyT, typename ContainerT>
-void Throttled<DispatchT, LockPolicyT, ContainerT>::abort_driver_impl(const stamp_type& t_abort)
+template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
+void Throttled<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::abort_driver_impl(const stamp_type& t_abort)
 {
   PolicyType::queue_.remove_before(t_abort);
 }
 
 
-template <typename DispatchT, typename LockPolicyT, typename ContainerT>
-void Throttled<DispatchT, LockPolicyT, ContainerT>::reset_driver_impl()
+template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
+void Throttled<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::reset_driver_impl()
 {
   previous_stamp_ = StampTraits<stamp_type>::min();
 }

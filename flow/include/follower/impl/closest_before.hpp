@@ -12,28 +12,21 @@ namespace flow
 namespace follower
 {
 
-template <typename DispatchT, typename LockPolicyT, typename ContainerT>
-ClosestBefore<DispatchT, LockPolicyT, ContainerT>::ClosestBefore(const offset_type& period, const offset_type& delay) :
-    PolicyType{},
-    period_{period},
-    delay_{delay}
-{}
-
-
-template <typename DispatchT, typename LockPolicyT, typename ContainerT>
-ClosestBefore<DispatchT, LockPolicyT, ContainerT>::ClosestBefore(
+template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
+ClosestBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::ClosestBefore(
   const offset_type& period,
   const offset_type& delay,
-  const ContainerT& container) :
-    PolicyType{container},
+  const ContainerT& container,
+  const QueueMonitorT& queue_monitor) :
+    PolicyType{container, queue_monitor},
     period_{period},
     delay_{delay}
 {}
 
 
-template <typename DispatchT, typename LockPolicyT, typename ContainerT>
+template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
 template <typename OutputDispatchIteratorT>
-State ClosestBefore<DispatchT, LockPolicyT, ContainerT>::capture_follower_impl(
+State ClosestBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::capture_follower_impl(
   OutputDispatchIteratorT output,
   const CaptureRange<stamp_type>& range)
 {
@@ -49,8 +42,8 @@ State ClosestBefore<DispatchT, LockPolicyT, ContainerT>::capture_follower_impl(
 }
 
 
-template <typename DispatchT, typename LockPolicyT, typename ContainerT>
-State ClosestBefore<DispatchT, LockPolicyT, ContainerT>::dry_capture_follower_impl(
+template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
+State ClosestBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::dry_capture_follower_impl(
   const CaptureRange<stamp_type>& range)
 {
   // The boundary before which messages are valid and after which they are not. Non-inclusive.
@@ -87,8 +80,8 @@ State ClosestBefore<DispatchT, LockPolicyT, ContainerT>::dry_capture_follower_im
 }
 
 
-template <typename DispatchT, typename LockPolicyT, typename ContainerT>
-void ClosestBefore<DispatchT, LockPolicyT, ContainerT>::abort_follower_impl(const stamp_type& t_abort)
+template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
+void ClosestBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::abort_follower_impl(const stamp_type& t_abort)
 {
   PolicyType::queue_.remove_before(t_abort - delay_ - period_);
 }

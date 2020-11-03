@@ -15,6 +15,8 @@
 
 // Flow
 #include <flow/captor.h>
+#include <flow/captor_state.h>
+#include <flow/captor_state_ostream.h>
 #include <flow/driver/next.h>
 #include <flow/follower/before.h>
 
@@ -82,6 +84,31 @@ TEST(Captor, RemoveAllOnReset)
   captor.reset();
 
   ASSERT_EQ(captor.size(), 0UL);
+}
+
+
+struct AlwaysFalseQueueMonitor
+{
+  template <typename DispatchT, typename DispatchContainerT, typename StampT>
+  static constexpr bool check(DispatchQueue<DispatchT, DispatchContainerT>&, const CaptureRange<StampT>&)
+  {
+    return false;
+  };
+};
+
+
+TEST(Captor, SimpleQueueMonitorSkipState)
+{
+  follower::Before<Dispatch<int, int>, NoLock, DefaultContainer<Dispatch<int, int>>, AlwaysFalseQueueMonitor> captor{
+    1 /*delay*/};
+
+  captor.inject(1, 1);
+  captor.inject(10, 1);
+
+  std::vector<Dispatch<int, int>> captured;
+  const auto state = captor.capture(std::back_inserter(captured), CaptureRange<int>{0, 0});
+
+  ASSERT_EQ(state, State::SKIP_FRAME_QUEUE_PRECONDITION);
 }
 
 #endif  // DOXYGEN_SKIP

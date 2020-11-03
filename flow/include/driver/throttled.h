@@ -30,10 +30,14 @@ namespace driver
  * @tparam LockPolicyT  a BasicLockable (https://en.cppreference.com/w/cpp/named_req/BasicLockable) object or NoLock or
  * PollingLock
  * @tparam ContainerT  underlying <code>DispatchT</code> container type
- * @tparam CaptureOutputT  captured output container type
+ * @tparam QueueMonitorT  object used to monitor queue state on each insertion
  */
-template <typename DispatchT, typename LockPolicyT = NoLock, typename ContainerT = DefaultContainer<DispatchT>>
-class Throttled : public Driver<Throttled<DispatchT, LockPolicyT, ContainerT>>
+template <
+  typename DispatchT,
+  typename LockPolicyT = NoLock,
+  typename ContainerT = DefaultContainer<DispatchT>,
+  typename QueueMonitorT = DefaultDispatchQueueMonitor>
+class Throttled : public Driver<Throttled<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>>
 {
 public:
   /// Data stamp type
@@ -46,19 +50,15 @@ public:
    * @brief Configuration constructor
    *
    * @param throttle_period  capture throttling period
+   * @param container  container object with some initial state
    */
-  explicit Throttled(const offset_type throttle_period);
-
-  /**
-   * @brief Configuration constructor
-   *
-   * @param throttle_period  capture throttling period
-   * @param container  dispatch object container (non-default initialization)
-   */
-  explicit Throttled(const offset_type throttle_period, const ContainerT& container);
+  explicit Throttled(
+    const offset_type throttle_period,
+    const ContainerT& container = ContainerT{},
+    const QueueMonitorT& queue_monitor = QueueMonitorT{});
 
 private:
-  using PolicyType = Driver<Throttled<DispatchT, LockPolicyT, ContainerT>>;
+  using PolicyType = Driver<Throttled<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>>;
   friend PolicyType;
 
   /**
@@ -105,13 +105,17 @@ private:
  * @tparam LockPolicyT  a BasicLockable (https://en.cppreference.com/w/cpp/named_req/BasicLockable) object or NoLock or
  * PollingLock
  * @tparam ContainerT  underlying <code>DispatchT</code> container type
- * @tparam CaptureOutputT  output capture container type
+ * @tparam QueueMonitorT  object used to monitor queue state on each insertion
  */
-template <typename DispatchT, typename LockPolicyT, typename ContainerT>
-struct CaptorTraits<driver::Throttled<DispatchT, LockPolicyT, ContainerT>> : CaptorTraitsFromDispatch<DispatchT>
+template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
+struct CaptorTraits<driver::Throttled<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>>
+    : CaptorTraitsFromDispatch<DispatchT>
 {
   /// Underlying dispatch container type
   using DispatchContainerType = ContainerT;
+
+  /// Queue monitor type
+  using DispatchQueueMonitorType = QueueMonitorT;
 
   /// Thread locking policy type
   using LockPolicyType = LockPolicyT;

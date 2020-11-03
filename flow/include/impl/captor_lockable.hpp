@@ -17,33 +17,40 @@
 namespace flow
 {
 
-template <typename CaptorT, typename LockableT>
-Captor<CaptorT, LockableT>::Captor() : CaptorInterfaceType{0UL}, capturing_{true}
-{}
-
-
-template <typename CaptorT, typename LockableT>
-Captor<CaptorT, LockableT>::Captor(const DispatchContainerType& container) :
-    CaptorInterfaceType{0UL, container},
+template <typename CaptorT, typename LockableT, typename QueueMonitorT>
+Captor<CaptorT, LockableT, QueueMonitorT>::Captor() :
+    CaptorInterfaceType{0UL, DispatchContainerType{}, QueueMonitorT{}},
     capturing_{true}
 {}
 
 
-template <typename CaptorT, typename LockableT> Captor<CaptorT, LockableT>::~Captor()
+template <typename CaptorT, typename LockableT, typename QueueMonitorT>
+Captor<CaptorT, LockableT, QueueMonitorT>::Captor(
+  const DispatchContainerType& container,
+  const QueueMonitorT& queue_monitor) :
+    CaptorInterfaceType{0UL, container, queue_monitor},
+    capturing_{true}
+{}
+
+
+template <typename CaptorT, typename LockableT, typename QueueMonitorT>
+Captor<CaptorT, LockableT, QueueMonitorT>::~Captor()
 {
   abort_impl(StampTraits<stamp_type>::max());
 }
 
 
-template <typename CaptorT, typename LockableT>
-typename Captor<CaptorT, LockableT>::size_type Captor<CaptorT, LockableT>::size_impl() const
+template <typename CaptorT, typename LockableT, typename QueueMonitorT>
+typename Captor<CaptorT, LockableT, QueueMonitorT>::size_type
+Captor<CaptorT, LockableT, QueueMonitorT>::size_impl() const
 {
   LockableT lock{capture_mutex_};
   return CaptorInterfaceType::queue_.size();
 }
 
 
-template <typename CaptorT, typename LockableT> void Captor<CaptorT, LockableT>::reset_impl()
+template <typename CaptorT, typename LockableT, typename QueueMonitorT>
+void Captor<CaptorT, LockableT, QueueMonitorT>::reset_impl()
 {
   {
     LockableT lock{capture_mutex_};
@@ -63,7 +70,8 @@ template <typename CaptorT, typename LockableT> void Captor<CaptorT, LockableT>:
 }
 
 
-template <typename CaptorT, typename LockableT> void Captor<CaptorT, LockableT>::abort_impl(const stamp_type& t_abort)
+template <typename CaptorT, typename LockableT, typename QueueMonitorT>
+void Captor<CaptorT, LockableT, QueueMonitorT>::abort_impl(const stamp_type& t_abort)
 {
   {
     LockableT lock{capture_mutex_};
@@ -80,9 +88,9 @@ template <typename CaptorT, typename LockableT> void Captor<CaptorT, LockableT>:
 }
 
 
-template <typename CaptorT, typename LockableT>
+template <typename CaptorT, typename LockableT, typename QueueMonitorT>
 template <typename... DispatchConstructorArgTs>
-void Captor<CaptorT, LockableT>::inject_impl(DispatchConstructorArgTs&&... dispatch_args)
+void Captor<CaptorT, LockableT, QueueMonitorT>::inject_impl(DispatchConstructorArgTs&&... dispatch_args)
 {
   {
     // Insert new data
@@ -95,9 +103,11 @@ void Captor<CaptorT, LockableT>::inject_impl(DispatchConstructorArgTs&&... dispa
 }
 
 
-template <typename CaptorT, typename LockableT>
+template <typename CaptorT, typename LockableT, typename QueueMonitorT>
 template <typename FirstForwardDispatchIteratorT, typename LastForwardDispatchIteratorT>
-void Captor<CaptorT, LockableT>::insert_impl(FirstForwardDispatchIteratorT first, LastForwardDispatchIteratorT last)
+void Captor<CaptorT, LockableT, QueueMonitorT>::insert_impl(
+  FirstForwardDispatchIteratorT first,
+  LastForwardDispatchIteratorT last)
 {
   {
     // Insert new data
@@ -111,7 +121,8 @@ void Captor<CaptorT, LockableT>::insert_impl(FirstForwardDispatchIteratorT first
 }
 
 
-template <typename CaptorT, typename LockableT> void Captor<CaptorT, LockableT>::remove_impl(const stamp_type& t_remove)
+template <typename CaptorT, typename LockableT, typename QueueMonitorT>
+void Captor<CaptorT, LockableT, QueueMonitorT>::remove_impl(const stamp_type& t_remove)
 {
   {
     // Remove all data before this time
@@ -124,24 +135,26 @@ template <typename CaptorT, typename LockableT> void Captor<CaptorT, LockableT>:
 }
 
 
-template <typename CaptorT, typename LockableT> void Captor<CaptorT, LockableT>::set_capacity_impl(size_type capacity)
+template <typename CaptorT, typename LockableT, typename QueueMonitorT>
+void Captor<CaptorT, LockableT, QueueMonitorT>::set_capacity_impl(size_type capacity)
 {
   LockableT lock{capture_mutex_};
   CaptorInterfaceType::capacity_ = capacity;
 }
 
 
-template <typename CaptorT, typename LockableT>
-typename Captor<CaptorT, LockableT>::size_type Captor<CaptorT, LockableT>::get_capacity_impl() const
+template <typename CaptorT, typename LockableT, typename QueueMonitorT>
+typename Captor<CaptorT, LockableT, QueueMonitorT>::size_type
+Captor<CaptorT, LockableT, QueueMonitorT>::get_capacity_impl() const
 {
   LockableT lock{capture_mutex_};
   return CaptorInterfaceType::capacity_;
 }
 
 
-template <typename CaptorT, typename LockableT>
-CaptureRange<typename Captor<CaptorT, LockableT>::stamp_type>
-Captor<CaptorT, LockableT>::get_available_stamp_range_impl() const
+template <typename CaptorT, typename LockableT, typename QueueMonitorT>
+CaptureRange<typename Captor<CaptorT, LockableT, QueueMonitorT>::stamp_type>
+Captor<CaptorT, LockableT, QueueMonitorT>::get_available_stamp_range_impl() const
 {
   LockableT lock{capture_mutex_};
   return queue_.empty() ? CaptureRange<stamp_type>{}
@@ -149,9 +162,9 @@ Captor<CaptorT, LockableT>::get_available_stamp_range_impl() const
 }
 
 
-template <typename CaptorT, typename LockableT>
+template <typename CaptorT, typename LockableT, typename QueueMonitorT>
 template <typename OutputDispatchIteratorT, typename CaptureRangeT, typename ClockT, typename DurationT>
-State Captor<CaptorT, LockableT>::capture_impl(
+State Captor<CaptorT, LockableT, QueueMonitorT>::capture_impl(
   OutputDispatchIteratorT&& output,
   CaptureRangeT&& range,
   const std::chrono::time_point<ClockT, DurationT> timeout)
@@ -196,9 +209,9 @@ State Captor<CaptorT, LockableT>::capture_impl(
 }
 
 
-template <typename CaptorT, typename LockableT>
+template <typename CaptorT, typename LockableT, typename QueueMonitorT>
 template <typename CaptureRangeT>
-State Captor<CaptorT, LockableT>::dry_capture_impl(CaptureRangeT&& range)
+State Captor<CaptorT, LockableT, QueueMonitorT>::dry_capture_impl(CaptureRangeT&& range)
 {
   LockableT lock{capture_mutex_};
 
@@ -206,9 +219,9 @@ State Captor<CaptorT, LockableT>::dry_capture_impl(CaptureRangeT&& range)
 }
 
 
-template <typename CaptorT, typename LockableT>
+template <typename CaptorT, typename LockableT, typename QueueMonitorT>
 template <typename InpectCallbackT>
-void Captor<CaptorT, LockableT>::inspect_impl(InpectCallbackT&& inspect_dispatch_cb) const
+void Captor<CaptorT, LockableT, QueueMonitorT>::inspect_impl(InpectCallbackT&& inspect_dispatch_cb) const
 {
   LockableT lock{capture_mutex_};
 
