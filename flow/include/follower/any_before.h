@@ -33,13 +33,18 @@ namespace follower
  * @tparam LockPolicyT  a BasicLockable (https://en.cppreference.com/w/cpp/named_req/BasicLockable) object or NoLock or
  * PollingLock
  * @tparam ContainerT  underlying <code>DispatchT</code> container type
+ * @tparam QueueMonitorT  object used to monitor queue state on each insertion; used to precondition capture
  *
  * @warn This captor WILL NOT behave deterministically if all data is not available before capture time minus
  *       the specified delay. As such, setting the delay properly will alleviate non-deterministic behavior.
  *       This is the only <i>optional</i> captor, and should be used with great caution.
  */
-template <typename DispatchT, typename LockPolicyT = NoLock, typename ContainerT = DefaultContainer<DispatchT>>
-class AnyBefore : public Follower<AnyBefore<DispatchT, LockPolicyT, ContainerT>>
+template <
+  typename DispatchT,
+  typename LockPolicyT = NoLock,
+  typename ContainerT = DefaultContainer<DispatchT>,
+  typename QueueMonitorT = DefaultDispatchQueueMonitor>
+class AnyBefore : public Follower<AnyBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>>
 {
 public:
   /// Data stamp type
@@ -50,19 +55,18 @@ public:
 
   /**
    * @brief Setup constructor
+   *
    * @param delay  the delay with which to capture
+   * @param container  container object with some initial state
+   * @param queue_monitor  queue monitor with some initial state
    */
-  explicit AnyBefore(const offset_type& delay);
-
-  /**
-   * @brief Setup constructor
-   * @param delay  the delay with which to capture
-   * @param container  dispatch object container (non-default initialization)
-   */
-  AnyBefore(const offset_type& delay, const ContainerT& container);
+  explicit AnyBefore(
+    const offset_type& delay,
+    const ContainerT& container = ContainerT{},
+    const QueueMonitorT& queue_monitor = QueueMonitorT{});
 
 private:
-  using PolicyType = Follower<AnyBefore<DispatchT, LockPolicyT, ContainerT>>;
+  using PolicyType = Follower<AnyBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>>;
   friend PolicyType;
 
   /**
@@ -105,13 +109,17 @@ private:
  * @tparam LockPolicyT  a BasicLockable (https://en.cppreference.com/w/cpp/named_req/BasicLockable) object or NoLock or
  * PollingLock
  * @tparam ContainerT  underlying <code>DispatchT</code> container type
- * @tparam CaptureOutputT  output capture container type
+ * @tparam QueueMonitorT queue monitor/capture preconditioning type
  */
-template <typename DispatchT, typename LockPolicyT, typename ContainerT>
-struct CaptorTraits<follower::AnyBefore<DispatchT, LockPolicyT, ContainerT>> : CaptorTraitsFromDispatch<DispatchT>
+template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
+struct CaptorTraits<follower::AnyBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>>
+    : CaptorTraitsFromDispatch<DispatchT>
 {
   /// Underlying dispatch container type
   using DispatchContainerType = ContainerT;
+
+  /// Queue monitor/capture preconditioning type
+  using DispatchQueueMonitorType = QueueMonitorT;
 
   /// Thread locking policy type
   using LockPolicyType = LockPolicyT;

@@ -28,9 +28,14 @@ namespace driver
  * @tparam LockPolicyT  a BasicLockable (https://en.cppreference.com/w/cpp/named_req/BasicLockable) object or NoLock or
  * PollingLock
  * @tparam ContainerT  underlying <code>DispatchT</code> container type
+ * @tparam QueueMonitorT  object used to monitor queue state on each insertion
  */
-template <typename DispatchT, typename LockPolicyT = NoLock, typename ContainerT = DefaultContainer<DispatchT>>
-class Batch : public Driver<Batch<DispatchT, LockPolicyT, ContainerT>>
+template <
+  typename DispatchT,
+  typename LockPolicyT = NoLock,
+  typename ContainerT = DefaultContainer<DispatchT>,
+  typename QueueMonitorT = DefaultDispatchQueueMonitor>
+class Batch : public Driver<Batch<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>>
 {
 public:
   /// Integer size type
@@ -43,25 +48,18 @@ public:
    * @brief Configuration constructor
    *
    * @param size  number of elements to batch before becoming ready
+   * @param container  container object with some initial state
    *
    * @throws <code>std::invalid_argument</code> if <code>size == 0</code>
    * @throws <code>std::invalid_argument</code> if <code>CaptureOutputT</code> cannot hold \p size
    */
-  explicit Batch(const size_type size) noexcept(false);
-
-  /**
-   * @brief Configuration constructor
-   *
-   * @param size  number of elements to batch before becoming ready
-   * @param container  dispatch object container (non-default initialization)
-   *
-   * @throws <code>std::invalid_argument</code> if <code>size == 0</code>
-   * @throws <code>std::invalid_argument</code> if <code>CaptureOutputT</code> cannot hold \p size
-   */
-  explicit Batch(const size_type size, const ContainerT& container) noexcept(false);
+  explicit Batch(
+    const size_type size,
+    const ContainerT& container = ContainerT{},
+    const QueueMonitorT& queue_monitor = QueueMonitorT{}) noexcept(false);
 
 private:
-  using PolicyType = Driver<Batch<DispatchT, LockPolicyT, ContainerT>>;
+  using PolicyType = Driver<Batch<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>>;
   friend PolicyType;
 
   /**
@@ -110,13 +108,17 @@ private:
  * @tparam LockPolicyT  a BasicLockable (https://en.cppreference.com/w/cpp/named_req/BasicLockable) object or NoLock or
  * PollingLock
  * @tparam ContainerT  underlying <code>DispatchT</code> container type
- * @tparam CaptureOutputT  output capture container type
+ * @tparam QueueMonitorT  object used to monitor queue state on each insertion
  */
-template <typename DispatchT, typename LockPolicyT, typename ContainerT>
-struct CaptorTraits<driver::Batch<DispatchT, LockPolicyT, ContainerT>> : CaptorTraitsFromDispatch<DispatchT>
+template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
+struct CaptorTraits<driver::Batch<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>>
+    : CaptorTraitsFromDispatch<DispatchT>
 {
   /// Underlying dispatch container type
   using DispatchContainerType = ContainerT;
+
+  /// Queue monitor type
+  using DispatchQueueMonitorType = QueueMonitorT;
 
   /// Thread locking policy type
   using LockPolicyType = LockPolicyT;

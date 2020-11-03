@@ -38,25 +38,26 @@ template <typename PolicyT> struct CaptorTraits<Driver<PolicyT>> : CaptorTraits<
  * @tparam PolicyT  CRTP-derived captor with specialized capture policy
  */
 template <typename PolicyT>
-class Driver : public Captor<Driver<PolicyT>, typename CaptorTraits<PolicyT>::LockPolicyType>
+class Driver
+    : public Captor<Driver<PolicyT>, typename CaptorTraits<PolicyT>::LockPolicyType, DefaultDispatchQueueMonitor>
 {
 public:
   /// Underlying dispatch container type
   using DispatchContainerType = typename CaptorTraits<PolicyT>::DispatchContainerType;
 
+  /// Queue monitor type
+  using DispatchQueueMonitorType = typename CaptorTraits<PolicyT>::DispatchQueueMonitorType;
+
   /// Data stamp type
   using stamp_type = typename CaptorTraits<PolicyT>::stamp_type;
 
   /**
-   * @brief Default constructor
-   */
-  Driver();
-
-  /**
    * @brief Dispatch container constructor
-   * @param container  dispatch object container (non-default initialization)
+   *
+   * @param container  container object with some initial state
+   * @param queue_monitor  queue monitor with some initial state
    */
-  explicit Driver(const DispatchContainerType& container);
+  explicit Driver(const DispatchContainerType& container, const DispatchQueueMonitorType& queue_monitor);
 
 private:
   /**
@@ -93,7 +94,7 @@ private:
 
   FLOW_IMPLEMENT_CRTP_BASE(PolicyT);
 
-  using CaptorType = Captor<Driver, typename CaptorTraits<PolicyT>::LockPolicyType>;
+  using CaptorType = Captor<Driver, typename CaptorTraits<PolicyT>::LockPolicyType, DefaultDispatchQueueMonitor>;
   friend CaptorType;
 
 protected:

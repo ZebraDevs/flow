@@ -12,14 +12,17 @@ namespace flow
 namespace driver
 {
 
-template <typename DispatchT, typename LockPolicyT, typename ContainerT>
-Next<DispatchT, LockPolicyT, ContainerT>::Next(const ContainerT& container) noexcept(false) : PolicyType{container}
+template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
+Next<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::Next(
+  const ContainerT& container,
+  const QueueMonitorT& queue_monitor) noexcept(false) :
+    PolicyType{container, queue_monitor}
 {}
 
 
-template <typename DispatchT, typename LockPolicyT, typename ContainerT>
+template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
 template <typename OutputDispatchIteratorT>
-State Next<DispatchT, LockPolicyT, ContainerT>::capture_driver_impl(
+State Next<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::capture_driver_impl(
   OutputDispatchIteratorT output,
   CaptureRange<stamp_type>& range)
 {
@@ -35,8 +38,9 @@ State Next<DispatchT, LockPolicyT, ContainerT>::capture_driver_impl(
 }
 
 
-template <typename DispatchT, typename LockPolicyT, typename ContainerT>
-State Next<DispatchT, LockPolicyT, ContainerT>::dry_capture_driver_impl(CaptureRange<stamp_type>& range) const
+template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
+State Next<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::dry_capture_driver_impl(
+  CaptureRange<stamp_type>& range) const
 {
   if (PolicyType::queue_.empty())
   {
@@ -52,8 +56,8 @@ State Next<DispatchT, LockPolicyT, ContainerT>::dry_capture_driver_impl(CaptureR
 }
 
 
-template <typename DispatchT, typename LockPolicyT, typename ContainerT>
-void Next<DispatchT, LockPolicyT, ContainerT>::abort_driver_impl(const stamp_type& t_abort)
+template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
+void Next<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::abort_driver_impl(const stamp_type& t_abort)
 {
   PolicyType::queue_.remove_before(t_abort);
 }

@@ -60,6 +60,21 @@ template <typename BasicLockableT = std::lock_guard<std::mutex>> struct PollingL
 
 
 /**
+ * @brief Stand-in type used to replace queue monitor
+ */
+struct DefaultDispatchQueueMonitor
+{
+  template <typename DispatchT, typename DispatchContainerT, typename StampT>
+  static constexpr bool check(DispatchQueue<DispatchT, DispatchContainerT>&, const CaptureRange<StampT>&)
+  {
+    return true;
+  };
+
+  static constexpr void update_sync_state(const State) {}
+};
+
+
+/**
  * @brief Basic captor traits struct with common type information from data dispatch object
  *
  * @tparam DispatchT  data dispatch object type
@@ -89,6 +104,7 @@ template <typename DispatchT> struct CaptorTraitsFromDispatch
  *        Requires:
  *        - <code>DispatchType</code> : data dispatch object type
  *        - <code>DispatchContainerType</code> : container for <code>DispatchType</code>
+ *          <code>DispatchQueueMonitorType</code> : optional monitoring/capture preconditioning object type
  *        - <code>value_type</code> : data value type
  *        - <code>stamp_type</code> : sequence stamp type
  *        - <code>size_type</code> : integer sizing type
@@ -110,6 +126,9 @@ public:
   /// Data dispatch container type
   using DispatchContainerType = typename CaptorTraits<CaptorT>::DispatchContainerType;
 
+  /// Queue monitor/capture preconditioning type
+  using DispatchQueueMonitorType = typename CaptorTraits<CaptorT>::DispatchQueueMonitorType;
+
   /// Data stamp type
   using stamp_type = typename CaptorTraits<CaptorT>::stamp_type;
 
@@ -117,19 +136,16 @@ public:
   using size_type = typename CaptorTraits<CaptorT>::size_type;
 
   /**
-   * @brief Capacity setup constructor
-   *
-   * @param capacity  maximum buffer capacity
-   */
-  explicit CaptorInterface(const size_type capacity);
-
-  /**
    * @brief Full setup constructor
    *
    * @param capacity  maximum buffer capacity
    * @param container  dispatch container type for underlying queue
+   * @param queue_monitor  custom implementation for checking the state of the queue and preconditioning capture
    */
-  explicit CaptorInterface(const size_type capacity, const DispatchContainerType& container);
+  explicit CaptorInterface(
+    const size_type capacity,
+    const DispatchContainerType& container,
+    const DispatchQueueMonitorType& queue_monitor);
 
   /**
    * @brief Clears all captor data and resets all states
@@ -294,6 +310,13 @@ public:
     return derived()->inspect_impl(std::forward<InpectCallbackT>(inspect_dispatch_cb));
   }
 
+  /**
+   * @brief Updates any monitoring facilities with overall synchronization state
+   *
+   * @brief sync_state  overall synchronization state, from Sychronizer
+   */
+  inline void update_sync_state(const State sync_state) { queue_monitor_.update_sync_state(sync_state); }
+
   // Sanity check to ensure that DispatchType is copyable
   FLOW_STATIC_ASSERT(std::is_copy_constructible<DispatchType>(), "'DispatchType' must be a copyable type");
 
@@ -307,11 +330,14 @@ protected:
    */
   template <typename... InsertArgTs> inline void insert_and_limit(InsertArgTs&&... args);
 
+  /// Buffered data capacity
+  size_type capacity_;
+
   /// Data dispatch queue
   DispatchQueue<DispatchType, DispatchContainerType> queue_;
 
-  /// Buffered data capacity
-  size_type capacity_;
+  /// Data dispatch queue capture monitor check
+  DispatchQueueMonitorType queue_monitor_;
 
   FLOW_IMPLEMENT_CRTP_BASE(CaptorT);
 };
@@ -322,10 +348,12 @@ protected:
  *
  * @tparam CaptorT  CRTP-derived Captor type
  * @tparam LockableT  a TimedLockable (https://en.cppreference.com/w/cpp/named_req/TimedLockable) object;
-                      specializations are available which replace <code>LockableT</code> with <code>NoLock</code> or
- <code>PollingLock</code>
+ *                    specializations are available which replace <code>LockableT</code> with <code>NoLock</code> or
+ *                    <code>PollingLock</code>
+ * @tparam QueueMonitorT  object used to monitor queue state on each insertion; used to precondition capture
  */
-template <typename CaptorT, typename LockableT> class Captor : public CaptorInterface<Captor<CaptorT, LockableT>>
+template <typename CaptorT, typename LockableT, typename QueueMonitorT>
+class Captor : public CaptorInterface<Captor<CaptorT, LockableT, QueueMonitorT>>
 {
 public:
   /// Data dispatch type
@@ -349,8 +377,9 @@ public:
    * @brief Dispatch container constructor
    *
    * @param container  container object with some initial state
+   * @param queue_monitor  queue monitor with some initial state
    */
-  explicit Captor(const DispatchContainerType& container);
+  Captor(const DispatchContainerType& container, const QueueMonitorT& queue_monitor);
 
   /**
    * @brief Destructor
@@ -442,13 +471,14 @@ private:
     std::condition_variable,
     std::condition_variable_any>::type capture_cv_;
 
-  using CaptorInterfaceType = CaptorInterface<Captor<CaptorT, LockableT>>;
+  using CaptorInterfaceType = CaptorInterface<Captor<CaptorT, LockableT, QueueMonitorT>>;
   friend CaptorInterfaceType;
 
   FLOW_IMPLEMENT_CRTP_BASE(CaptorT);
 
 protected:
   using CaptorInterfaceType::queue_;
+  using CaptorInterfaceType::queue_monitor_;
 };
 
 
@@ -457,7 +487,8 @@ protected:
  *
  * @tparam PolicyT  CRTP-derived captor with specialized capture policy
  */
-template <typename CaptorT, typename LockableT> struct CaptorTraits<Captor<CaptorT, LockableT>> : CaptorTraits<CaptorT>
+template <typename CaptorT, typename LockableT, typename QueueMonitorT>
+struct CaptorTraits<Captor<CaptorT, LockableT, QueueMonitorT>> : CaptorTraits<CaptorT>
 {};
 
 

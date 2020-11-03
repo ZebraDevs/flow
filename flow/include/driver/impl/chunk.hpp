@@ -17,25 +17,21 @@ namespace flow
 namespace driver
 {
 
-template <typename DispatchT, typename LockPolicyT, typename ContainerT>
-Chunk<DispatchT, LockPolicyT, ContainerT>::Chunk(const size_type size) noexcept(false) : PolicyType{}, chunk_size_{size}
-{
-  validate();
-}
-
-
-template <typename DispatchT, typename LockPolicyT, typename ContainerT>
-Chunk<DispatchT, LockPolicyT, ContainerT>::Chunk(const size_type size, const ContainerT& container) noexcept(false) :
-    PolicyType{container},
+template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
+Chunk<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::Chunk(
+  const size_type size,
+  const ContainerT& container,
+  const QueueMonitorT& queue_monitor) noexcept(false) :
+    PolicyType{container, queue_monitor},
     chunk_size_{size}
 {
   validate();
 }
 
 
-template <typename DispatchT, typename LockPolicyT, typename ContainerT>
+template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
 template <typename OutputDispatchIteratorT>
-State Chunk<DispatchT, LockPolicyT, ContainerT>::capture_driver_impl(
+State Chunk<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::capture_driver_impl(
   OutputDispatchIteratorT output,
   CaptureRange<stamp_type>& range)
 {
@@ -56,8 +52,9 @@ State Chunk<DispatchT, LockPolicyT, ContainerT>::capture_driver_impl(
   return state;
 }
 
-template <typename DispatchT, typename LockPolicyT, typename ContainerT>
-State Chunk<DispatchT, LockPolicyT, ContainerT>::dry_capture_driver_impl(CaptureRange<stamp_type>& range) const
+template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
+State Chunk<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::dry_capture_driver_impl(
+  CaptureRange<stamp_type>& range) const
 {
   if (PolicyType::queue_.size() >= chunk_size_)
   {
@@ -74,15 +71,15 @@ State Chunk<DispatchT, LockPolicyT, ContainerT>::dry_capture_driver_impl(Capture
   }
 }
 
-template <typename DispatchT, typename LockPolicyT, typename ContainerT>
-void Chunk<DispatchT, LockPolicyT, ContainerT>::abort_driver_impl(const stamp_type& t_abort)
+template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
+void Chunk<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::abort_driver_impl(const stamp_type& t_abort)
 {
   PolicyType::queue_.remove_before(t_abort);
 }
 
 
-template <typename DispatchT, typename LockPolicyT, typename ContainerT>
-void Chunk<DispatchT, LockPolicyT, ContainerT>::validate() const noexcept(false)
+template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
+void Chunk<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::validate() const noexcept(false)
 {
   if (chunk_size_ == 0)
   {

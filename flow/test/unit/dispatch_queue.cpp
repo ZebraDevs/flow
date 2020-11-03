@@ -249,4 +249,53 @@ TEST(DispatchQueue, InsertUnordered)
 }
 
 
+TEST(DispatchQueue, BeforeItrEmpty)
+{
+  using DispatchType = Dispatch<int, int>;
+
+  DispatchQueue<DispatchType> queue;
+
+  ASSERT_EQ(queue.before(6), queue.end());
+}
+
+
+TEST(DispatchQueue, BeforeItr)
+{
+  using DispatchType = Dispatch<int, int>;
+
+  DispatchQueue<DispatchType> queue;
+
+  queue.insert(DispatchType{5, 8});
+  queue.insert(DispatchType{6, 9});
+  queue.insert(DispatchType{7, 10});
+
+  ASSERT_EQ(queue.before(6)->stamp, 5);
+  ASSERT_EQ(queue.before(7)->stamp, 6);
+}
+
+
+TEST(DispatchQueue, ReverseBeforeItrEmpty)
+{
+  using DispatchType = Dispatch<int, int>;
+
+  DispatchQueue<DispatchType> queue;
+
+  ASSERT_EQ(queue.rbefore(6), queue.rend());
+}
+
+
+TEST(DispatchQueue, ReverseBeforeItr)
+{
+  using DispatchType = Dispatch<int, int>;
+
+  DispatchQueue<DispatchType> queue;
+
+  queue.insert(DispatchType{5, 8});
+  queue.insert(DispatchType{6, 9});
+  queue.insert(DispatchType{7, 10});
+
+  ASSERT_EQ(queue.rbefore(6)->stamp, 5);
+  ASSERT_EQ(queue.rbefore(7)->stamp, 6);
+}
+
 #endif  // DOXYGEN_SKIP

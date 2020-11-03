@@ -16,10 +16,10 @@
 namespace flow
 {
 
-template <typename PolicyT> Driver<PolicyT>::Driver() : CaptorType{} {}
-
-
-template <typename PolicyT> Driver<PolicyT>::Driver(const DispatchContainerType& container) : CaptorType{container} {}
+template <typename PolicyT>
+Driver<PolicyT>::Driver(const DispatchContainerType& container, const DispatchQueueMonitorType& queue_monitor) :
+    CaptorType{container, queue_monitor}
+{}
 
 
 template <typename PolicyT>

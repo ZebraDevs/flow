@@ -6,6 +6,7 @@
 #define FLOW_CAPTURE_IMPL_DISPATCH_QUEUE_HPP
 
 // C++ Standard Library
+#include <algorithm>
 #include <iterator>
 
 // Flow
@@ -63,6 +64,25 @@ void DispatchQueue<DispatchT, ContainerT>::insert(DispatchConstructorArgTs&&... 
   }
 }
 
+template <typename DispatchT, typename ContainerT>
+typename DispatchQueue<DispatchT, ContainerT>::const_iterator
+DispatchQueue<DispatchT, ContainerT>::before(stamp_const_arg_type stamp) const
+{
+  const auto after_itr = std::find_if(
+    container_.begin(), container_.end(), [stamp](const DispatchT& dispatch) { return get_stamp(dispatch) >= stamp; });
+
+  return after_itr == this->end() ? after_itr : std::prev(after_itr);
+}
+
+
+template <typename DispatchT, typename ContainerT>
+typename DispatchQueue<DispatchT, ContainerT>::const_reverse_iterator
+DispatchQueue<DispatchT, ContainerT>::rbefore(stamp_const_arg_type stamp) const
+{
+  return std::find_if(
+    container_.rbegin(), container_.rend(), [stamp](const DispatchT& dispatch) { return get_stamp(dispatch) < stamp; });
+}
+
 
 template <typename DispatchT, typename ContainerT> DispatchT DispatchQueue<DispatchT, ContainerT>::pop()
 {
@@ -79,7 +99,7 @@ template <typename DispatchT, typename ContainerT> void DispatchQueue<DispatchT,
 
 
 template <typename DispatchT, typename ContainerT>
-void DispatchQueue<DispatchT, ContainerT>::remove_before(const stamp_type& t)
+void DispatchQueue<DispatchT, ContainerT>::remove_before(stamp_const_arg_type t)
 {
   while (!container_.empty() and get_stamp(container_.front()) < t)
   {
@@ -89,7 +109,7 @@ void DispatchQueue<DispatchT, ContainerT>::remove_before(const stamp_type& t)
 
 
 template <typename DispatchT, typename ContainerT>
-void DispatchQueue<DispatchT, ContainerT>::remove_at_before(const stamp_type& t)
+void DispatchQueue<DispatchT, ContainerT>::remove_at_before(stamp_const_arg_type t)
 {
   while (!container_.empty() and get_stamp(container_.front()) <= t)
   {

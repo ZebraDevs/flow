@@ -15,14 +15,17 @@ namespace flow
 namespace follower
 {
 
-template <typename DispatchT, typename LockPolicyT, typename ContainerT>
-MatchedStamp<DispatchT, LockPolicyT, ContainerT>::MatchedStamp(const ContainerT& container) : PolicyType{container}
+template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
+MatchedStamp<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::MatchedStamp(
+  const ContainerT& container,
+  const QueueMonitorT& queue_monitor) :
+    PolicyType{container, queue_monitor}
 {}
 
 
-template <typename DispatchT, typename LockPolicyT, typename ContainerT>
+template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
 template <typename OutputDispatchIteratorT>
-State MatchedStamp<DispatchT, LockPolicyT, ContainerT>::capture_follower_impl(
+State MatchedStamp<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::capture_follower_impl(
   OutputDispatchIteratorT output,
   const CaptureRange<stamp_type>& range)
 {
@@ -38,8 +41,9 @@ State MatchedStamp<DispatchT, LockPolicyT, ContainerT>::capture_follower_impl(
 }
 
 
-template <typename DispatchT, typename LockPolicyT, typename ContainerT>
-State MatchedStamp<DispatchT, LockPolicyT, ContainerT>::dry_capture_follower_impl(const CaptureRange<stamp_type>& range)
+template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
+State MatchedStamp<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::dry_capture_follower_impl(
+  const CaptureRange<stamp_type>& range)
 {
   // Remove all elements before leading time
   PolicyType::queue_.remove_before(range.lower_stamp);
@@ -58,8 +62,8 @@ State MatchedStamp<DispatchT, LockPolicyT, ContainerT>::dry_capture_follower_imp
 }
 
 
-template <typename DispatchT, typename LockPolicyT, typename ContainerT>
-void MatchedStamp<DispatchT, LockPolicyT, ContainerT>::abort_follower_impl(const stamp_type& t_abort)
+template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
+void MatchedStamp<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::abort_follower_impl(const stamp_type& t_abort)
 {
   PolicyType::queue_.remove_before(t_abort);
 }

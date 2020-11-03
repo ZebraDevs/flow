@@ -27,10 +27,14 @@ namespace driver
  * @tparam LockPolicyT  a BasicLockable (https://en.cppreference.com/w/cpp/named_req/BasicLockable) object or NoLock or
  * PollingLock
  * @tparam ContainerT  underlying <code>DispatchT</code> container type
- * @tparam CaptureOutputT  captured output container type
+ * @tparam QueueMonitorT  object used to monitor queue state on each insertion
  */
-template <typename DispatchT, typename LockPolicyT = NoLock, typename ContainerT = DefaultContainer<DispatchT>>
-class Next : public Driver<Next<DispatchT, LockPolicyT, ContainerT>>
+template <
+  typename DispatchT,
+  typename LockPolicyT = NoLock,
+  typename ContainerT = DefaultContainer<DispatchT>,
+  typename QueueMonitorT = DefaultDispatchQueueMonitor>
+class Next : public Driver<Next<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>>
 {
 public:
   /// Integer size type
@@ -41,17 +45,13 @@ public:
 
   /**
    * @brief Configuration constructor
+   *
+   * @param container  container object with some initial state
    */
-  explicit Next() = default;
-
-  /**
-   * @brief Configuration constructor
-   * @param container  dispatch object container (non-default initialization)
-   */
-  explicit Next(const ContainerT& container);
+  explicit Next(const ContainerT& container = ContainerT{}, const QueueMonitorT& queue_monitor = QueueMonitorT{});
 
 private:
-  using PolicyType = Driver<Next<DispatchT, LockPolicyT, ContainerT>>;
+  using PolicyType = Driver<Next<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>>;
   friend PolicyType;
 
   /**
@@ -92,13 +92,17 @@ private:
  * @tparam LockPolicyT  a BasicLockable (https://en.cppreference.com/w/cpp/named_req/BasicLockable) object or NoLock or
  * PollingLock
  * @tparam ContainerT  underlying <code>DispatchT</code> container type
- * @tparam CaptureOutputT  output capture container type
+ * @tparam QueueMonitorT  object used to monitor queue state on each insertion
  */
-template <typename DispatchT, typename LockPolicyT, typename ContainerT>
-struct CaptorTraits<driver::Next<DispatchT, LockPolicyT, ContainerT>> : CaptorTraitsFromDispatch<DispatchT>
+template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
+struct CaptorTraits<driver::Next<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>>
+    : CaptorTraitsFromDispatch<DispatchT>
 {
   /// Underlying dispatch container type
   using DispatchContainerType = ContainerT;
+
+  /// Queue monitor type
+  using DispatchQueueMonitorType = QueueMonitorT;
 
   /// Thread locking policy type
   using LockPolicyType = LockPolicyT;

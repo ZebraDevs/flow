@@ -27,6 +27,7 @@ namespace follower
  * @tparam LockPolicyT  a BasicLockable (https://en.cppreference.com/w/cpp/named_req/BasicLockable) object or NoLock or
  * PollingLock
  * @tparam ContainerT  underlying <code>DispatchT</code> container type
+ * @tparam QueueMonitorT  object used to monitor queue state on each insertion; used to precondition capture
  *
  * @note Latched won't behave non-deterministically if actual input period (difference between successive
  *       dispatch stamps) is greater than <code>min_period</code>. However, newer data values will not be captured if
@@ -35,8 +36,12 @@ namespace follower
  * @warn Latched may never enter a READY state if data never becomes available. Calling application may need to
  * implement a synchronization timeout behavior
  */
-template <typename DispatchT, typename LockPolicyT = NoLock, typename ContainerT = DefaultContainer<DispatchT>>
-class Latched : public Follower<Latched<DispatchT, LockPolicyT, ContainerT>>
+template <
+  typename DispatchT,
+  typename LockPolicyT = NoLock,
+  typename ContainerT = DefaultContainer<DispatchT>,
+  typename QueueMonitorT = DefaultDispatchQueueMonitor>
+class Latched : public Follower<Latched<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>>
 {
 public:
   /// Data stamp type
@@ -49,21 +54,18 @@ public:
    * @brief Setup constructor
    *
    * @param min_period  minimum expected difference between data stamps
-   */
-  Latched(const offset_type min_period);
-
-  /**
-   * @brief Setup constructor
-   *
-   * @param min_period  minimum expected difference between data stamps
-   * @param container  dispatch object container (non-default initialization)
+   * @param container  container object with some initial state
+   * @param queue_monitor  queue monitor with some initial state
    *
    * @throw <code>std::invalid_argument</code> if <code>m_after < 1</code>
    */
-  Latched(const offset_type min_period, const ContainerT& container);
+  explicit Latched(
+    const offset_type min_period,
+    const ContainerT& container = ContainerT{},
+    const QueueMonitorT& queue_monitor = QueueMonitorT{});
 
 private:
-  using PolicyType = Follower<Latched<DispatchT, LockPolicyT, ContainerT>>;
+  using PolicyType = Follower<Latched<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>>;
   friend PolicyType;
 
   /**
@@ -115,13 +117,17 @@ private:
  * @tparam LockPolicyT  a BasicLockable (https://en.cppreference.com/w/cpp/named_req/BasicLockable) object or NoLock or
  * PollingLock
  * @tparam ContainerT  underlying <code>DispatchT</code> container type
- * @tparam CaptureOutputT  output capture container type
+ * @tparam QueueMonitorT queue monitor/capture preconditioning type
  */
-template <typename DispatchT, typename LockPolicyT, typename ContainerT>
-struct CaptorTraits<follower::Latched<DispatchT, LockPolicyT, ContainerT>> : CaptorTraitsFromDispatch<DispatchT>
+template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
+struct CaptorTraits<follower::Latched<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>>
+    : CaptorTraitsFromDispatch<DispatchT>
 {
   /// Underlying dispatch container type
   using DispatchContainerType = ContainerT;
+
+  /// Queue monitor/capture preconditioning type
+  using DispatchQueueMonitorType = QueueMonitorT;
 
   /// Thread locking policy type
   using LockPolicyType = LockPolicyT;

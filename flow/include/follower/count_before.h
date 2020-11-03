@@ -24,9 +24,14 @@ namespace follower
  * @tparam LockPolicyT  a BasicLockable (https://en.cppreference.com/w/cpp/named_req/BasicLockable) object or NoLock or
  * PollingLock
  * @tparam ContainerT  underlying <code>DispatchT</code> container type
+ * @tparam QueueMonitorT  object used to monitor queue state on each insertion; used to precondition capture
  */
-template <typename DispatchT, typename LockPolicyT = NoLock, typename ContainerT = DefaultContainer<DispatchT>>
-class CountBefore : public Follower<CountBefore<DispatchT, LockPolicyT, ContainerT>>
+template <
+  typename DispatchT,
+  typename LockPolicyT = NoLock,
+  typename ContainerT = DefaultContainer<DispatchT>,
+  typename QueueMonitorT = DefaultDispatchQueueMonitor>
+class CountBefore : public Follower<CountBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>>
 {
 public:
   /// Integer size type
@@ -43,24 +48,19 @@ public:
    *
    * @param count  number of elements before to capture
    * @param delay  the delay with which to capture
+   * @param container  container object with some initial state
+   * @param queue_monitor  queue monitor with some initial state
    *
    * @throws <code>std::invalid_argument</code> if <code>count == 0</code>
    */
-  explicit CountBefore(const size_type count, const offset_type& delay);
-
-  /**
-   * @brief Setup constructor
-   *
-   * @param count  number of elements before to capture
-   * @param delay  the delay with which to capture
-   * @param container  dispatch object container (non-default initialization)
-   *
-   * @throws <code>std::invalid_argument</code> if <code>count == 0</code>
-   */
-  CountBefore(const size_type count, const offset_type& delay, const ContainerT& container);
+  CountBefore(
+    const size_type count,
+    const offset_type& delay,
+    const ContainerT& container = ContainerT{},
+    const QueueMonitorT& queue_monitor = QueueMonitorT{});
 
 private:
-  using PolicyType = Follower<CountBefore<DispatchT, LockPolicyT, ContainerT>>;
+  using PolicyType = Follower<CountBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>>;
   friend PolicyType;
 
   /**
@@ -109,13 +109,17 @@ private:
  * @tparam LockPolicyT  a BasicLockable (https://en.cppreference.com/w/cpp/named_req/BasicLockable) object or NoLock or
  * PollingLock
  * @tparam ContainerT  underlying <code>DispatchT</code> container type
- * @tparam CaptureOutputT  output capture container type
+ * @tparam QueueMonitorT queue monitor/capture preconditioning type
  */
-template <typename DispatchT, typename LockPolicyT, typename ContainerT>
-struct CaptorTraits<follower::CountBefore<DispatchT, LockPolicyT, ContainerT>> : CaptorTraitsFromDispatch<DispatchT>
+template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
+struct CaptorTraits<follower::CountBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>>
+    : CaptorTraitsFromDispatch<DispatchT>
 {
   /// Underlying dispatch container type
   using DispatchContainerType = ContainerT;
+
+  /// Queue monitor/capture preconditioning type
+  using DispatchQueueMonitorType = QueueMonitorT;
 
   /// Thread locking policy type
   using LockPolicyType = LockPolicyT;

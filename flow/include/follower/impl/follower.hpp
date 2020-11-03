@@ -16,10 +16,9 @@
 namespace flow
 {
 
-template <typename PolicyT> Follower<PolicyT>::Follower() : CaptorType{} {}
-
-
-template <typename PolicyT> Follower<PolicyT>::Follower(const DispatchContainerType& container) : CaptorType{container}
+template <typename PolicyT>
+Follower<PolicyT>::Follower(const DispatchContainerType& container, const DispatchQueueMonitorType& queue_monitor) :
+    CaptorType{container, queue_monitor}
 {}
 
 
@@ -27,7 +26,14 @@ template <typename PolicyT>
 template <typename OutputDispatchIteratorT>
 State Follower<PolicyT>::capture_policy_impl(OutputDispatchIteratorT&& output, const CaptureRange<stamp_type>& range)
 {
-  return derived()->capture_follower_impl(std::forward<OutputDispatchIteratorT>(output), range);
+  if (CaptorType::queue_monitor_.check(CaptorType::queue_, range))
+  {
+    return derived()->capture_follower_impl(std::forward<OutputDispatchIteratorT>(output), range);
+  }
+  else
+  {
+    return State::SKIP_FRAME_QUEUE_PRECONDITION;
+  }
 }
 
 
