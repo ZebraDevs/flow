@@ -231,6 +231,16 @@ void Captor<CaptorT, LockableT, QueueMonitorT>::inspect_impl(InpectCallbackT&& i
   }
 }
 
+
+template <typename CaptorT, typename LockableT, typename QueueMonitorT>
+template <typename CaptureRangeT>
+void Captor<CaptorT, LockableT, QueueMonitorT>::update_queue_monitor_impl(CaptureRangeT&& range, const State sync_state)
+{
+  LockableT lock{capture_mutex_};
+  CaptorInterfaceType::queue_monitor_.update(
+    CaptorInterfaceType::queue_, std::forward<CaptureRangeT>(range), sync_state);
+}
+
 }  // namespace flow
 
 #endif  // FLOW_CAPTURE_IMPL_CAPTOR_LOCKABLE_HPP

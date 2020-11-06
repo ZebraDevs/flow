@@ -331,4 +331,4 @@ Bazel isn't everyone's cup of tea. _cmake build to come later_; earlier contribu
 
 ## TODOS
 
-- [ ] Add more documentation for `QueueMonitor`/`QueuePreconditioner` features
+- [ ] Add more documentation for `QueueMonitorT` (queue precondition) features

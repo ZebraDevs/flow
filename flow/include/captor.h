@@ -64,13 +64,28 @@ template <typename BasicLockableT = std::lock_guard<std::mutex>> struct PollingL
  */
 struct DefaultDispatchQueueMonitor
 {
+  /**
+   * @brief Check queue monitor state with on capture attempt
+   *
+   *        Checks are applied in Follower derivative Captor objects, only
+   *
+   * @retval true  allows capture to happen
+   * @retval false  otherwise, causing Captor to return <code>State::SKIP_FRAME_QUEUE_PRECONDITION</code>
+   */
   template <typename DispatchT, typename DispatchContainerT, typename StampT>
   static constexpr bool check(DispatchQueue<DispatchT, DispatchContainerT>&, const CaptureRange<StampT>&)
   {
     return true;
   };
 
-  static constexpr void update_sync_state(const State) {}
+  /**
+   * @brief Updates queue monitor state with global synchronization results
+   *
+   *        Called during <code>Sychronizer::capture</code>, updating several associated Captor s
+   */
+  template <typename DispatchT, typename DispatchContainerT, typename StampT>
+  static constexpr void update(DispatchQueue<DispatchT, DispatchContainerT>&, const CaptureRange<StampT>&, const State)
+  {}
 };
 
 
@@ -311,11 +326,17 @@ public:
   }
 
   /**
-   * @brief Updates any monitoring facilities with overall synchronization state
+   * @brief Updates any monitoring facilities with global synchronization state
    *
-   * @brief sync_state  overall synchronization state, from Sychronizer
+   * @tparam CaptureRangeT  message capture stamp range type
+   *
+   * @param range  data capture/sequencing range, from Sychronizer
+   * @brief sync_state  global synchronization state, from Sychronizer
    */
-  inline void update_sync_state(const State sync_state) { queue_monitor_.update_sync_state(sync_state); }
+  template <typename CaptureRangeT> inline void update_queue_monitor(CaptureRangeT&& range, const State sync_state)
+  {
+    derived()->update_queue_monitor_impl(std::forward<CaptureRangeT>(range), sync_state);
+  }
 
   // Sanity check to ensure that DispatchType is copyable
   FLOW_STATIC_ASSERT(std::is_copy_constructible<DispatchType>(), "'DispatchType' must be a copyable type");
@@ -437,6 +458,11 @@ private:
    * @copydoc CaptorInterface::inspect
    */
   template <typename InpectCallbackT> inline void inspect_impl(InpectCallbackT&& inspect_dispatch_cb) const;
+
+  /**
+   * @copydoc CaptorInterface::update_queue_monitor
+   */
+  template <typename CaptureRangeT> void update_queue_monitor_impl(CaptureRangeT&& range, const State sync_state);
 
   /**
    * @copydoc CaptorInterface::set_capacity
