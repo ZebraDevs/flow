@@ -111,7 +111,7 @@ public:
       result_->state = State::ERROR_DRIVER_LOWER_BOUND_EXCEEDED;
     }
 
-    c.update_sync_state(result_->state);
+    c.update_queue_monitor(result_->range, result_->state);
   }
 
   template <typename PolicyT, typename OutputIteratorT>
@@ -123,7 +123,7 @@ public:
       result_->state = c.capture(output, result_->range);
     }
 
-    c.update_sync_state(result_->state);
+    c.update_queue_monitor(result_->range, result_->state);
   }
 
   template <typename PolicyT, typename OutputIteratorT>
@@ -138,7 +138,7 @@ public:
       result_->state = State::ERROR_DRIVER_LOWER_BOUND_EXCEEDED;
     }
 
-    c.update_sync_state(result_->state);
+    c.update_queue_monitor(result_->range, result_->state);
   }
 
   template <typename PolicyT, typename OutputIteratorT>
@@ -150,7 +150,7 @@ public:
       result_->state = c.capture(output, result_->range, timeout_);
     }
 
-    c.update_sync_state(result_->state);
+    c.update_queue_monitor(result_->range, result_->state);
   }
 
 private:

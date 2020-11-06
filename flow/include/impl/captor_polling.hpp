@@ -183,6 +183,16 @@ private:
     }
   }
 
+  /**
+   * @copydoc CaptorInterface::update_monitor
+   */
+  template <typename CaptureRangeT> void update_queue_monitor_impl(CaptureRangeT&& range, const State sync_state)
+  {
+    BasicLockableT lock{queue_mutex_};
+    CaptorInterfaceType::queue_monitor_.update(
+      CaptorInterfaceType::queue_, std::forward<CaptureRangeT>(range), sync_state);
+  }
+
   /// Mutex to protect queue ONLY
   mutable std::mutex queue_mutex_;
 

@@ -157,6 +157,15 @@ private:
     }
   }
 
+  /**
+   * @copydoc CaptorInterface::update_queue_monitor
+   */
+  template <typename CaptureRangeT> void update_queue_monitor_impl(CaptureRangeT&& range, const State sync_state)
+  {
+    CaptorInterfaceType::queue_monitor_.update(
+      CaptorInterfaceType::queue_, std::forward<CaptureRangeT>(range), sync_state);
+  }
+
   using CaptorInterfaceType = CaptorInterface<Captor<CaptorT, NoLock, QueueMonitorT>>;
   friend CaptorInterfaceType;
 
