@@ -120,15 +120,15 @@ TEST(Synchronizer, UsageExampleExampleMultiThreaded)
   std::unique_lock<std::mutex> lock{working_mutex};
 
   // Only wait if still working
-  if (working)
+  while (working)
   {
     progress_cv.wait(lock);
   }
 
+  synchronizer_thread.join();
+
   // Cancel all data-waits; start a clean slate, if you need to
   Synchronizer::reset(std::forward_as_tuple(next_driver, closest_follower, before_follower));
-
-  synchronizer_thread.join();
 
   ASSERT_EQ(next_driver.size(), 0UL);
   ASSERT_EQ(closest_follower.size(), 0UL);
@@ -228,15 +228,15 @@ TEST(Synchronizer, UsageExampleExampleMultiThreadedPolling)
   std::unique_lock<std::mutex> lock{working_mutex};
 
   // Only wait if still working
-  if (working)
+  while (working)
   {
     progress_cv.wait(lock);
   }
 
+  synchronizer_thread.join();
+
   // Cancel all data-waits; start a clean slate, if you need to
   Synchronizer::reset(std::forward_as_tuple(next_driver, closest_follower, before_follower));
-
-  synchronizer_thread.join();
 
   ASSERT_EQ(next_driver.size(), 0UL);
   ASSERT_EQ(closest_follower.size(), 0UL);
