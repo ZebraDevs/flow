@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/fetchrobotics/flow.svg?branch=master)](https://travis-ci.com/fetchrobotics/flow)
+[![Build Status](https://travis-ci.com/fetchrobotics/flow.svg?branch=support-1.0.0)](https://travis-ci.com/fetchrobotics/flow)
 
 # Flow
 
