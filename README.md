@@ -319,6 +319,54 @@ Captures one `Dispatch` element before the capture range lower bound; one elemen
 ![Ranged](doc/follower/ranged.png)
 
 
+#### Follower Captor Data/Queue Monitoring Customization
+
+Follower Captors support customizable sync behavior through a "queue monitor". Queue monitor objects are specified in the template argument list of a captor. If not specified, then a default, `flow::DefaultDispatchQueueMonitor`, is used with no additional overhead, assuming some form of basic compiler optimization enabled.
+
+Queue monitor objects provide access to ALL the data currently available in a capture queue when the following methods are called:
+- `QueueMonitor::check` : per-captor synchronization state is checked, i.e. when held data is checked to verify that synchronization is state `PRIMED` and data can be captured. This check is a pre-condition applied BEFORE the actual capture behavior. In other words, this check can override a capture without removing data, but allow the current synchronization frame to be skipped.
+- `QueueMonitor::update` : global synchronization state is finished, i.e. when all captors have been checked and a global synchronization state is returned
+
+`check` and `update` methods can be used to modify how and when data is captured (in a potentially stateful way, if needed). These methods may be `static` or `const`-qualified, depending on the use case.
+
+An example queue monitor might look as follows:
+```c++
+struct MyQueueMonitor
+{
+  /**
+   * @brief Check queue monitor state with on capture attempt
+   *
+   *        Checks are applied in Follower derivative Captor objects, only
+   *
+   * @retval true  allows capture to happen
+   * @retval false  otherwise, causing Captor to return <code>State::SKIP_FRAME_QUEUE_PRECONDITION</code>
+   */
+  template <typename DispatchT, typename DispatchContainerT, typename StampT>
+  bool check(DispatchQueue<DispatchT, DispatchContainerT>&, const CaptureRange<StampT>&)
+  {
+    ...
+    return (cond == target_value);
+  };
+
+  /**
+   * @brief Updates queue monitor state with global synchronization results
+   *
+   *        Called during <code>Sychronizer::capture</code>, updating several associated Captor s
+   */
+  template <typename DispatchT, typename DispatchContainerT, typename StampT>
+  void update(DispatchQueue<DispatchT, DispatchContainerT>&, const CaptureRange<StampT>&, const State)
+  {
+    ...
+  }
+};
+
+
+...
+// Main user code
+
+// Before captor with custom queue monitor
+flow::follower::Before<DispatchType, flow::NoLock, std::deque<DispatchType>, MyQueueMonitor> my_before_captor;
+```
 
 ## Running Tests
 
@@ -327,8 +375,3 @@ bazel test ... --test_output=all
 ```
 
 Bazel isn't everyone's cup of tea. _cmake build to come later_; earlier contribution welcome.
-
-
-## TODOS
-
-- [ ] Add more documentation for `QueueMonitorT` (queue precondition) features
