@@ -18,7 +18,8 @@ jobs:
   - stage: style_check
     script: pre-commit run -a
     before_install:
-      - pip install pre-commit
+      - pip install identify==1.5.10
+      - pip install pre-commit==1.20.0
       - sudo apt install clang-format-7
   - stage: unit_tests
     script: bazel test //flow/test/...
