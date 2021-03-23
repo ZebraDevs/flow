@@ -1,5 +1,8 @@
 [![Build Status](https://travis-ci.com/fetchrobotics/flow.svg?branch=master)](https://travis-ci.com/fetchrobotics/flow)
 
+[**3.23.2021**]
+_We are currently experiencing issues with Travis CI after they changed their plan for open source repositories. The build badge is currently not reliable. Apologies._
+
 # Flow
 
 C++14, header-only library for multi-stream data synchronization.
