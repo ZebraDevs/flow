@@ -42,13 +42,7 @@ jobs:
           # Working directory
           working-directory: .
           # Generate latex documentation
-          Zenable-latex: False
-
-
-
-    build:
-        name: Build tcmalloc
-        runs-on: ubuntu-latest
+          enable-latex: False
         steps:
 
  
