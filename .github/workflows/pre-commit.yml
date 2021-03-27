@@ -1,4 +1,4 @@
-name: pre-commit
+name: Style Checks
 
 on:
   pull_request:
