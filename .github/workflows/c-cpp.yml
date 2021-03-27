@@ -12,11 +12,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Style Check
-      uses: pre-commit/action@v2.0.0
-      with:
-        # options to pass to pre-commit run
-        extra_args: --all-files
+#     - name: Style Check
+#       uses: pre-commit/action@v2.0.0
+#       with:
+#         # options to pass to pre-commit run
+#         extra_args: --all-files
     - name: Run Tests
       uses: ngalaiko/bazel-action@2.0.0
       with:
