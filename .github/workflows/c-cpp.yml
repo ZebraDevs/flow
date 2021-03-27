@@ -14,11 +14,6 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
-    
-    # Style checks via pre-commit
-#     - run: pip install identify==1.5.10 pre-commit==1.20.0
-#     - run: sudo apt install clang-format-7
-#     - run: python pre-commit run -a
 
     - name: Setup bazel
       uses: jwlawson/actions-setup-bazel@v1
@@ -43,6 +38,3 @@ jobs:
         working-directory: .
         # Generate latex documentation
         enable-latex: False
-        steps:
-
- 
