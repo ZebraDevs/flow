@@ -16,10 +16,7 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Style Check
-      uses: pre-commit/action@v2.0.0
-      with:
-        # options to pass to pre-commit run
-        extra_args: --all-files
+      run:  (pip install identify==1.5.10) && (pip install pre-commit==1.20.0) && (apt install clang-format-7 -y) && (pre-commit run -a)
 
     - name: Setup bazel
       uses: jwlawson/actions-setup-bazel@v1
