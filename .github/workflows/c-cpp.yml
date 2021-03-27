@@ -15,11 +15,11 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
    
-    - name: pip-commit
+    - name: Pip Install
       run:  pip install identify==1.5.10 pre-commit==1.20.0
       
-    - name: install-clang-7
-      run: apt install clang-format-7
+    - name: Apt Install
+      run: sudo apt install clang-format-7
       
     - name: Style Check
       run: pre-commit install && pre-commit run -a
