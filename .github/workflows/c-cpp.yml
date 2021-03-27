@@ -1,0 +1,33 @@
+name: C/C++ CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Style Check
+      uses: pre-commit/action@v2.0.0
+      with:
+        # options to pass to pre-commit run
+        extra_args: --all-files
+    - name: Run Tests
+      uses: ngalaiko/bazel-action@2.0.0
+      with:
+        # Arguments to the bazel command
+        args: bazel test //flow/test/...
+    - name: Generate Documentation
+      uses: mattnotmitt/doxygen-action@v1.2.3
+      with:
+        # Path to Doxyfile
+        doxyfile-path: ./Doxyfile
+        # Working directory
+        working-directory: .
+        # Generate latex documentation
+        enable-latex: False
