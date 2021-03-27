@@ -17,17 +17,38 @@ jobs:
 #       with:
 #         # options to pass to pre-commit run
 #         extra_args: --all-files
-    - name: Run Tests
-      uses: ngalaiko/bazel-action@2.0.0
-      with:
-        # Arguments to the bazel command
-        args: ${GITHUB_WORKSPACE}/bin/bazel test //flow/test/...
-    - name: Generate Documentation
-      uses: mattnotmitt/doxygen-action@v1.2.3
-      with:
-        # Path to Doxyfile
-        doxyfile-path: ./Doxyfile
-        # Working directory
-        working-directory: .
-        # Generate latex documentation
-        enable-latex: False
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup bazel
+        uses: jwlawson/actions-setup-bazel@v1
+        with:
+          bazel-version: '2.0.0'
+
+      - name: Setup cache
+        uses: actions/cache@v2
+        with:
+          path: "/home/runner/.cache/bazel"
+          key: bazel
+
+      - name: Run Tests
+        run: bazel test //flow/test/...
+        
+      - name: Generate Documentation
+        uses: mattnotmitt/doxygen-action@v1.2.3
+        with:
+          # Path to Doxyfile
+          doxyfile-path: ./Doxyfile
+          # Working directory
+          working-directory: .
+          # Generate latex documentation
+          Zenable-latex: False
+
+
+
+    build:
+        name: Build tcmalloc
+        runs-on: ubuntu-latest
+        steps:
+
+ 
