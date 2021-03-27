@@ -14,9 +14,15 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
-
-    - name: pre-commit
-      uses: pre-commit/action@0764670bf370aab253130d534e1eda7ff497dc60
+   
+    - name: pip-commit
+      run:  pip install identify==1.5.10 pre-commit==1.20.0
+      
+    - name: install-clang-7
+      run: apt install clang-format-7
+      
+    - name: Style Check:
+      run: pre-commit install && pre-commit run -a
 
     - name: Setup bazel
       uses: jwlawson/actions-setup-bazel@v1
