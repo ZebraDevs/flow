@@ -1,4 +1,6 @@
-[![Build Status](https://travis-ci.com/fetchrobotics/flow.svg?branch=support-1.0.0)](https://travis-ci.com/fetchrobotics/flow)
+![Unit Tests](https://github.com/fetchrobotics/flow/actions/workflows/c-cpp.yml/badge.svg)
+![Style Checks](https://github.com/fetchrobotics/flow/actions/workflows/pre-commit.yml/badge.svg)
+![Documentation](https://github.com/fetchrobotics/flow/actions/workflows/doxygen.yml/badge.svg)
 
 # Flow
 
