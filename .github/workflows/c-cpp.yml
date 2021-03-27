@@ -15,8 +15,10 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Style Check
-      run:  (pip install identify==1.5.10) && (pip install pre-commit==1.20.0) && (apt install clang-format-7 -y) && (pre-commit run -a)
+    - name: pre-commit
+      # You may pin to the exact commit or the version.
+      # uses: pre-commit/action@0764670bf370aab253130d534e1eda7ff497dc60
+      uses: pre-commit/action@v2.0.0
 
     - name: Setup bazel
       uses: jwlawson/actions-setup-bazel@v1
