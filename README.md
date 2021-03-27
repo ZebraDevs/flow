@@ -1,7 +1,6 @@
-[![Build Status](https://travis-ci.com/fetchrobotics/flow.svg?branch=master)](https://travis-ci.com/fetchrobotics/flow)
-
-[**3.23.2021**]
-_We are currently experiencing issues with Travis CI after they changed their plan for open source repositories. The build badge is currently not reliable. Apologies._
+![Unit Tests](https://github.com/fetchrobotics/flow/actions/workflows/c-cpp.yml/badge.svg)
+![Style Checks](https://github.com/fetchrobotics/flow/actions/workflows/pre-commit.yml/badge.svg)
+![Documentation](https://github.com/fetchrobotics/flow/actions/workflows/doxygen.yml/badge.svg)
 
 # Flow
 
