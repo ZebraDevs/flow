@@ -21,7 +21,7 @@ jobs:
     - name: install-clang-7
       run: apt install clang-format-7
       
-    - name: Style Check:
+    - name: Style Check
       run: pre-commit install && pre-commit run -a
 
     - name: Setup bazel
