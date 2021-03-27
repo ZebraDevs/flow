@@ -42,7 +42,7 @@ jobs:
         # Working directory
         working-directory: .
         # Generate latex documentation
-          enable-latex: False
+        enable-latex: False
         steps:
 
  
