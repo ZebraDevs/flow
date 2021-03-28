@@ -28,13 +28,3 @@ jobs:
 
     - name: Run Unit Tests
       run: bazel test //flow/test/...
-
-    - name: Build Documentation
-      uses: mattnotmitt/doxygen-action@v1.2.3
-      with:
-        # Path to Doxyfile
-        doxyfile-path: ./Doxyfile
-        # Working directory
-        working-directory: .
-        # Generate latex documentation
-        enable-latex: False
