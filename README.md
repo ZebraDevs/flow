@@ -1,5 +1,5 @@
 ![Unit Tests](https://github.com/fetchrobotics/flow/actions/workflows/pr.yml/badge.svg)
-![Style Checks](https://github.com/fetchrobotics/flow/actions/workflows/pre-commit.yml/badge.svg)
+![Documentation](https://github.com/fetchrobotics/flow/actions/workflows/doxygen.yml/badge.svg)
 
 # Flow
 
