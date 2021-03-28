@@ -1,8 +1,0 @@
-digraph "Graphical Class Hierarchy"
-{
- // LATEX_PDF_SIZE
-  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
-  node [fontname="Helvetica",fontsize="10",shape=record];
-  rankdir="LR";
-  Node0 [label="flow::DispatchAccess\l\<::std::pair\< StampT,\l ValueT \> \>",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structflow_1_1_dispatch_access_3_1_1std_1_1pair_3_01_stamp_t_00_01_value_t_01_4_01_4.html",tooltip="Dispatch access helper."];
-}
