@@ -3,19 +3,30 @@ name: Documentation
 
 on:
   pull_request:
-  push:
     branches: [master]
+    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
 
 jobs:
   doxygen:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - uses: mattnotmitt/doxygen-action@v1.2.3
+
+    - name: Install Doxygen
+      run: sudo apt install doxygen graphviz
+
+    - name: Run Doxygen
+      run: doxygen ./Doxyfile
+
+    - name: Deploy to GitHub Pages
+      uses: JamesIves/github-pages-deploy-action@4.1.0
       with:
-        # Path to Doxyfile
-        doxyfile-path: ./Doxyfile
-        # Working directory
-        working-directory: .
-        # Generate latex documentation
-        enable-latex: False
+        token: ${{ secrets.GITHUB_TOKEN }}
+        # This is the branch you wish to deploy to, for example gh-pages or docs.
+        branch: gh-pages
+        # The folder in your repository that you want to deploy.
+        folder: /tmp/doxygen-out/
+        # If you would like to push the contents of the deployment folder into a specific directory on the deployment branch you can specify it here.
+        target-folder: doxygen-out
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
