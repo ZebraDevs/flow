@@ -1,0 +1,8 @@
+digraph "Graphical Class Hierarchy"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node0 [label="flow::StampTraits\<\l std::chrono::time_point\l\< ClockT, DurationT \> \>",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structflow_1_1_stamp_traits_3_01std_1_1chrono_1_1time__point_3_01_clock_t_00_01_duration_t_01_4_01_4.html",tooltip="Helper struct used to specify stamp attributes for <chrono> time types."];
+}

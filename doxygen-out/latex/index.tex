@@ -1,0 +1,475 @@
+  
+
+\doxysection*{Flow}
+
+C++14, header-\/only library for multi-\/stream data synchronization.
+
+\doxysubsection*{A\+PI Documentation}
+
+Documentation for latest version available \href{https://fetchrobotics.github.io/flow/doxygen-out/html/index.html}{\texttt{ here}}.
+
+\doxysubsection*{What is this used for?}
+
+This library is meant for generating groups of data from separate series. The core problems it is meant to address are\+:
+
+
+\begin{DoxyItemize}
+\item How do we know which elements of data relate to one other across multiple series?
+\item How do we know when this data is ready to be retrieved (\char`\"{}captured\char`\"{}) for further use?
+\item How do we capture different types of data uniformly and with minimal overhead?
+\end{DoxyItemize}
+
+In addressing these problems, this library enables data-\/driven event execution using data collected from distinct streaming series.
+
+\doxysubsubsection*{Example use case}
+
+At Fetch Robotics Inc., this library is used in tandem with R\+OS. R\+OS subscribers are used to feed data into {\ttfamily Flow} capture buffers with light message feeding callbacks. The callbacks transfer R\+OS messages into the appropriate {\ttfamily Flow} capture buffer. {\ttfamily Flow} entities are serviced separately to compute events from these messages. The resulting data frames from synchronization contain all messages needed to run a particular task. In this way, messages are also used as a pace-\/setting mechanism for core execution blocks.
+
+Check out the \href{https://github.com/fetchrobotics/flow_ros}{\texttt{ Flow-\/\+R\+OS}} wrapper library for more details.
+
+\doxysubsection*{Components}
+
+\doxysubsubsection*{Captors}
+
+{\ttfamily \mbox{\hyperlink{classflow_1_1_captor}{flow\+::\+Captor}}} objects are data buffers with an associated synchronization policy. They are used in tuples to synchronize several streams of data. {\ttfamily \mbox{\hyperlink{classflow_1_1_captor}{flow\+::\+Captor}}} objects fall into two categories\+:
+
+
+\begin{DoxyItemize}
+\item {\ttfamily \mbox{\hyperlink{classflow_1_1_driver}{flow\+::\+Driver}}} captors, which establish a time range for synchronization
+\item {\ttfamily \mbox{\hyperlink{classflow_1_1_follower}{flow\+::\+Follower}}} captors, which select buffered data based on a driving sequencing range
+\end{DoxyItemize}
+
+{\ttfamily \mbox{\hyperlink{classflow_1_1_captor}{flow\+::\+Captor}}} objects from both categories will\+:
+
+
+\begin{DoxyItemize}
+\item select (capture) data from their internal buffers
+\item remove data from their internal buffers when it is no longer needed
+\item re-\/order data that is added to the internal buffer out of order {\itshape before} data synchronization is attempted
+\end{DoxyItemize}
+
+Additionally, {\ttfamily \mbox{\hyperlink{classflow_1_1_captor}{flow\+::\+Captor}}} objects were designed to\+:
+
+
+\begin{DoxyItemize}
+\item work in both multi-\/threaded and single-\/threaded contexts
+\begin{DoxyItemize}
+\item multi-\/threaded with blocking capture on asynchronous data injection
+\item multi-\/threaded with polling for capture
+\item single-\/threaded with polling for capture (no locking overhead)
+\end{DoxyItemize}
+\item support customizable data storage
+\begin{DoxyItemize}
+\item users can supply custom underlying data containers (default is a \href{https://en.cppreference.com/w/cpp/container/deque}{\texttt{ {\ttfamily std\+::deque}}})
+\item in turn, this allows for easy specification of custom allocation methods
+\end{DoxyItemize}
+\item support input data generically through the use of a {\ttfamily Dispatch} concept and flexible data access (see below)
+\item support generic data retrieval through use of \href{https://en.cppreference.com/w/cpp/named_req/OutputIterator}{\texttt{ output iterators}}
+\end{DoxyItemize}
+
+\doxysubsubsection*{Synchronizer}
+
+{\ttfamily \mbox{\hyperlink{classflow_1_1_synchronizer}{flow\+::\+Synchronizer}}} provides methods for operating on {\ttfamily \mbox{\hyperlink{classflow_1_1_captor}{flow\+::\+Captor}}} objects as a group (arranged as a tuple). The {\ttfamily \mbox{\hyperlink{classflow_1_1_synchronizer}{flow\+::\+Synchronizer}}} can be used to retrieve synchronized data between several buffers like so\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{ \{c++\}}
+\DoxyCodeLine{// We have three captors for different types of data: driver, first\_follower, second\_follower}
+\DoxyCodeLine{}
+\DoxyCodeLine{// Any iterable container can be used to capture data (even raw buffers!). Capturing through}
+\DoxyCodeLine{// iterators allows the end user to specify their own memory handling}
+\DoxyCodeLine{std::vector<CustomDispatch<int>> driver\_data;}
+\DoxyCodeLine{std::list<CustomDispatch<double>> first\_follower\_data;}
+\DoxyCodeLine{std::deque<CustomDispatch<std::string>> before\_follower\_data;}
+\DoxyCodeLine{}
+\DoxyCodeLine{// Run data capture}
+\DoxyCodeLine{const auto result = flow::Synchronizer::capture(}
+\DoxyCodeLine{  std::forward\_as\_tuple(driver, first\_follower, second\_follower),}
+\DoxyCodeLine{  std::forward\_as\_tuple(std::back\_inserter(driver\_data),}
+\DoxyCodeLine{                        std::back\_inserter(first\_follower\_data),}
+\DoxyCodeLine{                        std::back\_inserter(before\_follower\_data)));}
+\DoxyCodeLine{}
+\DoxyCodeLine{if (result == flow::State::PRIMED)}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{  // driver\_data, first\_follower\_data, before\_follower\_data are ready}
+\DoxyCodeLine{\}}
+\end{DoxyCode}
+
+
+The {\ttfamily \mbox{\hyperlink{classflow_1_1_synchronizer}{flow\+::\+Synchronizer}}} may also be used to {\itshape test} if capture is possible across all {\ttfamily \mbox{\hyperlink{classflow_1_1_captor}{flow\+::\+Captor}}} objects without changing the results of the next data capture\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{ \{c++\}}
+\DoxyCodeLine{// We have three captors for different types of data: driver, first\_follower, second\_follower}
+\DoxyCodeLine{}
+\DoxyCodeLine{// Run data capture}
+\DoxyCodeLine{const auto result = flow::Synchronizer::dry\_capture(}
+\DoxyCodeLine{  std::forward\_as\_tuple(driver, first\_follower, second\_follower));}
+\DoxyCodeLine{}
+\DoxyCodeLine{if (result == flow::State::PRIMED)}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{  // sync is possible (data for next capture was not removed)}
+\DoxyCodeLine{\}}
+\DoxyCodeLine{}
+\DoxyCodeLine{// The next call to `Synchronizer::capture` will yield valid results}
+\end{DoxyCode}
+
+
+\doxyparagraph*{Usage Examples}
+
+
+\begin{DoxyItemize}
+\item See these \href{flow/test/unit/synchronizer_mt_example.cpp}{\texttt{ test cases}} for examples of {\ttfamily \mbox{\hyperlink{classflow_1_1_synchronizer}{flow\+::\+Synchronizer}}} in action in a multi-\/threaded context.
+\item See this \href{flow/test/unit/synchronizer_st_example.cpp}{\texttt{ test case}} for an example of {\ttfamily \mbox{\hyperlink{classflow_1_1_synchronizer}{flow\+::\+Synchronizer}}} in action in a single-\/threaded context.
+\end{DoxyItemize}
+
+\doxysubsubsection*{Dispatch}
+
+A {\ttfamily Dispatch} is a conceptual object used to represent and access key information about data within {\ttfamily \mbox{\hyperlink{classflow_1_1_captor}{flow\+::\+Captor}}} buffers. Essentially, {\ttfamily Dispatch} objects have both data payload and sequencing information. An implementation which fulfills the {\ttfamily Dispatch} concept can be customized per use case.
+
+In order to fulfill the requirements of the {\ttfamily Dispatch} concept, users must provide the following companion template specialization for their data type\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{ \{c++\}}
+\DoxyCodeLine{namespace flow}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{}
+\DoxyCodeLine{template <> struct DispatchAccess<::MyType>}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{  // Accesses sequencing stamp associated with data element}
+\DoxyCodeLine{  static StampType stamp(const ::MyType\& dispatch);}
+\DoxyCodeLine{}
+\DoxyCodeLine{  // Accesses underlying value}
+\DoxyCodeLine{  static ValueType value(const ::MyType\& dispatch); // could just be a pass-\/through for ::MyType}
+\DoxyCodeLine{\};}
+\DoxyCodeLine{}
+\DoxyCodeLine{\}  // namespace flow}
+\end{DoxyCode}
+
+
+This library provides a default {\ttfamily \mbox{\hyperlink{classflow_1_1_dispatch}{flow\+::\+Dispatch}}$<$StampT, DataT$>$} object template, which is essentially just a slightly more descriptive {\ttfamily std\+::pair} for a stamp and a value. All required companion facilities have been provided for this template. This library also provides default accessors for {\ttfamily std\+::pair$<$StampT, ValueT$>$}.
+
+If your data already has an embedded sequencing value, you need only provide the appropriate access helpers. Take the following example\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{ \{c++\}}
+\DoxyCodeLine{struct MyMessage}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{  StampType stamp;}
+\DoxyCodeLine{  MessageData meaningful\_data;}
+\DoxyCodeLine{\};}
+\end{DoxyCode}
+
+
+You can specify access to stamp and message payload values with\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{ \{c++\}}
+\DoxyCodeLine{namespace flow}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{}
+\DoxyCodeLine{template <> struct DispatchAccess<::MyMessage>}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{  static const ::StampType\& stamp(const ::MyMessage\& dispatch) \{ return message.stamp; \}}
+\DoxyCodeLine{}
+\DoxyCodeLine{  static const ::MessageData\& value(const ::MyMessage\& dispatch) \{ return message.meaningful\_data; \}}
+\DoxyCodeLine{\};}
+\DoxyCodeLine{}
+\DoxyCodeLine{\}  // namespace flow}
+\end{DoxyCode}
+
+
+Additionally, you must provide a specialization of {\ttfamily \mbox{\hyperlink{structflow_1_1_dispatch_traits}{flow\+::\+Dispatch\+Traits}}}, which will be used to specify required type info used by {\ttfamily \mbox{\hyperlink{classflow_1_1_captor}{flow\+::\+Captor}}} objects\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{ \{c++\}}
+\DoxyCodeLine{namespace flow}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{}
+\DoxyCodeLine{template <> struct DispatchTraits<::MyMessageDispatch>}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{  /// Dispatch stamp type}
+\DoxyCodeLine{  using stamp\_type = ::StampType;}
+\DoxyCodeLine{}
+\DoxyCodeLine{  /// Dispatch data type}
+\DoxyCodeLine{  using value\_type = ::MessageData;}
+\DoxyCodeLine{}
+\DoxyCodeLine{\}  // namespace flow}
+\end{DoxyCode}
+
+
+If your associated sequence stamp type ({\ttfamily Stamp\+Type} in the example above) is not a \href{https://en.cppreference.com/w/cpp/types/is_integral}{\texttt{ non-\/integral}} type (excluding {\ttfamily bool}), then you must also specialize {\ttfamily \mbox{\hyperlink{structflow_1_1_stamp_traits}{flow\+::\+Stamp\+Traits}}}\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{ \{c++\}}
+\DoxyCodeLine{namespace flow}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{}
+\DoxyCodeLine{template <> struct DispatchTraits<::StampType>}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{  /// Stamp type}
+\DoxyCodeLine{  using stamp\_type = StampType;}
+\DoxyCodeLine{}
+\DoxyCodeLine{  /// Associated duration/offset type}
+\DoxyCodeLine{  using offset\_type = ... // typically a signed difference-\/result type, e.g. int or std::chrono::duration}
+\DoxyCodeLine{}
+\DoxyCodeLine{  /// Returns minimum stamp value}
+\DoxyCodeLine{  static constexpr StampT min() \{ return ...; \};}
+\DoxyCodeLine{}
+\DoxyCodeLine{  /// Returns maximum stamp value}
+\DoxyCodeLine{  static constexpr StampT max() \{ return ...; \};}
+\DoxyCodeLine{\};}
+\DoxyCodeLine{}
+\DoxyCodeLine{\}  // namespace flow}
+\end{DoxyCode}
+
+
+Partial specializations for \href{https://en.cppreference.com/w/cpp/chrono/time_point}{\texttt{ {\ttfamily std\+::chrono\+::time\+\_\+point}}} templates are provided.
+
+\doxysubsubsection*{Data queue storage customization}
+
+Captors utilize a {\ttfamily \mbox{\hyperlink{classflow_1_1_dispatch_queue}{flow\+::\+Dispatch\+Queue}}} for data ordering and retrieval. Users may supply a custom underlying container to manage this data. Refer to \href{https://en.cppreference.com/w/cpp/container/deque}{\texttt{ {\ttfamily std\+::deque}}} for more information on the listed requirements. The container type must supply the following\+:
+
+\tabulinesep=1mm
+\begin{longtabu}spread 0pt [c]{*{2}{|X[-1]}|}
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Required member Type }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Description  }\\\cline{1-2}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Required member Type }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Description  }\\\cline{1-2}
+\endhead
+{\ttfamily Container\+T\+::size\+\_\+type} &integer size type  \\\cline{1-2}
+{\ttfamily Container\+T\+::const\+\_\+iterator} &immutable element iterator type  \\\cline{1-2}
+{\ttfamily Container\+T\+::const\+\_\+reverse\+\_\+iterator} &reverse-\/sequence immutable element iterator type  \\\cline{1-2}
+\end{longtabu}
+
+
+\tabulinesep=1mm
+\begin{longtabu}spread 0pt [c]{*{2}{|X[-1]}|}
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Required method }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Description  }\\\cline{1-2}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Required method }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Description  }\\\cline{1-2}
+\endhead
+{\ttfamily Container\+T\+::begin/cbegin} &returns iterator to first immutable element  \\\cline{1-2}
+{\ttfamily Container\+T\+::end/cend} &returns iterator to one past last immutable element  \\\cline{1-2}
+{\ttfamily Container\+T\+::rbegin/crbegin} &returns reverse iterator to last immutable element  \\\cline{1-2}
+{\ttfamily Container\+T\+::rend/crend} &returns reverse iterator to one past first immutable element  \\\cline{1-2}
+{\ttfamily Container\+T\+::emplace\+\_\+front} &constructs an element, in place, at first position in the container  \\\cline{1-2}
+{\ttfamily Container\+T\+::emplace\+\_\+back} &constructs an element, in place, at last position in the container  \\\cline{1-2}
+{\ttfamily Container\+T\+::emplace} &constructs an element, in place, after a specified iterator position  \\\cline{1-2}
+{\ttfamily Container\+T\+::empty} &returns {\ttfamily true} if container contains no elements  \\\cline{1-2}
+{\ttfamily Container\+T\+::size} &returns the number of elements in the container  \\\cline{1-2}
+{\ttfamily Container\+T\+::pop\+\_\+front} &removes first element in the container  \\\cline{1-2}
+{\ttfamily Container\+T\+::front} &returns immutable reference to first element in the container  \\\cline{1-2}
+{\ttfamily Container\+T\+::back} &returns immutable reference to last element in the container  \\\cline{1-2}
+{\ttfamily Container\+T\+::clear} &clears available container contents  \\\cline{1-2}
+\end{longtabu}
+
+
+\doxysubsection*{Captor Synchronization Policies}
+
+\doxysubsubsection*{Drivers}
+
+\doxyparagraph*{{\ttfamily \mbox{\hyperlink{classflow_1_1driver_1_1_batch}{flow\+::driver\+::\+Batch}}}}
+
+Captures the next N-\/oldest available {\ttfamily Dispatch} elements, removing only the oldest. Capture range lower bound is the stamp associated with the oldest captured {\ttfamily Dispatch}. Capture range upper bound is the stamp associated with the oldest captured {\ttfamily Dispatch}.
+
+ 
+\begin{DoxyImage}
+\includegraphics[width=\textwidth,height=\textheight/2,keepaspectratio=true]{batch.png}
+\doxyfigcaption{Batch}
+\end{DoxyImage}
+  
+
+\doxyparagraph*{{\ttfamily \mbox{\hyperlink{classflow_1_1driver_1_1_chunk}{flow\+::driver\+::\+Chunk}}}}
+
+Captures the next N-\/oldest available {\ttfamily Dispatch} elements, removing all which are captured. Capture range lower bound is the stamp associated with the oldest captured {\ttfamily Dispatch}. Capture range upper bound is the stamp associated with the oldest captured {\ttfamily Dispatch}.
+
+ 
+\begin{DoxyImage}
+\includegraphics[width=\textwidth,height=\textheight/2,keepaspectratio=true]{chunk.png}
+\doxyfigcaption{Chunk}
+\end{DoxyImage}
+  
+
+\doxyparagraph*{{\ttfamily \mbox{\hyperlink{classflow_1_1driver_1_1_next}{flow\+::driver\+::\+Next}}}}
+
+Captures the oldest available {\ttfamily Dispatch} elements. Capture range is the stamp associated with that {\ttfamily Dispatch}.
+
+ 
+\begin{DoxyImage}
+\includegraphics[width=\textwidth,height=\textheight/2,keepaspectratio=true]{next.png}
+\doxyfigcaption{Next}
+\end{DoxyImage}
+  
+
+\doxyparagraph*{{\ttfamily \mbox{\hyperlink{classflow_1_1driver_1_1_throttled}{flow\+::driver\+::\+Throttled}}}}
+
+Captures the oldest available {\ttfamily Dispatch} elements. Capture range is the stamp associated with that {\ttfamily Dispatch}.
+
+ 
+\begin{DoxyImage}
+\includegraphics[width=\textwidth,height=\textheight/2,keepaspectratio=true]{throttled.png}
+\doxyfigcaption{Throttled}
+\end{DoxyImage}
+  
+
+\doxysubsubsection*{Followers}
+
+\doxyparagraph*{{\ttfamily \mbox{\hyperlink{classflow_1_1follower_1_1_any_before}{flow\+::follower\+::\+Any\+Before}}}}
+
+Captures all {\ttfamily Dispatch} elements before the capture range lower bound, minus a {\ttfamily delay} offset. All of the captured elements are removed.
+
+Capture will report a {\ttfamily \mbox{\hyperlink{namespaceflow_adefe9726e597eb50c46f0f6a202018e9a6eed4968877959d0209d9b75fdd16b52}{flow\+::\+State\+::\+P\+R\+I\+M\+ED}}} state even if the buffer is empty, making this captor the ideal choice if you are working with a data stream that is \char`\"{}optional\char`\"{} for the current synchronization attempt.
+
+It should be understood that the data captured by this captor is largely dependent on how data is add to the buffer and when {\ttfamily capture} is called.
+
+ 
+\begin{DoxyImage}
+\includegraphics[width=\textwidth,height=\textheight/2,keepaspectratio=true]{any_before.png}
+\doxyfigcaption{Any\+Before}
+\end{DoxyImage}
+  
+
+\doxyparagraph*{{\ttfamily \mbox{\hyperlink{classflow_1_1follower_1_1_before}{flow\+::follower\+::\+Before}}}}
+
+Captures all {\ttfamily Dispatch} elements before the capture range lower bound, minus a {\ttfamily delay} offset, once at least a single element is available after said sequencing boundary. All of the captured elements are removed.
+
+ 
+\begin{DoxyImage}
+\includegraphics[width=\textwidth,height=\textheight/2,keepaspectratio=true]{before.png}
+\doxyfigcaption{Before}
+\end{DoxyImage}
+  
+
+\doxyparagraph*{{\ttfamily \mbox{\hyperlink{classflow_1_1follower_1_1_closest_before}{flow\+::follower\+::\+Closest\+Before}}}}
+
+Captures one {\ttfamily Dispatch} element before the capture range lower bound, minus a {\ttfamily delay} offset, within a pre-\/configured data period. All older elements are removed.
+
+ 
+\begin{DoxyImage}
+\includegraphics[width=\textwidth,height=\textheight/2,keepaspectratio=true]{closest_before.png}
+\doxyfigcaption{Closest\+Before}
+\end{DoxyImage}
+  
+
+\doxyparagraph*{{\ttfamily \mbox{\hyperlink{classflow_1_1follower_1_1_count_before}{flow\+::follower\+::\+Count\+Before}}}}
+
+Captures N {\ttfamily Dispatch} elements before the capture range lower bound, minus a {\ttfamily delay} offset. All older elements are removed.
+
+ 
+\begin{DoxyImage}
+\includegraphics[width=\textwidth,height=\textheight/2,keepaspectratio=true]{count_before.png}
+\doxyfigcaption{Count\+Before}
+\end{DoxyImage}
+  
+
+\doxyparagraph*{{\ttfamily \mbox{\hyperlink{classflow_1_1follower_1_1_latched}{flow\+::follower\+::\+Latched}}}}
+
+Captures one {\ttfamily Dispatch} element before the capture range lower bound, minus a minimum period. All older elements are removed. If no newer elements are present on the next capture attempt, then the last captured element is returned. If a newer element is present on a subsequent capture attempt, meeting the aforementioned qualifications, this elements is captured and replaces \char`\"{}latched\char`\"{} element state.
+
+Latched element is cleared on reset.
+
+ 
+\begin{DoxyImage}
+\includegraphics[width=\textwidth,height=\textheight/2,keepaspectratio=true]{latched.png}
+\doxyfigcaption{Latched}
+\end{DoxyImage}
+  
+
+\doxyparagraph*{{\ttfamily \mbox{\hyperlink{classflow_1_1follower_1_1_matched_stamp}{flow\+::follower\+::\+Matched\+Stamp}}}}
+
+Captures one {\ttfamily Dispatch} element with a stamp which exactly matched the capture range lower bound. All older elements are removed.
+
+ 
+\begin{DoxyImage}
+\includegraphics[width=\textwidth,height=\textheight/2,keepaspectratio=true]{matched_stamp.png}
+\doxyfigcaption{Matched}
+\end{DoxyImage}
+  
+
+\doxyparagraph*{{\ttfamily \mbox{\hyperlink{classflow_1_1follower_1_1_ranged}{flow\+::follower\+::\+Ranged}}}}
+
+Captures one {\ttfamily Dispatch} element before the capture range lower bound; one element after the capture range upper bound; and all elements in between. All older elements are removed.
+
+ 
+\begin{DoxyImage}
+\includegraphics[width=\textwidth,height=\textheight/2,keepaspectratio=true]{ranged.png}
+\doxyfigcaption{Ranged}
+\end{DoxyImage}
+  
+
+\doxyparagraph*{Follower Captor Data/\+Queue Monitoring Customization}
+
+Follower Captors support customizable sync behavior through a \char`\"{}queue monitor\char`\"{}. Queue monitor objects are specified in the template argument list of a captor. If not specified, then a default, {\ttfamily \mbox{\hyperlink{structflow_1_1_default_dispatch_queue_monitor}{flow\+::\+Default\+Dispatch\+Queue\+Monitor}}}, is used with no additional overhead, assuming some form of basic compiler optimization enabled.
+
+Queue monitor objects provide access to A\+LL the data currently available in a capture queue when the following methods are called\+:
+\begin{DoxyItemize}
+\item {\ttfamily Queue\+Monitor\+::check} \+: per-\/captor synchronization state is checked, i.\+e. when held data is checked to verify that synchronization is state {\ttfamily P\+R\+I\+M\+ED} and data can be captured. This check is a pre-\/condition applied B\+E\+F\+O\+RE the actual capture behavior. In other words, this check can override a capture without removing data, but allow the current synchronization frame to be skipped.
+\item {\ttfamily Queue\+Monitor\+::update} \+: global synchronization state is finished, i.\+e. when all captors have been checked and a global synchronization state is returned
+\end{DoxyItemize}
+
+{\ttfamily check} and {\ttfamily update} methods can be used to modify how and when data is captured (in a potentially stateful way, if needed). These methods may be {\ttfamily static} or {\ttfamily const}-\/qualified, depending on the use case.
+
+An example queue monitor might look as follows\+: 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{ \{c++\}}
+\DoxyCodeLine{struct MyQueueMonitor}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{  /**}
+\DoxyCodeLine{   * @brief Check queue monitor state with on capture attempt}
+\DoxyCodeLine{   *}
+\DoxyCodeLine{   *        Checks are applied in Follower derivative Captor objects, only}
+\DoxyCodeLine{   *}
+\DoxyCodeLine{   * @retval true  allows capture to happen}
+\DoxyCodeLine{   * @retval false  otherwise, causing Captor to return <code>State::SKIP\_FRAME\_QUEUE\_PRECONDITION</code>}
+\DoxyCodeLine{   */}
+\DoxyCodeLine{  template <typename DispatchT, typename DispatchContainerT, typename StampT>}
+\DoxyCodeLine{  bool check(DispatchQueue<DispatchT, DispatchContainerT>\&, const CaptureRange<StampT>\&)}
+\DoxyCodeLine{  \{}
+\DoxyCodeLine{    ...}
+\DoxyCodeLine{    return (cond == target\_value);}
+\DoxyCodeLine{  \};}
+\DoxyCodeLine{}
+\DoxyCodeLine{  /**}
+\DoxyCodeLine{   * @brief Updates queue monitor state with global synchronization results}
+\DoxyCodeLine{   *}
+\DoxyCodeLine{   *        Called during <code>Sychronizer::capture</code>, updating several associated Captor s}
+\DoxyCodeLine{   */}
+\DoxyCodeLine{  template <typename DispatchT, typename DispatchContainerT, typename StampT>}
+\DoxyCodeLine{  void update(DispatchQueue<DispatchT, DispatchContainerT>\&, const CaptureRange<StampT>\&, const State)}
+\DoxyCodeLine{  \{}
+\DoxyCodeLine{    ...}
+\DoxyCodeLine{  \}}
+\DoxyCodeLine{\};}
+\DoxyCodeLine{}
+\DoxyCodeLine{}
+\DoxyCodeLine{...}
+\DoxyCodeLine{// Main user code}
+\DoxyCodeLine{}
+\DoxyCodeLine{// Before captor with custom queue monitor}
+\DoxyCodeLine{flow::follower::Before<DispatchType, flow::NoLock, std::deque<DispatchType>, MyQueueMonitor> my\_before\_captor;}
+\end{DoxyCode}
+
+
+\doxysubsection*{Running Tests}
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{bazel test ... -\/-\/test\_output=all}
+\end{DoxyCode}
+
+
+Bazel isn\textquotesingle{}t everyone\textquotesingle{}s cup of tea. {\itshape cmake build to come later}; earlier contribution welcome. 

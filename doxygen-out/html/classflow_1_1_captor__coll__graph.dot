@@ -1,0 +1,16 @@
+digraph "flow::Captor&lt; CaptorT, LockableT, QueueMonitorT &gt;"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node1 [label="flow::Captor\< CaptorT,\l LockableT, QueueMonitorT \>",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip="CRTP-base for input capture buffers with a specific data lock policy."];
+  Node2 -> Node1 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 [label="flow::CaptorInterface\l\< Captor\< CaptorT, Lockable\lT, QueueMonitorT \> \>",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classflow_1_1_captor_interface.html",tooltip=" "];
+  Node3 -> Node2 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" queue_monitor_\ncapacity_" ,fontname="Helvetica"];
+  Node3 [label="flow::CaptorTraits\l\< Captor\< CaptorT, Lockable\lT, QueueMonitorT \> \>",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structflow_1_1_captor_traits_3_01_captor_3_01_captor_t_00_01_lockable_t_00_01_queue_monitor_t_01_4_01_4.html",tooltip="Traits struct for captor types."];
+  Node4 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node4 [label="flow::CaptorTraits\l\< CaptorT \>",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structflow_1_1_captor_traits.html",tooltip="Traits struct for captor types."];
+  Node5 -> Node2 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" queue_" ,fontname="Helvetica"];
+  Node5 [label="flow::DispatchQueue\l\< DispatchType, DispatchContainer\lType \>",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classflow_1_1_dispatch_queue.html",tooltip=" "];
+}

@@ -1,0 +1,49 @@
+\hypertarget{structflow_1_1_captor_traits_3_01_captor_3_01_captor_t_00_01_lockable_t_00_01_queue_monitor_t_01_4_01_4}{}\doxysection{flow\+::Captor\+Traits$<$ Captor$<$ CaptorT, LockableT, Queue\+MonitorT $>$ $>$ Struct Template Reference}
+\label{structflow_1_1_captor_traits_3_01_captor_3_01_captor_t_00_01_lockable_t_00_01_queue_monitor_t_01_4_01_4}\index{flow::CaptorTraits$<$ Captor$<$ CaptorT, LockableT, QueueMonitorT $>$ $>$@{flow::CaptorTraits$<$ Captor$<$ CaptorT, LockableT, QueueMonitorT $>$ $>$}}
+
+
+Traits struct for captor types.  
+
+
+
+
+{\ttfamily \#include $<$captor.\+h$>$}
+
+
+
+Inheritance diagram for flow\+::Captor\+Traits$<$ Captor$<$ CaptorT, LockableT, Queue\+MonitorT $>$ $>$\+:
+% FIG 0
+
+
+Collaboration diagram for flow\+::Captor\+Traits$<$ Captor$<$ CaptorT, LockableT, Queue\+MonitorT $>$ $>$\+:
+% FIG 1
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$typename CaptorT, typename LockableT, typename Queue\+MonitorT$>$\newline
+struct flow\+::\+Captor\+Traits$<$ Captor$<$ Captor\+T, Lockable\+T, Queue\+Monitor\+T $>$ $>$}
+
+Traits struct for captor types. 
+
+\begin{DoxyVerb}   Requires:
+   - <code>DispatchType</code> : data dispatch object type
+   - <code>DispatchContainerType</code> : container for <code>DispatchType</code>
+     <code>DispatchQueueMonitorType</code> : optional monitoring/capture preconditioning object type
+   - <code>value_type</code> : data value type
+   - <code>stamp_type</code> : sequence stamp type
+   - <code>size_type</code> : integer sizing type
+\end{DoxyVerb}
+
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em CaptorT} & captor type with C\+R\+TP base {\ttfamily \mbox{\hyperlink{classflow_1_1_captor}{Captor}}}\\
+\hline
+{\em PolicyT} & C\+R\+T\+P-\/derived captor with specialized capture policy \\
+\hline
+\end{DoxyTemplParams}
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+flow/include/\mbox{\hyperlink{captor_8h}{captor.\+h}}\end{DoxyCompactItemize}

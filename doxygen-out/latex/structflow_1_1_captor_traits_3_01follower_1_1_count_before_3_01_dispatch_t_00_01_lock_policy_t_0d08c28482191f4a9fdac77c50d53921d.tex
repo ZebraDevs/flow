@@ -1,0 +1,82 @@
+\hypertarget{structflow_1_1_captor_traits_3_01follower_1_1_count_before_3_01_dispatch_t_00_01_lock_policy_t_0d08c28482191f4a9fdac77c50d53921d}{}\doxysection{flow\+::Captor\+Traits$<$ follower\+::Count\+Before$<$ DispatchT, Lock\+PolicyT, ContainerT, Queue\+MonitorT $>$ $>$ Struct Template Reference}
+\label{structflow_1_1_captor_traits_3_01follower_1_1_count_before_3_01_dispatch_t_00_01_lock_policy_t_0d08c28482191f4a9fdac77c50d53921d}\index{flow::CaptorTraits$<$ follower::CountBefore$<$ DispatchT, LockPolicyT, ContainerT, QueueMonitorT $>$ $>$@{flow::CaptorTraits$<$ follower::CountBefore$<$ DispatchT, LockPolicyT, ContainerT, QueueMonitorT $>$ $>$}}
+
+
+Traits struct for captor types.  
+
+
+
+
+{\ttfamily \#include $<$count\+\_\+before.\+h$>$}
+
+
+
+Inheritance diagram for flow\+::Captor\+Traits$<$ follower\+::Count\+Before$<$ DispatchT, Lock\+PolicyT, ContainerT, Queue\+MonitorT $>$ $>$\+:
+% FIG 0
+
+
+Collaboration diagram for flow\+::Captor\+Traits$<$ follower\+::Count\+Before$<$ DispatchT, Lock\+PolicyT, ContainerT, Queue\+MonitorT $>$ $>$\+:
+% FIG 1
+\doxysubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structflow_1_1_captor_traits_3_01follower_1_1_count_before_3_01_dispatch_t_00_01_lock_policy_t_0d08c28482191f4a9fdac77c50d53921d_a910c2579450b9ddea7e2ca447644318a}\label{structflow_1_1_captor_traits_3_01follower_1_1_count_before_3_01_dispatch_t_00_01_lock_policy_t_0d08c28482191f4a9fdac77c50d53921d_a910c2579450b9ddea7e2ca447644318a}} 
+using \mbox{\hyperlink{structflow_1_1_captor_traits_3_01follower_1_1_count_before_3_01_dispatch_t_00_01_lock_policy_t_0d08c28482191f4a9fdac77c50d53921d_a910c2579450b9ddea7e2ca447644318a}{Dispatch\+Container\+Type}} = ContainerT
+\begin{DoxyCompactList}\small\item\em Underlying dispatch container type. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structflow_1_1_captor_traits_3_01follower_1_1_count_before_3_01_dispatch_t_00_01_lock_policy_t_0d08c28482191f4a9fdac77c50d53921d_a6169c0a8254301865de88e30d47fd1e8}\label{structflow_1_1_captor_traits_3_01follower_1_1_count_before_3_01_dispatch_t_00_01_lock_policy_t_0d08c28482191f4a9fdac77c50d53921d_a6169c0a8254301865de88e30d47fd1e8}} 
+using \mbox{\hyperlink{structflow_1_1_captor_traits_3_01follower_1_1_count_before_3_01_dispatch_t_00_01_lock_policy_t_0d08c28482191f4a9fdac77c50d53921d_a6169c0a8254301865de88e30d47fd1e8}{Dispatch\+Queue\+Monitor\+Type}} = Queue\+MonitorT
+\begin{DoxyCompactList}\small\item\em Queue monitor/capture preconditioning type. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structflow_1_1_captor_traits_3_01follower_1_1_count_before_3_01_dispatch_t_00_01_lock_policy_t_0d08c28482191f4a9fdac77c50d53921d_a62b4fb8b787875e6878a7cb1d5c451e1}\label{structflow_1_1_captor_traits_3_01follower_1_1_count_before_3_01_dispatch_t_00_01_lock_policy_t_0d08c28482191f4a9fdac77c50d53921d_a62b4fb8b787875e6878a7cb1d5c451e1}} 
+using \mbox{\hyperlink{structflow_1_1_captor_traits_3_01follower_1_1_count_before_3_01_dispatch_t_00_01_lock_policy_t_0d08c28482191f4a9fdac77c50d53921d_a62b4fb8b787875e6878a7cb1d5c451e1}{Lock\+Policy\+Type}} = Lock\+PolicyT
+\begin{DoxyCompactList}\small\item\em Thread locking policy type. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static constexpr bool \mbox{\hyperlink{structflow_1_1_captor_traits_3_01follower_1_1_count_before_3_01_dispatch_t_00_01_lock_policy_t_0d08c28482191f4a9fdac77c50d53921d_a1e7e3deda342f19b5c2df4c3a66f7af8}{is\+\_\+capture\+\_\+deterministic}} = false
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$typename DispatchT, typename Lock\+PolicyT, typename ContainerT, typename Queue\+MonitorT$>$\newline
+struct flow\+::\+Captor\+Traits$<$ follower\+::\+Count\+Before$<$ Dispatch\+T, Lock\+Policy\+T, Container\+T, Queue\+Monitor\+T $>$ $>$}
+
+Traits struct for captor types. 
+
+\begin{DoxyVerb}   Requires:
+   - <code>DispatchType</code> : data dispatch object type
+   - <code>DispatchContainerType</code> : container for <code>DispatchType</code>
+     <code>DispatchQueueMonitorType</code> : optional monitoring/capture preconditioning object type
+   - <code>value_type</code> : data value type
+   - <code>stamp_type</code> : sequence stamp type
+   - <code>size_type</code> : integer sizing type
+\end{DoxyVerb}
+
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em CaptorT} & captor type with C\+R\+TP base {\ttfamily \mbox{\hyperlink{classflow_1_1_captor}{Captor}}}\\
+\hline
+{\em DispatchT} & data dispatch type \\
+\hline
+{\em Lock\+PolicyT} & a Basic\+Lockable (\href{https://en.cppreference.com/w/cpp/named_req/BasicLockable}{\texttt{ https\+://en.\+cppreference.\+com/w/cpp/named\+\_\+req/\+Basic\+Lockable}}) object or \mbox{\hyperlink{structflow_1_1_no_lock}{No\+Lock}} or \mbox{\hyperlink{structflow_1_1_polling_lock}{Polling\+Lock}} \\
+\hline
+{\em ContainerT} & underlying {\ttfamily DispatchT} container type \\
+\hline
+{\em Queue\+MonitorT} & queue monitor/capture preconditioning type \\
+\hline
+\end{DoxyTemplParams}
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{structflow_1_1_captor_traits_3_01follower_1_1_count_before_3_01_dispatch_t_00_01_lock_policy_t_0d08c28482191f4a9fdac77c50d53921d_a1e7e3deda342f19b5c2df4c3a66f7af8}\label{structflow_1_1_captor_traits_3_01follower_1_1_count_before_3_01_dispatch_t_00_01_lock_policy_t_0d08c28482191f4a9fdac77c50d53921d_a1e7e3deda342f19b5c2df4c3a66f7af8}} 
+\index{flow::CaptorTraits$<$ follower::CountBefore$<$ DispatchT, LockPolicyT, ContainerT, QueueMonitorT $>$ $>$@{flow::CaptorTraits$<$ follower::CountBefore$<$ DispatchT, LockPolicyT, ContainerT, QueueMonitorT $>$ $>$}!is\_capture\_deterministic@{is\_capture\_deterministic}}
+\index{is\_capture\_deterministic@{is\_capture\_deterministic}!flow::CaptorTraits$<$ follower::CountBefore$<$ DispatchT, LockPolicyT, ContainerT, QueueMonitorT $>$ $>$@{flow::CaptorTraits$<$ follower::CountBefore$<$ DispatchT, LockPolicyT, ContainerT, QueueMonitorT $>$ $>$}}
+\doxysubsubsection{\texorpdfstring{is\_capture\_deterministic}{is\_capture\_deterministic}}
+{\footnotesize\ttfamily template$<$typename DispatchT , typename Lock\+PolicyT , typename ContainerT , typename Queue\+MonitorT $>$ \\
+constexpr bool \mbox{\hyperlink{structflow_1_1_captor_traits}{flow\+::\+Captor\+Traits}}$<$ \mbox{\hyperlink{classflow_1_1follower_1_1_count_before}{follower\+::\+Count\+Before}}$<$ DispatchT, Lock\+PolicyT, ContainerT, Queue\+MonitorT $>$ $>$\+::is\+\_\+capture\+\_\+deterministic = false\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [constexpr]}}
+
+Indicates that data from this captor will N\+OT always be captured deterministically; i.\+e. is always dependent on when data is injected, and when captrue is executed 
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+flow/include/follower/\mbox{\hyperlink{count__before_8h}{count\+\_\+before.\+h}}\end{DoxyCompactItemize}

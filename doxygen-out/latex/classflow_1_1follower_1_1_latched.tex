@@ -1,0 +1,94 @@
+\hypertarget{classflow_1_1follower_1_1_latched}{}\doxysection{flow\+::follower\+::Latched$<$ DispatchT, Lock\+PolicyT, ContainerT, Queue\+MonitorT $>$ Class Template Reference}
+\label{classflow_1_1follower_1_1_latched}\index{flow::follower::Latched$<$ DispatchT, LockPolicyT, ContainerT, QueueMonitorT $>$@{flow::follower::Latched$<$ DispatchT, LockPolicyT, ContainerT, QueueMonitorT $>$}}
+
+
+Captures one element before the capture range lower bound, minus a minimum period.  
+
+
+
+
+{\ttfamily \#include $<$latched.\+h$>$}
+
+
+
+Inheritance diagram for flow\+::follower\+::Latched$<$ DispatchT, Lock\+PolicyT, ContainerT, Queue\+MonitorT $>$\+:
+% FIG 0
+
+
+Collaboration diagram for flow\+::follower\+::Latched$<$ DispatchT, Lock\+PolicyT, ContainerT, Queue\+MonitorT $>$\+:
+% FIG 1
+\doxysubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classflow_1_1follower_1_1_latched_a330b7f9dd745cd2b513b21789250131d}\label{classflow_1_1follower_1_1_latched_a330b7f9dd745cd2b513b21789250131d}} 
+using \mbox{\hyperlink{classflow_1_1follower_1_1_latched_a330b7f9dd745cd2b513b21789250131d}{stamp\+\_\+type}} = typename \mbox{\hyperlink{structflow_1_1_captor_traits}{Captor\+Traits}}$<$ \mbox{\hyperlink{classflow_1_1follower_1_1_latched}{Latched}} $>$\+::\mbox{\hyperlink{classflow_1_1follower_1_1_latched_a330b7f9dd745cd2b513b21789250131d}{stamp\+\_\+type}}
+\begin{DoxyCompactList}\small\item\em Data stamp type. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classflow_1_1follower_1_1_latched_a437fa0b63a9d5c36c7a63774a53d6552}\label{classflow_1_1follower_1_1_latched_a437fa0b63a9d5c36c7a63774a53d6552}} 
+using \mbox{\hyperlink{classflow_1_1follower_1_1_latched_a437fa0b63a9d5c36c7a63774a53d6552}{offset\+\_\+type}} = typename \mbox{\hyperlink{structflow_1_1_captor_traits}{Captor\+Traits}}$<$ \mbox{\hyperlink{classflow_1_1follower_1_1_latched}{Latched}} $>$\+::\mbox{\hyperlink{classflow_1_1follower_1_1_latched_a437fa0b63a9d5c36c7a63774a53d6552}{offset\+\_\+type}}
+\begin{DoxyCompactList}\small\item\em Data stamp duration type. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classflow_1_1follower_1_1_latched_a5974d2c9a24b8ef6d9e1f71b696fafdb}{Latched}} (const \mbox{\hyperlink{classflow_1_1follower_1_1_latched_a437fa0b63a9d5c36c7a63774a53d6552}{offset\+\_\+type}} min\+\_\+period, const ContainerT \&container=ContainerT\{\}, const Queue\+MonitorT \&queue\+\_\+monitor=Queue\+MonitorT\{\})
+\begin{DoxyCompactList}\small\item\em Setup constructor. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$typename DispatchT, typename Lock\+PolicyT = No\+Lock, typename ContainerT = Default\+Container$<$\+Dispatch\+T$>$, typename Queue\+MonitorT = Default\+Dispatch\+Queue\+Monitor$>$\newline
+class flow\+::follower\+::\+Latched$<$ Dispatch\+T, Lock\+Policy\+T, Container\+T, Queue\+Monitor\+T $>$}
+
+Captures one element before the capture range lower bound, minus a minimum period. 
+
+\begin{DoxyVerb}   All older elements are removed. If no newer elements are present on the next capture attempt,
+   then the last captured element is returned. If a newer element is present on a subsequent capture attempt,
+   meeting the aforementioned qualifications, this elements is captured and replaces "latched" element state.
+\end{DoxyVerb}
+
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em DispatchT} & data dispatch type \\
+\hline
+{\em Lock\+PolicyT} & a Basic\+Lockable (\href{https://en.cppreference.com/w/cpp/named_req/BasicLockable}{\texttt{ https\+://en.\+cppreference.\+com/w/cpp/named\+\_\+req/\+Basic\+Lockable}}) object or \mbox{\hyperlink{structflow_1_1_no_lock}{No\+Lock}} or \mbox{\hyperlink{structflow_1_1_polling_lock}{Polling\+Lock}} \\
+\hline
+{\em ContainerT} & underlying {\ttfamily DispatchT} container type \\
+\hline
+{\em Queue\+MonitorT} & object used to monitor queue state on each insertion; used to precondition capture\\
+\hline
+\end{DoxyTemplParams}
+\begin{DoxyNote}{Note}
+\mbox{\hyperlink{classflow_1_1follower_1_1_latched}{Latched}} won\textquotesingle{}t behave non-\/deterministically if actual input period (difference between successive dispatch stamps) is greater than {\ttfamily min\+\_\+period}. However, newer data values will not be captured if they are within a {\ttfamily min\+\_\+period{\ttfamily  offset of {\ttfamily range.\+lower\+\_\+stamp}}}
+\end{DoxyNote}
+@warn \mbox{\hyperlink{classflow_1_1follower_1_1_latched}{Latched}} may never enter a R\+E\+A\+DY state if data never becomes available. Calling application may need to implement a synchronization timeout behavior 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classflow_1_1follower_1_1_latched_a5974d2c9a24b8ef6d9e1f71b696fafdb}\label{classflow_1_1follower_1_1_latched_a5974d2c9a24b8ef6d9e1f71b696fafdb}} 
+\index{flow::follower::Latched$<$ DispatchT, LockPolicyT, ContainerT, QueueMonitorT $>$@{flow::follower::Latched$<$ DispatchT, LockPolicyT, ContainerT, QueueMonitorT $>$}!Latched@{Latched}}
+\index{Latched@{Latched}!flow::follower::Latched$<$ DispatchT, LockPolicyT, ContainerT, QueueMonitorT $>$@{flow::follower::Latched$<$ DispatchT, LockPolicyT, ContainerT, QueueMonitorT $>$}}
+\doxysubsubsection{\texorpdfstring{Latched()}{Latched()}}
+{\footnotesize\ttfamily template$<$typename DispatchT , typename Lock\+PolicyT  = No\+Lock, typename ContainerT  = Default\+Container$<$\+Dispatch\+T$>$, typename Queue\+MonitorT  = Default\+Dispatch\+Queue\+Monitor$>$ \\
+\mbox{\hyperlink{classflow_1_1follower_1_1_latched}{flow\+::follower\+::\+Latched}}$<$ DispatchT, Lock\+PolicyT, ContainerT, Queue\+MonitorT $>$\+::\mbox{\hyperlink{classflow_1_1follower_1_1_latched}{Latched}} (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classflow_1_1follower_1_1_latched_a437fa0b63a9d5c36c7a63774a53d6552}{offset\+\_\+type}}}]{min\+\_\+period,  }\item[{const ContainerT \&}]{container = {\ttfamily ContainerT\{\}},  }\item[{const Queue\+MonitorT \&}]{queue\+\_\+monitor = {\ttfamily QueueMonitorT\{\}} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+
+
+Setup constructor. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em min\+\_\+period} & minimum expected difference between data stamps \\
+\hline
+{\em container} & container object with some initial state \\
+\hline
+{\em queue\+\_\+monitor} & queue monitor with some initial state\\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em $<$code$>$std\+::invalid\+\_\+argument$<$/code$>$} & if {\ttfamily m\+\_\+after $<$ 1} \\
+\hline
+\end{DoxyExceptions}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+flow/include/follower/\mbox{\hyperlink{latched_8h}{latched.\+h}}\end{DoxyCompactItemize}
