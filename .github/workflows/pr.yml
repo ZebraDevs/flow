@@ -1,0 +1,54 @@
+name: Pull Request
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  # Style checks
+  style:
+    runs-on: ubuntu-latest
+    steps:
+    - run: sudo apt install clang-format-7
+    - uses: actions/checkout@v2
+    - uses: actions/setup-python@v2
+    - uses: pre-commit/action@v2.0.0
+
+  # Build/run unit tests with cmake
+  cmake:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Install cmake
+      run: sudo apt-get install make cmake
+
+    - name: Run Unit Tests
+      run: mkdir build && cd build && cmake .. -DBUILD_TESTS=true && make && ctest
+
+  # Build/run unit tests with bazel
+  bazel:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Setup bazel
+      uses: jwlawson/actions-setup-bazel@v1
+      with:
+        bazel-version: '2.0.0'
+
+    - name: Setup bazel cache
+      uses: actions/cache@v2
+      with:
+        path: "/home/runner/.cache/bazel"
+        key: bazel
+
+    - name: Run Unit Tests
+      run: bazel test //test/...

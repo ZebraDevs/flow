@@ -1,15 +1,14 @@
- 
 name: Documentation
 
 on:
   pull_request:
     branches: [master]
-  push:
-    branches: [master]
+    types: [ closed ]
 
 jobs:
   doxygen:
-    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
+    # This job will only run if the PR has been merged
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
