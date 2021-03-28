@@ -1,4 +1,4 @@
-name: Unit Tests
+name: Unit Tests (bazel)
 
 on:
   push:
@@ -27,4 +27,4 @@ jobs:
         key: bazel
 
     - name: Run Unit Tests
-      run: bazel test //flow/test/...
+      run: bazel test //test/...

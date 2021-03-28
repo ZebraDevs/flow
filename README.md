@@ -1,4 +1,5 @@
-![Unit Tests](https://github.com/fetchrobotics/flow/actions/workflows/c-cpp.yml/badge.svg)
+![Unit Tests (bazel)](https://github.com/fetchrobotics/flow/actions/workflows/cpp-bazel.yml/badge.svg)
+![Unit Tests (cmake)](https://github.com/fetchrobotics/flow/actions/workflows/cpp-cmake.yml/badge.svg)
 ![Style Checks](https://github.com/fetchrobotics/flow/actions/workflows/pre-commit.yml/badge.svg)
 ![Documentation](https://github.com/fetchrobotics/flow/actions/workflows/doxygen.yml/badge.svg)
 
