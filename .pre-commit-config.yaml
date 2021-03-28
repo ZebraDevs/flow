@@ -1,0 +1,9 @@
+repos:
+-   repo: local
+    hooks:
+    -   id: clang-format
+        name: clang-format-7
+        entry: clang-format-7 -i
+        language: system
+        files: \.(c|cc|cxx|cpp|h|hpp|hxx)$
+        args: [--style=file]
