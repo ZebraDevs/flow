@@ -67,7 +67,7 @@ $(function() {
 <div class="title">Flow Documentation</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><object type="image/svg+xml" data="https://github.com/fetchrobotics/flow/actions/workflows/c-cpp.yml/badge.svg" style="pointer-events: none;">Unit Tests</object> <object type="image/svg+xml" data="https://github.com/fetchrobotics/flow/actions/workflows/pre-commit.yml/badge.svg" style="pointer-events: none;">Style Checks</object> <object type="image/svg+xml" data="https://github.com/fetchrobotics/flow/actions/workflows/doxygen.yml/badge.svg" style="pointer-events: none;">Documentation</object></p>
+<div class="textblock"><p><object type="image/svg+xml" data="https://github.com/fetchrobotics/flow/actions/workflows/cpp-bazel.yml/badge.svg" style="pointer-events: none;">Unit Tests (bazel)</object> <object type="image/svg+xml" data="https://github.com/fetchrobotics/flow/actions/workflows/cpp-cmake.yml/badge.svg" style="pointer-events: none;">Unit Tests (cmake)</object> <object type="image/svg+xml" data="https://github.com/fetchrobotics/flow/actions/workflows/pre-commit.yml/badge.svg" style="pointer-events: none;">Style Checks</object> <object type="image/svg+xml" data="https://github.com/fetchrobotics/flow/actions/workflows/doxygen.yml/badge.svg" style="pointer-events: none;">Documentation</object></p>
 <h1>Flow</h1>
 <p>C++14, header-only library for multi-stream data synchronization.</p>
 <h2>API Documentation</h2>
@@ -85,18 +85,18 @@ $(function() {
 <p>Check out the <a href="https://github.com/fetchrobotics/flow_ros">Flow-ROS</a> wrapper library for more details.</p>
 <h2>Components</h2>
 <h3>Captors</h3>
-<p><code><a class="el" href="classflow_1_1_captor.html" title="CRTP-base for input capture buffers with a specific data lock policy.">flow::Captor</a></code> objects are data buffers with an associated synchronization policy. They are used in tuples to synchronize several streams of data. <code><a class="el" href="classflow_1_1_captor.html" title="CRTP-base for input capture buffers with a specific data lock policy.">flow::Captor</a></code> objects fall into two categories:</p>
+<p><code>flow::Captor</code> objects are data buffers with an associated synchronization policy. They are used in tuples to synchronize several streams of data. <code>flow::Captor</code> objects fall into two categories:</p>
 <ul>
-<li><code><a class="el" href="classflow_1_1_driver.html" title="CRTP-base for Driver input-capture policies.">flow::Driver</a></code> captors, which establish a time range for synchronization</li>
-<li><code><a class="el" href="classflow_1_1_follower.html" title="CRTP-base for Follower input-capture policies.">flow::Follower</a></code> captors, which select buffered data based on a driving sequencing range</li>
+<li><code>flow::Driver</code> captors, which establish a time range for synchronization</li>
+<li><code>flow::Follower</code> captors, which select buffered data based on a driving sequencing range</li>
 </ul>
-<p><code><a class="el" href="classflow_1_1_captor.html" title="CRTP-base for input capture buffers with a specific data lock policy.">flow::Captor</a></code> objects from both categories will:</p>
+<p><code>flow::Captor</code> objects from both categories will:</p>
 <ul>
 <li>select (capture) data from their internal buffers</li>
 <li>remove data from their internal buffers when it is no longer needed</li>
 <li>re-order data that is added to the internal buffer out of order <em>before</em> data synchronization is attempted</li>
 </ul>
-<p>Additionally, <code><a class="el" href="classflow_1_1_captor.html" title="CRTP-base for input capture buffers with a specific data lock policy.">flow::Captor</a></code> objects were designed to:</p>
+<p>Additionally, <code>flow::Captor</code> objects were designed to:</p>
 <ul>
 <li>work in both multi-threaded and single-threaded contexts<ul>
 <li>multi-threaded with blocking capture on asynchronous data injection</li>
@@ -113,7 +113,7 @@ $(function() {
 <li>support generic data retrieval through use of <a href="https://en.cppreference.com/w/cpp/named_req/OutputIterator">output iterators</a></li>
 </ul>
 <h3>Synchronizer</h3>
-<p><code><a class="el" href="classflow_1_1_synchronizer.html" title="Provides facilities to synchronize data across several Captors.">flow::Synchronizer</a></code> provides methods for operating on <code><a class="el" href="classflow_1_1_captor.html" title="CRTP-base for input capture buffers with a specific data lock policy.">flow::Captor</a></code> objects as a group (arranged as a tuple). The <code><a class="el" href="classflow_1_1_synchronizer.html" title="Provides facilities to synchronize data across several Captors.">flow::Synchronizer</a></code> can be used to retrieve synchronized data between several buffers like so:</p>
+<p><code>flow::Synchronizer</code> provides methods for operating on <code>flow::Captor</code> objects as a group (arranged as a tuple). The <code>flow::Synchronizer</code> can be used to retrieve synchronized data between several buffers like so:</p>
 <div class="fragment"><div class="line"> {c++}</div>
 <div class="line">// We have three captors for different types of data: driver, first_follower, second_follower</div>
 <div class="line"> </div>
@@ -134,7 +134,7 @@ $(function() {
 <div class="line">{</div>
 <div class="line">  // driver_data, first_follower_data, before_follower_data are ready</div>
 <div class="line">}</div>
-</div><!-- fragment --><p>The <code><a class="el" href="classflow_1_1_synchronizer.html" title="Provides facilities to synchronize data across several Captors.">flow::Synchronizer</a></code> may also be used to <em>test</em> if capture is possible across all <code><a class="el" href="classflow_1_1_captor.html" title="CRTP-base for input capture buffers with a specific data lock policy.">flow::Captor</a></code> objects without changing the results of the next data capture:</p>
+</div><!-- fragment --><p>The <code>flow::Synchronizer</code> may also be used to <em>test</em> if capture is possible across all <code>flow::Captor</code> objects without changing the results of the next data capture:</p>
 <div class="fragment"><div class="line"> {c++}</div>
 <div class="line">// We have three captors for different types of data: driver, first_follower, second_follower</div>
 <div class="line"> </div>
@@ -150,11 +150,11 @@ $(function() {
 <div class="line">// The next call to `Synchronizer::capture` will yield valid results</div>
 </div><!-- fragment --><h4>Usage Examples</h4>
 <ul>
-<li>See these <a href="flow/test/unit/synchronizer_mt_example.cpp">test cases</a> for examples of <code><a class="el" href="classflow_1_1_synchronizer.html" title="Provides facilities to synchronize data across several Captors.">flow::Synchronizer</a></code> in action in a multi-threaded context.</li>
-<li>See this <a href="flow/test/unit/synchronizer_st_example.cpp">test case</a> for an example of <code><a class="el" href="classflow_1_1_synchronizer.html" title="Provides facilities to synchronize data across several Captors.">flow::Synchronizer</a></code> in action in a single-threaded context.</li>
+<li>See these <a href="flow/test/unit/synchronizer_mt_example.cpp">test cases</a> for examples of <code>flow::Synchronizer</code> in action in a multi-threaded context.</li>
+<li>See this <a href="flow/test/unit/synchronizer_st_example.cpp">test case</a> for an example of <code>flow::Synchronizer</code> in action in a single-threaded context.</li>
 </ul>
 <h3>Dispatch</h3>
-<p>A <code>Dispatch</code> is a conceptual object used to represent and access key information about data within <code><a class="el" href="classflow_1_1_captor.html" title="CRTP-base for input capture buffers with a specific data lock policy.">flow::Captor</a></code> buffers. Essentially, <code>Dispatch</code> objects have both data payload and sequencing information. An implementation which fulfills the <code>Dispatch</code> concept can be customized per use case.</p>
+<p>A <code>Dispatch</code> is a conceptual object used to represent and access key information about data within <code>flow::Captor</code> buffers. Essentially, <code>Dispatch</code> objects have both data payload and sequencing information. An implementation which fulfills the <code>Dispatch</code> concept can be customized per use case.</p>
 <p>In order to fulfill the requirements of the <code>Dispatch</code> concept, users must provide the following companion template specialization for their data type:</p>
 <div class="fragment"><div class="line"> {c++}</div>
 <div class="line">namespace flow</div>
@@ -170,7 +170,7 @@ $(function() {
 <div class="line">};</div>
 <div class="line"> </div>
 <div class="line">}  // namespace flow</div>
-</div><!-- fragment --><p>This library provides a default <code><a class="el" href="classflow_1_1_dispatch.html" title="Dispatch data wrapper.">flow::Dispatch</a>&lt;StampT, DataT&gt;</code> object template, which is essentially just a slightly more descriptive <code>std::pair</code> for a stamp and a value. All required companion facilities have been provided for this template. This library also provides default accessors for <code>std::pair&lt;StampT, ValueT&gt;</code>.</p>
+</div><!-- fragment --><p>This library provides a default <code>flow::Dispatch&lt;StampT, DataT&gt;</code> object template, which is essentially just a slightly more descriptive <code>std::pair</code> for a stamp and a value. All required companion facilities have been provided for this template. This library also provides default accessors for <code>std::pair&lt;StampT, ValueT&gt;</code>.</p>
 <p>If your data already has an embedded sequencing value, you need only provide the appropriate access helpers. Take the following example:</p>
 <div class="fragment"><div class="line"> {c++}</div>
 <div class="line">struct MyMessage</div>
@@ -191,7 +191,7 @@ $(function() {
 <div class="line">};</div>
 <div class="line"> </div>
 <div class="line">}  // namespace flow</div>
-</div><!-- fragment --><p>Additionally, you must provide a specialization of <code><a class="el" href="structflow_1_1_dispatch_traits.html" title="Dispatch type traits struct.">flow::DispatchTraits</a></code>, which will be used to specify required type info used by <code><a class="el" href="classflow_1_1_captor.html" title="CRTP-base for input capture buffers with a specific data lock policy.">flow::Captor</a></code> objects:</p>
+</div><!-- fragment --><p>Additionally, you must provide a specialization of <code>flow::DispatchTraits</code>, which will be used to specify required type info used by <code>flow::Captor</code> objects:</p>
 <div class="fragment"><div class="line"> {c++}</div>
 <div class="line">namespace flow</div>
 <div class="line">{</div>
@@ -205,7 +205,7 @@ $(function() {
 <div class="line">  using value_type = ::MessageData;</div>
 <div class="line"> </div>
 <div class="line">}  // namespace flow</div>
-</div><!-- fragment --><p>If your associated sequence stamp type (<code>StampType</code> in the example above) is not a <a href="https://en.cppreference.com/w/cpp/types/is_integral">non-integral</a> type (excluding <code>bool</code>), then you must also specialize <code><a class="el" href="structflow_1_1_stamp_traits.html" title="Helper struct used to specify stamp attributes.">flow::StampTraits</a></code>:</p>
+</div><!-- fragment --><p>If your associated sequence stamp type (<code>StampType</code> in the example above) is not a <a href="https://en.cppreference.com/w/cpp/types/is_integral">non-integral</a> type (excluding <code>bool</code>), then you must also specialize <code>flow::StampTraits</code>:</p>
 <div class="fragment"><div class="line"> {c++}</div>
 <div class="line">namespace flow</div>
 <div class="line">{</div>
@@ -228,7 +228,7 @@ $(function() {
 <div class="line">}  // namespace flow</div>
 </div><!-- fragment --><p>Partial specializations for <a href="https://en.cppreference.com/w/cpp/chrono/time_point"><code>std::chrono::time_point</code></a> templates are provided.</p>
 <h3>Data queue storage customization</h3>
-<p>Captors utilize a <code><a class="el" href="classflow_1_1_dispatch_queue.html" title="Dispatch queuing data structure.">flow::DispatchQueue</a></code> for data ordering and retrieval. Users may supply a custom underlying container to manage this data. Refer to <a href="https://en.cppreference.com/w/cpp/container/deque"><code>std::deque</code></a> for more information on the listed requirements. The container type must supply the following:</p>
+<p>Captors utilize a <code>flow::DispatchQueue</code> for data ordering and retrieval. Users may supply a custom underlying container to manage this data. Refer to <a href="https://en.cppreference.com/w/cpp/container/deque"><code>std::deque</code></a> for more information on the listed requirements. The container type must supply the following:</p>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Required member Type </th><th class="markdownTableHeadNone">Description  </th></tr>
@@ -271,78 +271,78 @@ $(function() {
 </table>
 <h2>Captor Synchronization Policies</h2>
 <h3>Drivers</h3>
-<h4><code><a class="el" href="classflow_1_1driver_1_1_batch.html" title="Captures the N oldest data elements.">flow::driver::Batch</a></code></h4>
+<h4><code>flow::driver::Batch</code></h4>
 <p>Captures the next N-oldest available <code>Dispatch</code> elements, removing only the oldest. Capture range lower bound is the stamp associated with the oldest captured <code>Dispatch</code>. Capture range upper bound is the stamp associated with the oldest captured <code>Dispatch</code>.</p>
 <div class="image">
 <img src="batch.png" alt=""/>
 <div class="caption">
 Batch</div></div>
-   <h4><code><a class="el" href="classflow_1_1driver_1_1_chunk.html" title="Captures the next oldest data element.">flow::driver::Chunk</a></code></h4>
+   <h4><code>flow::driver::Chunk</code></h4>
 <p>Captures the next N-oldest available <code>Dispatch</code> elements, removing all which are captured. Capture range lower bound is the stamp associated with the oldest captured <code>Dispatch</code>. Capture range upper bound is the stamp associated with the oldest captured <code>Dispatch</code>.</p>
 <div class="image">
 <img src="chunk.png" alt=""/>
 <div class="caption">
 Chunk</div></div>
-   <h4><code><a class="el" href="classflow_1_1driver_1_1_next.html" title="Captures the next oldest data element.">flow::driver::Next</a></code></h4>
+   <h4><code>flow::driver::Next</code></h4>
 <p>Captures the oldest available <code>Dispatch</code> elements. Capture range is the stamp associated with that <code>Dispatch</code>.</p>
 <div class="image">
 <img src="next.png" alt=""/>
 <div class="caption">
 Next</div></div>
-   <h4><code><a class="el" href="classflow_1_1driver_1_1_throttled.html" title="Throttled next element driving capture object.">flow::driver::Throttled</a></code></h4>
+   <h4><code>flow::driver::Throttled</code></h4>
 <p>Captures the oldest available <code>Dispatch</code> elements. Capture range is the stamp associated with that <code>Dispatch</code>.</p>
 <div class="image">
 <img src="throttled.png" alt=""/>
 <div class="caption">
 Throttled</div></div>
    <h3>Followers</h3>
-<h4><code><a class="el" href="classflow_1_1follower_1_1_any_before.html" title="Captures all data elements from a delay before the driving sequencing stamp.">flow::follower::AnyBefore</a></code></h4>
+<h4><code>flow::follower::AnyBefore</code></h4>
 <p>Captures all <code>Dispatch</code> elements before the capture range lower bound, minus a <code>delay</code> offset. All of the captured elements are removed.</p>
-<p>Capture will report a <code><a class="el" href="namespaceflow.html#adefe9726e597eb50c46f0f6a202018e9a6eed4968877959d0209d9b75fdd16b52" title="Captor has captured data and its ready.">flow::State::PRIMED</a></code> state even if the buffer is empty, making this captor the ideal choice if you are working with a data stream that is "optional" for the current synchronization attempt.</p>
+<p>Capture will report a <code>flow::State::PRIMED</code> state even if the buffer is empty, making this captor the ideal choice if you are working with a data stream that is "optional" for the current synchronization attempt.</p>
 <p>It should be understood that the data captured by this captor is largely dependent on how data is add to the buffer and when <code>capture</code> is called.</p>
 <div class="image">
 <img src="any_before.png" alt=""/>
 <div class="caption">
 AnyBefore</div></div>
-   <h4><code><a class="el" href="classflow_1_1follower_1_1_before.html" title="Captures all elements before the capture range lower bound, minus a delay period.">flow::follower::Before</a></code></h4>
+   <h4><code>flow::follower::Before</code></h4>
 <p>Captures all <code>Dispatch</code> elements before the capture range lower bound, minus a <code>delay</code> offset, once at least a single element is available after said sequencing boundary. All of the captured elements are removed.</p>
 <div class="image">
 <img src="before.png" alt=""/>
 <div class="caption">
 Before</div></div>
-   <h4><code><a class="el" href="classflow_1_1follower_1_1_closest_before.html" title="Captures one element before the capture range lower bound, minus a delay period, within an expected p...">flow::follower::ClosestBefore</a></code></h4>
+   <h4><code>flow::follower::ClosestBefore</code></h4>
 <p>Captures one <code>Dispatch</code> element before the capture range lower bound, minus a <code>delay</code> offset, within a pre-configured data period. All older elements are removed.</p>
 <div class="image">
 <img src="closest_before.png" alt=""/>
 <div class="caption">
 ClosestBefore</div></div>
-   <h4><code><a class="el" href="classflow_1_1follower_1_1_count_before.html" title="Captures N-elements before the capture range lower bound, minus a delay period.">flow::follower::CountBefore</a></code></h4>
+   <h4><code>flow::follower::CountBefore</code></h4>
 <p>Captures N <code>Dispatch</code> elements before the capture range lower bound, minus a <code>delay</code> offset. All older elements are removed.</p>
 <div class="image">
 <img src="count_before.png" alt=""/>
 <div class="caption">
 CountBefore</div></div>
-   <h4><code><a class="el" href="classflow_1_1follower_1_1_latched.html" title="Captures one element before the capture range lower bound, minus a minimum period.">flow::follower::Latched</a></code></h4>
+   <h4><code>flow::follower::Latched</code></h4>
 <p>Captures one <code>Dispatch</code> element before the capture range lower bound, minus a minimum period. All older elements are removed. If no newer elements are present on the next capture attempt, then the last captured element is returned. If a newer element is present on a subsequent capture attempt, meeting the aforementioned qualifications, this elements is captured and replaces "latched" element state.</p>
 <p>Latched element is cleared on reset.</p>
 <div class="image">
 <img src="latched.png" alt=""/>
 <div class="caption">
 Latched</div></div>
-   <h4><code><a class="el" href="classflow_1_1follower_1_1_matched_stamp.html" title="Captures one element with a stamp which exactly matches the capture range lower bound.">flow::follower::MatchedStamp</a></code></h4>
+   <h4><code>flow::follower::MatchedStamp</code></h4>
 <p>Captures one <code>Dispatch</code> element with a stamp which exactly matched the capture range lower bound. All older elements are removed.</p>
 <div class="image">
 <img src="matched_stamp.png" alt=""/>
 <div class="caption">
 Matched</div></div>
-   <h4><code><a class="el" href="classflow_1_1follower_1_1_ranged.html" title="Captures one one element before the capture range lower bound; one element after the capture range up...">flow::follower::Ranged</a></code></h4>
+   <h4><code>flow::follower::Ranged</code></h4>
 <p>Captures one <code>Dispatch</code> element before the capture range lower bound; one element after the capture range upper bound; and all elements in between. All older elements are removed.</p>
 <div class="image">
 <img src="ranged.png" alt=""/>
 <div class="caption">
 Ranged</div></div>
    <h4>Follower Captor Data/Queue Monitoring Customization</h4>
-<p>Follower Captors support customizable sync behavior through a "queue monitor". Queue monitor objects are specified in the template argument list of a captor. If not specified, then a default, <code><a class="el" href="structflow_1_1_default_dispatch_queue_monitor.html" title="Stand-in type used to replace queue monitor.">flow::DefaultDispatchQueueMonitor</a></code>, is used with no additional overhead, assuming some form of basic compiler optimization enabled.</p>
+<p>Follower Captors support customizable sync behavior through a "queue monitor". Queue monitor objects are specified in the template argument list of a captor. If not specified, then a default, <code>flow::DefaultDispatchQueueMonitor</code>, is used with no additional overhead, assuming some form of basic compiler optimization enabled.</p>
 <p>Queue monitor objects provide access to ALL the data currently available in a capture queue when the following methods are called:</p><ul>
 <li><code>QueueMonitor::check</code> : per-captor synchronization state is checked, i.e. when held data is checked to verify that synchronization is state <code>PRIMED</code> and data can be captured. This check is a pre-condition applied BEFORE the actual capture behavior. In other words, this check can override a capture without removing data, but allow the current synchronization frame to be skipped.</li>
 <li><code>QueueMonitor::update</code> : global synchronization state is finished, i.e. when all captors have been checked and a global synchronization state is returned</li>
@@ -385,9 +385,15 @@ Ranged</div></div>
 <div class="line">// Before captor with custom queue monitor</div>
 <div class="line">flow::follower::Before&lt;DispatchType, flow::NoLock, std::deque&lt;DispatchType&gt;, MyQueueMonitor&gt; my_before_captor;</div>
 </div><!-- fragment --><h2>Running Tests</h2>
-<div class="fragment"><div class="line">bazel test ... --test_output=all</div>
-</div><!-- fragment --><p>Bazel isn't everyone's cup of tea. <em>cmake build to come later</em>; earlier contribution welcome. </p>
-</div></div><!-- PageDoc -->
+<h3>Bazel</h3>
+<div class="fragment"><div class="line">bazel test test/... --test_output=all</div>
+</div><!-- fragment --><h3>CMake</h3>
+<div class="fragment"><div class="line">mkdir build</div>
+<div class="line">cd build</div>
+<div class="line">cmake .. -DBUILD_TESTS=true</div>
+<div class="line">make</div>
+<div class="line">ctest</div>
+</div><!-- fragment --> </div></div><!-- PageDoc -->
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

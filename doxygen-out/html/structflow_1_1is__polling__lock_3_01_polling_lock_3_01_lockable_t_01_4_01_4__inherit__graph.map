@@ -1,4 +1,0 @@
-<map id="flow::is_polling_lock&lt; PollingLock&lt; LockableT &gt; &gt;" name="flow::is_polling_lock&lt; PollingLock&lt; LockableT &gt; &gt;">
-<area shape="rect" id="node1" title="Checks if LockableT is instance of PollingLock." alt="" coords="5,95,227,136"/>
-<area shape="rect" id="node2" title=" " alt="" coords="35,5,197,47"/>
-</map>

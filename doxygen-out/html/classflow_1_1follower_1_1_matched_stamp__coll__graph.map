@@ -1,4 +1,0 @@
-<map id="flow::follower::MatchedStamp&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT &gt;" name="flow::follower::MatchedStamp&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT &gt;">
-<area shape="rect" id="node1" title="Captures one element with a stamp which exactly matches the capture range lower bound." alt="" coords="405,5,625,61"/>
-<area shape="rect" id="node2" href="$classflow_1_1_follower.html" title=" " alt="" coords="5,5,357,61"/>
-</map>
