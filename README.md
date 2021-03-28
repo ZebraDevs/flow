@@ -333,6 +333,7 @@ Queue monitor objects provide access to ALL the data currently available in a ca
 `check` and `update` methods can be used to modify how and when data is captured (in a potentially stateful way, if needed). These methods may be `static` or `const`-qualified, depending on the use case.
 
 An example queue monitor might look as follows:
+
 ```c++
 struct MyQueueMonitor
 {
@@ -363,8 +364,6 @@ struct MyQueueMonitor
   }
 };
 
-
-...
 // Main user code
 
 // Before captor with custom queue monitor
@@ -374,11 +373,13 @@ flow::follower::Before<DispatchType, flow::NoLock, std::deque<DispatchType>, MyQ
 ## Running Tests
 
 ### Bazel
+
 ```
 bazel test test/... --test_output=all
 ```
 
 ### CMake
+
 ```
 mkdir build
 cd build
