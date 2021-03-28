@@ -1,0 +1,64 @@
+\hypertarget{structflow_1_1_default_dispatch_queue_monitor}{}\doxysection{flow\+::Default\+Dispatch\+Queue\+Monitor Struct Reference}
+\label{structflow_1_1_default_dispatch_queue_monitor}\index{flow::DefaultDispatchQueueMonitor@{flow::DefaultDispatchQueueMonitor}}
+
+
+Stand-\/in type used to replace queue monitor.  
+
+
+
+
+{\ttfamily \#include $<$captor.\+hpp$>$}
+
+\doxysubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$typename DispatchT , typename Dispatch\+ContainerT , typename StampT $>$ }\\static constexpr bool \mbox{\hyperlink{structflow_1_1_default_dispatch_queue_monitor_aed3f0234eeb6d3c60043d9d36047301a}{check}} (\mbox{\hyperlink{classflow_1_1_dispatch_queue}{Dispatch\+Queue}}$<$ DispatchT, Dispatch\+ContainerT $>$ \&, const \mbox{\hyperlink{structflow_1_1_capture_range}{Capture\+Range}}$<$ StampT $>$ \&)
+\begin{DoxyCompactList}\small\item\em Check queue monitor state with on capture attempt. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename DispatchT , typename Dispatch\+ContainerT , typename StampT $>$ }\\static constexpr void \mbox{\hyperlink{structflow_1_1_default_dispatch_queue_monitor_acccd20e4a17462c3d8d14e0aa26d1982}{update}} (\mbox{\hyperlink{classflow_1_1_dispatch_queue}{Dispatch\+Queue}}$<$ DispatchT, Dispatch\+ContainerT $>$ \&, const \mbox{\hyperlink{structflow_1_1_capture_range}{Capture\+Range}}$<$ StampT $>$ \&, const \mbox{\hyperlink{namespaceflow_adefe9726e597eb50c46f0f6a202018e9}{State}})
+\begin{DoxyCompactList}\small\item\em Updates queue monitor state with global synchronization results. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Stand-\/in type used to replace queue monitor. 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{structflow_1_1_default_dispatch_queue_monitor_aed3f0234eeb6d3c60043d9d36047301a}\label{structflow_1_1_default_dispatch_queue_monitor_aed3f0234eeb6d3c60043d9d36047301a}} 
+\index{flow::DefaultDispatchQueueMonitor@{flow::DefaultDispatchQueueMonitor}!check@{check}}
+\index{check@{check}!flow::DefaultDispatchQueueMonitor@{flow::DefaultDispatchQueueMonitor}}
+\doxysubsubsection{\texorpdfstring{check()}{check()}}
+{\footnotesize\ttfamily template$<$typename DispatchT , typename Dispatch\+ContainerT , typename StampT $>$ \\
+static constexpr bool flow\+::\+Default\+Dispatch\+Queue\+Monitor\+::check (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classflow_1_1_dispatch_queue}{Dispatch\+Queue}}$<$ DispatchT, Dispatch\+ContainerT $>$ \&}]{,  }\item[{const \mbox{\hyperlink{structflow_1_1_capture_range}{Capture\+Range}}$<$ StampT $>$ \&}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}, {\ttfamily [constexpr]}}
+
+
+
+Check queue monitor state with on capture attempt. 
+
+\begin{DoxyVerb}   Checks are applied in Follower derivative Captor objects, only
+\end{DoxyVerb}
+
+
+
+\begin{DoxyRetVals}{Return values}
+{\em true} & allows capture to happen \\
+\hline
+{\em false} & otherwise, causing \mbox{\hyperlink{classflow_1_1_captor}{Captor}} to return {\ttfamily \mbox{\hyperlink{namespaceflow_adefe9726e597eb50c46f0f6a202018e9a553bb3189571a5b09c1d53c315abd8f8}{State\+::\+S\+K\+I\+P\+\_\+\+F\+R\+A\+M\+E\+\_\+\+Q\+U\+E\+U\+E\+\_\+\+P\+R\+E\+C\+O\+N\+D\+I\+T\+I\+ON}}} \\
+\hline
+\end{DoxyRetVals}
+\mbox{\Hypertarget{structflow_1_1_default_dispatch_queue_monitor_acccd20e4a17462c3d8d14e0aa26d1982}\label{structflow_1_1_default_dispatch_queue_monitor_acccd20e4a17462c3d8d14e0aa26d1982}} 
+\index{flow::DefaultDispatchQueueMonitor@{flow::DefaultDispatchQueueMonitor}!update@{update}}
+\index{update@{update}!flow::DefaultDispatchQueueMonitor@{flow::DefaultDispatchQueueMonitor}}
+\doxysubsubsection{\texorpdfstring{update()}{update()}}
+{\footnotesize\ttfamily template$<$typename DispatchT , typename Dispatch\+ContainerT , typename StampT $>$ \\
+static constexpr void flow\+::\+Default\+Dispatch\+Queue\+Monitor\+::update (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classflow_1_1_dispatch_queue}{Dispatch\+Queue}}$<$ DispatchT, Dispatch\+ContainerT $>$ \&}]{,  }\item[{const \mbox{\hyperlink{structflow_1_1_capture_range}{Capture\+Range}}$<$ StampT $>$ \&}]{,  }\item[{const}]{State }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}, {\ttfamily [constexpr]}}
+
+
+
+Updates queue monitor state with global synchronization results. 
+
+\begin{DoxyVerb}   Called during <code>Sychronizer::capture</code>, updating several associated Captor s
+\end{DoxyVerb}
+ 
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/flow/captor.\+hpp\end{DoxyCompactItemize}

@@ -1,0 +1,4 @@
+<map id="flow::driver::Throttled&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT &gt;" name="flow::driver::Throttled&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT &gt;">
+<area shape="rect" id="node1" title="Throttled next element driving capture object." alt="" coords="347,13,567,69"/>
+<area shape="rect" id="node2" href="$classflow_1_1_driver.html" title=" " alt="" coords="5,5,299,76"/>
+</map>

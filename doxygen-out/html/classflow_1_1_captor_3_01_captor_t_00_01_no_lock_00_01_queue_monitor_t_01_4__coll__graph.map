@@ -1,0 +1,6 @@
+<map id="flow::Captor&lt; CaptorT, NoLock, QueueMonitorT &gt;" name="flow::Captor&lt; CaptorT, NoLock, QueueMonitorT &gt;">
+<area shape="rect" id="node1" title="Dispatch container constructor." alt="" coords="671,53,868,94"/>
+<area shape="rect" id="node2" href="$classflow_1_1_captor_interface.html" title=" " alt="" coords="415,45,621,101"/>
+<area shape="rect" id="node3" href="$classflow_1_1_dispatch_queue.html" title=" " alt="" coords="5,5,257,61"/>
+<area shape="rect" id="node4" href="$structflow_1_1_captor_traits.html" title=" " alt="" coords="28,85,235,141"/>
+</map>

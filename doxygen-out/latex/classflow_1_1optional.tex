@@ -1,0 +1,222 @@
+\hypertarget{classflow_1_1optional}{}\doxysection{flow\+::optional$<$ T $>$ Class Template Reference}
+\label{classflow_1_1optional}\index{flow::optional$<$ T $>$@{flow::optional$<$ T $>$}}
+
+
+The class template std\+::optional manages an optional contained value, i.\+e. a value that may or may not be present.  
+
+
+
+
+{\ttfamily \#include $<$optional.\+hpp$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classflow_1_1optional_af36799f9918ce98393eff213d4d57a0a}{optional}} ()
+\begin{DoxyCompactList}\small\item\em default constructor \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename Req\+ArgT , typename... Args\+Pack$>$ }\\\mbox{\hyperlink{classflow_1_1optional_a85ce722b18f3c6448f67473db4b1e341}{optional}} (Req\+ArgT \&\&arg, Args\+Pack \&\&... other\+\_\+args)
+\begin{DoxyCompactList}\small\item\em value constructor \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classflow_1_1optional_ada2faadc8e0c924e797d1f2432a09b83}{optional}} (const \mbox{\hyperlink{classflow_1_1optional}{optional}}$<$ T $>$ \&other)
+\begin{DoxyCompactList}\small\item\em copy constructor for optional \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classflow_1_1optional_a3a385a13a5a61cfb28f1cf79d636ab72}{optional}} (\mbox{\hyperlink{classflow_1_1optional}{optional}}$<$ T $>$ \&\&other)
+\begin{DoxyCompactList}\small\item\em move constructor for optional \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename AssignT $>$ }\\\mbox{\hyperlink{classflow_1_1optional}{optional}} \& \mbox{\hyperlink{classflow_1_1optional_afab5d0e3e52d6d3cd54ca5cd0b01b87e}{operator=}} (AssignT \&\&other)
+\begin{DoxyCompactList}\small\item\em move/value assignment \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classflow_1_1optional}{optional}} \& \mbox{\hyperlink{classflow_1_1optional_acc3cdf40092672f5c562e0490fdeb708}{operator=}} (const \mbox{\hyperlink{classflow_1_1optional}{optional}}$<$ T $>$ \&other)
+\begin{DoxyCompactList}\small\item\em copy assignment \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classflow_1_1optional_af6096677e53527ab10f84210e51d8aed}{operator bool}} () const
+\begin{DoxyCompactList}\small\item\em allows conversion to bool for conditional checks \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classflow_1_1optional_a5a32ea178d06eda7c6f3c37e9de4c6de}\label{classflow_1_1optional_a5a32ea178d06eda7c6f3c37e9de4c6de}} 
+T \& \mbox{\hyperlink{classflow_1_1optional_a5a32ea178d06eda7c6f3c37e9de4c6de}{operator$\ast$}} ()
+\begin{DoxyCompactList}\small\item\em Pointer-\/like access to underlying value. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classflow_1_1optional_a286a1c1878a46ae0e8b5b2e7d9e4f09c}\label{classflow_1_1optional_a286a1c1878a46ae0e8b5b2e7d9e4f09c}} 
+const T \& \mbox{\hyperlink{classflow_1_1optional_a286a1c1878a46ae0e8b5b2e7d9e4f09c}{operator$\ast$}} () const
+\begin{DoxyCompactList}\small\item\em Pointer-\/like access to underlying value (const) \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classflow_1_1optional_a71bcb8bc91d83c539f95888f4a9b3acf}{reset}} ()
+\begin{DoxyCompactList}\small\item\em Resets optional to no-\/value. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$typename T$>$\newline
+class flow\+::optional$<$ T $>$}
+
+The class template std\+::optional manages an optional contained value, i.\+e. a value that may or may not be present. 
+
+\begin{DoxyVerb}   See: https://en.cppreference.com/w/cpp/utility/optional
+\end{DoxyVerb}
+ ~\newline
+ Partial implementation drop-\/in of C++17 {\ttfamily std\+::optional}
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & value type of object to hold. {\ttfamily T} may be {\ttfamily const} or non-\/defaultable \\
+\hline
+\end{DoxyTemplParams}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classflow_1_1optional_af36799f9918ce98393eff213d4d57a0a}\label{classflow_1_1optional_af36799f9918ce98393eff213d4d57a0a}} 
+\index{flow::optional$<$ T $>$@{flow::optional$<$ T $>$}!optional@{optional}}
+\index{optional@{optional}!flow::optional$<$ T $>$@{flow::optional$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{optional()}{optional()}\hspace{0.1cm}{\footnotesize\ttfamily [1/4]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+\mbox{\hyperlink{classflow_1_1optional}{flow\+::optional}}$<$ T $>$\+::\mbox{\hyperlink{classflow_1_1optional}{optional}} (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+default constructor 
+
+\begin{DoxyNote}{Note}
+invalid by default 
+\end{DoxyNote}
+\mbox{\Hypertarget{classflow_1_1optional_a85ce722b18f3c6448f67473db4b1e341}\label{classflow_1_1optional_a85ce722b18f3c6448f67473db4b1e341}} 
+\index{flow::optional$<$ T $>$@{flow::optional$<$ T $>$}!optional@{optional}}
+\index{optional@{optional}!flow::optional$<$ T $>$@{flow::optional$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{optional()}{optional()}\hspace{0.1cm}{\footnotesize\ttfamily [2/4]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+template$<$typename Req\+ArgT , typename... Args\+Pack$>$ \\
+\mbox{\hyperlink{classflow_1_1optional}{flow\+::optional}}$<$ T $>$\+::\mbox{\hyperlink{classflow_1_1optional}{optional}} (\begin{DoxyParamCaption}\item[{Req\+ArgT \&\&}]{arg,  }\item[{Args\+Pack \&\&...}]{other\+\_\+args }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+value constructor 
+
+\begin{DoxyVerb}   automatically sets optional to valid
+\end{DoxyVerb}
+
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Req\+ArgT} & argument to construct {\ttfamily T} \\
+\hline
+{\em Args\+Pack..\+other} & arguments to construct {\ttfamily T}\\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em anything} & that {\ttfamily T\+::T} can throw \\
+\hline
+\end{DoxyExceptions}
+\mbox{\Hypertarget{classflow_1_1optional_ada2faadc8e0c924e797d1f2432a09b83}\label{classflow_1_1optional_ada2faadc8e0c924e797d1f2432a09b83}} 
+\index{flow::optional$<$ T $>$@{flow::optional$<$ T $>$}!optional@{optional}}
+\index{optional@{optional}!flow::optional$<$ T $>$@{flow::optional$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{optional()}{optional()}\hspace{0.1cm}{\footnotesize\ttfamily [3/4]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+\mbox{\hyperlink{classflow_1_1optional}{flow\+::optional}}$<$ T $>$\+::\mbox{\hyperlink{classflow_1_1optional}{optional}} (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classflow_1_1optional}{optional}}$<$ T $>$ \&}]{other }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+copy constructor for optional 
+
+
+\begin{DoxyExceptions}{Exceptions}
+{\em anything} & that {\ttfamily T\+::T} can throw \\
+\hline
+\end{DoxyExceptions}
+\mbox{\Hypertarget{classflow_1_1optional_a3a385a13a5a61cfb28f1cf79d636ab72}\label{classflow_1_1optional_a3a385a13a5a61cfb28f1cf79d636ab72}} 
+\index{flow::optional$<$ T $>$@{flow::optional$<$ T $>$}!optional@{optional}}
+\index{optional@{optional}!flow::optional$<$ T $>$@{flow::optional$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{optional()}{optional()}\hspace{0.1cm}{\footnotesize\ttfamily [4/4]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+\mbox{\hyperlink{classflow_1_1optional}{flow\+::optional}}$<$ T $>$\+::\mbox{\hyperlink{classflow_1_1optional}{optional}} (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classflow_1_1optional}{optional}}$<$ T $>$ \&\&}]{other }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+move constructor for optional 
+
+\begin{DoxyVerb}  sets other optional to invalid state
+\end{DoxyVerb}
+
+
+
+\begin{DoxyExceptions}{Exceptions}
+{\em anything} & that {\ttfamily T\+::T} can throw \\
+\hline
+\end{DoxyExceptions}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classflow_1_1optional_af6096677e53527ab10f84210e51d8aed}\label{classflow_1_1optional_af6096677e53527ab10f84210e51d8aed}} 
+\index{flow::optional$<$ T $>$@{flow::optional$<$ T $>$}!operator bool@{operator bool}}
+\index{operator bool@{operator bool}!flow::optional$<$ T $>$@{flow::optional$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{operator bool()}{operator bool()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+\mbox{\hyperlink{classflow_1_1optional}{flow\+::optional}}$<$ T $>$\+::operator bool (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}}
+
+
+
+allows conversion to bool for conditional checks 
+
+\begin{DoxyNote}{Note}
+cannot be used in arithmetic operations 
+\end{DoxyNote}
+\mbox{\Hypertarget{classflow_1_1optional_afab5d0e3e52d6d3cd54ca5cd0b01b87e}\label{classflow_1_1optional_afab5d0e3e52d6d3cd54ca5cd0b01b87e}} 
+\index{flow::optional$<$ T $>$@{flow::optional$<$ T $>$}!operator=@{operator=}}
+\index{operator=@{operator=}!flow::optional$<$ T $>$@{flow::optional$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{operator=()}{operator=()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+template$<$typename AssignT $>$ \\
+\mbox{\hyperlink{classflow_1_1optional}{optional}}\& \mbox{\hyperlink{classflow_1_1optional}{flow\+::optional}}$<$ T $>$\+::operator= (\begin{DoxyParamCaption}\item[{AssignT \&\&}]{other }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+move/value assignment 
+
+\begin{DoxyVerb}   automatically sets optional to valid
+\end{DoxyVerb}
+
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Assign\+T...} & (deduced) type which is assignable to {\ttfamily T}\\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em anything} & that {\ttfamily T\+::T} can throw \\
+\hline
+\end{DoxyExceptions}
+\mbox{\Hypertarget{classflow_1_1optional_acc3cdf40092672f5c562e0490fdeb708}\label{classflow_1_1optional_acc3cdf40092672f5c562e0490fdeb708}} 
+\index{flow::optional$<$ T $>$@{flow::optional$<$ T $>$}!operator=@{operator=}}
+\index{operator=@{operator=}!flow::optional$<$ T $>$@{flow::optional$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{operator=()}{operator=()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+\mbox{\hyperlink{classflow_1_1optional}{optional}}\& \mbox{\hyperlink{classflow_1_1optional}{flow\+::optional}}$<$ T $>$\+::operator= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classflow_1_1optional}{optional}}$<$ T $>$ \&}]{other }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+copy assignment 
+
+\begin{DoxyVerb}   automatically sets optional to valid
+\end{DoxyVerb}
+
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Copy\+T...} & (deduced) type which is copyable into {\ttfamily T}\\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em anything} & that {\ttfamily T\+::T} can throw \\
+\hline
+\end{DoxyExceptions}
+\mbox{\Hypertarget{classflow_1_1optional_a71bcb8bc91d83c539f95888f4a9b3acf}\label{classflow_1_1optional_a71bcb8bc91d83c539f95888f4a9b3acf}} 
+\index{flow::optional$<$ T $>$@{flow::optional$<$ T $>$}!reset@{reset}}
+\index{reset@{reset}!flow::optional$<$ T $>$@{flow::optional$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{reset()}{reset()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{classflow_1_1optional}{flow\+::optional}}$<$ T $>$\+::reset (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Resets optional to no-\/value. 
+
+\begin{DoxyNote}{Note}
+Does not call underlying destructor 
+\end{DoxyNote}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/flow/utility/optional.\+hpp\end{DoxyCompactItemize}
