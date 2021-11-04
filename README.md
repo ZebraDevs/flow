@@ -98,8 +98,8 @@ if (result == flow::State::PRIMED)
 
 #### Usage Examples
 
-- See these [test cases](flow/test/unit/synchronizer_mt_example.cpp) for examples of `flow::Synchronizer` in action in a multi-threaded context.
-- See this [test case](flow/test/unit/synchronizer_st_example.cpp) for an example of `flow::Synchronizer` in action in a single-threaded context.
+- See these [test cases](test/flow/synchronizer_mt_example.cpp) for examples of `flow::Synchronizer` in action in a multi-threaded context.
+- See this [test case](test/flow/synchronizer_st_example.cpp) for an example of `flow::Synchronizer` in action in a single-threaded context.
 
 
 ### Dispatch
