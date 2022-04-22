@@ -1,5 +1,5 @@
 /**
- * @copyright 2020 Fetch Robotics Inc.
+ * @copyright 2020-present Fetch Robotics Inc.
  * @author Brian Cairl, Derek King
  */
 #ifndef FLOW_FOLLOWER_CLOSEST_BEFORE_HPP

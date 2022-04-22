@@ -1,5 +1,5 @@
 /**
- * @copyright 2020 Fetch Robotics Inc.
+ * @copyright 2020-present Fetch Robotics Inc.
  * @author Brian Cairl
  */
 #ifndef FLOW_UTILITY_IMPLEMENT_CRTP_BASE_HPP
