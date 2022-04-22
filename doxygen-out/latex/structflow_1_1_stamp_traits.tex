@@ -41,12 +41,12 @@ struct flow\+::\+Stamp\+Traits$<$ Stamp\+T $>$}
 
 Helper struct used to specify stamp attributes. 
 
-\begin{DoxyVerb}   Must be specialized for non-integral sequence stamp types with the same fields:
-   - <code>min</code> : the minimum value of \p StampT
-   - <code>max</code> : the maximum value of \p StampT
-   - <code>offset_type</code> : associated offset/duration type
-\end{DoxyVerb}
-
+Must be specialized for non-\/integral sequence stamp types with the same fields\+:
+\begin{DoxyItemize}
+\item {\ttfamily min} \+: the minimum value of {\ttfamily StampT} 
+\item {\ttfamily max} \+: the maximum value of {\ttfamily StampT} 
+\item {\ttfamily offset\+\_\+type} \+: associated offset/duration type
+\end{DoxyItemize}
 
 
 \begin{DoxyTemplParams}{Template Parameters}

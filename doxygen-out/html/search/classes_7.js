@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['matchedstamp_249',['MatchedStamp',['../classflow_1_1follower_1_1_matched_stamp.html',1,'flow::follower']]]
+  ['latched_260',['Latched',['../classflow_1_1follower_1_1_latched.html',1,'flow::follower']]]
 ];

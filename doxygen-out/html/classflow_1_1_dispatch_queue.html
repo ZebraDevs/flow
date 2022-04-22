@@ -125,6 +125,14 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a447412abd83540a6c595dd7a17116c6c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classflow_1_1_dispatch_queue.html#a447412abd83540a6c595dd7a17116c6c">empty</a> () const</td></tr>
 <tr class="memdesc:a447412abd83540a6c595dd7a17116c6c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if queue is empty.  <a href="classflow_1_1_dispatch_queue.html#a447412abd83540a6c595dd7a17116c6c">More...</a><br /></td></tr>
 <tr class="separator:a447412abd83540a6c595dd7a17116c6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5e24566c81fade93f19e5e9cba7e4c9f"><td class="memTemplParams" colspan="2">template&lt;typename OutputDispatchIteratorT &gt; </td></tr>
+<tr class="memitem:a5e24566c81fade93f19e5e9cba7e4c9f"><td class="memTemplItemLeft" align="right" valign="top">OutputDispatchIteratorT&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classflow_1_1_dispatch_queue.html#a5e24566c81fade93f19e5e9cba7e4c9f">copy</a> (OutputDispatchIteratorT output, const <a class="el" href="structflow_1_1_extraction_range.html">ExtractionRange</a> &amp;extraction_range) const</td></tr>
+<tr class="memdesc:a5e24566c81fade93f19e5e9cba7e4c9f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copies elements in <code>range</code>.  <a href="classflow_1_1_dispatch_queue.html#a5e24566c81fade93f19e5e9cba7e4c9f">More...</a><br /></td></tr>
+<tr class="separator:a5e24566c81fade93f19e5e9cba7e4c9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abbea4a22916df6da88e9ae3d586d3c0d"><td class="memTemplParams" colspan="2">template&lt;typename OutputDispatchIteratorT &gt; </td></tr>
+<tr class="memitem:abbea4a22916df6da88e9ae3d586d3c0d"><td class="memTemplItemLeft" align="right" valign="top">OutputDispatchIteratorT&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classflow_1_1_dispatch_queue.html#abbea4a22916df6da88e9ae3d586d3c0d">move</a> (OutputDispatchIteratorT output, const <a class="el" href="structflow_1_1_extraction_range.html">ExtractionRange</a> &amp;extraction_range)</td></tr>
+<tr class="memdesc:abbea4a22916df6da88e9ae3d586d3c0d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Moves elements in <code>range</code>.  <a href="classflow_1_1_dispatch_queue.html#abbea4a22916df6da88e9ae3d586d3c0d">More...</a><br /></td></tr>
+<tr class="separator:abbea4a22916df6da88e9ae3d586d3c0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac4e9231e9bb44c6074c6021343fa60e7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classflow_1_1_dispatch_queue.html#a307496fdc34a2d59e11114dabf85dc8a">const_iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classflow_1_1_dispatch_queue.html#ac4e9231e9bb44c6074c6021343fa60e7">before</a> (<a class="el" href="classflow_1_1_dispatch_queue.html#affc83531dc53ee147899a33e82a6cbf0">stamp_const_arg_type</a> stamp) const</td></tr>
 <tr class="memdesc:ac4e9231e9bb44c6074c6021343fa60e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns first iterator to element before stamp.  <a href="classflow_1_1_dispatch_queue.html#ac4e9231e9bb44c6074c6021343fa60e7">More...</a><br /></td></tr>
 <tr class="separator:ac4e9231e9bb44c6074c6021343fa60e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -149,9 +157,18 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a5ced281bc5c221a79bf88a6169429252"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classflow_1_1_dispatch_queue.html#a7908f3d78b7f1767462244b94434d748">stamp_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classflow_1_1_dispatch_queue.html#a5ced281bc5c221a79bf88a6169429252">newest_stamp</a> () const</td></tr>
 <tr class="memdesc:a5ced281bc5c221a79bf88a6169429252"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sequencing stamp associated with the newest data.  <a href="classflow_1_1_dispatch_queue.html#a5ced281bc5c221a79bf88a6169429252">More...</a><br /></td></tr>
 <tr class="separator:a5ced281bc5c221a79bf88a6169429252"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a10607f6122683a4e24b44daaf8bf51fe"><td class="memItemLeft" align="right" valign="top">DispatchT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classflow_1_1_dispatch_queue.html#a10607f6122683a4e24b44daaf8bf51fe">pop</a> ()</td></tr>
-<tr class="memdesc:a10607f6122683a4e24b44daaf8bf51fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes the oldest element and returns associated <a class="el" href="classflow_1_1_dispatch.html" title="Dispatch data wrapper.">Dispatch</a>.  <a href="classflow_1_1_dispatch_queue.html#a10607f6122683a4e24b44daaf8bf51fe">More...</a><br /></td></tr>
-<tr class="separator:a10607f6122683a4e24b44daaf8bf51fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae2014e80c740ff4b4bd8db694520cbc1"><td class="memItemLeft" align="right" valign="top"><a id="ae2014e80c740ff4b4bd8db694520cbc1"></a>
+DispatchT &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classflow_1_1_dispatch_queue.html#ae2014e80c740ff4b4bd8db694520cbc1">top</a> ()</td></tr>
+<tr class="memdesc:ae2014e80c740ff4b4bd8db694520cbc1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the oldest element. <br /></td></tr>
+<tr class="separator:ae2014e80c740ff4b4bd8db694520cbc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad9e2a182a6de22ddf1bf313380a7476a"><td class="memItemLeft" align="right" valign="top"><a id="ad9e2a182a6de22ddf1bf313380a7476a"></a>
+const DispatchT &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classflow_1_1_dispatch_queue.html#ad9e2a182a6de22ddf1bf313380a7476a">top</a> () const</td></tr>
+<tr class="memdesc:ad9e2a182a6de22ddf1bf313380a7476a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the oldest element. <br /></td></tr>
+<tr class="separator:ad9e2a182a6de22ddf1bf313380a7476a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d6e8c6a930cf71880c4fcb06fa96e72"><td class="memItemLeft" align="right" valign="top"><a id="a1d6e8c6a930cf71880c4fcb06fa96e72"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classflow_1_1_dispatch_queue.html#a1d6e8c6a930cf71880c4fcb06fa96e72">pop</a> ()</td></tr>
+<tr class="memdesc:a1d6e8c6a930cf71880c4fcb06fa96e72"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes the oldest element. <br /></td></tr>
+<tr class="separator:a1d6e8c6a930cf71880c4fcb06fa96e72"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a184d59ca79ec916af7c2866eb1d3fa6e"><td class="memItemLeft" align="right" valign="top"><a id="a184d59ca79ec916af7c2866eb1d3fa6e"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classflow_1_1_dispatch_queue.html#a184d59ca79ec916af7c2866eb1d3fa6e">clear</a> ()</td></tr>
 <tr class="memdesc:a184d59ca79ec916af7c2866eb1d3fa6e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes all data from queue. <br /></td></tr>
@@ -162,6 +179,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="memitem:a44bbaa95fa99125929edb0dbd511a73a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classflow_1_1_dispatch_queue.html#a44bbaa95fa99125929edb0dbd511a73a">remove_at_before</a> (<a class="el" href="classflow_1_1_dispatch_queue.html#affc83531dc53ee147899a33e82a6cbf0">stamp_const_arg_type</a> t)</td></tr>
 <tr class="memdesc:a44bbaa95fa99125929edb0dbd511a73a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes data with stamp older than or equal to some reference sequence stamp.  <a href="classflow_1_1_dispatch_queue.html#a44bbaa95fa99125929edb0dbd511a73a">More...</a><br /></td></tr>
 <tr class="separator:a44bbaa95fa99125929edb0dbd511a73a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5d94838145c061c5975854a59a07b08f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classflow_1_1_dispatch_queue.html#a5d94838145c061c5975854a59a07b08f">remove_first_n</a> (const <a class="el" href="classflow_1_1_dispatch_queue.html#afdc67058e3461410fdd6170046df55bc">size_type</a> n)</td></tr>
+<tr class="memdesc:a5d94838145c061c5975854a59a07b08f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes first <code>n</code> elements.  <a href="classflow_1_1_dispatch_queue.html#a5d94838145c061c5975854a59a07b08f">More...</a><br /></td></tr>
+<tr class="separator:a5d94838145c061c5975854a59a07b08f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a66f89e3d5c95709662227ce275f00607"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classflow_1_1_dispatch_queue.html#a66f89e3d5c95709662227ce275f00607">shrink_to_fit</a> (const <a class="el" href="classflow_1_1_dispatch_queue.html#afdc67058e3461410fdd6170046df55bc">size_type</a> n)</td></tr>
 <tr class="memdesc:a66f89e3d5c95709662227ce275f00607"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes oldest data until queue has less than or equal to N-elements.  <a href="classflow_1_1_dispatch_queue.html#a66f89e3d5c95709662227ce275f00607">More...</a><br /></td></tr>
 <tr class="separator:a66f89e3d5c95709662227ce275f00607"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -179,10 +199,8 @@ const ContainerT &amp;&#160;</td><td class="memItemRight" valign="bottom"><a cla
 class flow::DispatchQueue&lt; DispatchT, ContainerT &gt;</h3>
 
 <p><a class="el" href="classflow_1_1_dispatch.html" title="Dispatch data wrapper.">Dispatch</a> queuing data structure. </p>
-<pre class="fragment">   FILO-type queue which orders data by sequence stamp, from oldest to newest. Provides
-   useful methods for extracting data within stamped/counted ranges
-</pre><p> <br  />
- This template provides an interface wrapper around a specifiable container implementation.</p>
+<p>FILO-type queue which orders data by sequence stamp, from oldest to newest. Provides useful methods for extracting data within stamped/counted ranges <br  />
+This template provides an interface wrapper around a specifiable container implementation.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">DispatchT</td><td>data dipatch type </td></tr>
@@ -218,8 +236,7 @@ template&lt;typename DispatchT , typename ContainerT &gt; </div>
 </div><div class="memdoc">
 
 <p>Returns first iterator to element before stamp. </p>
-<pre class="fragment">   Returns &lt;code&gt;end()&lt;/code&gt; iterator if
-</pre> <dl class="section return"><dt>Returns</dt><dd><code>const_iterator</code> to first <a class="el" href="classflow_1_1_dispatch.html" title="Dispatch data wrapper.">Dispatch</a> resource </dd></dl>
+<p>Returns <code><a class="el" href="classflow_1_1_dispatch_queue.html#a359b294ce203e10ee9fafc147f6638ff" title="Returns last iterator to underlying ordered data structure.">end()</a></code> iterator if </p><dl class="section return"><dt>Returns</dt><dd><code>const_iterator</code> to first <a class="el" href="classflow_1_1_dispatch.html" title="Dispatch data wrapper.">Dispatch</a> resource </dd></dl>
 
 </div>
 </div>
@@ -250,6 +267,55 @@ template&lt;typename DispatchT , typename ContainerT &gt; </div>
 
 <p>Returns first iterator to underlying ordered data structure. </p>
 <dl class="section return"><dt>Returns</dt><dd><code>const_iterator</code> to first <a class="el" href="classflow_1_1_dispatch.html" title="Dispatch data wrapper.">Dispatch</a> resource </dd></dl>
+
+</div>
+</div>
+<a id="a5e24566c81fade93f19e5e9cba7e4c9f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5e24566c81fade93f19e5e9cba7e4c9f">&#9670;&nbsp;</a></span>copy()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename DispatchT , typename ContainerT &gt; </div>
+<div class="memtemplate">
+template&lt;typename OutputDispatchIteratorT &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">OutputDispatchIteratorT <a class="el" href="classflow_1_1_dispatch_queue.html">flow::DispatchQueue</a>&lt; DispatchT, ContainerT &gt;::copy </td>
+          <td>(</td>
+          <td class="paramtype">OutputDispatchIteratorT&#160;</td>
+          <td class="paramname"><em>output</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structflow_1_1_extraction_range.html">ExtractionRange</a> &amp;&#160;</td>
+          <td class="paramname"><em>extraction_range</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Copies elements in <code>range</code>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">output</td><td>element output iterator </td></tr>
+    <tr><td class="paramname">range</td><td>element index range </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -355,6 +421,55 @@ template&lt;typename... DispatchConstructorArgTs&gt; </div>
 
 </div>
 </div>
+<a id="abbea4a22916df6da88e9ae3d586d3c0d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abbea4a22916df6da88e9ae3d586d3c0d">&#9670;&nbsp;</a></span>move()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename DispatchT , typename ContainerT &gt; </div>
+<div class="memtemplate">
+template&lt;typename OutputDispatchIteratorT &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">OutputDispatchIteratorT <a class="el" href="classflow_1_1_dispatch_queue.html">flow::DispatchQueue</a>&lt; DispatchT, ContainerT &gt;::move </td>
+          <td>(</td>
+          <td class="paramtype">OutputDispatchIteratorT&#160;</td>
+          <td class="paramname"><em>output</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structflow_1_1_extraction_range.html">ExtractionRange</a> &amp;&#160;</td>
+          <td class="paramname"><em>extraction_range</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Moves elements in <code>range</code>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">output</td><td>element output iterator </td></tr>
+    <tr><td class="paramname">range</td><td>element index range </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="a5ced281bc5c221a79bf88a6169429252"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a5ced281bc5c221a79bf88a6169429252">&#9670;&nbsp;</a></span>newest_stamp()</h2>
 
@@ -417,33 +532,6 @@ template&lt;typename DispatchT , typename ContainerT &gt; </div>
 
 </div>
 </div>
-<a id="a10607f6122683a4e24b44daaf8bf51fe"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a10607f6122683a4e24b44daaf8bf51fe">&#9670;&nbsp;</a></span>pop()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename DispatchT , typename ContainerT &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">DispatchT <a class="el" href="classflow_1_1_dispatch_queue.html">flow::DispatchQueue</a>&lt; DispatchT, ContainerT &gt;::pop</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Removes the oldest element and returns associated <a class="el" href="classflow_1_1_dispatch.html" title="Dispatch data wrapper.">Dispatch</a>. </p>
-<dl class="section return"><dt>Returns</dt><dd>oldest element </dd></dl>
-
-</div>
-</div>
 <a id="aa0b7930c0408b26d1367bb320c58bcbb"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa0b7930c0408b26d1367bb320c58bcbb">&#9670;&nbsp;</a></span>rbefore()</h2>
 
@@ -471,8 +559,8 @@ template&lt;typename DispatchT , typename ContainerT &gt; </div>
 </div><div class="memdoc">
 
 <p>Returns first reverse-iterator to element before stamp. </p>
-<pre class="fragment">   Returns &lt;code&gt;rend()&lt;/code&gt; iterator if
-</pre> <dl class="section return"><dt>Returns</dt><dd><code>const_reverse_iterator</code> to first <a class="el" href="classflow_1_1_dispatch.html" title="Dispatch data wrapper.">Dispatch</a> resource </dd></dl>
+<p>Returns <code><a class="el" href="classflow_1_1_dispatch_queue.html#a5fee6900da4ddd095b78608081b1873d" title="Returns last iterator to reversed underlying ordered data structure.">rend()</a></code> iterator if element cannot be found or if queue is empty</p>
+<dl class="section return"><dt>Returns</dt><dd><code>const_reverse_iterator</code> to first <a class="el" href="classflow_1_1_dispatch.html" title="Dispatch data wrapper.">Dispatch</a> resource </dd></dl>
 
 </div>
 </div>
@@ -572,6 +660,42 @@ template&lt;typename DispatchT , typename ContainerT &gt; </div>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">stamp</td><td>lower bound on container sequence stamp </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a5d94838145c061c5975854a59a07b08f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5d94838145c061c5975854a59a07b08f">&#9670;&nbsp;</a></span>remove_first_n()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename DispatchT , typename ContainerT &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classflow_1_1_dispatch_queue.html">flow::DispatchQueue</a>&lt; DispatchT, ContainerT &gt;::remove_first_n </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classflow_1_1_dispatch_queue.html#afdc67058e3461410fdd6170046df55bc">size_type</a>&#160;</td>
+          <td class="paramname"><em>n</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Removes first <code>n</code> elements. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">n</td><td>number of elements to remove </td></tr>
   </table>
   </dd>
 </dl>

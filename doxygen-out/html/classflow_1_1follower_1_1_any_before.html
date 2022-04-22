@@ -138,13 +138,9 @@ Public Member Functions</h2></td></tr>
 class flow::follower::AnyBefore&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT &gt;</h3>
 
 <p>Captures all data elements from a delay before the driving sequencing stamp. </p>
-<pre class="fragment">   This capture buffer will capture data which is behind the driving upper
-   sequence stamp (&lt;code&gt;range.upper_stamp&lt;/code&gt;) by some sequencing delay
-   w.r.t a driver-provided target time. It will return all data at and before
-   that sequencing boundary that has not previously been captured.
-</pre><p> <br  />
- This capture buffer is always ready, and will always return with a PRIMED state, regardless of whether or not there is data available to capture. <br  />
- <b>Data removal:</b> <a class="el" href="classflow_1_1_captor.html" title="Default constructor.">Captor</a> will remove all data before the driving time message minus the delay</p>
+<p>This capture buffer will capture data which is behind the driving upper sequence stamp (<code>range.upper_stamp</code>) by some sequencing delay w.r.t a driver-provided target time. It will return all data at and before that sequencing boundary that has not previously been captured. <br  />
+This capture buffer is always ready, and will always return with a PRIMED state, regardless of whether or not there is data available to capture. <br  />
+<b>Data removal:</b> <a class="el" href="classflow_1_1_captor.html" title="Default constructor.">Captor</a> will remove all data before the driving time message minus the delay</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">DispatchT</td><td>data dispatch type </td></tr>

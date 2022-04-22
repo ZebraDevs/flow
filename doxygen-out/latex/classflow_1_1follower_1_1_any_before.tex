@@ -51,14 +51,9 @@ class flow\+::follower\+::\+Any\+Before$<$ Dispatch\+T, Lock\+Policy\+T, Contain
 
 Captures all data elements from a delay before the driving sequencing stamp. 
 
-\begin{DoxyVerb}   This capture buffer will capture data which is behind the driving upper
-   sequence stamp (<code>range.upper_stamp</code>) by some sequencing delay
-   w.r.t a driver-provided target time. It will return all data at and before
-   that sequencing boundary that has not previously been captured.
-\end{DoxyVerb}
- ~\newline
- This capture buffer is always ready, and will always return with a P\+R\+I\+M\+ED state, regardless of whether or not there is data available to capture. ~\newline
- {\bfseries{Data removal\+:}} \mbox{\hyperlink{classflow_1_1_captor}{Captor}} will remove all data before the driving time message minus the delay
+This capture buffer will capture data which is behind the driving upper sequence stamp ({\ttfamily range.\+upper\+\_\+stamp}) by some sequencing delay w.\+r.\+t a driver-\/provided target time. It will return all data at and before that sequencing boundary that has not previously been captured. ~\newline
+This capture buffer is always ready, and will always return with a P\+R\+I\+M\+ED state, regardless of whether or not there is data available to capture. ~\newline
+{\bfseries{Data removal\+:}} \mbox{\hyperlink{classflow_1_1_captor}{Captor}} will remove all data before the driving time message minus the delay
 
 
 \begin{DoxyTemplParams}{Template Parameters}

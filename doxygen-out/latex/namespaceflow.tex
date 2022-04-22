@@ -77,6 +77,8 @@ struct \mbox{\hyperlink{structflow_1_1_dispatch_traits_3_1_1std_1_1pair_3_01_sta
 \begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{classflow_1_1_dispatch}{Dispatch}} type traits struct. \end{DoxyCompactList}\item 
 class \mbox{\hyperlink{classflow_1_1_driver}{Driver}}
 \begin{DoxyCompactList}\small\item\em C\+R\+T\+P-\/base for \mbox{\hyperlink{classflow_1_1_driver}{Driver}} input-\/capture policies. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structflow_1_1_extraction_range}{Extraction\+Range}}
+\begin{DoxyCompactList}\small\item\em Represents a range of elements. \end{DoxyCompactList}\item 
 class \mbox{\hyperlink{classflow_1_1_follower}{Follower}}
 \begin{DoxyCompactList}\small\item\em C\+R\+T\+P-\/base for \mbox{\hyperlink{classflow_1_1_follower}{Follower}} input-\/capture policies. \end{DoxyCompactList}\item 
 struct \mbox{\hyperlink{structflow_1_1integer__sequence}{integer\+\_\+sequence}}
@@ -148,6 +150,12 @@ enum \mbox{\hyperlink{namespaceflow_adefe9726e597eb50c46f0f6a202018e9}{State}} \
 \doxysubsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
+\mbox{\Hypertarget{namespaceflow_a02c72a25c49711b0983b4b6f6c1f5d7d}\label{namespaceflow_a02c72a25c49711b0983b4b6f6c1f5d7d}} 
+{\footnotesize template$<$typename... Other\+Ts$>$ }\\constexpr bool {\bfseries operator==} (const \mbox{\hyperlink{namespaceflow_adefe9726e597eb50c46f0f6a202018e9}{State}} lhs, const std\+::tuple$<$ \mbox{\hyperlink{namespaceflow_adefe9726e597eb50c46f0f6a202018e9}{State}}, Other\+Ts... $>$ \&rhs)
+\item 
+\mbox{\Hypertarget{namespaceflow_a64d98f45c52bf4a40e1e29a055776882}\label{namespaceflow_a64d98f45c52bf4a40e1e29a055776882}} 
+{\footnotesize template$<$typename... Other\+Ts$>$ }\\constexpr bool {\bfseries operator!=} (const \mbox{\hyperlink{namespaceflow_adefe9726e597eb50c46f0f6a202018e9}{State}} lhs, const std\+::tuple$<$ \mbox{\hyperlink{namespaceflow_adefe9726e597eb50c46f0f6a202018e9}{State}}, Other\+Ts... $>$ \&rhs)
+\item 
 std\+::ostream \& \mbox{\hyperlink{namespaceflow_add94bf5b887f5f969dd2988fdf0673d9}{operator$<$$<$}} (std\+::ostream \&os, const \mbox{\hyperlink{namespaceflow_adefe9726e597eb50c46f0f6a202018e9}{State}} state)
 \begin{DoxyCompactList}\small\item\em Output stream overload for {\ttfamily State} codes. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{namespaceflow_a7e74f2c2aa617c702eb0b184658b3e2e}\label{namespaceflow_a7e74f2c2aa617c702eb0b184658b3e2e}} 
@@ -162,13 +170,11 @@ std\+::ostream \& \mbox{\hyperlink{namespaceflow_add94bf5b887f5f969dd2988fdf0673
 \begin{DoxyCompactList}\small\item\em Output stream overload for {\ttfamily \mbox{\hyperlink{structflow_1_1_capture_range}{Capture\+Range}}} \end{DoxyCompactList}\item 
 {\footnotesize template$<$typename StampT $>$ }\\std\+::ostream \& \mbox{\hyperlink{namespaceflow_a7ca1e3a34fdc4e532e45869d9141c53a}{operator$<$$<$}} (std\+::ostream \&os, const \mbox{\hyperlink{structflow_1_1_result}{Result}}$<$ StampT $>$ \&result)
 \begin{DoxyCompactList}\small\item\em Output stream overload for {\ttfamily \mbox{\hyperlink{structflow_1_1_result}{Result}}} \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename Unary\+InvocableT , typename Arg\+TupleT $>$ }\\constexpr decltype(auto) \mbox{\hyperlink{namespaceflow_a576ffe4655756f441e6b680ae6c584ef}{apply}} (Unary\+InvocableT \&\&fn, Arg\+TupleT \&\&targs)
+\item 
 {\footnotesize template$<$typename ReturnT , typename Unary\+InvocableT , typename Arg\+TupleT $>$ }\\constexpr std\+::enable\+\_\+if$<$ std\+::is\+\_\+void$<$ ReturnT $>$\+::value $>$\+::type \mbox{\hyperlink{namespaceflow_addfb557e2933e92a2192c0de4d6b4621}{apply}} (Unary\+InvocableT \&\&fn, Arg\+TupleT \&\&targs)
 \begin{DoxyCompactList}\small\item\em Calls function with with tuple (e.\+g {\ttfamily std\+::tuple}) as argument list. \end{DoxyCompactList}\item 
-{\footnotesize template$<$typename ReturnT , typename Unary\+InvocableT , typename Arg\+TupleT $>$ }\\constexpr std\+::enable\+\_\+if$<$!std\+::is\+\_\+void$<$ ReturnT $>$\+::value, ReturnT $>$\+::type \mbox{\hyperlink{namespaceflow_a6455569ea0cc7a2f8e9ab470ce1ccf5c}{apply}} (Unary\+InvocableT \&\&fn, Arg\+TupleT \&\&targs)
-\begin{DoxyCompactList}\small\item\em Calls function with with tuple (e.\+g {\ttfamily std\+::tuple}) as argument list. \end{DoxyCompactList}\item 
-{\footnotesize template$<$typename Unary\+InvocableT , typename Arg\+TupleT $>$ }\\constexpr void \mbox{\hyperlink{namespaceflow_a4f23fc70281849dfd0c21efe1471df22}{apply\+\_\+every}} (Unary\+InvocableT \&\&fn, Arg\+TupleT \&\&targs)
-\begin{DoxyCompactList}\small\item\em Calls function on every element of a tuple (e.\+g {\ttfamily std\+::tuple}) \end{DoxyCompactList}\item 
-{\footnotesize template$<$typename Binary\+InvocableT , typename Arg1\+TupleT , typename Arg2\+TupleT $>$ }\\constexpr void \mbox{\hyperlink{namespaceflow_ad8a042fc4ba754e378d2e3e40ba1b9d9}{apply\+\_\+every}} (Binary\+InvocableT \&\&fn, Arg1\+TupleT \&\&targs1, Arg2\+TupleT \&\&targs2)
+{\footnotesize template$<$typename N\+Ary\+InvocableT , typename... Arg\+Tuples$>$ }\\constexpr void \mbox{\hyperlink{namespaceflow_af637729bd4e582460174c671dc619000}{apply\+\_\+every}} (N\+Ary\+InvocableT \&\&fn, Arg\+Tuples \&\&... targs)
 \begin{DoxyCompactList}\small\item\em Calls a binary function on each element of two tuples (e.\+g {\ttfamily std\+::tuple}) \end{DoxyCompactList}\item 
 {\footnotesize template$<$typename Unary\+Invocable\+TupleT , typename Arg\+TupleT $>$ }\\constexpr void \mbox{\hyperlink{namespaceflow_af332d2067ac2938609786e4bb3ad8b5e}{apply\+\_\+each}} (Unary\+Invocable\+TupleT \&\&fns, Arg\+TupleT \&\&targs)
 \begin{DoxyCompactList}\small\item\em Calls a unique function on each element of a tuple (e.\+g {\ttfamily std\+::tuple}) \end{DoxyCompactList}\end{DoxyCompactItemize}
@@ -182,25 +188,25 @@ Implements the C++17 utility {\ttfamily std\+::integer\+\_\+sequence} and relate
 Defines a utility similar to {\ttfamily std\+::apply} (C++14)
 
 \begin{DoxyCopyright}{Copyright}
-2020 Fetch Robotics Inc. 
+2020-\/present Fetch Robotics Inc. 
 \end{DoxyCopyright}
 \begin{DoxyAuthor}{Author}
 Brian Cairl
 \end{DoxyAuthor}
 \begin{DoxyCopyright}{Copyright}
-2020 Fetch Robotics Inc. 
+2020-\/present Fetch Robotics Inc. 
 \end{DoxyCopyright}
 \begin{DoxyAuthor}{Author}
 Levon Avagyan, Brian Cairl
 \end{DoxyAuthor}
 \begin{DoxyCopyright}{Copyright}
-2020 Fetch Robotics Inc. 
+2020-\/present Fetch Robotics Inc. 
 \end{DoxyCopyright}
 \begin{DoxyAuthor}{Author}
 Brian Cairl, Derek King
 \end{DoxyAuthor}
 \begin{DoxyCopyright}{Copyright}
-2020 Fetch Robotics Inc. 
+2020-\/present Fetch Robotics Inc. 
 \end{DoxyCopyright}
 \begin{DoxyAuthor}{Author}
 Brian Cairl
@@ -209,7 +215,7 @@ Brian Cairl
 I\+M\+P\+L\+E\+M\+E\+N\+T\+A\+T\+I\+ON O\+N\+LY\+: T\+H\+IS F\+I\+LE S\+H\+O\+U\+LD N\+E\+V\+ER BE I\+N\+C\+L\+U\+D\+ED D\+I\+R\+E\+C\+T\+L\+Y!
 \end{DoxyWarning}
 \begin{DoxyCopyright}{Copyright}
-2020 Fetch Robotics Inc. 
+2020-\/present Fetch Robotics Inc. 
 \end{DoxyCopyright}
 \begin{DoxyAuthor}{Author}
 Levon Avagyan, Brian Cairl
@@ -218,7 +224,7 @@ Levon Avagyan, Brian Cairl
 I\+M\+P\+L\+E\+M\+E\+N\+T\+A\+T\+I\+ON O\+N\+LY\+: T\+H\+IS F\+I\+LE S\+H\+O\+U\+LD N\+E\+V\+ER BE I\+N\+C\+L\+U\+D\+ED D\+I\+R\+E\+C\+T\+L\+Y!
 \end{DoxyWarning}
 \begin{DoxyCopyright}{Copyright}
-2020 Fetch Robotics Inc. 
+2020-\/present Fetch Robotics Inc. 
 \end{DoxyCopyright}
 \begin{DoxyAuthor}{Author}
 Brian Cairl, Derek King
@@ -227,7 +233,7 @@ Brian Cairl, Derek King
 I\+M\+P\+L\+E\+M\+E\+N\+T\+A\+T\+I\+ON O\+N\+LY\+: T\+H\+IS F\+I\+LE S\+H\+O\+U\+LD N\+E\+V\+ER BE I\+N\+C\+L\+U\+D\+ED D\+I\+R\+E\+C\+T\+L\+Y!
 \end{DoxyWarning}
 \begin{DoxyCopyright}{Copyright}
-2020 Fetch Robotics Inc. 
+2020-\/present Fetch Robotics Inc. 
 \end{DoxyCopyright}
 \begin{DoxyAuthor}{Author}
 Brian Cairl
@@ -238,7 +244,7 @@ Brian Cairl
 
 
 \begin{DoxyCopyright}{Copyright}
-2020 Fetch Robotics Inc. 
+2020-\/present Fetch Robotics Inc. 
 \end{DoxyCopyright}
 \begin{DoxyAuthor}{Author}
 Brian Cairl
@@ -325,9 +331,7 @@ Integer sequence where the integer type is {\ttfamily std\+::size\+\_\+t}
 
 Evaluated \mbox{\hyperlink{classflow_1_1_captor}{Captor}} state. 
 
-\begin{DoxyVerb}   These are used by captors to direct internal data capture behavior
-\end{DoxyVerb}
- \begin{DoxyEnumFields}{Enumerator}
+These are used by captors to direct internal data capture behavior \begin{DoxyEnumFields}{Enumerator}
 \raisebox{\heightof{T}}[0pt][0pt]{\index{RETRY@{RETRY}!flow@{flow}}\index{flow@{flow}!RETRY@{RETRY}}}\mbox{\Hypertarget{namespaceflow_adefe9726e597eb50c46f0f6a202018e9ac0cc02c3b3d55abb7bfb49ddbb4866c8}\label{namespaceflow_adefe9726e597eb50c46f0f6a202018e9ac0cc02c3b3d55abb7bfb49ddbb4866c8}} 
 R\+E\+T\+RY&\mbox{\hyperlink{classflow_1_1_captor}{Captor}} should continue waiting for data after prime attempt. \\
 \hline
@@ -360,10 +364,33 @@ S\+K\+I\+P\+\_\+\+F\+R\+A\+M\+E\+\_\+\+Q\+U\+E\+U\+E\+\_\+\+P\+R\+E\+C\+O\+N\+D\
 
 
 \doxysubsection{Function Documentation}
-\mbox{\Hypertarget{namespaceflow_addfb557e2933e92a2192c0de4d6b4621}\label{namespaceflow_addfb557e2933e92a2192c0de4d6b4621}} 
+\mbox{\Hypertarget{namespaceflow_a576ffe4655756f441e6b680ae6c584ef}\label{namespaceflow_a576ffe4655756f441e6b680ae6c584ef}} 
 \index{flow@{flow}!apply@{apply}}
 \index{apply@{apply}!flow@{flow}}
 \doxysubsubsection{\texorpdfstring{apply()}{apply()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$typename Unary\+InvocableT , typename Arg\+TupleT $>$ \\
+constexpr decltype(auto) flow\+::apply (\begin{DoxyParamCaption}\item[{Unary\+InvocableT \&\&}]{fn,  }\item[{Arg\+TupleT \&\&}]{targs }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+
+
+\begin{DoxyReturn}{Returns}
+return value of {\ttfamily fn} when passed arguments from {\ttfamily targs} 
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+Participates in overload resolution when {\ttfamily ReturnT} is non-\/{\ttfamily void} 
+\end{DoxyNote}
+\begin{DoxyReturn}{Returns}
+return value of {\ttfamily fn} when passed arguments from {\ttfamily targs} 
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+Participates in overload resolution when {\ttfamily ReturnT} is non-\/{\ttfamily void} 
+\end{DoxyNote}
+\mbox{\Hypertarget{namespaceflow_addfb557e2933e92a2192c0de4d6b4621}\label{namespaceflow_addfb557e2933e92a2192c0de4d6b4621}} 
+\index{flow@{flow}!apply@{apply}}
+\index{apply@{apply}!flow@{flow}}
+\doxysubsubsection{\texorpdfstring{apply()}{apply()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
 {\footnotesize\ttfamily template$<$typename ReturnT , typename Unary\+InvocableT , typename Arg\+TupleT $>$ \\
 constexpr std\+::enable\+\_\+if$<$std\+::is\+\_\+void$<$ReturnT$>$\+::value$>$\+::type flow\+::apply (\begin{DoxyParamCaption}\item[{Unary\+InvocableT \&\&}]{fn,  }\item[{Arg\+TupleT \&\&}]{targs }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [constexpr]}}
 
@@ -392,44 +419,6 @@ Calls function with with tuple (e.\+g {\ttfamily std\+::tuple}) as argument list
 {\em targs} & tuple with arguments to pass to {\ttfamily f} \\
 \hline
 \end{DoxyParams}
-\mbox{\Hypertarget{namespaceflow_a6455569ea0cc7a2f8e9ab470ce1ccf5c}\label{namespaceflow_a6455569ea0cc7a2f8e9ab470ce1ccf5c}} 
-\index{flow@{flow}!apply@{apply}}
-\index{apply@{apply}!flow@{flow}}
-\doxysubsubsection{\texorpdfstring{apply()}{apply()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
-{\footnotesize\ttfamily template$<$typename ReturnT , typename Unary\+InvocableT , typename Arg\+TupleT $>$ \\
-constexpr std\+::enable\+\_\+if$<$!std\+::is\+\_\+void$<$ReturnT$>$\+::value, ReturnT$>$\+::type flow\+::apply (\begin{DoxyParamCaption}\item[{Unary\+InvocableT \&\&}]{fn,  }\item[{Arg\+TupleT \&\&}]{targs }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [constexpr]}}
-
-
-
-Calls function with with tuple (e.\+g {\ttfamily std\+::tuple}) as argument list. 
-
-
-\begin{DoxyTemplParams}{Template Parameters}
-{\em ReturnT} & function return type \\
-\hline
-{\em Unary\+InvocableT} & (deduced) invocable type\+:
-\begin{DoxyItemize}
-\item function pointer
-\item functor object with {\ttfamily Object\+::operator()}
-\item lambda function expression 
-\end{DoxyItemize}\\
-\hline
-{\em TupleT} & (deduced) tuple-\/like type with element types order according to function argument list\\
-\hline
-\end{DoxyTemplParams}
-
-\begin{DoxyParams}{Parameters}
-{\em fn} & function pointer or functor object type \\
-\hline
-{\em targs} & tuple with arguments to pass to {\ttfamily f} \\
-\hline
-\end{DoxyParams}
-\begin{DoxyReturn}{Returns}
-return value of {\ttfamily fn} when passed arguments from {\ttfamily targs} 
-\end{DoxyReturn}
-\begin{DoxyNote}{Note}
-Participates in overload resolution when {\ttfamily ReturnT} is non-\/{\ttfamily void} 
-\end{DoxyNote}
 \mbox{\Hypertarget{namespaceflow_af332d2067ac2938609786e4bb3ad8b5e}\label{namespaceflow_af332d2067ac2938609786e4bb3ad8b5e}} 
 \index{flow@{flow}!apply\_each@{apply\_each}}
 \index{apply\_each@{apply\_each}!flow@{flow}}
@@ -460,12 +449,12 @@ Calls a unique function on each element of a tuple (e.\+g {\ttfamily std\+::tupl
 {\em targs} & tuple with arguments to pass to {\ttfamily f} \\
 \hline
 \end{DoxyParams}
-\mbox{\Hypertarget{namespaceflow_ad8a042fc4ba754e378d2e3e40ba1b9d9}\label{namespaceflow_ad8a042fc4ba754e378d2e3e40ba1b9d9}} 
+\mbox{\Hypertarget{namespaceflow_af637729bd4e582460174c671dc619000}\label{namespaceflow_af637729bd4e582460174c671dc619000}} 
 \index{flow@{flow}!apply\_every@{apply\_every}}
 \index{apply\_every@{apply\_every}!flow@{flow}}
-\doxysubsubsection{\texorpdfstring{apply\_every()}{apply\_every()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
-{\footnotesize\ttfamily template$<$typename Binary\+InvocableT , typename Arg1\+TupleT , typename Arg2\+TupleT $>$ \\
-constexpr void flow\+::apply\+\_\+every (\begin{DoxyParamCaption}\item[{Binary\+InvocableT \&\&}]{fn,  }\item[{Arg1\+TupleT \&\&}]{targs1,  }\item[{Arg2\+TupleT \&\&}]{targs2 }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [constexpr]}}
+\doxysubsubsection{\texorpdfstring{apply\_every()}{apply\_every()}}
+{\footnotesize\ttfamily template$<$typename N\+Ary\+InvocableT , typename... Arg\+Tuples$>$ \\
+constexpr void flow\+::apply\+\_\+every (\begin{DoxyParamCaption}\item[{N\+Ary\+InvocableT \&\&}]{fn,  }\item[{Arg\+Tuples \&\&...}]{targs }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [constexpr]}}
 
 
 
@@ -473,51 +462,19 @@ Calls a binary function on each element of two tuples (e.\+g {\ttfamily std\+::t
 
 
 \begin{DoxyTemplParams}{Template Parameters}
-{\em Binary\+InvocableT} & (deduced) binary invocable type\+:
+{\em N\+Ary\+InvocableT} & (deduced) binary invocable type\+:
 \begin{DoxyItemize}
 \item function pointer
 \item functor object with {\ttfamily Object\+::operator()}
 \item lambda function expression 
 \end{DoxyItemize}\\
 \hline
-{\em Arg1\+TupleT} & (deduced) tuple-\/like type with element types order according to function argument list \\
-\hline
-{\em Arg2\+TupleT} & (deduced) tuple-\/like type with element types order according to function argument list\\
+{\em Arg\+Tuples} & (deduced) tuple-\/like type with element types order according to function argument list\\
 \hline
 \end{DoxyTemplParams}
 
 \begin{DoxyParams}{Parameters}
 {\em fn} & function pointer or functor object \\
-\hline
-{\em targs} & tuple with arguments to pass to {\ttfamily f} \\
-\hline
-\end{DoxyParams}
-\mbox{\Hypertarget{namespaceflow_a4f23fc70281849dfd0c21efe1471df22}\label{namespaceflow_a4f23fc70281849dfd0c21efe1471df22}} 
-\index{flow@{flow}!apply\_every@{apply\_every}}
-\index{apply\_every@{apply\_every}!flow@{flow}}
-\doxysubsubsection{\texorpdfstring{apply\_every()}{apply\_every()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
-{\footnotesize\ttfamily template$<$typename Unary\+InvocableT , typename Arg\+TupleT $>$ \\
-constexpr void flow\+::apply\+\_\+every (\begin{DoxyParamCaption}\item[{Unary\+InvocableT \&\&}]{fn,  }\item[{Arg\+TupleT \&\&}]{targs }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [constexpr]}}
-
-
-
-Calls function on every element of a tuple (e.\+g {\ttfamily std\+::tuple}) 
-
-
-\begin{DoxyTemplParams}{Template Parameters}
-{\em Unary\+InvocableT} & (deduced) unary invocable type\+:
-\begin{DoxyItemize}
-\item function pointer
-\item functor object with {\ttfamily Object\+::operator()}
-\item lambda function expression 
-\end{DoxyItemize}\\
-\hline
-{\em Arg\+TupleT} & (deduced) tuple-\/like type with element types order according to function argument list\\
-\hline
-\end{DoxyTemplParams}
-
-\begin{DoxyParams}{Parameters}
-{\em fn} & function pointer or functor object type \\
 \hline
 {\em targs} & tuple with arguments to pass to {\ttfamily f} \\
 \hline
@@ -537,7 +494,7 @@ Output stream overload for {\ttfamily \mbox{\hyperlink{structflow_1_1_capture_ra
 \begin{DoxyParams}[1]{Parameters}
 \mbox{\texttt{ in,out}}  & {\em os} & output stream \\
 \hline
- & {\em range} & capture stamp range \\
+ & {\em range} & capture stamp range\\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
@@ -558,7 +515,7 @@ Output stream overload for {\ttfamily \mbox{\hyperlink{classflow_1_1_dispatch}{D
 \begin{DoxyParams}[1]{Parameters}
 \mbox{\texttt{ in,out}}  & {\em os} & output stream \\
 \hline
- & {\em dispatch} & dispatch object \\
+ & {\em dispatch} & dispatch object\\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
@@ -599,7 +556,7 @@ Output stream overload for {\ttfamily State} codes.
 \begin{DoxyParams}[1]{Parameters}
 \mbox{\texttt{ in,out}}  & {\em os} & output stream \\
 \hline
- & {\em state} & state code \\
+ & {\em state} & state code\\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}

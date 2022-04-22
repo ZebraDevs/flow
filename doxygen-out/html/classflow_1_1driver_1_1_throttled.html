@@ -138,10 +138,8 @@ Public Member Functions</h2></td></tr>
 class flow::driver::Throttled&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT &gt;</h3>
 
 <p><a class="el" href="classflow_1_1driver_1_1_throttled.html" title="Throttled next element driving capture object.">Throttled</a> next element driving capture object. </p>
-<pre class="fragment">   Captures the next oldest data element, limited to a max expected period. This means that some elements
-   are skipped if the input rate indicated by data sequence stamps is higher than the throttled rate.
-</pre><p> <br  />
- Establishes a sequencing range with <code>range.lower_stamp == range.upper_stamp</code> equal to the captured element stamp. Removes captured element from buffer.</p>
+<p>Captures the next oldest data element, limited to a max expected period. This means that some elements are skipped if the input rate indicated by data sequence stamps is higher than the throttled rate. <br  />
+Establishes a sequencing range with <code>range.lower_stamp == range.upper_stamp</code> equal to the captured element stamp. Removes captured element from buffer.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">DispatchT</td><td>data dispatch type </td></tr>

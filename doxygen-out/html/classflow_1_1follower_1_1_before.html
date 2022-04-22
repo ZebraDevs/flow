@@ -138,9 +138,8 @@ Public Member Functions</h2></td></tr>
 class flow::follower::Before&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT &gt;</h3>
 
 <p>Captures all elements before the capture range lower bound, minus a delay period. </p>
-<pre class="fragment">   Once at least a single element is available after said sequencing boundary.
-   All of the captured elements are removed.
-</pre><dl class="tparams"><dt>Template Parameters</dt><dd>
+<p>Once at least a single element is available after said sequencing boundary. All of the captured elements are removed.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">DispatchT</td><td>data dispatch type </td></tr>
     <tr><td class="paramname">LockPolicyT</td><td>a BasicLockable (<a href="https://en.cppreference.com/w/cpp/named_req/BasicLockable">https://en.cppreference.com/w/cpp/named_req/BasicLockable</a>) object or <a class="el" href="structflow_1_1_no_lock.html" title="Stand-in type used to signify that captors will be used in a single-threaded context.">NoLock</a> or <a class="el" href="structflow_1_1_polling_lock.html" title="Stand-in type used to signify that captors will be used in a threaded context, but will not wait for ...">PollingLock</a> </td></tr>

@@ -51,11 +51,8 @@ class flow\+::driver\+::\+Throttled$<$ Dispatch\+T, Lock\+Policy\+T, Container\+
 
 \mbox{\hyperlink{classflow_1_1driver_1_1_throttled}{Throttled}} next element driving capture object. 
 
-\begin{DoxyVerb}   Captures the next oldest data element, limited to a max expected period. This means that some elements
-   are skipped if the input rate indicated by data sequence stamps is higher than the throttled rate.
-\end{DoxyVerb}
- ~\newline
- Establishes a sequencing range with {\ttfamily range.\+lower\+\_\+stamp == range.\+upper\+\_\+stamp} equal to the captured element stamp. Removes captured element from buffer.
+Captures the next oldest data element, limited to a max expected period. This means that some elements are skipped if the input rate indicated by data sequence stamps is higher than the throttled rate. ~\newline
+Establishes a sequencing range with {\ttfamily range.\+lower\+\_\+stamp == range.\+upper\+\_\+stamp} equal to the captured element stamp. Removes captured element from buffer.
 
 
 \begin{DoxyTemplParams}{Template Parameters}

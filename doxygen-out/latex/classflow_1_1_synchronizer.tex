@@ -33,9 +33,7 @@ Provides facilities to synchronize data across several Captors.
 {\footnotesize template$<$typename Captor\+TupleT , typename Output\+Iterator\+TupleT , typename ClockT , typename DurationT $>$ }\\static \mbox{\hyperlink{classflow_1_1_synchronizer_a4f9693650274ae93f5b9a11cb41a2d80}{result\+\_\+t}}$<$ Captor\+TupleT $>$ \mbox{\hyperlink{classflow_1_1_synchronizer_a664a2a24cba7030d984715454f3b1104}{capture}} (Captor\+TupleT \&\&captors, Output\+Iterator\+TupleT \&\&outputs, const \mbox{\hyperlink{classflow_1_1_synchronizer_a0f1e7062475c9492191e29b26d09106c}{stamp\+\_\+arg\+\_\+t}}$<$ Captor\+TupleT $>$ lower\+\_\+bound, const std\+::chrono\+::time\+\_\+point$<$ ClockT, DurationT $>$ \&timeout)
 \begin{DoxyCompactList}\small\item\em Runs synchronization and data capture across all captors. \end{DoxyCompactList}\item 
 {\footnotesize template$<$typename Captor\+TupleT , typename Output\+Iterator\+TupleT $>$ }\\static \mbox{\hyperlink{classflow_1_1_synchronizer_a4f9693650274ae93f5b9a11cb41a2d80}{result\+\_\+t}}$<$ Captor\+TupleT $>$ \mbox{\hyperlink{classflow_1_1_synchronizer_a140d39b1091ca2ad7f524421a5f9b353}{capture}} (Captor\+TupleT \&\&captors, Output\+Iterator\+TupleT \&\&outputs, const \mbox{\hyperlink{classflow_1_1_synchronizer_a0f1e7062475c9492191e29b26d09106c}{stamp\+\_\+arg\+\_\+t}}$<$ Captor\+TupleT $>$ lower\+\_\+bound=\mbox{\hyperlink{structflow_1_1_stamp_traits}{Stamp\+Traits}}$<$ \mbox{\hyperlink{classflow_1_1_synchronizer_a2a443abb40ad2413e6d5f7a7f3cfe4a7}{stamp\+\_\+t}}$<$ Captor\+TupleT $>$$>$\+::min())
-\begin{DoxyCompactList}\small\item\em Runs synchronization and data capture across all captors. \end{DoxyCompactList}\item 
-{\footnotesize template$<$typename Captor\+TupleT $>$ }\\static \mbox{\hyperlink{classflow_1_1_synchronizer_a4f9693650274ae93f5b9a11cb41a2d80}{result\+\_\+t}}$<$ Captor\+TupleT $>$ \mbox{\hyperlink{classflow_1_1_synchronizer_a59ddd4809e03c8ed9cdd511f0729d6bb}{dry\+\_\+capture}} (Captor\+TupleT \&\&captors, const \mbox{\hyperlink{classflow_1_1_synchronizer_a0f1e7062475c9492191e29b26d09106c}{stamp\+\_\+arg\+\_\+t}}$<$ Captor\+TupleT $>$ lower\+\_\+bound=\mbox{\hyperlink{structflow_1_1_stamp_traits}{Stamp\+Traits}}$<$ \mbox{\hyperlink{classflow_1_1_synchronizer_a2a443abb40ad2413e6d5f7a7f3cfe4a7}{stamp\+\_\+t}}$<$ Captor\+TupleT $>$$>$\+::min())
-\begin{DoxyCompactList}\small\item\em Runs synchronization dry-\/run across all captors. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Runs synchronization and data capture across all captors. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
@@ -104,10 +102,7 @@ void flow\+::\+Synchronizer\+::abort (\begin{DoxyParamCaption}\item[{Captor\+Tup
 
 Abort active capture at and before {\ttfamily t\+\_\+abort}. 
 
-\begin{DoxyVerb}   If a capture uses a data wait, this will notify the wait
-   Captors will removing buffered data according to their specific abort policy.
-\end{DoxyVerb}
-
+If a capture uses a data wait, this will notify the wait Captors will removing buffered data according to their specific abort policy.
 
 
 \begin{DoxyTemplParams}{Template Parameters}
@@ -187,39 +182,6 @@ Runs synchronization and data capture across all captors.
 \begin{DoxyReturn}{Returns}
 capture/synchronization details 
 \end{DoxyReturn}
-\mbox{\Hypertarget{classflow_1_1_synchronizer_a59ddd4809e03c8ed9cdd511f0729d6bb}\label{classflow_1_1_synchronizer_a59ddd4809e03c8ed9cdd511f0729d6bb}} 
-\index{flow::Synchronizer@{flow::Synchronizer}!dry\_capture@{dry\_capture}}
-\index{dry\_capture@{dry\_capture}!flow::Synchronizer@{flow::Synchronizer}}
-\doxysubsubsection{\texorpdfstring{dry\_capture()}{dry\_capture()}}
-{\footnotesize\ttfamily template$<$typename Captor\+TupleT $>$ \\
-\mbox{\hyperlink{classflow_1_1_synchronizer_a4f9693650274ae93f5b9a11cb41a2d80}{Synchronizer\+::result\+\_\+t}}$<$ Captor\+TupleT $>$ flow\+::\+Synchronizer\+::dry\+\_\+capture (\begin{DoxyParamCaption}\item[{Captor\+TupleT \&\&}]{captors,  }\item[{const \mbox{\hyperlink{classflow_1_1_synchronizer_a0f1e7062475c9492191e29b26d09106c}{stamp\+\_\+arg\+\_\+t}}$<$ Captor\+TupleT $>$}]{lower\+\_\+bound = {\ttfamily \mbox{\hyperlink{structflow_1_1_stamp_traits}{Stamp\+Traits}}$<$\mbox{\hyperlink{classflow_1_1_synchronizer_a2a443abb40ad2413e6d5f7a7f3cfe4a7}{stamp\+\_\+t}}$<$CaptorTupleT$>$$>$\+:\+:min()} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
-
-
-
-Runs synchronization dry-\/run across all captors. 
-
-\begin{DoxyVerb}   Tests active next capture state without actually capturing elements. Any data
-   changes that occur are such that the next call to <code>Synchronizer::capture</code>
-   will be valid, and will have the same capture result if no changes have been made
-   to data in the capture queues.
-\end{DoxyVerb}
-
-
-
-\begin{DoxyTemplParams}{Template Parameters}
-{\em Captor\+TupleT} & tuple-\/like type of captors which supports access with {\ttfamily std\+::get}\\
-\hline
-\end{DoxyTemplParams}
-
-\begin{DoxyParams}{Parameters}
-{\em captors} & tuple of captors used to perform synchronization \\
-\hline
-{\em lower\+\_\+bound} & synchronization stamp lower bound; forces all captured data to have associated stamps which are greater than {\ttfamily lower\+\_\+bound}\\
-\hline
-\end{DoxyParams}
-\begin{DoxyReturn}{Returns}
-dry capture/synchronization details 
-\end{DoxyReturn}
 \mbox{\Hypertarget{classflow_1_1_synchronizer_a2f0d471246ef9e5629282ced5bc21692}\label{classflow_1_1_synchronizer_a2f0d471246ef9e5629282ced5bc21692}} 
 \index{flow::Synchronizer@{flow::Synchronizer}!remove@{remove}}
 \index{remove@{remove}!flow::Synchronizer@{flow::Synchronizer}}
@@ -231,9 +193,7 @@ void flow\+::\+Synchronizer\+::remove (\begin{DoxyParamCaption}\item[{Captor\+Tu
 
 Removes all possible synchronization frames at and before {\ttfamily t\+\_\+remove}. 
 
-\begin{DoxyVerb}   This does not necessarily remove data from all captors
-\end{DoxyVerb}
-
+This does not necessarily remove data from all captors
 
 
 \begin{DoxyTemplParams}{Template Parameters}
@@ -258,9 +218,7 @@ void flow\+::\+Synchronizer\+::reset (\begin{DoxyParamCaption}\item[{Captor\+Tup
 
 Resets internal captors states and removes all buffered data. 
 
-\begin{DoxyVerb}   If a capture uses a data wait, this will notify the wait
-\end{DoxyVerb}
-
+If a capture uses a data wait, this will notify the wait
 
 
 \begin{DoxyTemplParams}{Template Parameters}

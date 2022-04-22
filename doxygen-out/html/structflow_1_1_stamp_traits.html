@@ -115,11 +115,12 @@ static constexpr StampT&#160;</td><td class="memItemRight" valign="bottom"><a cl
 struct flow::StampTraits&lt; StampT &gt;</h3>
 
 <p>Helper struct used to specify stamp attributes. </p>
-<pre class="fragment">   Must be specialized for non-integral sequence stamp types with the same fields:
-   - &lt;code&gt;min&lt;/code&gt; : the minimum value of \p StampT
-   - &lt;code&gt;max&lt;/code&gt; : the maximum value of \p StampT
-   - &lt;code&gt;offset_type&lt;/code&gt; : associated offset/duration type
-</pre><dl class="tparams"><dt>Template Parameters</dt><dd>
+<p>Must be specialized for non-integral sequence stamp types with the same fields:</p><ul>
+<li><code>min</code> : the minimum value of <code>StampT</code> </li>
+<li><code>max</code> : the maximum value of <code>StampT</code> </li>
+<li><code>offset_type</code> : associated offset/duration type</li>
+</ul>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">StampT</td><td>sequence stamp type </td></tr>
   </table>

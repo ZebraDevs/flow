@@ -66,14 +66,14 @@ Default constructor.
 C\+R\+T\+P-\/base for input capture buffers.
 
 \begin{DoxyNote}{Note}
-\mbox{\hyperlink{classflow_1_1_captor}{Captor}} implementation which uses data waits/locks on {\ttfamily \mbox{\hyperlink{classflow_1_1_captor_interface_ae95095d924214605bfeac70d0bd5ad35}{Captor\+::capture}}} for use in asynchronous, multi-\/threaded code.
+\mbox{\hyperlink{classflow_1_1_captor}{Captor}} implementation which uses data waits/locks on {\ttfamily \mbox{\hyperlink{classflow_1_1_captor_interface_ab645172a3401cc978fd4618a64a83e3d}{Captor\+::capture}}} for use in asynchronous, multi-\/threaded code.
 \end{DoxyNote}
-\begin{DoxyVerb}   User may include any of the following for various capture implementations
-   - <code>#include <flow/captor/lockable.hpp></code>
-   - <code>#include <flow/captor/nolock.hpp></code>
-   - <code>#include <flow/captor/polling.hpp></code>
-\end{DoxyVerb}
-
+User may include any of the following for various capture implementations
+\begin{DoxyItemize}
+\item {\ttfamily \#include $<$\mbox{\hyperlink{lockable_8hpp_source}{flow/captor/lockable.\+hpp}}$>$}
+\item {\ttfamily \#include $<$\mbox{\hyperlink{nolock_8hpp_source}{flow/captor/nolock.\+hpp}}$>$}
+\item {\ttfamily \#include $<$\mbox{\hyperlink{polling_8hpp_source}{flow/captor/polling.\+hpp}}$>$}
+\end{DoxyItemize}
 
 
 \begin{DoxyTemplParams}{Template Parameters}

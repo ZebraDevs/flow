@@ -131,8 +131,8 @@ template&lt;typename DispatchT , typename DispatchContainerT , typename StampT &
 </div><div class="memdoc">
 
 <p>Check queue monitor state with on capture attempt. </p>
-<pre class="fragment">   Checks are applied in Follower derivative Captor objects, only
-</pre><dl class="retval"><dt>Return values</dt><dd>
+<p>Checks are applied in <a class="el" href="classflow_1_1_follower.html" title="CRTP-base for Follower input-capture policies.">Follower</a> derivative <a class="el" href="classflow_1_1_captor.html" title="Default constructor.">Captor</a> objects, only</p>
+<dl class="retval"><dt>Return values</dt><dd>
   <table class="retval">
     <tr><td class="paramname">true</td><td>allows capture to happen </td></tr>
     <tr><td class="paramname">false</td><td>otherwise, causing <a class="el" href="classflow_1_1_captor.html" title="Default constructor.">Captor</a> to return <code><a class="el" href="namespaceflow.html#adefe9726e597eb50c46f0f6a202018e9a553bb3189571a5b09c1d53c315abd8f8">State::SKIP_FRAME_QUEUE_PRECONDITION</a></code> </td></tr>
@@ -185,8 +185,8 @@ template&lt;typename DispatchT , typename DispatchContainerT , typename StampT &
 </div><div class="memdoc">
 
 <p>Updates queue monitor state with global synchronization results. </p>
-<pre class="fragment">   Called during &lt;code&gt;Sychronizer::capture&lt;/code&gt;, updating several associated Captor s
-</pre> 
+<p>Called during <code>Sychronizer::capture</code>, updating several associated <a class="el" href="classflow_1_1_captor.html" title="Default constructor.">Captor</a> s </p>
+
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>

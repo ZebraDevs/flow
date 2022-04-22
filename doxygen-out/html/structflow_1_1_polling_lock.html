@@ -91,11 +91,8 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>type</b> = BasicLock
 struct flow::PollingLock&lt; BasicLockableT &gt;</h3>
 
 <p>Stand-in type used to signify that captors will be used in a threaded context, but will not wait for data. </p>
-<pre class="fragment">   Captors use &lt;code&gt;BasicLockableT&lt;/code&gt; to protect data input/output from the capture queue, but
-   do not wait on a condition variable for new inputs before attempting to run a synchronization policy.
-   This allows for polling with the &lt;code&gt;Captor::capture&lt;/code&gt; method
-</pre><p> <br  />
- See <a href="https://en.cppreference.com/w/cpp/named_req/TimedLockable">https://en.cppreference.com/w/cpp/named_req/TimedLockable</a> for more information on <code>BasicLockableT</code> criteria </p>
+<p>Captors use <code>BasicLockableT</code> to protect data input/output from the capture queue, but do not wait on a condition variable for new inputs before attempting to run a synchronization policy. This allows for polling with the <code><a class="el" href="classflow_1_1_captor_interface.html#ab645172a3401cc978fd4618a64a83e3d" title="Waits for ready state and captures inputs.">Captor::capture</a></code> method <br  />
+See <a href="https://en.cppreference.com/w/cpp/named_req/TimedLockable">https://en.cppreference.com/w/cpp/named_req/TimedLockable</a> for more information on <code>BasicLockableT</code> criteria </p>
 </div><hr/>The documentation for this struct was generated from the following file:<ul>
 <li>include/flow/captor/<a class="el" href="polling_8hpp_source.html">polling.hpp</a></li>
 </ul>

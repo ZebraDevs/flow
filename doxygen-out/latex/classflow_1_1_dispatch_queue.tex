@@ -44,6 +44,10 @@ using \mbox{\hyperlink{classflow_1_1_dispatch_queue_ac74f1a9a8d77b06e9576492df2a
 \begin{DoxyCompactList}\small\item\em Returns the number queued elements. \end{DoxyCompactList}\item 
 bool \mbox{\hyperlink{classflow_1_1_dispatch_queue_a447412abd83540a6c595dd7a17116c6c}{empty}} () const
 \begin{DoxyCompactList}\small\item\em Checks if queue is empty. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename Output\+Dispatch\+IteratorT $>$ }\\Output\+Dispatch\+IteratorT \mbox{\hyperlink{classflow_1_1_dispatch_queue_a5e24566c81fade93f19e5e9cba7e4c9f}{copy}} (Output\+Dispatch\+IteratorT output, const \mbox{\hyperlink{structflow_1_1_extraction_range}{Extraction\+Range}} \&extraction\+\_\+range) const
+\begin{DoxyCompactList}\small\item\em Copies elements in {\ttfamily range}. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename Output\+Dispatch\+IteratorT $>$ }\\Output\+Dispatch\+IteratorT \mbox{\hyperlink{classflow_1_1_dispatch_queue_abbea4a22916df6da88e9ae3d586d3c0d}{move}} (Output\+Dispatch\+IteratorT output, const \mbox{\hyperlink{structflow_1_1_extraction_range}{Extraction\+Range}} \&extraction\+\_\+range)
+\begin{DoxyCompactList}\small\item\em Moves elements in {\ttfamily range}. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classflow_1_1_dispatch_queue_a307496fdc34a2d59e11114dabf85dc8a}{const\+\_\+iterator}} \mbox{\hyperlink{classflow_1_1_dispatch_queue_ac4e9231e9bb44c6074c6021343fa60e7}{before}} (\mbox{\hyperlink{classflow_1_1_dispatch_queue_affc83531dc53ee147899a33e82a6cbf0}{stamp\+\_\+const\+\_\+arg\+\_\+type}} stamp) const
 \begin{DoxyCompactList}\small\item\em Returns first iterator to element before stamp. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classflow_1_1_dispatch_queue_a307496fdc34a2d59e11114dabf85dc8a}{const\+\_\+iterator}} \mbox{\hyperlink{classflow_1_1_dispatch_queue_a19612c628308b97497ffca62c9b2b420}{begin}} () const
@@ -60,8 +64,15 @@ bool \mbox{\hyperlink{classflow_1_1_dispatch_queue_a447412abd83540a6c595dd7a1711
 \begin{DoxyCompactList}\small\item\em Sequencing stamp associated with the oldest data. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classflow_1_1_dispatch_queue_a7908f3d78b7f1767462244b94434d748}{stamp\+\_\+type}} \mbox{\hyperlink{classflow_1_1_dispatch_queue_a5ced281bc5c221a79bf88a6169429252}{newest\+\_\+stamp}} () const
 \begin{DoxyCompactList}\small\item\em Sequencing stamp associated with the newest data. \end{DoxyCompactList}\item 
-DispatchT \mbox{\hyperlink{classflow_1_1_dispatch_queue_a10607f6122683a4e24b44daaf8bf51fe}{pop}} ()
-\begin{DoxyCompactList}\small\item\em Removes the oldest element and returns associated \mbox{\hyperlink{classflow_1_1_dispatch}{Dispatch}}. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classflow_1_1_dispatch_queue_ae2014e80c740ff4b4bd8db694520cbc1}\label{classflow_1_1_dispatch_queue_ae2014e80c740ff4b4bd8db694520cbc1}} 
+DispatchT \& \mbox{\hyperlink{classflow_1_1_dispatch_queue_ae2014e80c740ff4b4bd8db694520cbc1}{top}} ()
+\begin{DoxyCompactList}\small\item\em Retrieves the oldest element. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classflow_1_1_dispatch_queue_ad9e2a182a6de22ddf1bf313380a7476a}\label{classflow_1_1_dispatch_queue_ad9e2a182a6de22ddf1bf313380a7476a}} 
+const DispatchT \& \mbox{\hyperlink{classflow_1_1_dispatch_queue_ad9e2a182a6de22ddf1bf313380a7476a}{top}} () const
+\begin{DoxyCompactList}\small\item\em Retrieves the oldest element. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classflow_1_1_dispatch_queue_a1d6e8c6a930cf71880c4fcb06fa96e72}\label{classflow_1_1_dispatch_queue_a1d6e8c6a930cf71880c4fcb06fa96e72}} 
+void \mbox{\hyperlink{classflow_1_1_dispatch_queue_a1d6e8c6a930cf71880c4fcb06fa96e72}{pop}} ()
+\begin{DoxyCompactList}\small\item\em Removes the oldest element. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classflow_1_1_dispatch_queue_a184d59ca79ec916af7c2866eb1d3fa6e}\label{classflow_1_1_dispatch_queue_a184d59ca79ec916af7c2866eb1d3fa6e}} 
 void \mbox{\hyperlink{classflow_1_1_dispatch_queue_a184d59ca79ec916af7c2866eb1d3fa6e}{clear}} ()
 \begin{DoxyCompactList}\small\item\em Removes all data from queue. \end{DoxyCompactList}\item 
@@ -69,6 +80,8 @@ void \mbox{\hyperlink{classflow_1_1_dispatch_queue_aabb451448562a4084506fc5c3289
 \begin{DoxyCompactList}\small\item\em Removes data with stamp older than reference sequence stamp. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{classflow_1_1_dispatch_queue_a44bbaa95fa99125929edb0dbd511a73a}{remove\+\_\+at\+\_\+before}} (\mbox{\hyperlink{classflow_1_1_dispatch_queue_affc83531dc53ee147899a33e82a6cbf0}{stamp\+\_\+const\+\_\+arg\+\_\+type}} t)
 \begin{DoxyCompactList}\small\item\em Removes data with stamp older than or equal to some reference sequence stamp. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classflow_1_1_dispatch_queue_a5d94838145c061c5975854a59a07b08f}{remove\+\_\+first\+\_\+n}} (const \mbox{\hyperlink{classflow_1_1_dispatch_queue_afdc67058e3461410fdd6170046df55bc}{size\+\_\+type}} n)
+\begin{DoxyCompactList}\small\item\em Removes first {\ttfamily n} elements. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{classflow_1_1_dispatch_queue_a66f89e3d5c95709662227ce275f00607}{shrink\+\_\+to\+\_\+fit}} (const \mbox{\hyperlink{classflow_1_1_dispatch_queue_afdc67058e3461410fdd6170046df55bc}{size\+\_\+type}} n)
 \begin{DoxyCompactList}\small\item\em Removes oldest data until queue has less than or equal to N-\/elements. \end{DoxyCompactList}\item 
 {\footnotesize template$<$typename... Dispatch\+Constructor\+Arg\+Ts$>$ }\\void \mbox{\hyperlink{classflow_1_1_dispatch_queue_a5221c73d3790e6795c48229a2bcd7c0e}{insert}} (Dispatch\+Constructor\+Arg\+Ts \&\&... dispatch\+\_\+args)
@@ -84,11 +97,8 @@ class flow\+::\+Dispatch\+Queue$<$ Dispatch\+T, Container\+T $>$}
 
 \mbox{\hyperlink{classflow_1_1_dispatch}{Dispatch}} queuing data structure. 
 
-\begin{DoxyVerb}   FILO-type queue which orders data by sequence stamp, from oldest to newest. Provides
-   useful methods for extracting data within stamped/counted ranges
-\end{DoxyVerb}
- ~\newline
- This template provides an interface wrapper around a specifiable container implementation.
+F\+I\+L\+O-\/type queue which orders data by sequence stamp, from oldest to newest. Provides useful methods for extracting data within stamped/counted ranges ~\newline
+This template provides an interface wrapper around a specifiable container implementation.
 
 
 \begin{DoxyTemplParams}{Template Parameters}
@@ -111,9 +121,7 @@ class flow\+::\+Dispatch\+Queue$<$ Dispatch\+T, Container\+T $>$}
 
 Returns first iterator to element before stamp. 
 
-\begin{DoxyVerb}   Returns <code>end()</code> iterator if
-\end{DoxyVerb}
- \begin{DoxyReturn}{Returns}
+Returns {\ttfamily \mbox{\hyperlink{classflow_1_1_dispatch_queue_a359b294ce203e10ee9fafc147f6638ff}{end()}}} iterator if \begin{DoxyReturn}{Returns}
 {\ttfamily const\+\_\+iterator} to first \mbox{\hyperlink{classflow_1_1_dispatch}{Dispatch}} resource 
 \end{DoxyReturn}
 \mbox{\Hypertarget{classflow_1_1_dispatch_queue_a19612c628308b97497ffca62c9b2b420}\label{classflow_1_1_dispatch_queue_a19612c628308b97497ffca62c9b2b420}} 
@@ -130,6 +138,25 @@ Returns first iterator to underlying ordered data structure.
 \begin{DoxyReturn}{Returns}
 {\ttfamily const\+\_\+iterator} to first \mbox{\hyperlink{classflow_1_1_dispatch}{Dispatch}} resource 
 \end{DoxyReturn}
+\mbox{\Hypertarget{classflow_1_1_dispatch_queue_a5e24566c81fade93f19e5e9cba7e4c9f}\label{classflow_1_1_dispatch_queue_a5e24566c81fade93f19e5e9cba7e4c9f}} 
+\index{flow::DispatchQueue$<$ DispatchT, ContainerT $>$@{flow::DispatchQueue$<$ DispatchT, ContainerT $>$}!copy@{copy}}
+\index{copy@{copy}!flow::DispatchQueue$<$ DispatchT, ContainerT $>$@{flow::DispatchQueue$<$ DispatchT, ContainerT $>$}}
+\doxysubsubsection{\texorpdfstring{copy()}{copy()}}
+{\footnotesize\ttfamily template$<$typename DispatchT , typename ContainerT $>$ \\
+template$<$typename Output\+Dispatch\+IteratorT $>$ \\
+Output\+Dispatch\+IteratorT \mbox{\hyperlink{classflow_1_1_dispatch_queue}{flow\+::\+Dispatch\+Queue}}$<$ DispatchT, ContainerT $>$\+::copy (\begin{DoxyParamCaption}\item[{Output\+Dispatch\+IteratorT}]{output,  }\item[{const \mbox{\hyperlink{structflow_1_1_extraction_range}{Extraction\+Range}} \&}]{extraction\+\_\+range }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Copies elements in {\ttfamily range}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em output} & element output iterator \\
+\hline
+{\em range} & element index range \\
+\hline
+\end{DoxyParams}
 \mbox{\Hypertarget{classflow_1_1_dispatch_queue_a447412abd83540a6c595dd7a17116c6c}\label{classflow_1_1_dispatch_queue_a447412abd83540a6c595dd7a17116c6c}} 
 \index{flow::DispatchQueue$<$ DispatchT, ContainerT $>$@{flow::DispatchQueue$<$ DispatchT, ContainerT $>$}!empty@{empty}}
 \index{empty@{empty}!flow::DispatchQueue$<$ DispatchT, ContainerT $>$@{flow::DispatchQueue$<$ DispatchT, ContainerT $>$}}
@@ -182,6 +209,25 @@ Inserts data in sequence stamp order as \mbox{\hyperlink{classflow_1_1_dispatch}
 \begin{DoxyWarning}{Warning}
 elements with stamps identical to existing element stamps are not added 
 \end{DoxyWarning}
+\mbox{\Hypertarget{classflow_1_1_dispatch_queue_abbea4a22916df6da88e9ae3d586d3c0d}\label{classflow_1_1_dispatch_queue_abbea4a22916df6da88e9ae3d586d3c0d}} 
+\index{flow::DispatchQueue$<$ DispatchT, ContainerT $>$@{flow::DispatchQueue$<$ DispatchT, ContainerT $>$}!move@{move}}
+\index{move@{move}!flow::DispatchQueue$<$ DispatchT, ContainerT $>$@{flow::DispatchQueue$<$ DispatchT, ContainerT $>$}}
+\doxysubsubsection{\texorpdfstring{move()}{move()}}
+{\footnotesize\ttfamily template$<$typename DispatchT , typename ContainerT $>$ \\
+template$<$typename Output\+Dispatch\+IteratorT $>$ \\
+Output\+Dispatch\+IteratorT \mbox{\hyperlink{classflow_1_1_dispatch_queue}{flow\+::\+Dispatch\+Queue}}$<$ DispatchT, ContainerT $>$\+::move (\begin{DoxyParamCaption}\item[{Output\+Dispatch\+IteratorT}]{output,  }\item[{const \mbox{\hyperlink{structflow_1_1_extraction_range}{Extraction\+Range}} \&}]{extraction\+\_\+range }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Moves elements in {\ttfamily range}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em output} & element output iterator \\
+\hline
+{\em range} & element index range \\
+\hline
+\end{DoxyParams}
 \mbox{\Hypertarget{classflow_1_1_dispatch_queue_a5ced281bc5c221a79bf88a6169429252}\label{classflow_1_1_dispatch_queue_a5ced281bc5c221a79bf88a6169429252}} 
 \index{flow::DispatchQueue$<$ DispatchT, ContainerT $>$@{flow::DispatchQueue$<$ DispatchT, ContainerT $>$}!newest\_stamp@{newest\_stamp}}
 \index{newest\_stamp@{newest\_stamp}!flow::DispatchQueue$<$ DispatchT, ContainerT $>$@{flow::DispatchQueue$<$ DispatchT, ContainerT $>$}}
@@ -216,20 +262,6 @@ sequencing stamp of first-\/queued \mbox{\hyperlink{classflow_1_1_dispatch}{Disp
 \begin{DoxyWarning}{Warning}
 Undefined behavior when {\ttfamily \mbox{\hyperlink{classflow_1_1_dispatch_queue_a447412abd83540a6c595dd7a17116c6c}{empty()}} == true} 
 \end{DoxyWarning}
-\mbox{\Hypertarget{classflow_1_1_dispatch_queue_a10607f6122683a4e24b44daaf8bf51fe}\label{classflow_1_1_dispatch_queue_a10607f6122683a4e24b44daaf8bf51fe}} 
-\index{flow::DispatchQueue$<$ DispatchT, ContainerT $>$@{flow::DispatchQueue$<$ DispatchT, ContainerT $>$}!pop@{pop}}
-\index{pop@{pop}!flow::DispatchQueue$<$ DispatchT, ContainerT $>$@{flow::DispatchQueue$<$ DispatchT, ContainerT $>$}}
-\doxysubsubsection{\texorpdfstring{pop()}{pop()}}
-{\footnotesize\ttfamily template$<$typename DispatchT , typename ContainerT $>$ \\
-DispatchT \mbox{\hyperlink{classflow_1_1_dispatch_queue}{flow\+::\+Dispatch\+Queue}}$<$ DispatchT, ContainerT $>$\+::pop\hspace{0.3cm}{\ttfamily [inline]}}
-
-
-
-Removes the oldest element and returns associated \mbox{\hyperlink{classflow_1_1_dispatch}{Dispatch}}. 
-
-\begin{DoxyReturn}{Returns}
-oldest element 
-\end{DoxyReturn}
 \mbox{\Hypertarget{classflow_1_1_dispatch_queue_aa0b7930c0408b26d1367bb320c58bcbb}\label{classflow_1_1_dispatch_queue_aa0b7930c0408b26d1367bb320c58bcbb}} 
 \index{flow::DispatchQueue$<$ DispatchT, ContainerT $>$@{flow::DispatchQueue$<$ DispatchT, ContainerT $>$}!rbefore@{rbefore}}
 \index{rbefore@{rbefore}!flow::DispatchQueue$<$ DispatchT, ContainerT $>$@{flow::DispatchQueue$<$ DispatchT, ContainerT $>$}}
@@ -241,9 +273,9 @@ oldest element
 
 Returns first reverse-\/iterator to element before stamp. 
 
-\begin{DoxyVerb}   Returns <code>rend()</code> iterator if
-\end{DoxyVerb}
- \begin{DoxyReturn}{Returns}
+Returns {\ttfamily \mbox{\hyperlink{classflow_1_1_dispatch_queue_a5fee6900da4ddd095b78608081b1873d}{rend()}}} iterator if element cannot be found or if queue is empty
+
+\begin{DoxyReturn}{Returns}
 {\ttfamily const\+\_\+reverse\+\_\+iterator} to first \mbox{\hyperlink{classflow_1_1_dispatch}{Dispatch}} resource 
 \end{DoxyReturn}
 \mbox{\Hypertarget{classflow_1_1_dispatch_queue_a969fdabec571725b903056d69ea2a31b}\label{classflow_1_1_dispatch_queue_a969fdabec571725b903056d69ea2a31b}} 
@@ -290,6 +322,22 @@ Removes data with stamp older than reference sequence stamp.
 
 \begin{DoxyParams}{Parameters}
 {\em stamp} & lower bound on container sequence stamp \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classflow_1_1_dispatch_queue_a5d94838145c061c5975854a59a07b08f}\label{classflow_1_1_dispatch_queue_a5d94838145c061c5975854a59a07b08f}} 
+\index{flow::DispatchQueue$<$ DispatchT, ContainerT $>$@{flow::DispatchQueue$<$ DispatchT, ContainerT $>$}!remove\_first\_n@{remove\_first\_n}}
+\index{remove\_first\_n@{remove\_first\_n}!flow::DispatchQueue$<$ DispatchT, ContainerT $>$@{flow::DispatchQueue$<$ DispatchT, ContainerT $>$}}
+\doxysubsubsection{\texorpdfstring{remove\_first\_n()}{remove\_first\_n()}}
+{\footnotesize\ttfamily template$<$typename DispatchT , typename ContainerT $>$ \\
+void \mbox{\hyperlink{classflow_1_1_dispatch_queue}{flow\+::\+Dispatch\+Queue}}$<$ DispatchT, ContainerT $>$\+::remove\+\_\+first\+\_\+n (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classflow_1_1_dispatch_queue_afdc67058e3461410fdd6170046df55bc}{size\+\_\+type}}}]{n }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Removes first {\ttfamily n} elements. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em n} & number of elements to remove \\
 \hline
 \end{DoxyParams}
 \mbox{\Hypertarget{classflow_1_1_dispatch_queue_a5fee6900da4ddd095b78608081b1873d}\label{classflow_1_1_dispatch_queue_a5fee6900da4ddd095b78608081b1873d}} 

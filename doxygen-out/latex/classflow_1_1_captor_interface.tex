@@ -63,12 +63,16 @@ void \mbox{\hyperlink{classflow_1_1_captor_interface_a8068310b1ece5c53a11252919a
 \mbox{\Hypertarget{classflow_1_1_captor_interface_aaa637f69db2258f19c516d7e42c94bb4}\label{classflow_1_1_captor_interface_aaa637f69db2258f19c516d7e42c94bb4}} 
 \mbox{\hyperlink{structflow_1_1_capture_range}{Capture\+Range}}$<$ \mbox{\hyperlink{classflow_1_1_captor_interface_a2b87d20d17e8d1437941bd98fe514bc8}{stamp\+\_\+type}} $>$ \mbox{\hyperlink{classflow_1_1_captor_interface_aaa637f69db2258f19c516d7e42c94bb4}{get\+\_\+available\+\_\+stamp\+\_\+range}} () const
 \begin{DoxyCompactList}\small\item\em Gets the time range between oldest/newest buffered messages. \end{DoxyCompactList}\item 
-{\footnotesize template$<$typename Output\+Dispatch\+IteratorT , typename Capture\+RangeT , typename ClockT , typename DurationT $>$ }\\\mbox{\hyperlink{namespaceflow_adefe9726e597eb50c46f0f6a202018e9}{State}} \mbox{\hyperlink{classflow_1_1_captor_interface_ae95095d924214605bfeac70d0bd5ad35}{capture}} (Output\+Dispatch\+IteratorT \&\&output, Capture\+RangeT \&\&range, const std\+::chrono\+::time\+\_\+point$<$ ClockT, DurationT $>$ timeout=std\+::chrono\+::time\+\_\+point$<$ ClockT, DurationT $>$\+::max())
-\begin{DoxyCompactList}\small\item\em Waits for ready state and captures inputs. \end{DoxyCompactList}\item 
 {\footnotesize template$<$typename Output\+Dispatch\+IteratorT , typename Capture\+RangeT $>$ }\\\mbox{\hyperlink{namespaceflow_adefe9726e597eb50c46f0f6a202018e9}{State}} \mbox{\hyperlink{classflow_1_1_captor_interface_ab645172a3401cc978fd4618a64a83e3d}{capture}} (Output\+Dispatch\+IteratorT \&\&output, Capture\+RangeT \&\&range)
 \begin{DoxyCompactList}\small\item\em Waits for ready state and captures inputs. \end{DoxyCompactList}\item 
-{\footnotesize template$<$typename Capture\+RangeT $>$ }\\\mbox{\hyperlink{namespaceflow_adefe9726e597eb50c46f0f6a202018e9}{State}} \mbox{\hyperlink{classflow_1_1_captor_interface_a2cd64d7a401f7ee1bfd63ddea2c49f4a}{dry\+\_\+capture}} (Capture\+RangeT \&\&range)
-\begin{DoxyCompactList}\small\item\em Queries state that {\ttfamily capture} would return without data modification. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename Output\+Dispatch\+IteratorT , typename Capture\+RangeT , typename ClockT , typename DurationT $>$ }\\\mbox{\hyperlink{namespaceflow_adefe9726e597eb50c46f0f6a202018e9}{State}} \mbox{\hyperlink{classflow_1_1_captor_interface_ae95095d924214605bfeac70d0bd5ad35}{capture}} (Output\+Dispatch\+IteratorT \&\&output, Capture\+RangeT \&\&range, const std\+::chrono\+::time\+\_\+point$<$ ClockT, DurationT $>$ timeout=std\+::chrono\+::time\+\_\+point$<$ ClockT, DurationT $>$\+::max())
+\begin{DoxyCompactList}\small\item\em Waits for ready state and captures inputs. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename Capture\+RangeT $>$ }\\std\+::tuple$<$ \mbox{\hyperlink{namespaceflow_adefe9726e597eb50c46f0f6a202018e9}{State}}, \mbox{\hyperlink{structflow_1_1_extraction_range}{Extraction\+Range}} $>$ \mbox{\hyperlink{classflow_1_1_captor_interface_a6815569fecf89d603d53d872cac776ea}{locate}} (Capture\+RangeT \&\&range)
+\begin{DoxyCompactList}\small\item\em Finds element range to extract on synchronization. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename Capture\+RangeT , typename ClockT , typename DurationT $>$ }\\std\+::tuple$<$ \mbox{\hyperlink{namespaceflow_adefe9726e597eb50c46f0f6a202018e9}{State}}, \mbox{\hyperlink{structflow_1_1_extraction_range}{Extraction\+Range}} $>$ \mbox{\hyperlink{classflow_1_1_captor_interface_acebec0256a3c716a681f05e70757d7c0}{locate}} (Capture\+RangeT \&\&range, const std\+::chrono\+::time\+\_\+point$<$ ClockT, DurationT $>$ timeout=std\+::chrono\+::time\+\_\+point$<$ ClockT, DurationT $>$\+::max())
+\begin{DoxyCompactList}\small\item\em Finds element range to extract on synchronization. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename Output\+Dispatch\+IteratorT $>$ }\\void \mbox{\hyperlink{classflow_1_1_captor_interface_a0e33efcd5b47730f9c4d8fe3d186af34}{extract}} (Output\+Dispatch\+IteratorT \&\&output, const \mbox{\hyperlink{structflow_1_1_extraction_range}{Extraction\+Range}} \&extraction\+\_\+range, const \mbox{\hyperlink{structflow_1_1_capture_range}{Capture\+Range}}$<$ \mbox{\hyperlink{classflow_1_1_captor_interface_a2b87d20d17e8d1437941bd98fe514bc8}{stamp\+\_\+type}} $>$ \&range)
+\begin{DoxyCompactList}\small\item\em Extracts elements from queue based on {\ttfamily extraction\+\_\+range} found via {\ttfamily locate}. \end{DoxyCompactList}\item 
 {\footnotesize template$<$typename Inpect\+CallbackT $>$ }\\void \mbox{\hyperlink{classflow_1_1_captor_interface_a4648d1a3ec30a603e24e9ba0a667159d}{inspect}} (Inpect\+CallbackT \&\&inspect\+\_\+dispatch\+\_\+cb) const
 \begin{DoxyCompactList}\small\item\em Runs inspection callback all messages available in the current queue. \end{DoxyCompactList}\item 
 {\footnotesize template$<$typename Capture\+RangeT $>$ }\\void \mbox{\hyperlink{classflow_1_1_captor_interface_aed9ad6819bfbcdda915febb57274842e}{update\+\_\+queue\+\_\+monitor}} (Capture\+RangeT \&\&range, const \mbox{\hyperlink{namespaceflow_adefe9726e597eb50c46f0f6a202018e9}{State}} sync\+\_\+state)
@@ -139,10 +143,7 @@ void \mbox{\hyperlink{classflow_1_1_captor_interface}{flow\+::\+Captor\+Interfac
 
 Defines \mbox{\hyperlink{classflow_1_1_captor}{Captor}} behavior during an external abort. 
 
-\begin{DoxyVerb}   Triggers data removal before \p t_abort
-   Notifies any data waits for capture under a lock
-\end{DoxyVerb}
-
+Triggers data removal before {\ttfamily t\+\_\+abort} Notifies any data waits for capture under a lock
 
 
 \begin{DoxyParams}{Parameters}
@@ -160,6 +161,8 @@ template$<$typename Output\+Dispatch\+IteratorT , typename Capture\+RangeT $>$ \
 
 
 Waits for ready state and captures inputs. 
+
+This is used for capturing data from an individual \mbox{\hyperlink{classflow_1_1_captor}{Captor}}. This method calls a combination of {\ttfamily locate} and {\ttfamily extract}. This method is not used during multi-\/\+Captor synchronization
 
 
 \begin{DoxyTemplParams}{Template Parameters}
@@ -190,53 +193,54 @@ template$<$typename Output\+Dispatch\+IteratorT , typename Capture\+RangeT , typ
 
 Waits for ready state and captures inputs. 
 
+This is used for capturing data from an individual \mbox{\hyperlink{classflow_1_1_captor}{Captor}}. This method calls a combination of {\ttfamily locate} and {\ttfamily extract}. This method is not used during multi-\/\+Captor synchronization
+
 
 \begin{DoxyTemplParams}{Template Parameters}
 {\em Output\+Dispatch\+IteratorT} & output iterator type for a value type which supports assignment with {\ttfamily Dispatch\+Type} \\
 \hline
-{\em Capture\+RangeT} & message capture stamp range type \\
-\hline
-{\em ClockT} & clock type associated with time-\/point representation \\
-\hline
-{\em DurationT} & duration type associated with time-\/point representation\\
+{\em Capture\+RangeT} & message capture stamp range type\\
 \hline
 \end{DoxyTemplParams}
 
 \begin{DoxyParams}[1]{Parameters}
 \mbox{\texttt{ out}}  & {\em output} & output data iterator \\
 \hline
-\mbox{\texttt{ in,out}}  & {\em range} & data capture/sequencing range \\
-\hline
- & {\em timeout} & time to stop waiting for data\\
+\mbox{\texttt{ in,out}}  & {\em range} & data capture/sequencing range\\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
-capture directive code 
+capture directive code
 \end{DoxyReturn}
-\mbox{\Hypertarget{classflow_1_1_captor_interface_a2cd64d7a401f7ee1bfd63ddea2c49f4a}\label{classflow_1_1_captor_interface_a2cd64d7a401f7ee1bfd63ddea2c49f4a}} 
-\index{flow::CaptorInterface$<$ CaptorT $>$@{flow::CaptorInterface$<$ CaptorT $>$}!dry\_capture@{dry\_capture}}
-\index{dry\_capture@{dry\_capture}!flow::CaptorInterface$<$ CaptorT $>$@{flow::CaptorInterface$<$ CaptorT $>$}}
-\doxysubsubsection{\texorpdfstring{dry\_capture()}{dry\_capture()}}
+
+\begin{DoxyParams}{Parameters}
+{\em timeout} & time to stop waiting for data \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classflow_1_1_captor_interface_a0e33efcd5b47730f9c4d8fe3d186af34}\label{classflow_1_1_captor_interface_a0e33efcd5b47730f9c4d8fe3d186af34}} 
+\index{flow::CaptorInterface$<$ CaptorT $>$@{flow::CaptorInterface$<$ CaptorT $>$}!extract@{extract}}
+\index{extract@{extract}!flow::CaptorInterface$<$ CaptorT $>$@{flow::CaptorInterface$<$ CaptorT $>$}}
+\doxysubsubsection{\texorpdfstring{extract()}{extract()}}
 {\footnotesize\ttfamily template$<$typename CaptorT $>$ \\
-template$<$typename Capture\+RangeT $>$ \\
-\mbox{\hyperlink{namespaceflow_adefe9726e597eb50c46f0f6a202018e9}{State}} \mbox{\hyperlink{classflow_1_1_captor_interface}{flow\+::\+Captor\+Interface}}$<$ CaptorT $>$\+::dry\+\_\+capture (\begin{DoxyParamCaption}\item[{Capture\+RangeT \&\&}]{range }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+template$<$typename Output\+Dispatch\+IteratorT $>$ \\
+void \mbox{\hyperlink{classflow_1_1_captor_interface}{flow\+::\+Captor\+Interface}}$<$ CaptorT $>$\+::extract (\begin{DoxyParamCaption}\item[{Output\+Dispatch\+IteratorT \&\&}]{output,  }\item[{const \mbox{\hyperlink{structflow_1_1_extraction_range}{Extraction\+Range}} \&}]{extraction\+\_\+range,  }\item[{const \mbox{\hyperlink{structflow_1_1_capture_range}{Capture\+Range}}$<$ \mbox{\hyperlink{classflow_1_1_captor_interface_a2b87d20d17e8d1437941bd98fe514bc8}{stamp\+\_\+type}} $>$ \&}]{range }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
-Queries state that {\ttfamily capture} would return without data modification. 
-
-\begin{DoxyVerb}   May remove data to prepare next possible capture
-\end{DoxyVerb}
-
+Extracts elements from queue based on {\ttfamily extraction\+\_\+range} found via {\ttfamily locate}. 
 
 
 \begin{DoxyTemplParams}{Template Parameters}
-{\em Capture\+RangeT} & message capture stamp range type\\
+{\em Output\+Dispatch\+IteratorT} & output iterator type for a value type which supports assignment with {\ttfamily Dispatch\+Type}\\
 \hline
 \end{DoxyTemplParams}
 
 \begin{DoxyParams}[1]{Parameters}
-\mbox{\texttt{ in,out}}  & {\em range} & data capture/sequencing range\\
+\mbox{\texttt{ out}}  & {\em output} & output data iterator \\
+\hline
+ & {\em extraction\+\_\+range} & range of elements to extract (by copy or move) from queue \\
+\hline
+ & {\em range} & data capture/sequencing range\\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
@@ -253,10 +257,7 @@ capture directive code
 
 Gets the maximum number of elements. 
 
-\begin{DoxyVerb}   This is the number of data elements which can be buffered
-   in the capture queue before being discarded
-\end{DoxyVerb}
-
+This is the number of data elements which can be buffered in the capture queue before being discarded
 
 \begin{DoxySeeAlso}{See also}
 {\ttfamily \mbox{\hyperlink{classflow_1_1_captor_interface_a8068310b1ece5c53a11252919a62355a}{set\+\_\+capacity}}} 
@@ -273,10 +274,7 @@ void \mbox{\hyperlink{classflow_1_1_captor_interface}{flow\+::\+Captor\+Interfac
 
 Injects new data into \mbox{\hyperlink{classflow_1_1_captor}{Captor}} queue. 
 
-\begin{DoxyVerb}   Data is automatically removed from <code>queue_</code> when its
-   size is in excess of the size specified by <code>capacity_</code>
-\end{DoxyVerb}
-
+Data is automatically removed from {\ttfamily queue\+\_\+} when its size is in excess of the size specified by {\ttfamily capacity\+\_\+}
 
 
 \begin{DoxyTemplParams}{Template Parameters}
@@ -300,10 +298,7 @@ void \mbox{\hyperlink{classflow_1_1_captor_interface}{flow\+::\+Captor\+Interfac
 
 Injects a range of new data into \mbox{\hyperlink{classflow_1_1_captor}{Captor}} queue. 
 
-\begin{DoxyVerb}   Data is automatically removed from <code>queue_</code> when its
-   size is in excess of the size specified by <code>capacity_</code>
-\end{DoxyVerb}
-
+Data is automatically removed from {\ttfamily queue\+\_\+} when its size is in excess of the size specified by {\ttfamily capacity\+\_\+}
 
 
 \begin{DoxyTemplParams}{Template Parameters}
@@ -349,9 +344,7 @@ void \mbox{\hyperlink{classflow_1_1_captor_interface}{flow\+::\+Captor\+Interfac
 
 Runs inspection callback all messages available in the current queue. 
 
-\begin{DoxyVerb}   The queue and its contents will be immutable during inspection
-\end{DoxyVerb}
-
+The queue and its contents will be immutable during inspection
 
 
 \begin{DoxyTemplParams}{Template Parameters}
@@ -361,6 +354,69 @@ Runs inspection callback all messages available in the current queue.
 
 \begin{DoxyParams}{Parameters}
 {\em inspect\+\_\+dispatch\+\_\+cb} & callback invoked for each available dispatch \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classflow_1_1_captor_interface_a6815569fecf89d603d53d872cac776ea}\label{classflow_1_1_captor_interface_a6815569fecf89d603d53d872cac776ea}} 
+\index{flow::CaptorInterface$<$ CaptorT $>$@{flow::CaptorInterface$<$ CaptorT $>$}!locate@{locate}}
+\index{locate@{locate}!flow::CaptorInterface$<$ CaptorT $>$@{flow::CaptorInterface$<$ CaptorT $>$}}
+\doxysubsubsection{\texorpdfstring{locate()}{locate()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$typename CaptorT $>$ \\
+template$<$typename Capture\+RangeT $>$ \\
+std\+::tuple$<$\mbox{\hyperlink{namespaceflow_adefe9726e597eb50c46f0f6a202018e9}{State}}, \mbox{\hyperlink{structflow_1_1_extraction_range}{Extraction\+Range}}$>$ \mbox{\hyperlink{classflow_1_1_captor_interface}{flow\+::\+Captor\+Interface}}$<$ CaptorT $>$\+::locate (\begin{DoxyParamCaption}\item[{Capture\+RangeT \&\&}]{range }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Finds element range to extract on synchronization. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Capture\+RangeT} & message capture stamp range type \\
+\hline
+{\em ClockT} & clock type associated with time-\/point representation \\
+\hline
+{\em DurationT} & duration type associated with time-\/point representation\\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in,out}}  & {\em range} & data capture/sequencing range\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+capture directive code 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classflow_1_1_captor_interface_acebec0256a3c716a681f05e70757d7c0}\label{classflow_1_1_captor_interface_acebec0256a3c716a681f05e70757d7c0}} 
+\index{flow::CaptorInterface$<$ CaptorT $>$@{flow::CaptorInterface$<$ CaptorT $>$}!locate@{locate}}
+\index{locate@{locate}!flow::CaptorInterface$<$ CaptorT $>$@{flow::CaptorInterface$<$ CaptorT $>$}}
+\doxysubsubsection{\texorpdfstring{locate()}{locate()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$typename CaptorT $>$ \\
+template$<$typename Capture\+RangeT , typename ClockT , typename DurationT $>$ \\
+std\+::tuple$<$\mbox{\hyperlink{namespaceflow_adefe9726e597eb50c46f0f6a202018e9}{State}}, \mbox{\hyperlink{structflow_1_1_extraction_range}{Extraction\+Range}}$>$ \mbox{\hyperlink{classflow_1_1_captor_interface}{flow\+::\+Captor\+Interface}}$<$ CaptorT $>$\+::locate (\begin{DoxyParamCaption}\item[{Capture\+RangeT \&\&}]{range,  }\item[{const std\+::chrono\+::time\+\_\+point$<$ ClockT, DurationT $>$}]{timeout = {\ttfamily std\+:\+:chrono\+:\+:time\+\_\+point$<$ClockT,~DurationT$>$\+:\+:max()} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Finds element range to extract on synchronization. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Capture\+RangeT} & message capture stamp range type \\
+\hline
+{\em ClockT} & clock type associated with time-\/point representation \\
+\hline
+{\em DurationT} & duration type associated with time-\/point representation\\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in,out}}  & {\em range} & data capture/sequencing range\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+capture directive code
+\end{DoxyReturn}
+
+\begin{DoxyParams}{Parameters}
+{\em timeout} & time to stop waiting for data \\
 \hline
 \end{DoxyParams}
 \mbox{\Hypertarget{classflow_1_1_captor_interface_a492c00041af4fe2cb92342482b0b59fe}\label{classflow_1_1_captor_interface_a492c00041af4fe2cb92342482b0b59fe}} 
@@ -390,10 +446,7 @@ void \mbox{\hyperlink{classflow_1_1_captor_interface}{flow\+::\+Captor\+Interfac
 
 Sets the maximum number of elements. 
 
-\begin{DoxyVerb}   This is the number of data elements which can be buffered
-   in the capture queue before being discarded
-\end{DoxyVerb}
-
+This is the number of data elements which can be buffered in the capture queue before being discarded
 
 
 \begin{DoxyParams}{Parameters}

@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['pollinglock_255',['PollingLock',['../structflow_1_1_polling_lock.html',1,'flow']]]
+  ['optional_265',['optional',['../classflow_1_1optional.html',1,'flow']]],
+  ['optional_3c_20dispatcht_20_3e_266',['optional&lt; DispatchT &gt;',['../classflow_1_1optional.html',1,'flow']]]
 ];

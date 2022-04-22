@@ -122,9 +122,8 @@ const T &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" h
 class flow::optional&lt; T &gt;</h3>
 
 <p>The class template std::optional manages an optional contained value, i.e. a value that may or may not be present. </p>
-<pre class="fragment">   See: https://en.cppreference.com/w/cpp/utility/optional
-</pre><p> <br  />
- Partial implementation drop-in of C++17 <code>std::optional</code></p>
+<p>See: <a href="https://en.cppreference.com/w/cpp/utility/optional">https://en.cppreference.com/w/cpp/utility/optional</a> <br  />
+Partial implementation drop-in of C++17 <code>std::optional</code></p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">T</td><td>value type of object to hold. <code>T</code> may be <code>const</code> or non-defaultable </td></tr>
@@ -201,8 +200,8 @@ template&lt;typename ReqArgT , typename... ArgsPack&gt; </div>
 </div><div class="memdoc">
 
 <p>value constructor </p>
-<pre class="fragment">   automatically sets optional to valid
-</pre><dl class="tparams"><dt>Template Parameters</dt><dd>
+<p>automatically sets optional to valid</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">ReqArgT</td><td>argument to construct <code>T</code> </td></tr>
     <tr><td class="paramname">ArgsPack..other</td><td>arguments to construct <code>T</code></td></tr>
@@ -351,8 +350,8 @@ template&lt;typename AssignT &gt; </div>
 </div><div class="memdoc">
 
 <p>move/value assignment </p>
-<pre class="fragment">   automatically sets optional to valid
-</pre><dl class="tparams"><dt>Template Parameters</dt><dd>
+<p>automatically sets optional to valid</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">AssignT...</td><td>(deduced) type which is assignable to <code>T</code></td></tr>
   </table>
@@ -394,8 +393,8 @@ template&lt;typename T &gt; </div>
 </div><div class="memdoc">
 
 <p>copy assignment </p>
-<pre class="fragment">   automatically sets optional to valid
-</pre><dl class="tparams"><dt>Template Parameters</dt><dd>
+<p>automatically sets optional to valid</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">CopyT...</td><td>(deduced) type which is copyable into <code>T</code></td></tr>
   </table>

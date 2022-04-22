@@ -145,14 +145,14 @@ Static Public Attributes</h2></td></tr>
 struct flow::CaptorTraits&lt; follower::Before&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT &gt; &gt;</h3>
 
 <p>Traits struct for captor types. </p>
-<pre class="fragment">   Requires:
-   - &lt;code&gt;DispatchType&lt;/code&gt; : data dispatch object type
-   - &lt;code&gt;DispatchContainerType&lt;/code&gt; : container for &lt;code&gt;DispatchType&lt;/code&gt;
-     &lt;code&gt;DispatchQueueMonitorType&lt;/code&gt; : optional monitoring/capture preconditioning object type
-   - &lt;code&gt;value_type&lt;/code&gt; : data value type
-   - &lt;code&gt;stamp_type&lt;/code&gt; : sequence stamp type
-   - &lt;code&gt;size_type&lt;/code&gt; : integer sizing type
-</pre><dl class="tparams"><dt>Template Parameters</dt><dd>
+<p>Requires:</p><ul>
+<li><code>DispatchType</code> : data dispatch object type</li>
+<li><code>DispatchContainerType</code> : container for <code>DispatchType</code> <code>DispatchQueueMonitorType</code> : optional monitoring/capture preconditioning object type</li>
+<li><code>value_type</code> : data value type</li>
+<li><code>stamp_type</code> : sequence stamp type</li>
+<li><code>size_type</code> : integer sizing type</li>
+</ul>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">CaptorT</td><td>captor type with CRTP base <code><a class="el" href="classflow_1_1_captor.html" title="Default constructor.">Captor</a></code></td></tr>
     <tr><td class="paramname">DispatchT</td><td>data dispatch type </td></tr>

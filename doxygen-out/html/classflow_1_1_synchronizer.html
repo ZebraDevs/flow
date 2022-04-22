@@ -123,10 +123,6 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a140d39b1091ca2ad7f524421a5f9b353"><td class="memTemplItemLeft" align="right" valign="top">static <a class="el" href="classflow_1_1_synchronizer.html#a4f9693650274ae93f5b9a11cb41a2d80">result_t</a>&lt; CaptorTupleT &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classflow_1_1_synchronizer.html#a140d39b1091ca2ad7f524421a5f9b353">capture</a> (CaptorTupleT &amp;&amp;captors, OutputIteratorTupleT &amp;&amp;outputs, const <a class="el" href="classflow_1_1_synchronizer.html#a0f1e7062475c9492191e29b26d09106c">stamp_arg_t</a>&lt; CaptorTupleT &gt; lower_bound=<a class="el" href="structflow_1_1_stamp_traits.html">StampTraits</a>&lt; <a class="el" href="classflow_1_1_synchronizer.html#a2a443abb40ad2413e6d5f7a7f3cfe4a7">stamp_t</a>&lt; CaptorTupleT &gt;&gt;::min())</td></tr>
 <tr class="memdesc:a140d39b1091ca2ad7f524421a5f9b353"><td class="mdescLeft">&#160;</td><td class="mdescRight">Runs synchronization and data capture across all captors.  <a href="classflow_1_1_synchronizer.html#a140d39b1091ca2ad7f524421a5f9b353">More...</a><br /></td></tr>
 <tr class="separator:a140d39b1091ca2ad7f524421a5f9b353"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a59ddd4809e03c8ed9cdd511f0729d6bb"><td class="memTemplParams" colspan="2">template&lt;typename CaptorTupleT &gt; </td></tr>
-<tr class="memitem:a59ddd4809e03c8ed9cdd511f0729d6bb"><td class="memTemplItemLeft" align="right" valign="top">static <a class="el" href="classflow_1_1_synchronizer.html#a4f9693650274ae93f5b9a11cb41a2d80">result_t</a>&lt; CaptorTupleT &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classflow_1_1_synchronizer.html#a59ddd4809e03c8ed9cdd511f0729d6bb">dry_capture</a> (CaptorTupleT &amp;&amp;captors, const <a class="el" href="classflow_1_1_synchronizer.html#a0f1e7062475c9492191e29b26d09106c">stamp_arg_t</a>&lt; CaptorTupleT &gt; lower_bound=<a class="el" href="structflow_1_1_stamp_traits.html">StampTraits</a>&lt; <a class="el" href="classflow_1_1_synchronizer.html#a2a443abb40ad2413e6d5f7a7f3cfe4a7">stamp_t</a>&lt; CaptorTupleT &gt;&gt;::min())</td></tr>
-<tr class="memdesc:a59ddd4809e03c8ed9cdd511f0729d6bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Runs synchronization dry-run across all captors.  <a href="classflow_1_1_synchronizer.html#a59ddd4809e03c8ed9cdd511f0729d6bb">More...</a><br /></td></tr>
-<tr class="separator:a59ddd4809e03c8ed9cdd511f0729d6bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Provides facilities to synchronize data across several Captors. </p>
@@ -241,9 +237,8 @@ template&lt;typename CaptorTupleT &gt; </div>
 </div><div class="memdoc">
 
 <p>Abort active capture at and before <code>t_abort</code>. </p>
-<pre class="fragment">   If a capture uses a data wait, this will notify the wait
-   Captors will removing buffered data according to their specific abort policy.
-</pre><dl class="tparams"><dt>Template Parameters</dt><dd>
+<p>If a capture uses a data wait, this will notify the wait Captors will removing buffered data according to their specific abort policy.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">CaptorTupleT</td><td>tuple-like type of captors which supports access with <code>std::get</code></td></tr>
   </table>
@@ -392,64 +387,6 @@ template&lt;typename CaptorTupleT , typename OutputIteratorTupleT &gt; </div>
 
 </div>
 </div>
-<a id="a59ddd4809e03c8ed9cdd511f0729d6bb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a59ddd4809e03c8ed9cdd511f0729d6bb">&#9670;&nbsp;</a></span>dry_capture()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename CaptorTupleT &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classflow_1_1_synchronizer.html#a4f9693650274ae93f5b9a11cb41a2d80">Synchronizer::result_t</a>&lt; CaptorTupleT &gt; flow::Synchronizer::dry_capture </td>
-          <td>(</td>
-          <td class="paramtype">CaptorTupleT &amp;&amp;&#160;</td>
-          <td class="paramname"><em>captors</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="classflow_1_1_synchronizer.html#a0f1e7062475c9492191e29b26d09106c">stamp_arg_t</a>&lt; CaptorTupleT &gt;&#160;</td>
-          <td class="paramname"><em>lower_bound</em> = <code><a class="el" href="structflow_1_1_stamp_traits.html">StampTraits</a>&lt;<a class="el" href="classflow_1_1_synchronizer.html#a2a443abb40ad2413e6d5f7a7f3cfe4a7">stamp_t</a>&lt;CaptorTupleT&gt;&gt;::min()</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Runs synchronization dry-run across all captors. </p>
-<pre class="fragment">   Tests active next capture state without actually capturing elements. Any data
-   changes that occur are such that the next call to &lt;code&gt;Synchronizer::capture&lt;/code&gt;
-   will be valid, and will have the same capture result if no changes have been made
-   to data in the capture queues.
-</pre><dl class="tparams"><dt>Template Parameters</dt><dd>
-  <table class="tparams">
-    <tr><td class="paramname">CaptorTupleT</td><td>tuple-like type of captors which supports access with <code>std::get</code></td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">captors</td><td>tuple of captors used to perform synchronization </td></tr>
-    <tr><td class="paramname">lower_bound</td><td>synchronization stamp lower bound; forces all captured data to have associated stamps which are greater than <code>lower_bound</code></td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>dry capture/synchronization details </dd></dl>
-
-</div>
-</div>
 <a id="a2f0d471246ef9e5629282ced5bc21692"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2f0d471246ef9e5629282ced5bc21692">&#9670;&nbsp;</a></span>remove()</h2>
 
@@ -487,8 +424,8 @@ template&lt;typename CaptorTupleT &gt; </div>
 </div><div class="memdoc">
 
 <p>Removes all possible synchronization frames at and before <code>t_remove</code>. </p>
-<pre class="fragment">   This does not necessarily remove data from all captors
-</pre><dl class="tparams"><dt>Template Parameters</dt><dd>
+<p>This does not necessarily remove data from all captors</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">CaptorTupleT</td><td>tuple-like type of captors which supports access with <code>std::get</code></td></tr>
   </table>
@@ -531,8 +468,8 @@ template&lt;typename CaptorTupleT &gt; </div>
 </div><div class="memdoc">
 
 <p>Resets internal captors states and removes all buffered data. </p>
-<pre class="fragment">   If a capture uses a data wait, this will notify the wait
-</pre><dl class="tparams"><dt>Template Parameters</dt><dd>
+<p>If a capture uses a data wait, this will notify the wait</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">CaptorTupleT</td><td>tuple-like type of captors which supports access with <code>std::get</code></td></tr>
   </table>
