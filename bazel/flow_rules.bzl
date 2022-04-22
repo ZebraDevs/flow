@@ -106,19 +106,27 @@ def flow_cc_gtest(name, copts=[], linkopts=[], deps=[], sanitize=False, debug_bu
     '''
     _GTEST_COPTS = [
         "-Iexternal/googletest/googletest/include",
-        "-Iexternal/googletest/googlemock/include"
+        "-fsanitize=address",
+        "-fsanitize-address-use-after-scope",
+        "-DADDRESS_SANITIZER",
+        "-g",
+        "-fno-omit-frame-pointer",
+        "-O0"
     ]
 
+    _GTEST_LINKOPTS = [
+        "-fsanitize=address",
+        "-static-libasan"
+    ]
 
     _GTEST_DEPS = [
         "@googletest//:gtest",
-        "@googletest//:gmock",
     ]
 
     flow_cc_test(name=name,
                  copts=_GTEST_COPTS + copts,
                  deps=_GTEST_DEPS + deps,
-                 linkopts=linkopts,
+                 linkopts=_GTEST_LINKOPTS + linkopts,
                  sanitize=sanitize,
                  debug_build=debug_build,
                  **kwargs)
