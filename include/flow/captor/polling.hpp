@@ -20,11 +20,11 @@ namespace flow
 /**
  * @brief Stand-in type used to signify that captors will be used in a threaded context, but will not wait for data
  *
- *        Captors use <code>BasicLockableT</code> to protect data input/output from the capture queue, but
- *        do not wait on a condition variable for new inputs before attempting to run a synchronization policy.
- *        This allows for polling with the <code>Captor::capture</code> method
+ * Captors use <code>BasicLockableT</code> to protect data input/output from the capture queue, but
+ * do not wait on a condition variable for new inputs before attempting to run a synchronization policy.
+ * This allows for polling with the <code>Captor::capture</code> method
  * \n
- *        See https://en.cppreference.com/w/cpp/named_req/TimedLockable for more information on
+ * See https://en.cppreference.com/w/cpp/named_req/TimedLockable for more information on
  * <code>BasicLockableT</code> criteria
  */
 template <typename BasicLockableT = std::lock_guard<std::mutex>> struct PollingLock

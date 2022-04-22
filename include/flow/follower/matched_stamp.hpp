@@ -16,7 +16,7 @@ namespace follower
 /**
  * @brief Captures one element with a stamp which exactly matches the capture range lower bound.
  *
- *        All older elements are removed.
+ * All older elements are removed.
  *
  * @tparam DispatchT  data dispatch type
  * @tparam LockPolicyT  a BasicLockable (https://en.cppreference.com/w/cpp/named_req/BasicLockable) object or NoLock or
@@ -56,11 +56,11 @@ private:
    * @param[in] range  data capture/sequencing range
    *
    * @retval PRIMED  If element(s) with sequencing stamp equal to
-   *                 <code>range.upper_stamp</code> is available
+   *         <code>range.upper_stamp</code> is available
    * @retval RETRY   If only element(s) with sequencing stamp less than
-   *                 <code>range.upper_stamp</code> is available or queue is empty
+   *         <code>range.upper_stamp</code> is available or queue is empty
    * @retval ABORT   If only element(s) with sequencing stamp greater than
-   *                 <code>range.upper_stamp</code> is available
+   *         <code>range.upper_stamp</code> is available
    */
   template <typename OutputDispatchIteratorT>
   inline State capture_follower_impl(OutputDispatchIteratorT output, const CaptureRange<stamp_type>& range);

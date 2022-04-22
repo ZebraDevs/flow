@@ -16,8 +16,10 @@ namespace flow
 
 /**
  * @brief Output stream overload for <code>State</code> codes
+ *
  * @param[in,out] os  output stream
  * @param state  state code
+ *
  * @return os
  */
 inline std::ostream& operator<<(std::ostream& os, const State state)

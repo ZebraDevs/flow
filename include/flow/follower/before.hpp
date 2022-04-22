@@ -16,8 +16,8 @@ namespace follower
 /**
  * @brief Captures all  elements before the capture range lower bound, minus a delay period.
  *
- *        Once at least a single element is available after said sequencing boundary.
- *        All of the captured elements are removed.
+ * Once at least a single element is available after said sequencing boundary.
+ * All of the captured elements are removed.
  *
  * @tparam DispatchT  data dispatch type
  * @tparam LockPolicyT  a BasicLockable (https://en.cppreference.com/w/cpp/named_req/BasicLockable) object or NoLock or
@@ -62,7 +62,7 @@ private:
    * @param[in] range  data capture/sequencing range
    *
    * @retval PRIMED  if there is a Dispatch element with a sequencing stamp greater than or
-   *                 equal to the upper driving stamp, minus specified delay
+   *          equal to the upper driving stamp, minus specified delay
    * @retval RETRY  otherwise
    */
   template <typename OutputDispatchIteratorT>

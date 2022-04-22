@@ -16,12 +16,12 @@ namespace flow
  * @brief The class template std::optional manages an optional contained value, i.e. a value that may or may not be
  * present
  *
- *        See: https://en.cppreference.com/w/cpp/utility/optional
+ * See: https://en.cppreference.com/w/cpp/utility/optional
  * \n
- *        Partial implementation drop-in of C++17 <code>std::optional</code>
+ * Partial implementation drop-in of C++17 <code>std::optional</code>
  *
  * @tparam T  value type of object to hold. <code>T</code> may be
- *            <code>const</code> or non-defaultable
+ *     <code>const</code> or non-defaultable
  */
 template <typename T> class optional
 {
@@ -39,7 +39,7 @@ public:
   /**
    * @brief value constructor
    *
-   *        automatically sets optional to valid
+   * automatically sets optional to valid
    *
    * @tparam ReqArgT   argument to construct <code>T</code>
    * @tparam ArgsPack..other arguments to construct <code>T</code>
@@ -86,7 +86,7 @@ public:
   /**
    * @brief move/value assignment
    *
-   *        automatically sets optional to valid
+   * automatically sets optional to valid
    *
    * @tparam AssignT...  (deduced) type which is assignable to <code>T</code>
    *
@@ -106,7 +106,7 @@ public:
   /**
    * @brief copy assignment
    *
-   *        automatically sets optional to valid
+   * automatically sets optional to valid
    *
    * @tparam CopyT...  (deduced) type which is copyable into <code>T</code>
    *

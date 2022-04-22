@@ -17,9 +17,9 @@ namespace follower
 /**
  * @brief Captures one element before the capture range lower bound, minus a minimum period
  *
- *        All older elements are removed. If no newer elements are present on the next capture attempt,
- *        then the last captured element is returned. If a newer element is present on a subsequent capture attempt,
- *        meeting the aforementioned qualifications, this elements is captured and replaces "latched" element state.
+ * All older elements are removed. If no newer elements are present on the next capture attempt,
+ * then the last captured element is returned. If a newer element is present on a subsequent capture attempt,
+ * meeting the aforementioned qualifications, this elements is captured and replaces "latched" element state.
  *
  * @tparam DispatchT  data dispatch type
  * @tparam LockPolicyT  a BasicLockable (https://en.cppreference.com/w/cpp/named_req/BasicLockable) object or NoLock or

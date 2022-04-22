@@ -16,7 +16,7 @@ namespace follower
 /**
  * @brief Captures N-elements before the capture range lower bound, minus a delay period
  *
- *        All older elements are removed.
+ * All older elements are removed.
  *
  * @tparam DispatchT  data dispatch type
  * @tparam LockPolicyT  a BasicLockable (https://en.cppreference.com/w/cpp/named_req/BasicLockable) object or NoLock or
@@ -68,7 +68,7 @@ private:
    * @param[in] range  data capture/sequencing range
    *
    * @retval PRIMED  if there are N Dispatch elements with a sequencing stamp greater than or
-   *                 equal to the upper driving stamp, minus specified delay
+   *         equal to the upper driving stamp, minus specified delay
    * @retval ABORT  if capture is not possible
    * @retval RETRY  otherwise
    */

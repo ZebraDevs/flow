@@ -19,10 +19,10 @@ namespace flow
 /**
  * @brief Helper struct used to specify stamp attributes
  *
- *        Must be specialized for non-integral sequence stamp types with the same fields:
- *        - <code>min</code> : the minimum value of \p StampT
- *        - <code>max</code> : the maximum value of \p StampT
- *        - <code>offset_type</code> : associated offset/duration type
+ * Must be specialized for non-integral sequence stamp types with the same fields:
+ * - <code>min</code> : the minimum value of \p StampT
+ * - <code>max</code> : the maximum value of \p StampT
+ * - <code>offset_type</code> : associated offset/duration type
  *
  * @tparam StampT  sequence stamp type
  */
@@ -49,12 +49,12 @@ template <typename StampT> struct StampTraits
 /**
  * @brief Dispatch data wrapper
  *
- *        Custom "dispatching" objects may be used with this library in lieu of
- *        the standard <code>Dispatch</code> template provided in this file
+ * Custom "dispatching" objects may be used with this library in lieu of
+ * the standard <code>Dispatch</code> template provided in this file
  * \n
- *        Custom dispatch types must also specialize the <code>DispatchTraits</code> helper
- *        struct, which is used to provide core <code>stamp_type</code> and <code>value_type</code>
- *        to other dependent objects throughout the library.
+ * Custom dispatch types must also specialize the <code>DispatchTraits</code> helper
+ * struct, which is used to provide core <code>stamp_type</code> and <code>value_type</code>
+ * to other dependent objects throughout the library.
  *
  * @tparam StampT  sequencing stamp type; used for data ordering (e.g. time, sequence number, etc.)
  * @tparam ValueT  data value type; must be copyable

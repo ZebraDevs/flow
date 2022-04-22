@@ -31,8 +31,8 @@ template <typename DispatchT> using DefaultContainer = std::deque<DispatchT>;
 /**
  * @brief Stand-in type used to signify that captors will be used in a single-threaded context
  *
- *        Used in place of a TimedLockable (https://en.cppreference.com/w/cpp/named_req/TimedLockable)
- *        object used to specify a locking policy
+ * Used in place of a TimedLockable (https://en.cppreference.com/w/cpp/named_req/TimedLockable)
+ * object used to specify a locking policy
  */
 struct NoLock
 {};
@@ -46,7 +46,7 @@ struct DefaultDispatchQueueMonitor
   /**
    * @brief Check queue monitor state with on capture attempt
    *
-   *        Checks are applied in Follower derivative Captor objects, only
+   * Checks are applied in Follower derivative Captor objects, only
    *
    * @retval true  allows capture to happen
    * @retval false  otherwise, causing Captor to return <code>State::SKIP_FRAME_QUEUE_PRECONDITION</code>
@@ -60,7 +60,7 @@ struct DefaultDispatchQueueMonitor
   /**
    * @brief Updates queue monitor state with global synchronization results
    *
-   *        Called during <code>Sychronizer::capture</code>, updating several associated Captor s
+   * Called during <code>Sychronizer::capture</code>, updating several associated Captor s
    */
   template <typename DispatchT, typename DispatchContainerT, typename StampT>
   static constexpr void update(DispatchQueue<DispatchT, DispatchContainerT>&, const CaptureRange<StampT>&, const State)
@@ -95,13 +95,13 @@ template <typename DispatchT> struct CaptorTraitsFromDispatch
 /**
  * @brief Traits struct for captor types
  *
- *        Requires:
- *        - <code>DispatchType</code> : data dispatch object type
- *        - <code>DispatchContainerType</code> : container for <code>DispatchType</code>
- *          <code>DispatchQueueMonitorType</code> : optional monitoring/capture preconditioning object type
- *        - <code>value_type</code> : data value type
- *        - <code>stamp_type</code> : sequence stamp type
- *        - <code>size_type</code> : integer sizing type
+ * Requires:
+ * - <code>DispatchType</code> : data dispatch object type
+ * - <code>DispatchContainerType</code> : container for <code>DispatchType</code>
+ *   <code>DispatchQueueMonitorType</code> : optional monitoring/capture preconditioning object type
+ * - <code>value_type</code> : data value type
+ * - <code>stamp_type</code> : sequence stamp type
+ * - <code>size_type</code> : integer sizing type
  *
  * @tparam CaptorT  captor type with CRTP base <code>Captor</code>
  */
@@ -154,8 +154,8 @@ public:
   /**
    * @brief Injects new data into Captor queue
    *
-   *        Data is automatically removed from <code>queue_</code> when its
-   *        size is in excess of the size specified by <code>capacity_</code>
+   * Data is automatically removed from <code>queue_</code> when its
+   * size is in excess of the size specified by <code>capacity_</code>
    *
    * @tparam DispatchConstructorArgTs...  dispatch constructor argument types
    *
@@ -169,8 +169,8 @@ public:
   /**
    * @brief Injects a range of new data into Captor queue
    *
-   *        Data is automatically removed from <code>queue_</code> when its
-   *        size is in excess of the size specified by <code>capacity_</code>
+   * Data is automatically removed from <code>queue_</code> when its
+   * size is in excess of the size specified by <code>capacity_</code>
    *
    * @tparam FirstForwardDispatchIteratorT  forward iterator type for <code>DispatchType</code> elements
    * @tparam LastForwardDispatchIteratorT  forward iterator type for <code>DispatchType</code> elements
@@ -194,8 +194,8 @@ public:
   /**
    * @brief Defines Captor behavior during an external abort
    *
-   *        Triggers data removal before \p t_abort
-   *        Notifies any data waits for capture under a lock
+   * Triggers data removal before \p t_abort
+   * Notifies any data waits for capture under a lock
    *
    * @param t_abort  time at which abort was signaled
    */
@@ -204,19 +204,19 @@ public:
   /**
    * @brief Sets the maximum number of elements
    *
-   *        This is the number of data elements which can be buffered
-   *        in the capture queue before being discarded
+   * This is the number of data elements which can be buffered
+   * in the capture queue before being discarded
    *
    * @param capacity  maximum number of buffered elements; <code>capacity == 0</code>
-   *                  signifies that there will be no limit on buffer capacity
+   *           signifies that there will be no limit on buffer capacity
    */
   inline void set_capacity(const size_type capacity) { return derived()->set_capacity_impl(capacity); }
 
   /**
    * @brief Gets the maximum number of elements
    *
-   *        This is the number of data elements which can be buffered
-   *        in the capture queue before being discarded
+   * This is the number of data elements which can be buffered
+   * in the capture queue before being discarded
    *
    * @see <code>set_capacity</code>
    */
@@ -276,7 +276,7 @@ public:
   /**
    * @brief Queries state that <code>capture</code> would return without data modification
    *
-   *        May remove data to prepare next possible capture
+   * May remove data to prepare next possible capture
    *
    * @tparam CaptureRangeT  message capture stamp range type
    *
@@ -292,10 +292,10 @@ public:
   /**
    * @brief Runs inspection callback all messages available in the current queue
    *
-   *        The queue and its contents will be immutable during inspection
+   * The queue and its contents will be immutable during inspection
    *
    * @tparam InpectCallbackT  queue inspection callback type which can be called as
-   *                          <code>cb(const DispatchType& dispatch)</code>
+   *                   <code>cb(const DispatchType& dispatch)</code>
    *
    * @param inspect_dispatch_cb  callback invoked for each available dispatch
    */
@@ -346,15 +346,15 @@ protected:
 /**
  * @brief CRTP-base for input capture buffers
  *
- *        User may include any of the following for various capture implementations
- *        - <code>#include <flow/captor/lockable.hpp></code>
- *        - <code>#include <flow/captor/nolock.hpp></code>
- *        - <code>#include <flow/captor/polling.hpp></code>
+ * User may include any of the following for various capture implementations
+ * - <code>#include <flow/captor/lockable.hpp></code>
+ * - <code>#include <flow/captor/nolock.hpp></code>
+ * - <code>#include <flow/captor/polling.hpp></code>
  *
  * @tparam CaptorT  CRTP-derived Captor type
  * @tparam LockableT  a TimedLockable (https://en.cppreference.com/w/cpp/named_req/TimedLockable) object;
- *                    specializations are available which replace <code>LockableT</code> with <code>NoLock</code> or
- *                    <code>PollingLock</code>
+ *         specializations are available which replace <code>LockableT</code> with <code>NoLock</code> or
+ *         <code>PollingLock</code>
  * @tparam QueueMonitorT  object used to monitor queue state on each insertion; used to precondition capture
  */
 template <typename CaptorT, typename LockableT, typename QueueMonitorT> class Captor;
