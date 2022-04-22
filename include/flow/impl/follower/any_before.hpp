@@ -1,5 +1,5 @@
 /**
- * @copyright 2020 Fetch Robotics Inc.
+ * @copyright 2020-present Fetch Robotics Inc.
  * @author Levon Avagyan, Brian Cairl
  *
  * @warning IMPLEMENTATION ONLY: THIS FILE SHOULD NEVER BE INCLUDED DIRECTLY!

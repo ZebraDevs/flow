@@ -1,5 +1,5 @@
 /**
- * @copyright 2020 Fetch Robotics Inc.
+ * @copyright 2020-present Fetch Robotics Inc.
  * @author Brian Cairl
  *
  * @brief Defines a utility similar to <code>std::apply</code> (C++14)

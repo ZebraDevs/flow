@@ -1,5 +1,5 @@
 /**
- * @copyright 2020 Fetch Robotics Inc.
+ * @copyright 2020-present Fetch Robotics Inc.
  * @author Brian Cairl
  */
 #ifndef FLOW_CAPTOR_STATE_OSTREAM_HPP

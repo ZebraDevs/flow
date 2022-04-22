@@ -1,5 +1,5 @@
 /**
- * @copyright 2020 Fetch Robotics Inc.
+ * @copyright 2020-present Fetch Robotics Inc.
  * @author Brian Cairl
  *
  * @brief Implements the C++17 utility <code>std::integer_sequence</code> and related
