@@ -34,24 +34,15 @@ State Batch<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::capture_driver_i
   OutputDispatchIteratorT output,
   CaptureRange<stamp_type>& range)
 {
-  const State state = this->dry_capture_driver_impl(range);
-
-  if (state == State::PRIMED)
-  {
-    // Collect dispatches
-    std::copy_n(PolicyType::queue_.begin(), batch_size_, output);
-
-    // Pop last element
-    PolicyType::queue_.pop();
-  }
-
-  return state;
+  const auto locate_result = Batch::locate_driver_impl(range);
+  Batch::extract_driver_impl(output, std::get<1>(locate_result), range);
+  return std::get<0>(locate_result);
 }
 
 
 template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
-State Batch<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::dry_capture_driver_impl(
-  CaptureRange<stamp_type>& range) const
+std::tuple<State, ExtractionRange>
+Batch<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::locate_driver_impl(CaptureRange<stamp_type>& range) const
 {
   if (PolicyType::queue_.size() >= batch_size_)
   {
@@ -60,12 +51,21 @@ State Batch<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::dry_capture_driv
     range.lower_stamp = get_stamp(*oldest_itr);
     range.upper_stamp = get_stamp(*std::next(oldest_itr, batch_size_ - 1));
 
-    return State::PRIMED;
+    return std::make_tuple(State::PRIMED, ExtractionRange{0, batch_size_});
   }
-  else
-  {
-    return State::RETRY;
-  }
+  return std::make_tuple(State::RETRY, ExtractionRange{});
+}
+
+
+template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
+template <typename OutputDispatchIteratorT>
+void Batch<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::extract_driver_impl(
+  OutputDispatchIteratorT output,
+  const ExtractionRange& extraction_range,
+  const CaptureRange<stamp_type>& range)
+{
+  PolicyType::queue_.move(output, extraction_range);
+  PolicyType::queue_.pop();
 }
 
 

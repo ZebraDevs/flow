@@ -34,10 +34,20 @@ State Ranged<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::capture_followe
   OutputDispatchIteratorT&& output,
   const CaptureRange<stamp_type>& range)
 {
+  const auto locate_result = Ranged::locate_follower_impl(range);
+  Ranged::extract_follower_impl(output, std::get<1>(locate_result), range);
+  return std::get<0>(locate_result);
+}
+
+
+template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
+std::tuple<State, ExtractionRange> Ranged<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::locate_follower_impl(
+  const CaptureRange<stamp_type>& range) const
+{
   // Abort early on empty queue
   if (PolicyType::queue_.empty())
   {
-    return State::RETRY;
+    return std::make_tuple(State::RETRY, ExtractionRange{});
   }
 
   // Get iterator to element after first in capture sequence
@@ -46,7 +56,7 @@ State Ranged<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::capture_followe
   // If we are at the start of the available range, then all elements after this one will be after the valid range
   if (after_first_itr == PolicyType::queue_.begin())
   {
-    return State::ABORT;
+    return std::make_tuple(State::ABORT, ExtractionRange{});
   }
 
   // Find initial end position iterator
@@ -55,53 +65,31 @@ State Ranged<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::capture_followe
   // If the end of our range
   if (before_last_itr == PolicyType::queue_.end())
   {
-    return State::RETRY;
+    return std::make_tuple(State::RETRY, ExtractionRange{});
   }
 
   // Get capture iterator range
   const auto first_itr = std::prev(after_first_itr);
   const auto last_itr = std::next(before_last_itr);
 
-  // Copy captured data over range
-  std::copy(first_itr, last_itr, std::forward<OutputDispatchIteratorT>(output));
-
-  // Remove data before first captured element
-  PolicyType::queue_.remove_before(get_stamp(*first_itr));
-
-  return State::PRIMED;
+  return std::make_tuple(
+    State::PRIMED,
+    ExtractionRange{static_cast<std::size_t>(std::distance(PolicyType::queue_.begin(), first_itr)),
+                    static_cast<std::size_t>(std::distance(PolicyType::queue_.begin(), last_itr))});
 }
 
 
 template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
-State Ranged<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::dry_capture_follower_impl(
+template <typename OutputDispatchIteratorT>
+void Ranged<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::extract_follower_impl(
+  OutputDispatchIteratorT output,
+  const ExtractionRange& extraction_range,
   const CaptureRange<stamp_type>& range)
 {
-  // Abort early on empty queue
-  if (PolicyType::queue_.empty())
-  {
-    return State::RETRY;
-  }
-
-  // Get iterator to element after first in capture sequence
-  const auto after_first_itr = this->find_after_first(range);
-
-  // If we are at the start of the available range, then all elements after this one will be after the valid range
-  if (after_first_itr == PolicyType::queue_.begin())
-  {
-    return State::ABORT;
-  }
-  // If the end of our range
-  else if (this->find_before_last(range, after_first_itr) == PolicyType::queue_.end())
-  {
-    return State::RETRY;
-  }
-  else
-  {
-    // Remove data before first captured element
-    PolicyType::queue_.remove_before(get_stamp(*std::prev(after_first_itr)));
-    return State::PRIMED;
-  }
+  PolicyType::queue_.copy(output, extraction_range);
+  PolicyType::queue_.remove_first_n(extraction_range.first);
 }
+
 
 template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
 auto Ranged<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::find_after_first(
@@ -114,6 +102,7 @@ auto Ranged<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::find_after_first
       return get_stamp(dispatch) >= offset_lower_stamp;
     });
 }
+
 
 template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
 template <typename QueueIteratorT>

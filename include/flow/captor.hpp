@@ -9,6 +9,7 @@
 #include <chrono>
 #include <cstdint>
 #include <deque>
+#include <tuple>
 #include <type_traits>
 #include <utility>
 
@@ -21,7 +22,6 @@
 
 namespace flow
 {
-
 /**
  * @brief Default dispatch container template
  */
@@ -90,7 +90,6 @@ template <typename DispatchT> struct CaptorTraitsFromDispatch
   /// Integer size type
   using size_type = std::size_t;
 };
-
 
 /**
  * @brief Traits struct for captor types
@@ -233,30 +232,8 @@ public:
   /**
    * @brief Waits for ready state and captures inputs
    *
-   * @tparam OutputDispatchIteratorT  output iterator type for a value type which supports assignment with
-   * <code>DispatchType</code>
-   * @tparam CaptureRangeT  message capture stamp range type
-   * @tparam ClockT  clock type associated with time-point representation
-   * @tparam DurationT  duration type associated with time-point representation
-   *
-   * @param[out] output  output data iterator
-   * @param[in,out] range  data capture/sequencing range
-   * @param timeout  time to stop waiting for data
-   *
-   * @return capture directive code
-   */
-  template <typename OutputDispatchIteratorT, typename CaptureRangeT, typename ClockT, typename DurationT>
-  inline State capture(
-    OutputDispatchIteratorT&& output,
-    CaptureRangeT&& range,
-    const std::chrono::time_point<ClockT, DurationT> timeout = std::chrono::time_point<ClockT, DurationT>::max())
-  {
-    return derived()->capture_impl(
-      std::forward<OutputDispatchIteratorT>(output), std::forward<CaptureRangeT>(range), timeout);
-  }
-
-  /**
-   * @brief Waits for ready state and captures inputs
+   * This is used for capturing data from an individual Captor. This method calls a combination of \c locate and \c
+   * extract. This method is not used during multi-Captor synchronization
    *
    * @tparam OutputDispatchIteratorT  output iterator type for a value type which supports assignment with
    * <code>DispatchType</code>
@@ -274,19 +251,68 @@ public:
   }
 
   /**
-   * @brief Queries state that <code>capture</code> would return without data modification
+   * @copydoc capture
    *
-   * May remove data to prepare next possible capture
+   * @param timeout  time to stop waiting for data
+   */
+  template <typename OutputDispatchIteratorT, typename CaptureRangeT, typename ClockT, typename DurationT>
+  inline State capture(
+    OutputDispatchIteratorT&& output,
+    CaptureRangeT&& range,
+    const std::chrono::time_point<ClockT, DurationT> timeout = std::chrono::time_point<ClockT, DurationT>::max())
+  {
+    return derived()->capture_impl(
+      std::forward<OutputDispatchIteratorT>(output), std::forward<CaptureRangeT>(range), timeout);
+  }
+
+  /**
+   * @brief Finds element range to extract on synchronization
    *
    * @tparam CaptureRangeT  message capture stamp range type
+   * @tparam ClockT  clock type associated with time-point representation
+   * @tparam DurationT  duration type associated with time-point representation
    *
    * @param[in,out] range  data capture/sequencing range
    *
    * @return capture directive code
    */
-  template <typename CaptureRangeT> inline State dry_capture(CaptureRangeT&& range)
+  template <typename CaptureRangeT> inline std::tuple<State, ExtractionRange> locate(CaptureRangeT&& range)
   {
-    return derived()->dry_capture_impl(std::forward<CaptureRangeT>(range));
+    return derived()->locate_impl(std::forward<CaptureRangeT>(range));
+  }
+
+  /**
+   * @copydoc locate
+   *
+   * @param timeout  time to stop waiting for data
+   */
+  template <typename CaptureRangeT, typename ClockT, typename DurationT>
+  inline std::tuple<State, ExtractionRange> locate(
+    CaptureRangeT&& range,
+    const std::chrono::time_point<ClockT, DurationT> timeout = std::chrono::time_point<ClockT, DurationT>::max())
+  {
+    return derived()->locate_impl(std::forward<CaptureRangeT>(range), timeout);
+  }
+
+  /**
+   * @brief Extracts elements from queue based on \c extraction_range found via \c locate
+   *
+   * @tparam OutputDispatchIteratorT  output iterator type for a value type which supports assignment with
+   * <code>DispatchType</code>
+   *
+   * @param[out] output  output data iterator
+   * @param extraction_range  range of elements to extract (by copy or move) from queue
+   * @param range  data capture/sequencing range
+   *
+   * @return capture directive code
+   */
+  template <typename OutputDispatchIteratorT>
+  inline void extract(
+    OutputDispatchIteratorT&& output,
+    const ExtractionRange& extraction_range,
+    const CaptureRange<stamp_type>& range)
+  {
+    return derived()->extract_impl(std::forward<OutputDispatchIteratorT>(output), extraction_range, range);
   }
 
   /**

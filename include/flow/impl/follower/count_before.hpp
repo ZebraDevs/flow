@@ -40,26 +40,20 @@ State CountBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::capture_fo
   OutputDispatchIteratorT output,
   const CaptureRange<stamp_type>& range)
 {
-  const State state = this->dry_capture_follower_impl(range);
-
-  if (state == State::PRIMED)
-  {
-    // When primed, next n-elements should be captured without removal
-    std::copy_n(PolicyType::queue_.begin(), count_, output);
-  }
-
-  return state;
+  const auto locate_result = CountBefore::locate_follower_impl(range);
+  CountBefore::extract_follower_impl(output, std::get<1>(locate_result), range);
+  return std::get<0>(locate_result);
 }
 
 
 template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
-State CountBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::dry_capture_follower_impl(
-  const CaptureRange<stamp_type>& range)
+std::tuple<State, ExtractionRange> CountBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::locate_follower_impl(
+  const CaptureRange<stamp_type>& range) const
 {
   // Retry if queue has no data
   if (PolicyType::queue_.empty())
   {
-    return State::RETRY;
+    return std::make_tuple(State::RETRY, ExtractionRange{});
   }
 
   // The boundary before which messages are valid and after which they are not. Non-inclusive.
@@ -80,18 +74,30 @@ State CountBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::dry_captur
   if (before_boundary_count >= count_)
   {
     const auto first_itr = std::prev(itr, count_);
-    PolicyType::queue_.remove_before(get_stamp(*first_itr));
-    return State::PRIMED;
+    return std::make_tuple(
+      State::PRIMED,
+      ExtractionRange{static_cast<std::size_t>(std::distance(PolicyType::queue_.begin(), first_itr)),
+                      static_cast<std::size_t>(std::distance(PolicyType::queue_.begin(), itr))});
   }
   else if (at_or_after_boundary_count)
   {
-    return State::ABORT;
+    return std::make_tuple(State::ABORT, ExtractionRange{});
   }
-  else
-  {
-    return State::RETRY;
-  }
+  return std::make_tuple(State::RETRY, ExtractionRange{});
 }
+
+
+template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
+template <typename OutputDispatchIteratorT>
+void CountBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::extract_follower_impl(
+  OutputDispatchIteratorT output,
+  const ExtractionRange& extraction_range,
+  const CaptureRange<stamp_type>& range)
+{
+  PolicyType::queue_.copy(output, extraction_range);
+  PolicyType::queue_.remove_first_n(extraction_range.first);
+}
+
 
 }  // namespace follower
 }  // namespace flow

@@ -149,66 +149,66 @@ TEST_F(FollowerBefore, CapturePrimedMultiDataBeforeAndAtBoundary)
 }
 
 
-TEST_F(FollowerBefore, DryCaptureRetryOnEmpty)
+TEST_F(FollowerBefore, LocateRetryOnEmpty)
 {
   CaptureRange<int> t_range{0, 0};
-  ASSERT_EQ(State::RETRY, this->dry_capture(t_range));
+  ASSERT_EQ(State::RETRY, this->locate(t_range));
 }
 
 
-TEST_F(FollowerBefore, DryCapturePrimedOnDataAtBoundary)
+TEST_F(FollowerBefore, LocatePrimedOnDataAtBoundary)
 {
   CaptureRange<int> t_range{0, 0};
 
   this->inject(Dispatch<int, int>{-DELAY, 1});
 
-  ASSERT_EQ(State::PRIMED, this->dry_capture(t_range));
+  ASSERT_EQ(State::PRIMED, this->locate(t_range));
 }
 
 
-TEST_F(FollowerBefore, DryCapturePrimedOnDataAfterBoundary)
+TEST_F(FollowerBefore, LocatePrimedOnDataAfterBoundary)
 {
   CaptureRange<int> t_range{0, 0};
 
   this->inject(Dispatch<int, int>{-DELAY + 1, 1});
 
-  ASSERT_EQ(State::PRIMED, this->dry_capture(t_range));
+  ASSERT_EQ(State::PRIMED, this->locate(t_range));
 }
 
 
-TEST_F(FollowerBefore, DryCaptureRetryOnDataBeforeBoundary)
+TEST_F(FollowerBefore, LocateRetryOnDataBeforeBoundary)
 {
   CaptureRange<int> t_range{0, 0};
 
   this->inject(Dispatch<int, int>{-DELAY - 1, 1});
 
-  ASSERT_EQ(State::RETRY, this->dry_capture(t_range));
+  ASSERT_EQ(State::RETRY, this->locate(t_range));
 }
 
 
-TEST_F(FollowerBefore, DryCapturePrimedOnDataBeforeAndAfterBoundary)
+TEST_F(FollowerBefore, LocatePrimedOnDataBeforeAndAfterBoundary)
 {
   CaptureRange<int> t_range{0, 0};
 
   this->inject(Dispatch<int, int>{-DELAY - 1, 1});
   this->inject(Dispatch<int, int>{-DELAY + 1, 1});
 
-  ASSERT_EQ(State::PRIMED, this->dry_capture(t_range));
+  ASSERT_EQ(State::PRIMED, this->locate(t_range));
 }
 
 
-TEST_F(FollowerBefore, DryCapturePrimedOnDataBeforeAndAtBoundary)
+TEST_F(FollowerBefore, LocatePrimedOnDataBeforeAndAtBoundary)
 {
   CaptureRange<int> t_range{0, 0};
 
   this->inject(Dispatch<int, int>{-DELAY - 1, 1});
   this->inject(Dispatch<int, int>{-DELAY, 1});
 
-  ASSERT_EQ(State::PRIMED, this->dry_capture(t_range));
+  ASSERT_EQ(State::PRIMED, this->locate(t_range));
 }
 
 
-TEST_F(FollowerBefore, DryCapturePrimedMultiDataBeforeBoundary)
+TEST_F(FollowerBefore, LocatePrimedMultiDataBeforeBoundary)
 {
   CaptureRange<int> t_range{0, 0};
 
@@ -216,11 +216,11 @@ TEST_F(FollowerBefore, DryCapturePrimedMultiDataBeforeBoundary)
   this->inject(Dispatch<int, int>{-DELAY - 2, 1});
   this->inject(Dispatch<int, int>{-DELAY + 1, 1});
 
-  ASSERT_EQ(State::PRIMED, this->dry_capture(t_range));
+  ASSERT_EQ(State::PRIMED, this->locate(t_range));
 }
 
 
-TEST_F(FollowerBefore, DryCapturePrimedMultiDataBeforeAndAtBoundary)
+TEST_F(FollowerBefore, LocatePrimedMultiDataBeforeAndAtBoundary)
 {
   CaptureRange<int> t_range{0, 0};
 
@@ -228,7 +228,7 @@ TEST_F(FollowerBefore, DryCapturePrimedMultiDataBeforeAndAtBoundary)
   this->inject(Dispatch<int, int>{-DELAY - 1, 1});
   this->inject(Dispatch<int, int>{-DELAY - 2, 1});
 
-  ASSERT_EQ(State::PRIMED, this->dry_capture(t_range));
+  ASSERT_EQ(State::PRIMED, this->locate(t_range));
 }
 
 

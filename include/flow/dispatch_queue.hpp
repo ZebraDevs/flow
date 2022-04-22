@@ -16,6 +16,27 @@ namespace flow
 {
 
 /**
+ * @brief Represents a range of elements
+ */
+struct ExtractionRange
+{
+  /// Position of first element
+  std::size_t first = 0UL;
+
+  /// Position of one-past-last element
+  std::size_t last = 0UL;
+
+  /// Checks if element range is valid
+  constexpr bool valid() const { return first < last; }
+
+  /// Checks if element range is valid
+  constexpr operator bool() const { return ExtractionRange::valid(); }
+
+  ExtractionRange() = default;
+  ExtractionRange(const std::size_t _first, const std::size_t _last) : first{_first}, last{_last} {}
+};
+
+/**
  * @brief Dispatch queuing data structure
  *
  * FILO-type queue which orders data by sequence stamp, from oldest to newest. Provides
@@ -70,6 +91,24 @@ public:
    * @retval false  otherwise
    */
   inline bool empty() const;
+
+  /**
+   * @brief Copies elements in \c range
+   *
+   * @param output  element output iterator
+   * @param range  element index range
+   */
+  template <typename OutputDispatchIteratorT>
+  inline OutputDispatchIteratorT copy(OutputDispatchIteratorT output, const ExtractionRange& extraction_range) const;
+
+  /**
+   * @brief Moves elements in \c range
+   *
+   * @param output  element output iterator
+   * @param range  element index range
+   */
+  template <typename OutputDispatchIteratorT>
+  inline OutputDispatchIteratorT move(OutputDispatchIteratorT output, const ExtractionRange& extraction_range);
 
   /**
    * @brief Returns first iterator to element before stamp
@@ -133,10 +172,19 @@ public:
   inline stamp_type newest_stamp() const { return get_stamp(container_.back()); }
 
   /**
-   * @brief Removes the oldest element and returns associated Dispatch
-   * @return oldest element
+   * @brief Retrieves the oldest element
    */
-  inline DispatchT pop();
+  inline DispatchT& top();
+
+  /**
+   * @brief Retrieves the oldest element
+   */
+  inline const DispatchT& top() const;
+
+  /**
+   * @brief Removes the oldest element
+   */
+  inline void pop();
 
   /**
    * @brief Removes all data from queue
@@ -156,6 +204,13 @@ public:
    * @param stamp  lower bound on container sequence stamp
    */
   inline void remove_at_before(stamp_const_arg_type t);
+
+  /**
+   * @brief Removes first \c n elements
+   *
+   * @param n  number of elements to remove
+   */
+  inline void remove_first_n(const size_type n);
 
   /**
    * @brief Removes oldest data until queue has less than or equal to N-elements

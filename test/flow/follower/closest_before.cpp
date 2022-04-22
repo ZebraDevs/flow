@@ -160,32 +160,32 @@ TEST_F(FollowerClosestBefore, CaptureAbortClosestBeforeDataAfterPeriod)
 }
 
 
-TEST_F(FollowerClosestBefore, DryCaptureRetryOnEmpty)
+TEST_F(FollowerClosestBefore, LocateRetryOnEmpty)
 {
   CaptureRange<int> t_range{0, 0};
-  ASSERT_EQ(State::RETRY, this->dry_capture(t_range));
+  ASSERT_EQ(State::RETRY, this->locate(t_range));
 }
 
 
-TEST_F(FollowerClosestBefore, DryCaptureAbortTooNew)
+TEST_F(FollowerClosestBefore, LocateAbortTooNew)
 {
   this->inject(Dispatch<int, int>{1, 1});
 
   CaptureRange<int> t_range{0, 0};
-  ASSERT_EQ(State::ABORT, this->dry_capture(t_range));
+  ASSERT_EQ(State::ABORT, this->locate(t_range));
 }
 
 
-TEST_F(FollowerClosestBefore, DryCaptureAbortAtDataBoundary)
+TEST_F(FollowerClosestBefore, LocateAbortAtDataBoundary)
 {
   this->inject(Dispatch<int, int>{0, 0});
 
   CaptureRange<int> t_range{0, 0};
-  ASSERT_EQ(State::ABORT, this->dry_capture(t_range));
+  ASSERT_EQ(State::ABORT, this->locate(t_range));
 }
 
 
-TEST_F(FollowerClosestBefore, DryCapturePrimedAtDataBoundary)
+TEST_F(FollowerClosestBefore, LocatePrimedAtDataBoundary)
 {
   int t = 0;
 
@@ -200,11 +200,11 @@ TEST_F(FollowerClosestBefore, DryCapturePrimedAtDataBoundary)
   ASSERT_EQ(this->size(), 2UL * (DELAY + PERIOD));
 
   CaptureRange<int> t_range{t_target, t_target};
-  ASSERT_EQ(State::PRIMED, this->dry_capture(t_range));
+  ASSERT_EQ(State::PRIMED, this->locate(t_range));
 }
 
 
-TEST_F(FollowerClosestBefore, DryCapturePrimedAtDataBoundaryFilledPast)
+TEST_F(FollowerClosestBefore, LocatePrimedAtDataBoundaryFilledPast)
 {
   int t = 0;
 
@@ -227,11 +227,11 @@ TEST_F(FollowerClosestBefore, DryCapturePrimedAtDataBoundaryFilledPast)
   ASSERT_EQ(this->size(), 4UL * (DELAY + PERIOD));
 
   CaptureRange<int> t_range{t_target, t_target};
-  ASSERT_EQ(State::PRIMED, this->dry_capture(t_range));
+  ASSERT_EQ(State::PRIMED, this->locate(t_range));
 }
 
 
-TEST_F(FollowerClosestBefore, DryCapturePrimedClosestBeforeDataBeforePeriod)
+TEST_F(FollowerClosestBefore, LocatePrimedClosestBeforeDataBeforePeriod)
 {
   int t = 0;
 
@@ -246,11 +246,11 @@ TEST_F(FollowerClosestBefore, DryCapturePrimedClosestBeforeDataBeforePeriod)
   ASSERT_EQ(this->size(), 10U);
 
   CaptureRange<int> t_range{t_target, t_target};
-  ASSERT_EQ(State::PRIMED, this->dry_capture(t_range));
+  ASSERT_EQ(State::PRIMED, this->locate(t_range));
 }
 
 
-TEST_F(FollowerClosestBefore, DryCaptureAbortClosestBeforeDataAfterPeriod)
+TEST_F(FollowerClosestBefore, LocateAbortClosestBeforeDataAfterPeriod)
 {
   int t = 0;
 
@@ -265,7 +265,7 @@ TEST_F(FollowerClosestBefore, DryCaptureAbortClosestBeforeDataAfterPeriod)
   ASSERT_EQ(this->size(), 10U);
 
   CaptureRange<int> t_range{t_target, t_target};
-  ASSERT_EQ(State::ABORT, this->dry_capture(t_range));
+  ASSERT_EQ(State::ABORT, this->locate(t_range));
 }
 
 

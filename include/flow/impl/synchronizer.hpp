@@ -16,11 +16,40 @@
 #include <flow/utility/apply.hpp>
 #include <flow/utility/static_assert.hpp>
 
+namespace std
+{
+
+/**
+ * @brief Specialization of \c std::iterator_traits for a valid \c NoCapture template instance
+ */
+template <> struct iterator_traits<::flow::NoCapture>
+{
+  using difference_type = std::ptrdiff_t;
+  using value_type = void;
+  using pointer = void;
+  using reference = void;
+  using iterator_category = void;
+};
+
+}  // namespace std
+
 namespace flow
 {
 #ifndef DOXYGEN_SKIP
 namespace detail
 {
+
+/// helper for use with exchange_type_with
+template <typename ExchangeT, typename OriginalT> struct Exchange
+{
+  using type = ExchangeT;
+};
+
+/// creates a new tuple of the same length with all elements of type \c ExchangeT, which must be default-constructible
+template <typename ExchangeT, typename... OriginalTs> auto exchange_type_with(std::tuple<OriginalTs...>&)
+{
+  return std::tuple<typename Exchange<ExchangeT, OriginalTs>::type...>{};
+}
 
 /// captor::reset call helper
 struct ResetHelper
@@ -34,6 +63,7 @@ struct ResetHelper
     c.reset();
   }
 };
+
 
 /// captor::remove call helper
 template <typename StampT> class RemoveHelper
@@ -53,6 +83,7 @@ private:
   /// Remove stamp
   StampT t_remove_;
 };
+
 
 /// captor::abort call helper
 template <typename StampT> class AbortHelper
@@ -75,23 +106,18 @@ private:
 };
 
 
-/// captor::capture call helper
-template <typename ResultT, typename StampT, typename TimePointT> class CaptureHelper
+/// captor::locate call helper
+template <typename ResultT, typename StampT, typename TimePointT> class LocateHelper
 {
 public:
-  CaptureHelper(ResultT& result, const StampT lower_bound, const TimePointT timeout) :
+  LocateHelper(ResultT& result, const StampT lower_bound, const TimePointT timeout) :
       result_{std::addressof(result)},
       lower_bound_{lower_bound},
       timeout_{timeout}
   {}
 
-  template <typename ExpectNoCaptureT>
-  inline void operator()(const CaptureRange<StampT>& range, const ExpectNoCaptureT output)
+  inline void operator()(const CaptureRange<StampT>& range, ExtractionRange& NO_CAPTURE)
   {
-    FLOW_STATIC_ASSERT(
-      (std::is_same<ExpectNoCaptureT, NoCapture>::value),
-      "When using a direct capture range, NoCapture should be used in place of output iterator");
-
     // Initialize capture range
     result_->range = range;
 
@@ -99,58 +125,52 @@ public:
     result_->state = range.upper_stamp < lower_bound_ ? State::ABORT : State::PRIMED;
   }
 
-  template <typename PolicyT, typename OutputIteratorT>
-  inline std::enable_if_t<is_polling<PolicyT>::value> operator()(Driver<PolicyT>& c, OutputIteratorT output)
+  template <typename PolicyT>
+  inline std::enable_if_t<is_polling<PolicyT>::value> operator()(Driver<PolicyT>& c, ExtractionRange& extraction_range)
   {
     // Get capture state
-    result_->state = c.capture(output, result_->range);
+    std::tie(result_->state, extraction_range) = c.locate(result_->range);
 
     // Set aborted state if driving sequence range violates monotonicity guard
     if (result_->state == State::PRIMED and result_->range.upper_stamp < lower_bound_)
     {
       result_->state = State::ERROR_DRIVER_LOWER_BOUND_EXCEEDED;
     }
-
-    c.update_queue_monitor(result_->range, result_->state);
   }
 
-  template <typename PolicyT, typename OutputIteratorT>
-  inline std::enable_if_t<is_polling<PolicyT>::value> operator()(Follower<PolicyT>& c, OutputIteratorT output)
+  template <typename PolicyT>
+  inline std::enable_if_t<is_polling<PolicyT>::value>
+  operator()(Follower<PolicyT>& c, ExtractionRange& extraction_range)
   {
     // Get capture state alias
     if (result_->state == State::PRIMED)
     {
-      result_->state = c.capture(output, result_->range);
+      std::tie(result_->state, extraction_range) = c.locate(result_->range);
     }
-
-    c.update_queue_monitor(result_->range, result_->state);
   }
 
-  template <typename PolicyT, typename OutputIteratorT>
-  inline std::enable_if_t<!is_polling<PolicyT>::value> operator()(Driver<PolicyT>& c, OutputIteratorT output)
+  template <typename PolicyT>
+  inline std::enable_if_t<!is_polling<PolicyT>::value> operator()(Driver<PolicyT>& c, ExtractionRange& extraction_range)
   {
     // Get capture state
-    result_->state = c.capture(output, result_->range, timeout_);
+    std::tie(result_->state, extraction_range) = c.locate(result_->range, timeout_);
 
     // Set aborted state if driving sequence range violates monotonicity guard
     if (result_->state == State::PRIMED and result_->range.upper_stamp < lower_bound_)
     {
       result_->state = State::ERROR_DRIVER_LOWER_BOUND_EXCEEDED;
     }
-
-    c.update_queue_monitor(result_->range, result_->state);
   }
 
-  template <typename PolicyT, typename OutputIteratorT>
-  inline std::enable_if_t<!is_polling<PolicyT>::value> operator()(Follower<PolicyT>& c, OutputIteratorT output)
+  template <typename PolicyT>
+  inline std::enable_if_t<!is_polling<PolicyT>::value>
+  operator()(Follower<PolicyT>& c, ExtractionRange& extraction_range)
   {
     // Get capture state alias
     if (result_->state == State::PRIMED)
     {
-      result_->state = c.capture(output, result_->range, timeout_);
+      std::tie(result_->state, extraction_range) = c.locate(result_->range, timeout_);
     }
-
-    c.update_queue_monitor(result_->range, result_->state);
   }
 
 private:
@@ -165,55 +185,30 @@ private:
 };
 
 
-/// captor::dry_capture call helper
-template <typename ResultT, typename StampT> class DryCaptureHelper
+/// captor::extract call helper
+template <typename ResultT> class ExtractHelper
 {
 public:
-  DryCaptureHelper(ResultT& result, const StampT lower_bound) :
-      result_{std::addressof(result)},
-      lower_bound_{lower_bound}
+  ExtractHelper(ResultT& result) : result_{std::addressof(result)} {}
+
+  template <typename StampT>
+  constexpr void
+  operator()(const CaptureRange<StampT>& range, NoCapture __nc__, const ExtractionRange& extraction_range)
   {}
 
-  inline void operator()(const CaptureRange<StampT>& range)
+  template <typename CaptorT, typename LockPolicyT, typename QueueMonitorT, typename OutputIteratorT>
+  inline void operator()(
+    Captor<CaptorT, LockPolicyT, QueueMonitorT>& c,
+    OutputIteratorT&& output,
+    const ExtractionRange& extraction_range)
   {
-    // Initialize capture state and range
-    result_->state = State::PRIMED;
-    result_->range = range;
-
-    // Set aborted state if driving sequence range violates monotonicity guard
-    if (result_->state == State::PRIMED and result_->range.upper_stamp < lower_bound_)
-    {
-      result_->state = State::ABORT;
-    }
-  }
-
-  template <typename PolicyT> inline void operator()(Driver<PolicyT>& c)
-  {
-    // Get capture state
-    result_->state = c.dry_capture(result_->range);
-
-    // Set aborted state if driving sequence range violates monotonicity guard
-    if (result_->state == State::PRIMED and result_->range.upper_stamp < lower_bound_)
-    {
-      result_->state = State::ABORT;
-    }
-  }
-
-  template <typename PolicyT> inline void operator()(Follower<PolicyT>& c)
-  {
-    // Get capture state alias
-    if (result_->state == State::PRIMED)
-    {
-      result_->state = c.dry_capture(result_->range);
-    }
+    c.extract(std::forward<OutputIteratorT>(output), extraction_range, result_->range);
+    c.update_queue_monitor(result_->range, result_->state);
   }
 
 private:
   /// Capture result
   ResultT* const result_;
-
-  /// Known latest sequence stamp
-  StampT lower_bound_;
 };
 
 /// Checks that captor stamp types are consistent
@@ -307,11 +302,28 @@ typename Synchronizer::result_t<CaptorTupleT> Synchronizer::capture(
   using ResultType = result_t<CaptorTupleT>;
   using StampType = stamp_t<CaptorTupleT>;
 
+  auto elements = detail::exchange_type_with<ExtractionRange>(captors);
+
   ResultType result;
+
+  // Attempt to locate elements that we will capture
   apply_every(
-    detail::CaptureHelper<ResultType, StampType, time_point_type>{result, lower_bound, timeout},
+    detail::LocateHelper<ResultType, StampType, time_point_type>{result, lower_bound, timeout},
     std::forward<CaptorTupleT>(captors),
-    std::forward<OutputIteratorTupleT>(outputs));
+    elements);
+
+  // If a RETRY state occurs, don't try to capture elements
+  if (result.state == State::RETRY)
+  {
+    return result;
+  }
+
+  // Otherwise, capture elements and possibly remove elements from queues
+  apply_every(
+    detail::ExtractHelper<ResultType>{result},
+    std::forward<CaptorTupleT>(captors),
+    std::forward<OutputIteratorTupleT>(outputs),
+    elements);
 
   return result;
 }
@@ -329,34 +341,6 @@ typename Synchronizer::result_t<CaptorTupleT> Synchronizer::capture(
     lower_bound,
     std::chrono::steady_clock::time_point::max());
 }
-
-
-template <typename CaptorTupleT>
-typename Synchronizer::result_t<CaptorTupleT>
-Synchronizer::dry_capture(CaptorTupleT&& captors, const stamp_arg_t<CaptorTupleT> lower_bound)
-{
-  // Sanity check captor sequence
-  FLOW_STATIC_ASSERT(
-    detail::captor_sequence_valid<CaptorTupleT>(),
-    "[Synchronizer::dry_capture] Captor sequence is invalid. Must have (DriverType, FollowerTypes...) with "
-    "0 or more FollowerTypes allowed, or (CaptureRange<StampT>, FollowerTypes...) with at least 1 FollowerTypes.");
-
-  // Sanity check captor stamp types
-  FLOW_STATIC_ASSERT(
-    detail::captor_stamp_types_consistent<CaptorTupleT>(),
-    "[Synchronizer::dry_capture] Associated captor stamp types do not match between all captors");
-
-  using ResultType = result_t<CaptorTupleT>;
-  using StampType = stamp_t<CaptorTupleT>;
-
-  // Capture next input set
-  ResultType result;
-  apply_every(
-    detail::DryCaptureHelper<ResultType, StampType>{result, lower_bound}, std::forward<CaptorTupleT>(captors));
-
-  return result;
-}
-
 
 template <typename CaptorTupleT>
 void Synchronizer::remove(CaptorTupleT&& captors, const stamp_arg_t<CaptorTupleT> t_remove)

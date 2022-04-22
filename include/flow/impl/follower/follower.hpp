@@ -34,9 +34,21 @@ State Follower<PolicyT>::capture_policy_impl(OutputDispatchIteratorT&& output, c
 }
 
 
-template <typename PolicyT> State Follower<PolicyT>::dry_capture_policy_impl(const CaptureRange<stamp_type>& range)
+template <typename PolicyT>
+std::tuple<State, ExtractionRange> Follower<PolicyT>::locate_policy_impl(const CaptureRange<stamp_type>& range) const
 {
-  return derived()->dry_capture_follower_impl(range);
+  return derived()->locate_follower_impl(range);
+}
+
+
+template <typename PolicyT>
+template <typename OutputDispatchIteratorT>
+void Follower<PolicyT>::extract_policy_impl(
+  OutputDispatchIteratorT&& output,
+  const ExtractionRange& extraction_range,
+  const CaptureRange<stamp_type>& range)
+{
+  return derived()->extract_follower_impl(std::forward<OutputDispatchIteratorT>(output), extraction_range, range);
 }
 
 

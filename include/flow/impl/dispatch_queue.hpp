@@ -18,6 +18,7 @@ template <typename DispatchT, typename ContainerT>
 DispatchQueue<DispatchT, ContainerT>::DispatchQueue(const ContainerT& container) : container_{container}
 {}
 
+
 template <typename DispatchT, typename ContainerT>
 typename DispatchQueue<DispatchT, ContainerT>::size_type DispatchQueue<DispatchT, ContainerT>::size() const
 {
@@ -28,6 +29,31 @@ typename DispatchQueue<DispatchT, ContainerT>::size_type DispatchQueue<DispatchT
 template <typename DispatchT, typename ContainerT> bool DispatchQueue<DispatchT, ContainerT>::empty() const
 {
   return !size();
+}
+
+
+template <typename DispatchT, typename ContainerT>
+template <typename OutputDispatchIteratorT>
+OutputDispatchIteratorT DispatchQueue<DispatchT, ContainerT>::copy(
+  OutputDispatchIteratorT output,
+  const ExtractionRange& extraction_range) const
+{
+  return std::copy(
+    std::next(container_.begin(), extraction_range.first),
+    std::next(container_.begin(), extraction_range.last),
+    output);
+}
+
+
+template <typename DispatchT, typename ContainerT>
+template <typename OutputDispatchIteratorT>
+OutputDispatchIteratorT
+DispatchQueue<DispatchT, ContainerT>::move(OutputDispatchIteratorT output, const ExtractionRange& extraction_range)
+{
+  return std::move(
+    std::next(container_.begin(), extraction_range.first),
+    std::next(container_.begin(), extraction_range.last),
+    output);
 }
 
 
@@ -83,11 +109,21 @@ DispatchQueue<DispatchT, ContainerT>::rbefore(stamp_const_arg_type stamp) const
 }
 
 
-template <typename DispatchT, typename ContainerT> DispatchT DispatchQueue<DispatchT, ContainerT>::pop()
+template <typename DispatchT, typename ContainerT> DispatchT& DispatchQueue<DispatchT, ContainerT>::top()
 {
-  const auto retval = std::move(container_.front());
+  return container_.front();
+}
+
+
+template <typename DispatchT, typename ContainerT> const DispatchT& DispatchQueue<DispatchT, ContainerT>::top() const
+{
+  return container_.front();
+}
+
+
+template <typename DispatchT, typename ContainerT> void DispatchQueue<DispatchT, ContainerT>::pop()
+{
   container_.pop_front();
-  return retval;
 }
 
 
@@ -114,6 +150,13 @@ void DispatchQueue<DispatchT, ContainerT>::remove_at_before(stamp_const_arg_type
   {
     container_.pop_front();
   }
+}
+
+
+template <typename DispatchT, typename ContainerT>
+void DispatchQueue<DispatchT, ContainerT>::remove_first_n(const size_type n)
+{
+  container_.erase(container_.begin(), std::next(container_.begin(), n));
 }
 
 

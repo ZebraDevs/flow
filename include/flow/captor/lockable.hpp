@@ -211,13 +211,62 @@ private:
   }
 
   /**
-   * @copydoc CaptorInterface::dry_capture_impl
+   * @copydoc CaptorInterface::locate_impl
    */
-  template <typename CaptureRangeT> inline State dry_capture_impl(CaptureRangeT&& range)
+  template <typename CaptureRangeT, typename ClockT, typename DurationT>
+  inline std::tuple<State, ExtractionRange>
+  locate_impl(CaptureRangeT&& range, const std::chrono::time_point<ClockT, DurationT> timeout)
   {
     LockableT lock{capture_mutex_};
 
-    return derived()->dry_capture_policy_impl(std::forward<CaptureRangeT>(range));
+    // Wait for data and attempt capture when data is available
+    State state{State::ABORT};
+    ExtractionRange extraction_range{};
+    while (capturing_)
+    {
+      // Attempt data capture
+      std::tie(state, extraction_range) = derived()->locate_policy_impl(std::forward<CaptureRangeT>(range));
+
+      // Check capture state, and whether or not a data wait is needed
+      if (state != State::RETRY)
+      {
+        break;
+      }
+      else if (std::chrono::time_point<ClockT, DurationT>::max() == timeout)
+      {
+        capture_cv_.wait(lock);
+      }
+      else if (std::cv_status::timeout == capture_cv_.wait_until(lock, timeout))
+      {
+        state = State::TIMEOUT;
+        break;
+      }
+    }
+
+    if (capturing_)
+    {
+      // Return state set in capture loop if not aborted externally
+      return std::make_tuple(state, extraction_range);
+    }
+    else
+    {
+      // Make sure capturing flag is reset under lock before next capture attempt
+      capturing_ = true;
+      return std::make_tuple((state == State::RETRY) ? State::ABORT : state, extraction_range);
+    }
+  }
+
+  /**
+   * @copydoc CaptorInterface::extract_impl
+   */
+  template <typename OutputDispatchIteratorT>
+  inline void extract_impl(
+    OutputDispatchIteratorT&& output,
+    const ExtractionRange& extraction_range,
+    const CaptureRange<stamp_type>& range)
+  {
+    LockableT lock{capture_mutex_};
+    derived()->extract_policy_impl(std::forward<OutputDispatchIteratorT>(output), extraction_range, range);
   }
 
   /**

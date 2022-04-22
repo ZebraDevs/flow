@@ -105,7 +105,7 @@ TEST_F(FollowerLatched, DryCaptureRetryOnEmpty)
 {
   CaptureRange<int> t_range{0, 0};
 
-  ASSERT_EQ(State::RETRY, this->dry_capture(t_range));
+  ASSERT_EQ(State::RETRY, this->locate(t_range));
 }
 
 
@@ -115,7 +115,7 @@ TEST_F(FollowerLatched, DryCaptureAbortOnDataTooNew)
 
   CaptureRange<int> t_range{MIN_PERIOD - 1, MIN_PERIOD - 1};
 
-  ASSERT_EQ(State::ABORT, this->dry_capture(t_range));
+  ASSERT_EQ(State::ABORT, this->locate(t_range));
 }
 
 
@@ -125,7 +125,7 @@ TEST_F(FollowerLatched, DryCapturePrimedOnMinPeriodStamp)
 
   CaptureRange<int> t_range{MIN_PERIOD, MIN_PERIOD};
 
-  ASSERT_EQ(State::PRIMED, this->dry_capture(t_range));
+  ASSERT_EQ(State::PRIMED, this->locate(t_range));
 }
 
 
@@ -135,7 +135,7 @@ TEST_F(FollowerLatched, DryCapturePrimedOnBeforeMinPeriodStamp)
 
   CaptureRange<int> t_range{MIN_PERIOD + 1, MIN_PERIOD + 1};
 
-  ASSERT_EQ(State::PRIMED, this->dry_capture(t_range));
+  ASSERT_EQ(State::PRIMED, this->locate(t_range));
 }
 
 
@@ -146,7 +146,7 @@ TEST_F(FollowerLatched, DryCapturePrimedOnBeforeMinPeriodStampTakeNewer)
 
   CaptureRange<int> t_range{MIN_PERIOD + 1, MIN_PERIOD + 1};
 
-  ASSERT_EQ(State::PRIMED, this->dry_capture(t_range));
+  ASSERT_EQ(State::PRIMED, this->locate(t_range));
 }
 
 

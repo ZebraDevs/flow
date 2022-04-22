@@ -140,11 +140,23 @@ private:
   }
 
   /**
-   * @copydoc CaptorInterface::dry_capture
+   * @copydoc CaptorInterface::locate
    */
-  template <typename CaptureRangeT> State dry_capture_impl(CaptureRangeT&& range)
+  template <typename CaptureRangeT> std::tuple<State, ExtractionRange> locate_impl(CaptureRangeT&& range)
   {
-    return derived()->dry_capture_policy_impl(std::forward<CaptureRangeT>(range));
+    return derived()->locate_policy_impl(std::forward<CaptureRangeT>(range));
+  }
+
+  /**
+   * @copydoc CaptorInterface::extract_impl
+   */
+  template <typename OutputDispatchIteratorT>
+  inline void extract_impl(
+    OutputDispatchIteratorT&& output,
+    const ExtractionRange& extraction_range,
+    const CaptureRange<stamp_type>& range)
+  {
+    derived()->extract_policy_impl(std::forward<OutputDispatchIteratorT>(output), extraction_range, range);
   }
 
   /**

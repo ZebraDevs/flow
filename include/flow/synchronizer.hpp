@@ -189,27 +189,6 @@ public:
     CaptorTupleT&& captors,
     OutputIteratorTupleT&& outputs,
     const stamp_arg_t<CaptorTupleT> lower_bound = StampTraits<stamp_t<CaptorTupleT>>::min());
-
-  /**
-   * @brief Runs synchronization dry-run across all captors
-   *
-   * Tests active next capture state without actually capturing elements. Any data
-   * changes that occur are such that the next call to <code>Synchronizer::capture</code>
-   * will be valid, and will have the same capture result if no changes have been made
-   * to data in the capture queues.
-   *
-   * @tparam CaptorTupleT  tuple-like type of captors which supports access with <code>std::get</code>
-   *
-   * @param captors  tuple of captors used to perform synchronization
-   * @param lower_bound  synchronization stamp lower bound; forces all captured data to have associated
-   *        stamps which are greater than <code>lower_bound</code>
-   *
-   * @return dry capture/synchronization details
-   */
-  template <typename CaptorTupleT>
-  static result_t<CaptorTupleT> dry_capture(
-    CaptorTupleT&& captors,
-    const stamp_arg_t<CaptorTupleT> lower_bound = StampTraits<stamp_t<CaptorTupleT>>::min());
 };
 
 }  // namespace flow

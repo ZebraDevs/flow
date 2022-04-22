@@ -31,33 +31,27 @@ State Latched<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::capture_follow
   OutputDispatchIteratorT output,
   const CaptureRange<stamp_type>& range)
 {
-  const State state = this->dry_capture_follower_impl(range);
-
-  if (state == State::PRIMED)
-  {
-    // When primed, latched element should be captured
-    *(output++) = *latched_;
-  }
-
-  return state;
+  const auto locate_result = Latched::locate_follower_impl(range);
+  Latched::extract_follower_impl(output, std::get<1>(locate_result), range);
+  return std::get<0>(locate_result);
 }
 
 
 template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
-State Latched<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::dry_capture_follower_impl(
-  const CaptureRange<stamp_type>& range)
+std::tuple<State, ExtractionRange> Latched<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::locate_follower_impl(
+  const CaptureRange<stamp_type>& range) const
 {
   if (PolicyType::queue_.empty())
   {
     if (latched_)
     {
       // If we have latched data, return that and report ready state
-      return State::PRIMED;
+      return std::make_tuple(State::PRIMED, ExtractionRange{});
     }
     else
     {
       // Retry if queue has no data and there is no latched data
-      return State::RETRY;
+      return std::make_tuple(State::RETRY, ExtractionRange{});
     }
   }
 
@@ -70,33 +64,47 @@ State Latched<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::dry_capture_fo
     if (latched_)
     {
       // If we have latched data, return that and report ready state
-      return State::PRIMED;
+      return std::make_tuple(State::PRIMED, ExtractionRange{});
     }
     else
     {
       // Abort if queue has no data and there is no latched data
-      return State::ABORT;
+      return std::make_tuple(State::ABORT, ExtractionRange{});
     }
   }
 
   // Find data closest to boundary, starting from oldest
   // curr_qitr will never start at queue_.end() due to previous empty check
   auto curr_qitr = PolicyType::queue_.begin();
-  auto prev_qitr = curr_qitr;
   while (curr_qitr != PolicyType::queue_.end() and get_stamp(*curr_qitr) <= boundary)
   {
-    prev_qitr = curr_qitr;
     ++curr_qitr;
   }
-
-  // Set latched element
-  latched_ = *prev_qitr;
-
-  // Remove all elements before latched element
-  const auto prev_stamp = get_stamp(*prev_qitr);
-  PolicyType::queue_.remove_before(prev_stamp);
-  return State::PRIMED;
+  return std::make_tuple(
+    State::PRIMED, ExtractionRange{0, static_cast<std::size_t>(std::distance(PolicyType::queue_.begin(), curr_qitr))});
 }
+
+
+template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
+template <typename OutputDispatchIteratorT>
+void Latched<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::extract_follower_impl(
+  OutputDispatchIteratorT output,
+  const ExtractionRange& extraction_range,
+  const CaptureRange<stamp_type>& range)
+{
+  if (extraction_range)
+  {
+    const auto access_index = extraction_range.last - 1UL;
+    latched_ = *std::next(PolicyType::queue_.begin(), access_index);
+    PolicyType::queue_.remove_first_n(access_index);
+  }
+
+  if (latched_)
+  {
+    *(output++) = *latched_;
+  }
+}
+
 
 template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
 void Latched<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::abort_follower_impl(const stamp_type& t_abort)
