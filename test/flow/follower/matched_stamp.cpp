@@ -71,39 +71,39 @@ TEST_F(FollowerMatchedStamp, CapturePrimedOnExact)
   ASSERT_EQ(this->size(), 1UL);
 }
 
-TEST_F(FollowerMatchedStamp, DryCaptureRetryOnEmpty)
+TEST_F(FollowerMatchedStamp, LocateRetryOnEmpty)
 {
   CaptureRange<int> t_range{0, 0};
-  ASSERT_EQ(State::RETRY, this->dry_capture(t_range));
+  ASSERT_EQ(State::RETRY, this->locate(t_range));
 }
 
 
-TEST_F(FollowerMatchedStamp, DryCaptureRetryOnDataTooOld)
+TEST_F(FollowerMatchedStamp, LocateRetryOnDataTooOld)
 {
   this->inject(Dispatch<int, int>{0, 0});
 
   CaptureRange<int> t_range{1, 0};
 
-  ASSERT_EQ(State::RETRY, this->dry_capture(t_range));
+  ASSERT_EQ(State::RETRY, this->locate(t_range));
 }
 
 
-TEST_F(FollowerMatchedStamp, DryCaptureAbortOnDataTooNew)
+TEST_F(FollowerMatchedStamp, LocateAbortOnDataTooNew)
 {
   this->inject(Dispatch<int, int>{1, 0});
 
   CaptureRange<int> t_range{0, 0};
 
-  ASSERT_EQ(State::ABORT, this->dry_capture(t_range));
+  ASSERT_EQ(State::ABORT, this->locate(t_range));
 }
 
-TEST_F(FollowerMatchedStamp, DryCapturePrimedOnExact)
+TEST_F(FollowerMatchedStamp, LocatePrimedOnExact)
 {
   this->inject(Dispatch<int, int>{0, 0});
 
   CaptureRange<int> t_range{0, 0};
 
-  ASSERT_EQ(State::PRIMED, this->dry_capture(t_range));
+  ASSERT_EQ(State::PRIMED, this->locate(t_range));
 }
 
 

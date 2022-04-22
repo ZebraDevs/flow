@@ -118,15 +118,15 @@ TEST_F(DriverChunk, CapturePrimedGTChunkSize)
 }
 
 
-TEST_F(DriverChunk, DryCaptureRetryOnEmpty)
+TEST_F(DriverChunk, LocateRetryOnEmpty)
 {
   CaptureRange<int> t_range{0, 0};
 
-  ASSERT_EQ(State::RETRY, this->dry_capture(t_range));
+  ASSERT_EQ(State::RETRY, this->locate(t_range));
 }
 
 
-TEST_F(DriverChunk, DryCaptureContinueLTChunkSize)
+TEST_F(DriverChunk, LocateContinueLTChunkSize)
 {
   // Start injecting data
   const int t0 = 0;
@@ -143,11 +143,11 @@ TEST_F(DriverChunk, DryCaptureContinueLTChunkSize)
   // Start processing
   CaptureRange<int> t_range{0, 0};
 
-  ASSERT_EQ(State::RETRY, this->dry_capture(t_range));
+  ASSERT_EQ(State::RETRY, this->locate(t_range));
 }
 
 
-TEST_F(DriverChunk, DryCapturePrimedEQChunkSize)
+TEST_F(DriverChunk, LocatePrimedEQChunkSize)
 {
   // Start injecting data
   const int t0 = 0;
@@ -162,14 +162,14 @@ TEST_F(DriverChunk, DryCapturePrimedEQChunkSize)
   // Start processing
   CaptureRange<int> t_range{0, 0};
 
-  ASSERT_EQ(State::PRIMED, this->dry_capture(t_range));
+  ASSERT_EQ(State::PRIMED, this->locate(t_range));
 
   EXPECT_EQ(t_range.lower_stamp, static_cast<int>(t0));
   EXPECT_EQ(t_range.upper_stamp, static_cast<int>(t0 + CHUNK_SIZE - 1));
 }
 
 
-TEST_F(DriverChunk, DryCapturePrimedGTChunkSize)
+TEST_F(DriverChunk, LocatePrimedGTChunkSize)
 {
   // Start injecting data
   const int t0 = 0;
@@ -184,7 +184,7 @@ TEST_F(DriverChunk, DryCapturePrimedGTChunkSize)
   // Start processing
   CaptureRange<int> t_range{0, 0};
 
-  ASSERT_EQ(State::PRIMED, this->dry_capture(t_range));
+  ASSERT_EQ(State::PRIMED, this->locate(t_range));
 
   EXPECT_EQ(t_range.lower_stamp, static_cast<int>(t0));
   EXPECT_EQ(t_range.upper_stamp, static_cast<int>(t0 + CHUNK_SIZE - 1));

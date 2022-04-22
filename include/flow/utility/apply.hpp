@@ -20,6 +20,7 @@
 
 namespace flow
 {
+
 #ifndef DOXYGEN_SKIP
 namespace detail
 {
@@ -27,43 +28,53 @@ namespace detail
 /**
  * @brief Implementation for flow::apply
  */
-template <typename ReturnT, typename UnaryInvocableT, typename ArgTupleT, std::size_t... IntPack>
-constexpr typename std::enable_if<std::is_void<ReturnT>::value>::type
-apply(UnaryInvocableT&& fn, ArgTupleT&& targs, index_sequence<IntPack...>)
-{
-  fn(std::get<IntPack>(std::forward<ArgTupleT>(targs))...);
-}
-
-/**
- * @copydoc flow::detail::apply
- * @note Participates in overload resolution when \p ReturnT is non-<code>void</code>
- * @return return value of <code>fn</code> when passed arguments from <code>targs</code>
- */
-template <typename ReturnT, typename UnaryInvocableT, typename ArgTupleT, std::size_t... IntPack>
-constexpr typename std::enable_if<!std::is_void<ReturnT>::value, ReturnT>::type
-apply(UnaryInvocableT&& fn, ArgTupleT&& targs, index_sequence<IntPack...>)
-{
-  return fn(std::get<IntPack>(std::forward<ArgTupleT>(std::forward<ArgTupleT>(targs)))...);
-}
-
-/**
- * @brief Implementation for flow::apply_every
- */
 template <typename UnaryInvocableT, typename ArgTupleT, std::size_t... IntPack>
-constexpr void apply_every(UnaryInvocableT&& fn, ArgTupleT&& targs, index_sequence<IntPack...>)
+constexpr decltype(auto) apply(UnaryInvocableT&& fn, ArgTupleT&& targs, index_sequence<IntPack...>)
 {
-  std::initializer_list<int>{0, (fn(std::get<IntPack>(std::forward<ArgTupleT>(targs))), 0)...};
+  return fn(std::get<IntPack>(std::forward<ArgTupleT>(targs))...);
 }
+
+}  // namespace detail
+#endif  // DOXYGEN_SKIP
+
+/**
+ * @copydoc flow::apply
+ * @return return value of <code>fn</code> when passed arguments from <code>targs</code>
+ * @note Participates in overload resolution when \p ReturnT is non-<code>void</code>
+ */
+template <typename UnaryInvocableT, typename ArgTupleT>
+constexpr decltype(auto) apply(UnaryInvocableT&& fn, ArgTupleT&& targs)
+{
+  constexpr auto N = std::tuple_size<typename std::remove_reference<ArgTupleT>::type>::value;
+  return detail::apply(std::forward<UnaryInvocableT>(fn), std::forward<ArgTupleT>(targs), make_index_sequence<N>{});
+}
+
+#ifndef DOXYGEN_SKIP
+namespace detail
+{
+
+/**
+ * @brief Calls \c std::apply on a tuple formed of elements at each \c TupleTs at \c ArgPosition
+ */
+template <std::size_t ArgPosition> struct NAryAdaptor
+{
+  template <typename NAryInvocableT, typename... ArgTuples>
+  inline static void exec(NAryInvocableT&& fn, ArgTuples&&... tups)
+  {
+    ::flow::apply(
+      std::forward<NAryInvocableT>(fn), std::forward_as_tuple(std::get<ArgPosition>(std::forward<ArgTuples>(tups))...));
+  }
+};
 
 /**
  * @brief Implementation for flow::apply_every
  */
-template <typename BinaryInvocableT, typename Arg1TupleT, typename Arg2TupleT, std::size_t... IntPack>
-constexpr void apply_every(BinaryInvocableT&& fn, Arg1TupleT&& targs1, Arg2TupleT&& targs2, index_sequence<IntPack...>)
+template <typename NAryInvocableT, std::size_t... ArgPositions, typename... ArgTupleTs>
+constexpr void apply_every(NAryInvocableT&& fn, index_sequence<ArgPositions...>, ArgTupleTs&&... targs)
 {
   std::initializer_list<int>{
     0,
-    (fn(std::get<IntPack>(std::forward<Arg1TupleT>(targs1)), std::get<IntPack>(std::forward<Arg2TupleT>(targs2))),
+    (NAryAdaptor<ArgPositions>::template exec(std::forward<NAryInvocableT>(fn), std::forward<ArgTupleTs>(targs)...),
      0)...};
 }
 
@@ -102,62 +113,23 @@ constexpr typename std::enable_if<std::is_void<ReturnT>::value>::type apply(Unar
 
 
 /**
- * @copydoc flow::apply
- * @return return value of <code>fn</code> when passed arguments from <code>targs</code>
- * @note Participates in overload resolution when \p ReturnT is non-<code>void</code>
- */
-template <typename ReturnT, typename UnaryInvocableT, typename ArgTupleT>
-constexpr typename std::enable_if<!std::is_void<ReturnT>::value, ReturnT>::type
-apply(UnaryInvocableT&& fn, ArgTupleT&& targs)
-{
-  constexpr auto N = std::tuple_size<typename std::remove_reference<ArgTupleT>::type>::value;
-  return detail::apply<ReturnT>(
-    std::forward<UnaryInvocableT>(fn), std::forward<ArgTupleT>(targs), make_index_sequence<N>{});
-}
-
-
-/**
- * @brief Calls function on every element of a tuple (e.g <code>std::tuple</code>)
- *
- * @tparam UnaryInvocableT  (deduced) unary invocable type:
- *                              - function pointer
- *                              - functor object with <code>Object::operator()</code>
- *                              - lambda function expression
- * @tparam ArgTupleT  (deduced) tuple-like type with element types order according to function argument list
- *
- * @param fn     function pointer or functor object type
- * @param targs  tuple with arguments to pass to <code>f</code>
- */
-template <typename UnaryInvocableT, typename ArgTupleT>
-constexpr void apply_every(UnaryInvocableT&& fn, ArgTupleT&& targs)
-{
-  constexpr auto N = std::tuple_size<typename std::remove_reference<ArgTupleT>::type>::value;
-  detail::apply_every(std::forward<UnaryInvocableT>(fn), std::forward<ArgTupleT>(targs), make_index_sequence<N>{});
-}
-
-
-/**
  * @brief Calls a binary function on each element of two tuples (e.g <code>std::tuple</code>)
  *
- * @tparam BinaryInvocableT  (deduced) binary invocable type:
+ * @tparam NAryInvocableT  (deduced) binary invocable type:
  *                              - function pointer
  *                              - functor object with <code>Object::operator()</code>
  *                              - lambda function expression
- * @tparam Arg1TupleT  (deduced) tuple-like type with element types order according to function argument list
- * @tparam Arg2TupleT  (deduced) tuple-like type with element types order according to function argument list
+ * @tparam ArgTuples  (deduced) tuple-like type with element types order according to function argument list
  *
  * @param fn    function pointer or functor object
  * @param targs  tuple with arguments to pass to <code>f</code>
  */
-template <typename BinaryInvocableT, typename Arg1TupleT, typename Arg2TupleT>
-constexpr void apply_every(BinaryInvocableT&& fn, Arg1TupleT&& targs1, Arg2TupleT&& targs2)
+template <typename NAryInvocableT, typename... ArgTuples>
+constexpr void apply_every(NAryInvocableT&& fn, ArgTuples&&... targs)
 {
-  constexpr auto N = std::tuple_size<typename std::remove_reference<Arg1TupleT>::type>::value;
+  constexpr auto NArgs = std::tuple_size<std::tuple_element_t<0, std::tuple<ArgTuples...>>>::value;
   detail::apply_every(
-    std::forward<BinaryInvocableT>(fn),
-    std::forward<Arg1TupleT>(targs1),
-    std::forward<Arg2TupleT>(targs2),
-    make_index_sequence<N>{});
+    std::forward<NAryInvocableT>(fn), make_index_sequence<NArgs>{}, std::forward<ArgTuples>(targs)...);
 }
 
 

@@ -5,6 +5,9 @@
 #ifndef FLOW_CAPTOR_STATE_HPP
 #define FLOW_CAPTOR_STATE_HPP
 
+// C++ Standard Library
+#include <tuple>
+
 namespace flow
 {
 
@@ -27,6 +30,16 @@ enum class State : int
                                   ///< when a queue monitor object is used to precondition capture
   _N_STATES,  ///< Total number of captor states
 };
+
+template <typename... OtherTs> constexpr bool operator==(const State lhs, const std::tuple<State, OtherTs...>& rhs)
+{
+  return lhs == std::get<0>(rhs);
+}
+
+template <typename... OtherTs> constexpr bool operator!=(const State lhs, const std::tuple<State, OtherTs...>& rhs)
+{
+  return lhs != std::get<0>(rhs);
+}
 
 }  // namespace flow
 

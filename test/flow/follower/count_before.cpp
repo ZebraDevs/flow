@@ -101,14 +101,14 @@ TEST_F(FollowerCountBefore, CapturePrimedWithExactBefore)
 }
 
 
-TEST_F(FollowerCountBefore, DryCaptureRetryOnEmpty)
+TEST_F(FollowerCountBefore, LocateRetryOnEmpty)
 {
   CaptureRange<int> t_range{0, 0};
-  ASSERT_EQ(State::RETRY, this->dry_capture(t_range));
+  ASSERT_EQ(State::RETRY, this->locate(t_range));
 }
 
 
-TEST_F(FollowerCountBefore, DryCaptureRetryOnToFewBefore)
+TEST_F(FollowerCountBefore, LocateRetryOnToFewBefore)
 {
   std::size_t N = COUNT - 1;
 
@@ -121,11 +121,11 @@ TEST_F(FollowerCountBefore, DryCaptureRetryOnToFewBefore)
 
   CaptureRange<int> t_range{0, 0};
 
-  ASSERT_EQ(State::RETRY, this->dry_capture(t_range));
+  ASSERT_EQ(State::RETRY, this->locate(t_range));
 }
 
 
-TEST_F(FollowerCountBefore, DryCaptureAbortOnToFewBeforeWithDataAfter)
+TEST_F(FollowerCountBefore, LocateAbortOnToFewBeforeWithDataAfter)
 {
   std::size_t N = COUNT;
 
@@ -138,11 +138,11 @@ TEST_F(FollowerCountBefore, DryCaptureAbortOnToFewBeforeWithDataAfter)
 
   CaptureRange<int> t_range{0, 0};
 
-  ASSERT_EQ(State::ABORT, this->dry_capture(t_range));
+  ASSERT_EQ(State::ABORT, this->locate(t_range));
 }
 
 
-TEST_F(FollowerCountBefore, DryCapturePrimedWithExactBefore)
+TEST_F(FollowerCountBefore, LocatePrimedWithExactBefore)
 {
   std::size_t N = COUNT;
 
@@ -154,7 +154,7 @@ TEST_F(FollowerCountBefore, DryCapturePrimedWithExactBefore)
   }
 
   CaptureRange<int> t_range{0, 0};
-  ASSERT_EQ(State::PRIMED, this->dry_capture(t_range));
+  ASSERT_EQ(State::PRIMED, this->locate(t_range));
 }
 
 

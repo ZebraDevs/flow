@@ -85,7 +85,7 @@ The `flow::Synchronizer` may also be used to _test_ if capture is possible acros
 // We have three captors for different types of data: driver, first_follower, second_follower
 
 // Run data capture
-const auto result = flow::Synchronizer::dry_capture(
+const auto result = flow::Synchronizer::locate(
   std::forward_as_tuple(driver, first_follower, second_follower));
 
 if (result == flow::State::PRIMED)

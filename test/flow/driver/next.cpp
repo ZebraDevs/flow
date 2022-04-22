@@ -51,21 +51,21 @@ TEST_F(DriverNext, CapturePrimedWithOldest)
 }
 
 
-TEST_F(DriverNext, DryCaptureRetryOnEmpty)
+TEST_F(DriverNext, LocateRetryOnEmpty)
 {
   CaptureRange<int> t_range{0, 0};
-  ASSERT_EQ(State::RETRY, this->dry_capture(t_range));
+  ASSERT_EQ(State::RETRY, this->locate(t_range));
 }
 
 
-TEST_F(DriverNext, DryCapturePrimedWithOldest)
+TEST_F(DriverNext, LocatePrimedWithOldest)
 {
   const int t = 1;
   this->inject(Dispatch<int, int>{t + 0, 1});
   this->inject(Dispatch<int, int>{t + 1, 2});
 
   CaptureRange<int> t_range{0, 0};
-  ASSERT_EQ(State::PRIMED, this->dry_capture(t_range));
+  ASSERT_EQ(State::PRIMED, this->locate(t_range));
 
   EXPECT_EQ(t_range.lower_stamp, t);
   EXPECT_EQ(t_range.upper_stamp, t);

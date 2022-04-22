@@ -72,9 +72,18 @@ private:
   inline State capture_driver_impl(OutputDispatchIteratorT output, CaptureRange<stamp_type>& range);
 
   /**
-   * @copydoc Driver::dry_capture_policy_impl
+   * @copydoc Driver::locate_policy_impl
    */
-  inline State dry_capture_driver_impl(CaptureRange<stamp_type>& range) const;
+  inline std::tuple<State, ExtractionRange> locate_driver_impl(CaptureRange<stamp_type>& range) const;
+
+  /**
+   * @copydoc Driver::extract_policy_impl
+   */
+  template <typename OutputDispatchIteratorT>
+  inline void extract_driver_impl(
+    OutputDispatchIteratorT output,
+    const ExtractionRange& extraction_range,
+    const CaptureRange<stamp_type>& range);
 
   /**
    * @copydoc Driver::abort_policy_impl

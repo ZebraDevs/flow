@@ -29,36 +29,57 @@ State MatchedStamp<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::capture_f
   OutputDispatchIteratorT output,
   const CaptureRange<stamp_type>& range)
 {
-  const State state = this->dry_capture_follower_impl(range);
-
-  if (state == State::PRIMED)
-  {
-    // When primed, next element should be captured without removal
-    *(output++) = *PolicyType::queue_.begin();
-  }
-
-  return state;
+  const auto locate_result = MatchedStamp::locate_follower_impl(range);
+  MatchedStamp::extract_follower_impl(output, std::get<1>(locate_result), range);
+  return std::get<0>(locate_result);
 }
 
 
 template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
-State MatchedStamp<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::dry_capture_follower_impl(
-  const CaptureRange<stamp_type>& range)
+std::tuple<State, ExtractionRange>
+MatchedStamp<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::locate_follower_impl(
+  const CaptureRange<stamp_type>& range) const
 {
-  // Remove all elements before leading time
-  PolicyType::queue_.remove_before(range.lower_stamp);
-
-  if (PolicyType::queue_.empty())
+  if (PolicyType::queue_.oldest_stamp() > range.upper_stamp)
   {
-    return State::RETRY;
+    return std::make_tuple(State::ABORT, ExtractionRange{});
   }
-  else if (PolicyType::queue_.oldest_stamp() > range.upper_stamp)
+
+  ExtractionRange extraction_range;
+
+  std::size_t element_index = 0;
+  for (const auto& element : PolicyType::queue_)
   {
-    return State::ABORT;
+    if (get_stamp(element) < range.lower_stamp or get_stamp(element) > range.lower_stamp)
+    {
+      continue;
+    }
+    else if (extraction_range)
+    {
+      extraction_range.first = element_index;
+      extraction_range.last = element_index;
+    }
+    else
+    {
+      ++extraction_range.last;
+    }
+    ++element_index;
   }
 
   // Assign matching element
-  return State::PRIMED;
+  return std::make_tuple(static_cast<bool>(extraction_range) ? State::PRIMED : State::RETRY, extraction_range);
+}
+
+
+template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
+template <typename OutputDispatchIteratorT>
+void MatchedStamp<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::extract_follower_impl(
+  OutputDispatchIteratorT output,
+  const ExtractionRange& extraction_range,
+  const CaptureRange<stamp_type>& range)
+{
+  PolicyType::queue_.move(output, extraction_range);
+  PolicyType::queue_.remove_first_n(extraction_range.first);
 }
 
 

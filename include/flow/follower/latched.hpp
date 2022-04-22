@@ -80,9 +80,18 @@ private:
   inline State capture_follower_impl(OutputDispatchIteratorT output, const CaptureRange<stamp_type>& range);
 
   /**
-   * @copydoc Follower::dry_capture_policy_impl
+   * @copydoc Follower::locate_policy_impl
    */
-  inline State dry_capture_follower_impl(const CaptureRange<stamp_type>& range);
+  inline std::tuple<State, ExtractionRange> locate_follower_impl(const CaptureRange<stamp_type>& range) const;
+
+  /**
+   * @copydoc Follower::extract_policy_impl
+   */
+  template <typename OutputDispatchIteratorT>
+  inline void extract_follower_impl(
+    OutputDispatchIteratorT output,
+    const ExtractionRange& extraction_range,
+    const CaptureRange<stamp_type>& range);
 
   /**
    * @brief Defines behavior on <code>ABORT</code>

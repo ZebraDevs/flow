@@ -74,9 +74,18 @@ private:
   inline State capture_policy_impl(OutputDispatchIteratorT&& output, const CaptureRange<stamp_type>& range);
 
   /**
-   * @copydoc CaptorInterface::dry_capture
+   * @copydoc CaptorInterface::locate
    */
-  inline State dry_capture_policy_impl(const CaptureRange<stamp_type>& range);
+  inline std::tuple<State, ExtractionRange> locate_policy_impl(const CaptureRange<stamp_type>& range) const;
+
+  /**
+   * @copydoc CaptorInterface::extract
+   */
+  template <typename OutputDispatchIteratorT>
+  inline void extract_policy_impl(
+    OutputDispatchIteratorT&& output,
+    const ExtractionRange& extraction_range,
+    const CaptureRange<stamp_type>& range);
 
   /**
    * @brief Defines Captor behavior on <code>ABORT</code>

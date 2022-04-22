@@ -171,7 +171,7 @@ TEST_P(FollowerRangedTest, DryCaptureRetryOnEmpty)
   CaptorType captor{p_delay};
 
   CaptureRange<int> t_range{0, 0};
-  ASSERT_EQ(State::RETRY, captor.dry_capture(t_range));
+  ASSERT_EQ(State::RETRY, captor.locate(t_range));
 }
 
 
@@ -183,7 +183,7 @@ TEST_P(FollowerRangedTest, DryCaptureAbortOnTooFewBeforeZeroRange)
   captor.inject(-p_delay + 2, 100);
 
   CaptureRange<int> t_range{0, 0};
-  ASSERT_EQ(State::ABORT, captor.dry_capture(t_range));
+  ASSERT_EQ(State::ABORT, captor.locate(t_range));
 }
 
 
@@ -195,7 +195,7 @@ TEST_P(FollowerRangedTest, DryCaptureAbortOnTooFewBeforeNonZeroRange)
   captor.inject(-p_delay + 2, 100);
 
   CaptureRange<int> t_range{0, 1};
-  ASSERT_EQ(State::ABORT, captor.dry_capture(t_range));
+  ASSERT_EQ(State::ABORT, captor.locate(t_range));
 }
 
 
@@ -207,7 +207,7 @@ TEST_P(FollowerRangedTest, DryCaptureRetryOnNoneAfterZeroRange)
   captor.inject(-p_delay - 2, 100);
 
   CaptureRange<int> t_range{0, 0};
-  ASSERT_EQ(State::RETRY, captor.dry_capture(t_range));
+  ASSERT_EQ(State::RETRY, captor.locate(t_range));
 }
 
 
@@ -219,7 +219,7 @@ TEST_P(FollowerRangedTest, DryCaptureRetryOnNoneAfterNonZeroRange)
   captor.inject(-p_delay + 1, 100);
 
   CaptureRange<int> t_range{0, 1};
-  ASSERT_EQ(State::RETRY, captor.dry_capture(t_range));
+  ASSERT_EQ(State::RETRY, captor.locate(t_range));
 }
 
 
@@ -231,7 +231,7 @@ TEST_P(FollowerRangedTest, DryCaptureOnZeroRange)
   captor.inject(-p_delay + 1, 100);
 
   CaptureRange<int> t_range{0, 0};
-  ASSERT_EQ(State::PRIMED, captor.dry_capture(t_range));
+  ASSERT_EQ(State::PRIMED, captor.locate(t_range));
 }
 
 
@@ -244,7 +244,7 @@ TEST_P(FollowerRangedTest, DryCaptureOnZeroRangeWithIntermediate)
   captor.inject(-p_delay + 1, 100);
 
   CaptureRange<int> t_range{0, 0};
-  ASSERT_EQ(State::PRIMED, captor.dry_capture(t_range));
+  ASSERT_EQ(State::PRIMED, captor.locate(t_range));
 }
 
 
@@ -256,7 +256,7 @@ TEST_P(FollowerRangedTest, DryCaptureOnNonZeroRange)
   captor.inject(-p_delay + 2, 100);
 
   CaptureRange<int> t_range{0, 1};
-  ASSERT_EQ(State::PRIMED, captor.dry_capture(t_range));
+  ASSERT_EQ(State::PRIMED, captor.locate(t_range));
 }
 
 
@@ -270,7 +270,7 @@ TEST_P(FollowerRangedTest, DryCaptureOnNonZeroRangeWithIntermediate)
   captor.inject(-p_delay + 2, 100);
 
   CaptureRange<int> t_range{0, 1};
-  ASSERT_EQ(State::PRIMED, captor.dry_capture(t_range));
+  ASSERT_EQ(State::PRIMED, captor.locate(t_range));
 }
 
 

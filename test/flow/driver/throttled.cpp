@@ -158,14 +158,14 @@ TEST_F(DriverThrottled, CaptureNPrimedCapturesExactMessages)
 }
 
 
-TEST_F(DriverThrottled, DryCaptureRetryOnEmpty)
+TEST_F(DriverThrottled, LocateRetryOnEmpty)
 {
   CaptureRange<int> t_range{0, 0};
-  ASSERT_EQ(State::RETRY, this->dry_capture(t_range));
+  ASSERT_EQ(State::RETRY, this->locate(t_range));
 }
 
 
-TEST_F(DriverThrottled, DryCaptureRetryUnderLengthPeriod)
+TEST_F(DriverThrottled, LocateRetryUnderLengthPeriod)
 {
   const int t = 1;
   for (int offset = 0; offset <= THROTTLE_PERIOD / 2; ++offset)
@@ -185,12 +185,12 @@ TEST_F(DriverThrottled, DryCaptureRetryUnderLengthPeriod)
   // Next is under throttling period
   {
     CaptureRange<int> t_range{0, 0};
-    ASSERT_EQ(State::RETRY, this->dry_capture(t_range));
+    ASSERT_EQ(State::RETRY, this->locate(t_range));
   }
 }
 
 
-TEST_F(DriverThrottled, DryCaptureNPrimedCapturesIntermediateMessages)
+TEST_F(DriverThrottled, LocateNPrimedCapturesIntermediateMessages)
 {
   constexpr int N = 4;
 
@@ -205,7 +205,7 @@ TEST_F(DriverThrottled, DryCaptureNPrimedCapturesIntermediateMessages)
   {
     CaptureRange<int> t_range{0, 0};
     std::vector<Dispatch<int, int>> data;
-    ASSERT_EQ(State::PRIMED, this->dry_capture(t_range));
+    ASSERT_EQ(State::PRIMED, this->locate(t_range));
     ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
     ASSERT_EQ(data.size(), 1UL);
   }
@@ -217,7 +217,7 @@ TEST_F(DriverThrottled, DryCaptureNPrimedCapturesIntermediateMessages)
     ASSERT_EQ(this->size(), static_cast<std::size_t>(N * THROTTLE_PERIOD - capture * THROTTLE_PERIOD));
 
     CaptureRange<int> t_range{0, 0};
-    ASSERT_EQ(State::PRIMED, this->dry_capture(t_range));
+    ASSERT_EQ(State::PRIMED, this->locate(t_range));
     ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
     ASSERT_EQ(data.size(), 1UL);
 
@@ -231,12 +231,12 @@ TEST_F(DriverThrottled, DryCaptureNPrimedCapturesIntermediateMessages)
   // to check period between messages again
   {
     CaptureRange<int> t_range{0, 0};
-    ASSERT_EQ(State::RETRY, this->dry_capture(t_range));
+    ASSERT_EQ(State::RETRY, this->locate(t_range));
   }
 }
 
 
-TEST_F(DriverThrottled, DryCaptureNPrimedCapturesExactMessages)
+TEST_F(DriverThrottled, LocateNPrimedCapturesExactMessages)
 {
   constexpr int N = 4;
 
@@ -251,7 +251,7 @@ TEST_F(DriverThrottled, DryCaptureNPrimedCapturesExactMessages)
   {
     CaptureRange<int> t_range{0, 0};
     std::vector<Dispatch<int, int>> data;
-    ASSERT_EQ(State::PRIMED, this->dry_capture(t_range));
+    ASSERT_EQ(State::PRIMED, this->locate(t_range));
     ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
     ASSERT_EQ(data.size(), 1UL);
   }
@@ -263,7 +263,7 @@ TEST_F(DriverThrottled, DryCaptureNPrimedCapturesExactMessages)
     ASSERT_EQ(this->size(), static_cast<std::size_t>(N - capture));
 
     CaptureRange<int> t_range{0, 0};
-    ASSERT_EQ(State::PRIMED, this->dry_capture(t_range));
+    ASSERT_EQ(State::PRIMED, this->locate(t_range));
     ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
     ASSERT_EQ(data.size(), 1UL);
 
@@ -277,7 +277,7 @@ TEST_F(DriverThrottled, DryCaptureNPrimedCapturesExactMessages)
   // to check period between messages again
   {
     CaptureRange<int> t_range{0, 0};
-    ASSERT_EQ(State::RETRY, this->dry_capture(t_range));
+    ASSERT_EQ(State::RETRY, this->locate(t_range));
   }
 }
 

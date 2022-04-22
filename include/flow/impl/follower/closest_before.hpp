@@ -30,33 +30,28 @@ State ClosestBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::capture_
   OutputDispatchIteratorT output,
   const CaptureRange<stamp_type>& range)
 {
-  const State state = this->dry_capture_follower_impl(range);
-
-  if (state == State::PRIMED)
-  {
-    // When primed, next element should be captured without removal
-    *(output++) = *PolicyType::queue_.begin();
-  }
-
-  return state;
+  const auto locate_result = ClosestBefore::locate_follower_impl(range);
+  ClosestBefore::extract_follower_impl(output, std::get<1>(locate_result), range);
+  return std::get<0>(locate_result);
 }
 
 
 template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
-State ClosestBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::dry_capture_follower_impl(
-  const CaptureRange<stamp_type>& range)
+std::tuple<State, ExtractionRange>
+ClosestBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::locate_follower_impl(
+  const CaptureRange<stamp_type>& range) const
 {
   // The boundary before which messages are valid and after which they are not. Non-inclusive.
   const stamp_type boundary = range.lower_stamp - delay_;
 
   // Starting from the oldest data, return on when data found within periodic window
-  auto capture_itr = PolicyType::queue_.end();
+  auto capture_itr = PolicyType::queue_.begin();
   for (auto itr = PolicyType::queue_.begin(); itr != PolicyType::queue_.end(); ++itr)
   {
     if (get_stamp(*itr) >= boundary)
     {
       // If oldest element is far ahead of boundary, abort
-      return State::ABORT;
+      return std::make_tuple(State::ABORT, ExtractionRange{});
     }
     else if (get_stamp(*itr) + period_ >= boundary)
     {
@@ -68,14 +63,23 @@ State ClosestBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::dry_capt
 
   // Check if inputs are capturable
   // NOTE: If no capture input was set, then all data is at or after boundary
-  if (capture_itr != PolicyType::queue_.end())
+  return std::make_tuple(
+    (capture_itr == PolicyType::queue_.end()) ? State::RETRY : State::PRIMED,
+    ExtractionRange{0, static_cast<std::size_t>(std::distance(PolicyType::queue_.begin(), capture_itr))});
+}
+
+
+template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
+template <typename OutputDispatchIteratorT>
+void ClosestBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::extract_follower_impl(
+  OutputDispatchIteratorT output,
+  const ExtractionRange& extraction_range,
+  const CaptureRange<stamp_type>& range)
+{
+  if (extraction_range)
   {
-    PolicyType::queue_.remove_before(get_stamp(*capture_itr));
-    return State::PRIMED;
-  }
-  else
-  {
-    return State::RETRY;
+    *(output++) = std::move(*std::next(PolicyType::queue_.begin(), extraction_range.last));
+    PolicyType::queue_.remove_first_n(extraction_range.last);
   }
 }
 

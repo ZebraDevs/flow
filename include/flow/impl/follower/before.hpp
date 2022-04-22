@@ -34,10 +34,20 @@ State Before<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::capture_followe
   OutputDispatchIteratorT output,
   const CaptureRange<stamp_type>& range)
 {
+  const auto locate_result = Before::locate_follower_impl(range);
+  Before::extract_follower_impl(output, std::get<1>(locate_result), range);
+  return std::get<0>(locate_result);
+}
+
+
+template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
+std::tuple<State, ExtractionRange> Before<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::locate_follower_impl(
+  const CaptureRange<stamp_type>& range) const
+{
   // Retry if queue has no data
   if (PolicyType::queue_.empty())
   {
-    return State::RETRY;
+    return std::make_tuple(State::RETRY, ExtractionRange{});
   }
 
   // The boundary before which messages are valid and after which they are not. Non-inclusive.
@@ -46,28 +56,32 @@ State Before<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::capture_followe
   // Retry if priming is not possible
   if (PolicyType::queue_.newest_stamp() < boundary)
   {
-    return State::RETRY;
+    return std::make_tuple(State::RETRY, ExtractionRange{});
   }
+
+  auto itr = PolicyType::queue_.begin();
 
   // Collect all the messages that are earlier than the first driving message's
   // timestamp minus the delay
-  while (!PolicyType::queue_.empty() and PolicyType::queue_.oldest_stamp() < boundary)
+  while (itr != PolicyType::queue_.end() and get_stamp(*itr) < boundary)
   {
-    *(output++) = PolicyType::queue_.pop();
+    ++itr;
   }
 
-  // Remove all elements before delayed boundary
-  PolicyType::queue_.remove_before(boundary);
-  return State::PRIMED;
+  return std::make_tuple(
+    State::PRIMED, ExtractionRange{0, static_cast<std::size_t>(std::distance(PolicyType::queue_.begin(), itr))});
 }
 
 
 template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
-State Before<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::dry_capture_follower_impl(
-  const CaptureRange<stamp_type>& range) const
+template <typename OutputDispatchIteratorT>
+void Before<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::extract_follower_impl(
+  OutputDispatchIteratorT output,
+  const ExtractionRange& extraction_range,
+  const CaptureRange<stamp_type>& range)
 {
-  const stamp_type boundary = range.upper_stamp - delay_;
-  return (PolicyType::queue_.empty() or PolicyType::queue_.newest_stamp() < boundary) ? State::RETRY : State::PRIMED;
+  PolicyType::queue_.move(output, extraction_range);
+  PolicyType::queue_.remove_first_n(extraction_range.last);
 }
 
 
