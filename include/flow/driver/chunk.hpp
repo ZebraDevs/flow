@@ -18,9 +18,9 @@ namespace driver
 /**
  * @brief Captures the next oldest data element
  *
- *        Establishes a sequencing range with where <code>range.lower_stamp</code> is the stamp of
- *        the oldest captured element, and <code>range.upper_stamp</code> is the stamp of the newest.
- *        Removes all captured elements from buffer.
+ * Establishes a sequencing range with where <code>range.lower_stamp</code> is the stamp of
+ * the oldest captured element, and <code>range.upper_stamp</code> is the stamp of the newest.
+ * Removes all captured elements from buffer.
  *
  * @tparam DispatchT  data dispatch type
  * @tparam LockPolicyT  a BasicLockable (https://en.cppreference.com/w/cpp/named_req/BasicLockable) object or NoLock or

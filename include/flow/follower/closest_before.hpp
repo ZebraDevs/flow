@@ -16,7 +16,7 @@ namespace follower
 /**
  * @brief Captures one element before the capture range lower bound, minus a delay period, within an expected period.
  *
- *        All older elements are removed.
+ * All older elements are removed.
  *
  * @tparam DispatchT  data dispatch type
  * @tparam LockPolicyT  a BasicLockable (https://en.cppreference.com/w/cpp/named_req/BasicLockable) object or NoLock or
@@ -70,8 +70,7 @@ private:
    * @retval ABORT   If next closest element has a sequencing stamp greater than <code>range.upper_stamp</code>
    * @retval PRIMED  If next closest element to is available
    * @retval RETRY   Element with sequence stamp greater than <code>range.upper_stamp</code> exists, and
-   *                 there is a data element within the expected duration window before
-   *                 <code>range.upper_stamp</code>
+   *         there is a data element within the expected duration window before <code>range.upper_stamp</code>
    */
   template <typename OutputDispatchIteratorT>
   inline State capture_follower_impl(OutputDispatchIteratorT output, const CaptureRange<stamp_type>& range);

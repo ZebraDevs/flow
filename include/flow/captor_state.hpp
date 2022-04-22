@@ -11,7 +11,7 @@ namespace flow
 /**
  * @brief Evaluated Captor state
  *
- *        These are used by captors to direct internal data capture behavior
+ * These are used by captors to direct internal data capture behavior
  */
 enum class State : int
 {

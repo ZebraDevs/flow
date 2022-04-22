@@ -3,10 +3,10 @@
  * @author Brian Cairl
  *
  * @brief Implements the C++17 utility <code>std::integer_sequence</code> and related
- *        compile-time utility objects
+ * compile-time utility objects
  *
- *        For reference on how this works, see
- *        <a href="https://blog.galowicz.de/2016/06/24/integer_sequences_at_compile_time/</a>.
+ * For reference on how this works, see
+ * <a href="https://blog.galowicz.de/2016/06/24/integer_sequences_at_compile_time/</a>.
  */
 #ifndef FLOW_UTILITY_INTEGER_SEQUENCE_HPP
 #define FLOW_UTILITY_INTEGER_SEQUENCE_HPP

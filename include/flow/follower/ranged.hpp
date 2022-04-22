@@ -17,7 +17,7 @@ namespace follower
  * @brief Captures one one element before the capture range lower bound; one element after the capture range upper
  * bound.
  *
- *        All elements in between are also captured. All older elements are removed.
+ * All elements in between are also captured. All older elements are removed.
  *
  * @tparam DispatchT  data dispatch type
  * @tparam LockPolicyT  a BasicLockable (https://en.cppreference.com/w/cpp/named_req/BasicLockable) object or NoLock or
@@ -66,9 +66,9 @@ private:
    *
    * @retval ABORT   If N-elements do not exist before <code>range.lower_stamp</code>
    * @retval PRIMED  If N-elements exist before <code>range.lower_stamp</code> and
-   *                 M-elements exist after <code>range.upper_stamp</code>
+   *         M-elements exist after <code>range.upper_stamp</code>
    * @retval RETRY   If N-elements exist before <code>range.lower_stamp</code> but
-   *                 M-elements do not exist after <code>range.upper_stamp</code>
+   *         M-elements do not exist after <code>range.upper_stamp</code>
    */
   template <typename OutputDispatchIteratorT>
   inline State capture_follower_impl(OutputDispatchIteratorT&& output, const CaptureRange<stamp_type>& range);

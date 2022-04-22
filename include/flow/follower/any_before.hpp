@@ -16,16 +16,16 @@ namespace follower
 /**
  * @brief Captures all data elements from a delay before the driving sequencing stamp
  *
- *        This capture buffer will capture data which is behind the driving upper
- *        sequence stamp (<code>range.upper_stamp</code>) by some sequencing delay
- *        w.r.t a driver-provided target time. It will return all data at and before
- *        that sequencing boundary that has not previously been captured.
+ * This capture buffer will capture data which is behind the driving upper
+ * sequence stamp (<code>range.upper_stamp</code>) by some sequencing delay
+ * w.r.t a driver-provided target time. It will return all data at and before
+ * that sequencing boundary that has not previously been captured.
  * \n
- *        This capture buffer is always ready, and will always return with a PRIMED state,
- *        regardless of whether or not there is data available to capture.
+ * This capture buffer is always ready, and will always return with a PRIMED state,
+ * regardless of whether or not there is data available to capture.
  * \n
- *        <b>Data removal:</b> Captor will remove all data before the driving time
- *        message minus the delay
+ * <b>Data removal:</b> Captor will remove all data before the driving time
+ * message minus the delay
  *
  * @tparam DispatchT  data dispatch type
  * @tparam LockPolicyT  a BasicLockable (https://en.cppreference.com/w/cpp/named_req/BasicLockable) object or NoLock or

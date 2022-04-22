@@ -18,10 +18,10 @@ namespace flow
 /**
  * @brief Dispatch queuing data structure
  *
- *        FILO-type queue which orders data by sequence stamp, from oldest to newest. Provides
- *        useful methods for extracting data within stamped/counted ranges
+ * FILO-type queue which orders data by sequence stamp, from oldest to newest. Provides
+ * useful methods for extracting data within stamped/counted ranges
  * \n
- *        This template provides an interface wrapper around a specifiable container implementation.
+ * This template provides an interface wrapper around a specifiable container implementation.
  *
  * @tparam DispatchT  data dipatch type
  * @tparam ContainerT  underlying <code>DispatchT</code> container timplementation
@@ -74,7 +74,7 @@ public:
   /**
    * @brief Returns first iterator to element before stamp
    *
-   *        Returns <code>end()</code> iterator if
+   * Returns <code>end()</code> iterator if
    * @return <code>const_iterator</code> to first Dispatch resource
    */
   inline const_iterator before(stamp_const_arg_type stamp) const;
@@ -94,25 +94,29 @@ public:
   /**
    * @brief Returns first reverse-iterator to element before stamp
    *
-   *        Returns <code>rend()</code> iterator if
+   * Returns <code>rend()</code> iterator if element cannot be found or if queue is empty
+   *
    * @return <code>const_reverse_iterator</code> to first Dispatch resource
    */
   inline const_reverse_iterator rbefore(stamp_const_arg_type stamp) const;
 
   /**
    * @brief Returns first iterator to reversed underlying ordered data structure
+   *
    * @return <code>const_reverse_iterator</code> to first Dispatch resource
    */
   inline const_reverse_iterator rbegin() const { return container_.crbegin(); }
 
   /**
    * @brief Returns last iterator to reversed underlying ordered data structure
+   *
    * @return <code>const_reverse_iterator</code> to one element past Dispatch resource
    */
   inline const_reverse_iterator rend() const { return container_.crend(); }
 
   /**
    * @brief Sequencing stamp associated with the oldest data
+   *
    * @return sequencing stamp of first-queued Dispatch
    *
    * @warning Undefined behavior when <code>empty() == true</code>
@@ -121,6 +125,7 @@ public:
 
   /**
    * @brief Sequencing stamp associated with the newest data
+   *
    * @return sequencing stamp of last-queued Dispatch
    *
    * @warning Undefined behavior when <code>empty() == true</code>

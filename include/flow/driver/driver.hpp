@@ -31,8 +31,8 @@ template <typename PolicyT> struct CaptorTraits<Driver<PolicyT>> : CaptorTraits<
 /**
  * @brief CRTP-base for Driver input-capture policies
  *
- *        Captures data produces a synchronization sequencing range used
- *        to synchronize data produced by Follower buffers
+ * Captures data produces a synchronization sequencing range used
+ * to synchronize data produced by Follower buffers
  *
  * @tparam PolicyT  CRTP-derived captor with specialized capture policy
  */
@@ -80,7 +80,7 @@ private:
   /**
    * @brief Defines Captor behavior on <code>ABORT</code>
    *
-   *        Triggers data removal before \p t_abort
+   * Triggers data removal before \p t_abort
    *
    * @param t_abort  time at which abort was signaled
    */
