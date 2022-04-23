@@ -490,11 +490,10 @@ template&lt;typename OutputDispatchIteratorT &gt; </div>
   <table class="params">
     <tr><td class="paramdir">[out]</td><td class="paramname">output</td><td>output data iterator </td></tr>
     <tr><td class="paramdir"></td><td class="paramname">extraction_range</td><td>range of elements to extract (by copy or move) from queue </td></tr>
-    <tr><td class="paramdir"></td><td class="paramname">range</td><td>data capture/sequencing range</td></tr>
+    <tr><td class="paramdir"></td><td class="paramname">range</td><td>data capture/sequencing range </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>capture directive code </dd></dl>
 
 </div>
 </div>
@@ -757,7 +756,7 @@ template&lt;typename CaptureRangeT &gt; </div>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>capture directive code </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><code>{capture directive code, element range}</code> </dd></dl>
 
 </div>
 </div>
@@ -814,7 +813,7 @@ template&lt;typename CaptureRangeT , typename ClockT , typename DurationT &gt; <
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>capture directive code</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><code>{capture directive code, element range}</code></dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">timeout</td><td>time to stop waiting for data </td></tr>

@@ -240,12 +240,9 @@ Extracts elements from queue based on {\ttfamily extraction\+\_\+range} found vi
 \hline
  & {\em extraction\+\_\+range} & range of elements to extract (by copy or move) from queue \\
 \hline
- & {\em range} & data capture/sequencing range\\
+ & {\em range} & data capture/sequencing range \\
 \hline
 \end{DoxyParams}
-\begin{DoxyReturn}{Returns}
-capture directive code 
-\end{DoxyReturn}
 \mbox{\Hypertarget{classflow_1_1_captor_interface_a84ee393ca53d595bb20057445334eb78}\label{classflow_1_1_captor_interface_a84ee393ca53d595bb20057445334eb78}} 
 \index{flow::CaptorInterface$<$ CaptorT $>$@{flow::CaptorInterface$<$ CaptorT $>$}!get\_capacity@{get\_capacity}}
 \index{get\_capacity@{get\_capacity}!flow::CaptorInterface$<$ CaptorT $>$@{flow::CaptorInterface$<$ CaptorT $>$}}
@@ -383,7 +380,7 @@ Finds element range to extract on synchronization.
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
-capture directive code 
+{\ttfamily \{capture directive code, element range\}} 
 \end{DoxyReturn}
 \mbox{\Hypertarget{classflow_1_1_captor_interface_acebec0256a3c716a681f05e70757d7c0}\label{classflow_1_1_captor_interface_acebec0256a3c716a681f05e70757d7c0}} 
 \index{flow::CaptorInterface$<$ CaptorT $>$@{flow::CaptorInterface$<$ CaptorT $>$}!locate@{locate}}
@@ -412,7 +409,7 @@ Finds element range to extract on synchronization.
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
-capture directive code
+{\ttfamily \{capture directive code, element range\}}
 \end{DoxyReturn}
 
 \begin{DoxyParams}{Parameters}
