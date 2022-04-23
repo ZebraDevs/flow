@@ -274,7 +274,7 @@ public:
    *
    * @param[in,out] range  data capture/sequencing range
    *
-   * @return capture directive code
+   * @return <code>{capture directive code, element range}</code>
    */
   template <typename CaptureRangeT> inline std::tuple<State, ExtractionRange> locate(CaptureRangeT&& range)
   {
@@ -303,8 +303,6 @@ public:
    * @param[out] output  output data iterator
    * @param extraction_range  range of elements to extract (by copy or move) from queue
    * @param range  data capture/sequencing range
-   *
-   * @return capture directive code
    */
   template <typename OutputDispatchIteratorT>
   inline void extract(
