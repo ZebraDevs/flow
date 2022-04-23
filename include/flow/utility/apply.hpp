@@ -17,6 +17,7 @@
 
 // Flow
 #include <flow/utility/integer_sequence.hpp>
+#include <flow/utility/static_assert.hpp>
 
 namespace flow
 {
@@ -31,6 +32,8 @@ namespace detail
 template <typename UnaryInvocableT, typename ArgTupleT, std::size_t... IntPack>
 constexpr decltype(auto) apply(UnaryInvocableT&& fn, ArgTupleT&& targs, index_sequence<IntPack...>)
 {
+  FLOW_STATIC_ASSERT(
+    std::tuple_size<std::remove_reference_t<ArgTupleT>>::value == sizeof...(IntPack), "ArgTupleT size is invalid");
   return fn(std::get<IntPack>(std::forward<ArgTupleT>(targs))...);
 }
 
@@ -127,9 +130,9 @@ constexpr typename std::enable_if<std::is_void<ReturnT>::value>::type apply(Unar
 template <typename NAryInvocableT, typename... ArgTuples>
 constexpr void apply_every(NAryInvocableT&& fn, ArgTuples&&... targs)
 {
-  constexpr auto NArgs = std::tuple_size<std::tuple_element_t<0, std::tuple<ArgTuples...>>>::value;
-  detail::apply_every(
-    std::forward<NAryInvocableT>(fn), make_index_sequence<NArgs>{}, std::forward<ArgTuples>(targs)...);
+  using ArgTuple0 = std::remove_reference_t<std::tuple_element_t<0, std::tuple<ArgTuples...>>>;
+  constexpr auto N = std::tuple_size<ArgTuple0>::value;
+  detail::apply_every(std::forward<NAryInvocableT>(fn), make_index_sequence<N>{}, std::forward<ArgTuples>(targs)...);
 }
 
 
