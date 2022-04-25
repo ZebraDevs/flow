@@ -118,6 +118,21 @@ TEST_F(FollowerMatchedStamp, PrimedOnMatchedStamp)
   ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
 }
 
+TEST_F(FollowerMatchedStamp, PrimedOnMatchedRange)
+{
+  std::vector<Dispatch<int, int>> data;
+
+  this->inject(Dispatch<int, int>{1, 1});
+  this->inject(Dispatch<int, int>{2, 2});
+  this->inject(Dispatch<int, int>{3, 3});
+  this->inject(Dispatch<int, int>{4, 4});
+
+  CaptureRange<int> t_range{2, 3};
+
+  ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
+  ASSERT_EQ(data.size(), 2UL);
+}
+
 
 TEST_F(FollowerMatchedStamp, RemovalOnAbort)
 {

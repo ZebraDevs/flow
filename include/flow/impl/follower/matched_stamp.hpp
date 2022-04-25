@@ -40,7 +40,11 @@ std::tuple<State, ExtractionRange>
 MatchedStamp<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::locate_follower_impl(
   const CaptureRange<stamp_type>& range) const
 {
-  if (PolicyType::queue_.oldest_stamp() > range.upper_stamp)
+  if (PolicyType::queue_.empty())
+  {
+    return std::make_tuple(State::RETRY, ExtractionRange{});
+  }
+  else if (PolicyType::queue_.oldest_stamp() > range.upper_stamp)
   {
     return std::make_tuple(State::ABORT, ExtractionRange{});
   }
@@ -48,22 +52,22 @@ MatchedStamp<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::locate_follower
   ExtractionRange extraction_range;
 
   std::size_t element_index = 0;
-  for (const auto& element : PolicyType::queue_)
+  for (auto element_itr = PolicyType::queue_.begin(); element_itr != PolicyType::queue_.end();
+       ++element_itr, ++element_index)
   {
-    if (get_stamp(element) < range.lower_stamp or get_stamp(element) > range.lower_stamp)
+    if (get_stamp(*element_itr) < range.lower_stamp or get_stamp(*element_itr) > range.upper_stamp)
     {
       continue;
     }
-    else if (extraction_range)
+    else if (!extraction_range)
     {
       extraction_range.first = element_index;
-      extraction_range.last = element_index;
+      extraction_range.last = element_index + 1UL;  // one-past last (iterator-like)
     }
     else
     {
       ++extraction_range.last;
     }
-    ++element_index;
   }
 
   // Assign matching element
