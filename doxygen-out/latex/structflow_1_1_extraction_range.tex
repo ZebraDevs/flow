@@ -12,12 +12,10 @@ Represents a range of elements.
 \doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\Hypertarget{structflow_1_1_extraction_range_a3b3889b41beb2833b09cd4387eff6229}\label{structflow_1_1_extraction_range_a3b3889b41beb2833b09cd4387eff6229}} 
 constexpr bool \mbox{\hyperlink{structflow_1_1_extraction_range_a3b3889b41beb2833b09cd4387eff6229}{valid}} () const
-\begin{DoxyCompactList}\small\item\em Checks if element range is valid. \end{DoxyCompactList}\item 
-\mbox{\Hypertarget{structflow_1_1_extraction_range_aac6a8541a21125c5a59c1d508bcd41fe}\label{structflow_1_1_extraction_range_aac6a8541a21125c5a59c1d508bcd41fe}} 
+\begin{DoxyCompactList}\small\item\em Checks if element range is non-\/empty. \end{DoxyCompactList}\item 
 constexpr \mbox{\hyperlink{structflow_1_1_extraction_range_aac6a8541a21125c5a59c1d508bcd41fe}{operator bool}} () const
-\begin{DoxyCompactList}\small\item\em Checks if element range is valid. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Checks if element range is non-\/empty. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{structflow_1_1_extraction_range_aa67b898cb64a2eb16a3e650f1a3b4a2a}\label{structflow_1_1_extraction_range_aa67b898cb64a2eb16a3e650f1a3b4a2a}} 
 {\bfseries Extraction\+Range} (const std\+::size\+\_\+t \+\_\+first, const std\+::size\+\_\+t \+\_\+last)
 \end{DoxyCompactItemize}
@@ -34,6 +32,45 @@ std\+::size\+\_\+t \mbox{\hyperlink{structflow_1_1_extraction_range_a8b896f53ac6
 
 \doxysubsection{Detailed Description}
 Represents a range of elements. 
+
+Range is iterator-\/like range. When {\ttfamily first == last}, an \char`\"{}empty\char`\"{} range is represented 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{structflow_1_1_extraction_range_aac6a8541a21125c5a59c1d508bcd41fe}\label{structflow_1_1_extraction_range_aac6a8541a21125c5a59c1d508bcd41fe}} 
+\index{flow::ExtractionRange@{flow::ExtractionRange}!operator bool@{operator bool}}
+\index{operator bool@{operator bool}!flow::ExtractionRange@{flow::ExtractionRange}}
+\doxysubsubsection{\texorpdfstring{operator bool()}{operator bool()}}
+{\footnotesize\ttfamily constexpr flow\+::\+Extraction\+Range\+::operator bool (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}}
+
+
+
+Checks if element range is non-\/empty. 
+
+
+\begin{DoxyRetVals}{Return values}
+{\em true} & if non-\/empty \\
+\hline
+{\em false} & if empty \\
+\hline
+\end{DoxyRetVals}
+\mbox{\Hypertarget{structflow_1_1_extraction_range_a3b3889b41beb2833b09cd4387eff6229}\label{structflow_1_1_extraction_range_a3b3889b41beb2833b09cd4387eff6229}} 
+\index{flow::ExtractionRange@{flow::ExtractionRange}!valid@{valid}}
+\index{valid@{valid}!flow::ExtractionRange@{flow::ExtractionRange}}
+\doxysubsubsection{\texorpdfstring{valid()}{valid()}}
+{\footnotesize\ttfamily constexpr bool flow\+::\+Extraction\+Range\+::valid (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}}
+
+
+
+Checks if element range is non-\/empty. 
+
+
+\begin{DoxyRetVals}{Return values}
+{\em true} & if non-\/empty \\
+\hline
+{\em false} & if empty \\
+\hline
+\end{DoxyRetVals}
+
 
 The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
 \item 

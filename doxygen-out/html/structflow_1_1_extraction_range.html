@@ -83,13 +83,11 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a3b3889b41beb2833b09cd4387eff6229"><td class="memItemLeft" align="right" valign="top"><a id="a3b3889b41beb2833b09cd4387eff6229"></a>
-constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structflow_1_1_extraction_range.html#a3b3889b41beb2833b09cd4387eff6229">valid</a> () const</td></tr>
-<tr class="memdesc:a3b3889b41beb2833b09cd4387eff6229"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if element range is valid. <br /></td></tr>
+<tr class="memitem:a3b3889b41beb2833b09cd4387eff6229"><td class="memItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structflow_1_1_extraction_range.html#a3b3889b41beb2833b09cd4387eff6229">valid</a> () const</td></tr>
+<tr class="memdesc:a3b3889b41beb2833b09cd4387eff6229"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if element range is non-empty.  <a href="structflow_1_1_extraction_range.html#a3b3889b41beb2833b09cd4387eff6229">More...</a><br /></td></tr>
 <tr class="separator:a3b3889b41beb2833b09cd4387eff6229"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aac6a8541a21125c5a59c1d508bcd41fe"><td class="memItemLeft" align="right" valign="top"><a id="aac6a8541a21125c5a59c1d508bcd41fe"></a>
-constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structflow_1_1_extraction_range.html#aac6a8541a21125c5a59c1d508bcd41fe">operator bool</a> () const</td></tr>
-<tr class="memdesc:aac6a8541a21125c5a59c1d508bcd41fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if element range is valid. <br /></td></tr>
+<tr class="memitem:aac6a8541a21125c5a59c1d508bcd41fe"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structflow_1_1_extraction_range.html#aac6a8541a21125c5a59c1d508bcd41fe">operator bool</a> () const</td></tr>
+<tr class="memdesc:aac6a8541a21125c5a59c1d508bcd41fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if element range is non-empty.  <a href="structflow_1_1_extraction_range.html#aac6a8541a21125c5a59c1d508bcd41fe">More...</a><br /></td></tr>
 <tr class="separator:aac6a8541a21125c5a59c1d508bcd41fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa67b898cb64a2eb16a3e650f1a3b4a2a"><td class="memItemLeft" align="right" valign="top"><a id="aa67b898cb64a2eb16a3e650f1a3b4a2a"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>ExtractionRange</b> (const std::size_t _first, const std::size_t _last)</td></tr>
@@ -108,7 +106,77 @@ std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Represents a range of elements. </p>
-</div><hr/>The documentation for this struct was generated from the following file:<ul>
+<p>Range is iterator-like range. When <code>first == last</code>, an "empty" range is represented </p>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="aac6a8541a21125c5a59c1d508bcd41fe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aac6a8541a21125c5a59c1d508bcd41fe">&#9670;&nbsp;</a></span>operator bool()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr flow::ExtractionRange::operator bool </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Checks if element range is non-empty. </p>
+<dl class="retval"><dt>Return values</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">true</td><td>if non-empty </td></tr>
+    <tr><td class="paramname">false</td><td>if empty </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a3b3889b41beb2833b09cd4387eff6229"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3b3889b41beb2833b09cd4387eff6229">&#9670;&nbsp;</a></span>valid()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr bool flow::ExtractionRange::valid </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Checks if element range is non-empty. </p>
+<dl class="retval"><dt>Return values</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">true</td><td>if non-empty </td></tr>
+    <tr><td class="paramname">false</td><td>if empty </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<hr/>The documentation for this struct was generated from the following file:<ul>
 <li>include/flow/<a class="el" href="dispatch__queue_8hpp_source.html">dispatch_queue.hpp</a></li>
 </ul>
 </div><!-- contents -->
