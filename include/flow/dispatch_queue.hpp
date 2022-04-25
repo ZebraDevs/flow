@@ -17,6 +17,8 @@ namespace flow
 
 /**
  * @brief Represents a range of elements
+ *
+ * Range is iterator-like range. When <code>first == last</code>, an "empty" range is represented
  */
 struct ExtractionRange
 {
@@ -26,10 +28,17 @@ struct ExtractionRange
   /// Position of one-past-last element
   std::size_t last = 0UL;
 
-  /// Checks if element range is valid
+  /**
+   * @brief Checks if element range is non-empty
+   *
+   * @retval true  if non-empty
+   * @retval false if empty
+   */
   constexpr bool valid() const { return first < last; }
 
-  /// Checks if element range is valid
+  /**
+   * @copydoc ExtractionRange::valid
+   */
   constexpr operator bool() const { return ExtractionRange::valid(); }
 
   ExtractionRange() = default;
