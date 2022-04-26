@@ -78,7 +78,7 @@ void ClosestBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::extract_f
 {
   if (extraction_range)
   {
-    *(output++) = std::move(*std::next(PolicyType::queue_.begin(), extraction_range.last));
+    *(output++) = *std::next(PolicyType::queue_.begin(), extraction_range.last);
     PolicyType::queue_.remove_first_n(extraction_range.last);
   }
 }
