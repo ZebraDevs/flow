@@ -15,14 +15,15 @@
 // Flow
 #include <flow/captor/nolock.hpp>
 #include <flow/follower/matched_stamp.hpp>
+#include <flow/utility/optional.hpp>
 
 using namespace flow;
 using namespace flow::follower;
 
 
-struct FollowerMatchedStamp : ::testing::Test, MatchedStamp<Dispatch<int, int>, NoLock>
+struct FollowerMatchedStamp : ::testing::Test, MatchedStamp<Dispatch<int, optional<int>>, NoLock>
 {
-  FollowerMatchedStamp() : MatchedStamp<Dispatch<int, int>, NoLock>{} {}
+  FollowerMatchedStamp() : MatchedStamp<Dispatch<int, optional<int>>, NoLock>{} {}
 
   void SetUp() final { this->reset(); }
 };
@@ -30,16 +31,16 @@ struct FollowerMatchedStamp : ::testing::Test, MatchedStamp<Dispatch<int, int>, 
 
 TEST_F(FollowerMatchedStamp, CaptureRetryOnEmpty)
 {
-  std::vector<Dispatch<int, int>> data;
+  std::vector<Dispatch<int, optional<int>>> data;
   CaptureRange<int> t_range{0, 0};
   ASSERT_EQ(State::RETRY, this->capture(std::back_inserter(data), t_range));
 }
 
 TEST_F(FollowerMatchedStamp, CaptureRetryOnDataTooOld)
 {
-  std::vector<Dispatch<int, int>> data;
+  std::vector<Dispatch<int, optional<int>>> data;
 
-  this->inject(Dispatch<int, int>{0, 0});
+  this->inject(Dispatch<int, optional<int>>{0, 0});
 
   CaptureRange<int> t_range{1, 0};
 
@@ -49,9 +50,9 @@ TEST_F(FollowerMatchedStamp, CaptureRetryOnDataTooOld)
 
 TEST_F(FollowerMatchedStamp, CaptureAbortOnDataTooNew)
 {
-  std::vector<Dispatch<int, int>> data;
+  std::vector<Dispatch<int, optional<int>>> data;
 
-  this->inject(Dispatch<int, int>{1, 0});
+  this->inject(Dispatch<int, optional<int>>{1, 0});
 
   CaptureRange<int> t_range{0, 0};
 
@@ -60,9 +61,9 @@ TEST_F(FollowerMatchedStamp, CaptureAbortOnDataTooNew)
 
 TEST_F(FollowerMatchedStamp, CapturePrimedOnExact)
 {
-  std::vector<Dispatch<int, int>> data;
+  std::vector<Dispatch<int, optional<int>>> data;
 
-  this->inject(Dispatch<int, int>{0, 0});
+  this->inject(Dispatch<int, optional<int>>{0, 0});
 
   CaptureRange<int> t_range{0, 0};
 
@@ -80,7 +81,7 @@ TEST_F(FollowerMatchedStamp, LocateRetryOnEmpty)
 
 TEST_F(FollowerMatchedStamp, LocateRetryOnDataTooOld)
 {
-  this->inject(Dispatch<int, int>{0, 0});
+  this->inject(Dispatch<int, optional<int>>{0, 0});
 
   CaptureRange<int> t_range{1, 0};
 
@@ -90,7 +91,7 @@ TEST_F(FollowerMatchedStamp, LocateRetryOnDataTooOld)
 
 TEST_F(FollowerMatchedStamp, LocateAbortOnDataTooNew)
 {
-  this->inject(Dispatch<int, int>{1, 0});
+  this->inject(Dispatch<int, optional<int>>{1, 0});
 
   CaptureRange<int> t_range{0, 0};
 
@@ -99,7 +100,7 @@ TEST_F(FollowerMatchedStamp, LocateAbortOnDataTooNew)
 
 TEST_F(FollowerMatchedStamp, LocatePrimedOnExact)
 {
-  this->inject(Dispatch<int, int>{0, 0});
+  this->inject(Dispatch<int, optional<int>>{0, 0});
 
   CaptureRange<int> t_range{0, 0};
 
@@ -109,9 +110,9 @@ TEST_F(FollowerMatchedStamp, LocatePrimedOnExact)
 
 TEST_F(FollowerMatchedStamp, PrimedOnMatchedStamp)
 {
-  std::vector<Dispatch<int, int>> data;
+  std::vector<Dispatch<int, optional<int>>> data;
 
-  this->inject(Dispatch<int, int>{1, 0});
+  this->inject(Dispatch<int, optional<int>>{1, 0});
 
   CaptureRange<int> t_range{1, 1};
 
@@ -120,12 +121,12 @@ TEST_F(FollowerMatchedStamp, PrimedOnMatchedStamp)
 
 TEST_F(FollowerMatchedStamp, PrimedOnMatchedRange)
 {
-  std::vector<Dispatch<int, int>> data;
+  std::vector<Dispatch<int, optional<int>>> data;
 
-  this->inject(Dispatch<int, int>{1, 1});
-  this->inject(Dispatch<int, int>{2, 2});
-  this->inject(Dispatch<int, int>{3, 3});
-  this->inject(Dispatch<int, int>{4, 4});
+  this->inject(Dispatch<int, optional<int>>{1, 1});
+  this->inject(Dispatch<int, optional<int>>{2, 2});
+  this->inject(Dispatch<int, optional<int>>{3, 3});
+  this->inject(Dispatch<int, optional<int>>{4, 4});
 
   CaptureRange<int> t_range{2, 3};
 
@@ -142,7 +143,7 @@ TEST_F(FollowerMatchedStamp, RemovalOnAbort)
   int N = 10;
   while (N--)
   {
-    this->inject(Dispatch<int, int>{t, 1});
+    this->inject(Dispatch<int, optional<int>>{t, 1});
     t += 1;
   }
 

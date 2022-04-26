@@ -15,14 +15,15 @@
 // Flow
 #include <flow/captor/nolock.hpp>
 #include <flow/driver/next.hpp>
+#include <flow/utility/optional.hpp>
 
 using namespace flow;
 using namespace flow::driver;
 
 
-struct DriverNext : ::testing::Test, Next<Dispatch<int, int>, NoLock>
+struct DriverNext : ::testing::Test, Next<Dispatch<int, optional<int>>, NoLock>
 {
-  DriverNext() : Next<Dispatch<int, int>, NoLock>{} {}
+  DriverNext() : Next<Dispatch<int, optional<int>>, NoLock>{} {}
 
   void SetUp() final { this->reset(); }
 };
@@ -30,7 +31,7 @@ struct DriverNext : ::testing::Test, Next<Dispatch<int, int>, NoLock>
 
 TEST_F(DriverNext, CaptureRetryOnEmpty)
 {
-  std::vector<Dispatch<int, int>> data;
+  std::vector<Dispatch<int, optional<int>>> data;
   CaptureRange<int> t_range{0, 0};
   ASSERT_EQ(State::RETRY, this->capture(std::back_inserter(data), t_range));
 }
@@ -39,10 +40,10 @@ TEST_F(DriverNext, CaptureRetryOnEmpty)
 TEST_F(DriverNext, CapturePrimedWithOldest)
 {
   const int t = 1;
-  this->inject(Dispatch<int, int>{t + 0, 1});
-  this->inject(Dispatch<int, int>{t + 1, 2});
+  this->inject(Dispatch<int, optional<int>>{t + 0, 1});
+  this->inject(Dispatch<int, optional<int>>{t + 1, 2});
 
-  std::vector<Dispatch<int, int>> data;
+  std::vector<Dispatch<int, optional<int>>> data;
   CaptureRange<int> t_range{0, 0};
   ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
 
@@ -61,8 +62,8 @@ TEST_F(DriverNext, LocateRetryOnEmpty)
 TEST_F(DriverNext, LocatePrimedWithOldest)
 {
   const int t = 1;
-  this->inject(Dispatch<int, int>{t + 0, 1});
-  this->inject(Dispatch<int, int>{t + 1, 2});
+  this->inject(Dispatch<int, optional<int>>{t + 0, 1});
+  this->inject(Dispatch<int, optional<int>>{t + 1, 2});
 
   CaptureRange<int> t_range{0, 0};
   ASSERT_EQ(State::PRIMED, this->locate(t_range));
@@ -80,7 +81,7 @@ TEST_F(DriverNext, RemovalOnAbort)
   int N = 10 + 1;
   while (N--)
   {
-    this->inject(Dispatch<int, int>{t, 1});
+    this->inject(Dispatch<int, optional<int>>{t, 1});
     t += 1;
   }
 

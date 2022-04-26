@@ -15,16 +15,17 @@
 // Flow
 #include <flow/captor/nolock.hpp>
 #include <flow/driver/batch.hpp>
+#include <flow/utility/optional.hpp>
 
 using namespace flow;
 using namespace flow::driver;
 
 
-struct DriverBatch : ::testing::Test, Batch<Dispatch<int, int>, NoLock>
+struct DriverBatch : ::testing::Test, Batch<Dispatch<int, optional<int>>, NoLock>
 {
   static constexpr std::size_t CHUNK_SIZE = 10;
 
-  DriverBatch() : Batch<Dispatch<int, int>, NoLock>{CHUNK_SIZE} {}
+  DriverBatch() : Batch<Dispatch<int, optional<int>>, NoLock>{CHUNK_SIZE} {}
 
   void SetUp() final { this->reset(); }
 };
@@ -33,7 +34,7 @@ constexpr std::size_t DriverBatch::CHUNK_SIZE;
 
 TEST_F(DriverBatch, CaptureRetryOnEmpty)
 {
-  std::vector<Dispatch<int, int>> data;
+  std::vector<Dispatch<int, optional<int>>> data;
   CaptureRange<int> t_range;
 
   ASSERT_EQ(State::RETRY, this->capture(std::back_inserter(data), t_range));
@@ -49,14 +50,14 @@ TEST_F(DriverBatch, CaptureContinueLTBatchSize)
   int N = CHUNK_SIZE / 2;
   while (N--)
   {
-    this->inject(Dispatch<int, int>{t, 1});
+    this->inject(Dispatch<int, optional<int>>{t, 1});
     t += 1;
   }
 
   ASSERT_EQ(this->size(), CHUNK_SIZE / 2);
 
   // Start processing
-  std::vector<Dispatch<int, int>> data;
+  std::vector<Dispatch<int, optional<int>>> data;
   CaptureRange<int> t_range;
 
   ASSERT_EQ(State::RETRY, this->capture(std::back_inserter(data), t_range));
@@ -72,13 +73,13 @@ TEST_F(DriverBatch, CapturePrimedEQBatchSize)
   int N = CHUNK_SIZE;
   while (N--)
   {
-    this->inject(Dispatch<int, int>{t, 1});
+    this->inject(Dispatch<int, optional<int>>{t, 1});
     t += 1;
   }
 
 
   // Start processing
-  std::vector<Dispatch<int, int>> data;
+  std::vector<Dispatch<int, optional<int>>> data;
   CaptureRange<int> t_range;
 
   ASSERT_EQ(this->size(), CHUNK_SIZE);
@@ -99,12 +100,12 @@ TEST_F(DriverBatch, CapturePrimedGTBatchSize)
   int N = CHUNK_SIZE + CHUNK_SIZE / 2;
   while (N--)
   {
-    this->inject(Dispatch<int, int>{t, 1});
+    this->inject(Dispatch<int, optional<int>>{t, 1});
     t += 1;
   }
 
   // Start processing
-  std::vector<Dispatch<int, int>> data;
+  std::vector<Dispatch<int, optional<int>>> data;
   CaptureRange<int> t_range;
 
   ASSERT_EQ(this->size(), CHUNK_SIZE + CHUNK_SIZE / 2);
@@ -133,7 +134,7 @@ TEST_F(DriverBatch, LocateContinueLTBatchSize)
   int N = CHUNK_SIZE / 2;
   while (N--)
   {
-    this->inject(Dispatch<int, int>{t, 1});
+    this->inject(Dispatch<int, optional<int>>{t, 1});
     t += 1;
   }
 
@@ -154,7 +155,7 @@ TEST_F(DriverBatch, LocatePrimedEQBatchSize)
   int N = CHUNK_SIZE;
   while (N--)
   {
-    this->inject(Dispatch<int, int>{t, 1});
+    this->inject(Dispatch<int, optional<int>>{t, 1});
     t += 1;
   }
 
@@ -176,7 +177,7 @@ TEST_F(DriverBatch, LocatePrimedGTBatchSize)
   int N = CHUNK_SIZE + CHUNK_SIZE / 2;
   while (N--)
   {
-    this->inject(Dispatch<int, int>{t, 1});
+    this->inject(Dispatch<int, optional<int>>{t, 1});
     t += 1;
   }
 
@@ -198,7 +199,7 @@ TEST_F(DriverBatch, RemovalOnAbort)
   int N = CHUNK_SIZE + 1;
   while (N--)
   {
-    this->inject(Dispatch<int, int>{t, 1});
+    this->inject(Dispatch<int, optional<int>>{t, 1});
     t += 1;
   }
 

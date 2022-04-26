@@ -15,17 +15,18 @@
 // Flow
 #include <flow/captor/nolock.hpp>
 #include <flow/follower/closest_before.hpp>
+#include <flow/utility/optional.hpp>
 
 using namespace flow;
 using namespace flow::follower;
 
 
-struct FollowerClosestBefore : ::testing::Test, ClosestBefore<Dispatch<int, int>, NoLock>
+struct FollowerClosestBefore : ::testing::Test, ClosestBefore<Dispatch<int, optional<int>>, NoLock>
 {
   static constexpr int PERIOD = 5;
   static constexpr int DELAY = 3;
 
-  FollowerClosestBefore() : ClosestBefore<Dispatch<int, int>, NoLock>{PERIOD, DELAY} {}
+  FollowerClosestBefore() : ClosestBefore<Dispatch<int, optional<int>>, NoLock>{PERIOD, DELAY} {}
 
   void SetUp() final { this->reset(); }
 };
@@ -35,7 +36,7 @@ constexpr int FollowerClosestBefore::DELAY;
 
 TEST_F(FollowerClosestBefore, CaptureRetryOnEmpty)
 {
-  std::vector<Dispatch<int, int>> data;
+  std::vector<Dispatch<int, optional<int>>> data;
   CaptureRange<int> t_range{0, 0};
   ASSERT_EQ(State::RETRY, this->capture(std::back_inserter(data), t_range));
 }
@@ -43,9 +44,9 @@ TEST_F(FollowerClosestBefore, CaptureRetryOnEmpty)
 
 TEST_F(FollowerClosestBefore, CaptureAbortTooNew)
 {
-  this->inject(Dispatch<int, int>{1, 1});
+  this->inject(Dispatch<int, optional<int>>{1, 1});
 
-  std::vector<Dispatch<int, int>> data;
+  std::vector<Dispatch<int, optional<int>>> data;
   CaptureRange<int> t_range{0, 0};
   ASSERT_EQ(State::ABORT, this->capture(std::back_inserter(data), t_range));
 }
@@ -53,9 +54,9 @@ TEST_F(FollowerClosestBefore, CaptureAbortTooNew)
 
 TEST_F(FollowerClosestBefore, CaptureAbortAtDataBoundary)
 {
-  this->inject(Dispatch<int, int>{0, 0});
+  this->inject(Dispatch<int, optional<int>>{0, 0});
 
-  std::vector<Dispatch<int, int>> data;
+  std::vector<Dispatch<int, optional<int>>> data;
   CaptureRange<int> t_range{0, 0};
   ASSERT_EQ(State::ABORT, this->capture(std::back_inserter(data), t_range));
 }
@@ -69,16 +70,16 @@ TEST_F(FollowerClosestBefore, CapturePrimedAtDataBoundary)
   while (N--)
   {
     t += 1;
-    this->inject(Dispatch<int, int>{t, t});
+    this->inject(Dispatch<int, optional<int>>{t, t});
   }
   const int t_target = t;
 
   ASSERT_EQ(this->size(), 2UL * (DELAY + PERIOD));
 
-  std::vector<Dispatch<int, int>> data;
+  std::vector<Dispatch<int, optional<int>>> data;
   CaptureRange<int> t_range{t_target, t_target};
   ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
-  ASSERT_EQ(get_value(data.back()), t_target - DELAY - PERIOD);
+  ASSERT_EQ(*get_value(data.back()), t_target - DELAY - PERIOD);
 
   ASSERT_EQ(this->size(), static_cast<std::size_t>(PERIOD + DELAY + 1));
 }
@@ -92,7 +93,7 @@ TEST_F(FollowerClosestBefore, CapturePrimedAtDataBoundaryFilledPast)
   while (N--)
   {
     t += 1;
-    this->inject(Dispatch<int, int>{t, t});
+    this->inject(Dispatch<int, optional<int>>{t, t});
   }
   const int t_target = t + DELAY;
 
@@ -101,15 +102,15 @@ TEST_F(FollowerClosestBefore, CapturePrimedAtDataBoundaryFilledPast)
   while (M--)
   {
     t += 1;
-    this->inject(Dispatch<int, int>{t, t});
+    this->inject(Dispatch<int, optional<int>>{t, t});
   }
 
   ASSERT_EQ(this->size(), 4UL * (DELAY + PERIOD));
 
-  std::vector<Dispatch<int, int>> data;
+  std::vector<Dispatch<int, optional<int>>> data;
   CaptureRange<int> t_range{t_target, t_target};
   ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
-  ASSERT_EQ(get_value(data.back()), t_target - DELAY - PERIOD);
+  ASSERT_EQ(*get_value(data.back()), t_target - DELAY - PERIOD);
 
   ASSERT_EQ(this->size(), static_cast<std::size_t>(3UL * (DELAY + PERIOD) - 2));
 }
@@ -123,16 +124,16 @@ TEST_F(FollowerClosestBefore, CapturePrimedClosestBeforeDataBeforePeriod)
   while (N--)
   {
     t += 1;
-    this->inject(Dispatch<int, int>{t + PERIOD, t});
+    this->inject(Dispatch<int, optional<int>>{t + PERIOD, t});
   }
   const int t_target = t + PERIOD;
 
   ASSERT_EQ(this->size(), 10U);
 
-  std::vector<Dispatch<int, int>> data;
+  std::vector<Dispatch<int, optional<int>>> data;
   CaptureRange<int> t_range{t_target, t_target};
   ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
-  ASSERT_EQ(get_value(data.back()), t - DELAY - PERIOD);
+  ASSERT_EQ(*get_value(data.back()), t - DELAY - PERIOD);
 
   ASSERT_EQ(this->size(), static_cast<std::size_t>(PERIOD + DELAY + 1));
 }
@@ -146,13 +147,13 @@ TEST_F(FollowerClosestBefore, CaptureAbortClosestBeforeDataAfterPeriod)
   while (N--)
   {
     t += 1;
-    this->inject(Dispatch<int, int>{t + PERIOD, t});
+    this->inject(Dispatch<int, optional<int>>{t + PERIOD, t});
   }
   const int t_target = 0;
 
   ASSERT_EQ(this->size(), 10U);
 
-  std::vector<Dispatch<int, int>> data;
+  std::vector<Dispatch<int, optional<int>>> data;
   CaptureRange<int> t_range{t_target, t_target};
   ASSERT_EQ(State::ABORT, this->capture(std::back_inserter(data), t_range));
 
@@ -169,7 +170,7 @@ TEST_F(FollowerClosestBefore, LocateRetryOnEmpty)
 
 TEST_F(FollowerClosestBefore, LocateAbortTooNew)
 {
-  this->inject(Dispatch<int, int>{1, 1});
+  this->inject(Dispatch<int, optional<int>>{1, 1});
 
   CaptureRange<int> t_range{0, 0};
   ASSERT_EQ(State::ABORT, this->locate(t_range));
@@ -178,7 +179,7 @@ TEST_F(FollowerClosestBefore, LocateAbortTooNew)
 
 TEST_F(FollowerClosestBefore, LocateAbortAtDataBoundary)
 {
-  this->inject(Dispatch<int, int>{0, 0});
+  this->inject(Dispatch<int, optional<int>>{0, 0});
 
   CaptureRange<int> t_range{0, 0};
   ASSERT_EQ(State::ABORT, this->locate(t_range));
@@ -193,7 +194,7 @@ TEST_F(FollowerClosestBefore, LocatePrimedAtDataBoundary)
   while (N--)
   {
     t += 1;
-    this->inject(Dispatch<int, int>{t, t});
+    this->inject(Dispatch<int, optional<int>>{t, t});
   }
   const int t_target = t;
 
@@ -212,7 +213,7 @@ TEST_F(FollowerClosestBefore, LocatePrimedAtDataBoundaryFilledPast)
   while (N--)
   {
     t += 1;
-    this->inject(Dispatch<int, int>{t, t});
+    this->inject(Dispatch<int, optional<int>>{t, t});
   }
   const int t_target = t + DELAY;
 
@@ -221,7 +222,7 @@ TEST_F(FollowerClosestBefore, LocatePrimedAtDataBoundaryFilledPast)
   while (M--)
   {
     t += 1;
-    this->inject(Dispatch<int, int>{t, t});
+    this->inject(Dispatch<int, optional<int>>{t, t});
   }
 
   ASSERT_EQ(this->size(), 4UL * (DELAY + PERIOD));
@@ -239,7 +240,7 @@ TEST_F(FollowerClosestBefore, LocatePrimedClosestBeforeDataBeforePeriod)
   while (N--)
   {
     t += 1;
-    this->inject(Dispatch<int, int>{t + PERIOD, t});
+    this->inject(Dispatch<int, optional<int>>{t + PERIOD, t});
   }
   const int t_target = t + PERIOD;
 
@@ -258,7 +259,7 @@ TEST_F(FollowerClosestBefore, LocateAbortClosestBeforeDataAfterPeriod)
   while (N--)
   {
     t += 1;
-    this->inject(Dispatch<int, int>{t + PERIOD, t});
+    this->inject(Dispatch<int, optional<int>>{t + PERIOD, t});
   }
   const int t_target = 0;
 
@@ -277,7 +278,7 @@ TEST_F(FollowerClosestBefore, RemovalOnAbort)
   int N = 10;
   while (N--)
   {
-    this->inject(Dispatch<int, int>{t, 1});
+    this->inject(Dispatch<int, optional<int>>{t, 1});
     t += 1;
   }
 

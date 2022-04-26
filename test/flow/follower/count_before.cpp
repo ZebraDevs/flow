@@ -15,17 +15,18 @@
 // Flow
 #include <flow/captor/nolock.hpp>
 #include <flow/follower/count_before.hpp>
+#include <flow/utility/optional.hpp>
 
 using namespace flow;
 using namespace flow::follower;
 
 
-struct FollowerCountBefore : ::testing::Test, CountBefore<Dispatch<int, int>, NoLock>
+struct FollowerCountBefore : ::testing::Test, CountBefore<Dispatch<int, optional<int>>, NoLock>
 {
   static constexpr int COUNT = 3;
   static constexpr int DELAY = 3;
 
-  FollowerCountBefore() : CountBefore<Dispatch<int, int>, NoLock>{COUNT, DELAY} {}
+  FollowerCountBefore() : CountBefore<Dispatch<int, optional<int>>, NoLock>{COUNT, DELAY} {}
 
   void SetUp() final { this->reset(); }
 };
@@ -35,7 +36,7 @@ constexpr int FollowerCountBefore::DELAY;
 
 TEST_F(FollowerCountBefore, CaptureRetryOnEmpty)
 {
-  std::vector<Dispatch<int, int>> data;
+  std::vector<Dispatch<int, optional<int>>> data;
   CaptureRange<int> t_range{0, 0};
   ASSERT_EQ(State::RETRY, this->capture(std::back_inserter(data), t_range));
 }
@@ -48,11 +49,11 @@ TEST_F(FollowerCountBefore, CaptureRetryOnToFewBefore)
   int t = 0 - (COUNT + DELAY);
   while (N--)
   {
-    this->inject(Dispatch<int, int>{t, t});
+    this->inject(Dispatch<int, optional<int>>{t, t});
     t++;
   }
 
-  std::vector<Dispatch<int, int>> data;
+  std::vector<Dispatch<int, optional<int>>> data;
   CaptureRange<int> t_range{0, 0};
 
   const auto size_before_capture = this->size();
@@ -68,11 +69,11 @@ TEST_F(FollowerCountBefore, CaptureAbortOnToFewBeforeWithDataAfter)
   int t = 0;
   while (N--)
   {
-    this->inject(Dispatch<int, int>{t, t});
+    this->inject(Dispatch<int, optional<int>>{t, t});
     t++;
   }
 
-  std::vector<Dispatch<int, int>> data;
+  std::vector<Dispatch<int, optional<int>>> data;
   CaptureRange<int> t_range{0, 0};
 
   const auto size_before_capture = this->size();
@@ -88,11 +89,11 @@ TEST_F(FollowerCountBefore, CapturePrimedWithExactBefore)
   int t = 0 - (COUNT + DELAY);
   while (N--)
   {
-    this->inject(Dispatch<int, int>{t, t});
+    this->inject(Dispatch<int, optional<int>>{t, t});
     t++;
   }
 
-  std::vector<Dispatch<int, int>> data;
+  std::vector<Dispatch<int, optional<int>>> data;
   CaptureRange<int> t_range{0, 0};
   const auto size_before_capture = this->size();
   ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
@@ -115,7 +116,7 @@ TEST_F(FollowerCountBefore, LocateRetryOnToFewBefore)
   int t = 0 - (COUNT + DELAY);
   while (N--)
   {
-    this->inject(Dispatch<int, int>{t, t});
+    this->inject(Dispatch<int, optional<int>>{t, t});
     t++;
   }
 
@@ -132,7 +133,7 @@ TEST_F(FollowerCountBefore, LocateAbortOnToFewBeforeWithDataAfter)
   int t = 0;
   while (N--)
   {
-    this->inject(Dispatch<int, int>{t, t});
+    this->inject(Dispatch<int, optional<int>>{t, t});
     t++;
   }
 
@@ -149,7 +150,7 @@ TEST_F(FollowerCountBefore, LocatePrimedWithExactBefore)
   int t = 0 - (COUNT + DELAY);
   while (N--)
   {
-    this->inject(Dispatch<int, int>{t, t});
+    this->inject(Dispatch<int, optional<int>>{t, t});
     t++;
   }
 
@@ -167,11 +168,11 @@ TEST_F(FollowerCountBefore, PrimedWithExcessBefore)
   int t = 0 - static_cast<int>(COUNT + EXCESS + DELAY);
   while (N--)
   {
-    this->inject(Dispatch<int, int>{t, t});
+    this->inject(Dispatch<int, optional<int>>{t, t});
     t++;
   }
 
-  std::vector<Dispatch<int, int>> data;
+  std::vector<Dispatch<int, optional<int>>> data;
   CaptureRange<int> t_range{0, 0};
   const auto size_before_capture = this->size();
   ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
@@ -195,7 +196,7 @@ TEST_F(FollowerCountBefore, RemovalOnAbort)
   int N = 10;
   while (N--)
   {
-    this->inject(Dispatch<int, int>{t, 1});
+    this->inject(Dispatch<int, optional<int>>{t, 1});
     t += 1;
   }
 

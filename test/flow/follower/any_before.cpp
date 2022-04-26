@@ -14,16 +14,17 @@
 // Flow
 #include <flow/captor/nolock.hpp>
 #include <flow/follower/any_before.hpp>
+#include <flow/utility/optional.hpp>
 
 using namespace flow;
 using namespace flow::follower;
 
 
-struct FollowerAnyBefore : ::testing::Test, AnyBefore<Dispatch<int, int>, NoLock>
+struct FollowerAnyBefore : ::testing::Test, AnyBefore<Dispatch<int, optional<int>>, NoLock>
 {
   static constexpr int DELAY = 1;
 
-  FollowerAnyBefore() : AnyBefore<Dispatch<int, int>, NoLock>{DELAY} {}
+  FollowerAnyBefore() : AnyBefore<Dispatch<int, optional<int>>, NoLock>{DELAY} {}
 
   void SetUp() final { this->reset(); }
 };
@@ -31,7 +32,7 @@ constexpr int FollowerAnyBefore::DELAY;
 
 TEST_F(FollowerAnyBefore, CapturePrimedOnEmpty)
 {
-  std::vector<Dispatch<int, int>> data;
+  std::vector<Dispatch<int, optional<int>>> data;
   CaptureRange<int> t_range{0, 0};
   ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
 }
@@ -39,10 +40,10 @@ TEST_F(FollowerAnyBefore, CapturePrimedOnEmpty)
 
 TEST_F(FollowerAnyBefore, CapturePrimedOnDataAtBoundary)
 {
-  std::vector<Dispatch<int, int>> data;
+  std::vector<Dispatch<int, optional<int>>> data;
   CaptureRange<int> t_range{0, 0};
 
-  this->inject(Dispatch<int, int>{-DELAY, 1});
+  this->inject(Dispatch<int, optional<int>>{-DELAY, 1});
 
   ASSERT_EQ(this->size(), 1U);
   ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
@@ -54,10 +55,10 @@ TEST_F(FollowerAnyBefore, CapturePrimedOnDataAtBoundary)
 
 TEST_F(FollowerAnyBefore, CapturePrimedOnDataAfterBoundary)
 {
-  std::vector<Dispatch<int, int>> data;
+  std::vector<Dispatch<int, optional<int>>> data;
   CaptureRange<int> t_range{0, 0};
 
-  this->inject(Dispatch<int, int>{-DELAY + 1, 1});
+  this->inject(Dispatch<int, optional<int>>{-DELAY + 1, 1});
 
   ASSERT_EQ(this->size(), 1U);
   ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
@@ -69,10 +70,10 @@ TEST_F(FollowerAnyBefore, CapturePrimedOnDataAfterBoundary)
 
 TEST_F(FollowerAnyBefore, CapturePrimedOnDataAnyBeforeBoundary)
 {
-  std::vector<Dispatch<int, int>> data;
+  std::vector<Dispatch<int, optional<int>>> data;
   CaptureRange<int> t_range{0, 0};
 
-  this->inject(Dispatch<int, int>{-DELAY - 1, 1});
+  this->inject(Dispatch<int, optional<int>>{-DELAY - 1, 1});
 
   ASSERT_EQ(this->size(), 1U);
   ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
@@ -84,11 +85,11 @@ TEST_F(FollowerAnyBefore, CapturePrimedOnDataAnyBeforeBoundary)
 
 TEST_F(FollowerAnyBefore, CapturePrimedOnDataAnyBeforeAndAfterBoundary)
 {
-  std::vector<Dispatch<int, int>> data;
+  std::vector<Dispatch<int, optional<int>>> data;
   CaptureRange<int> t_range{0, 0};
 
-  this->inject(Dispatch<int, int>{-DELAY - 1, 1});
-  this->inject(Dispatch<int, int>{-DELAY + 1, 1});
+  this->inject(Dispatch<int, optional<int>>{-DELAY - 1, 1});
+  this->inject(Dispatch<int, optional<int>>{-DELAY + 1, 1});
 
   ASSERT_EQ(this->size(), 2U);
   ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
@@ -100,11 +101,11 @@ TEST_F(FollowerAnyBefore, CapturePrimedOnDataAnyBeforeAndAfterBoundary)
 
 TEST_F(FollowerAnyBefore, CapturePrimedOnDataAnyBeforeAndAtBoundary)
 {
-  std::vector<Dispatch<int, int>> data;
+  std::vector<Dispatch<int, optional<int>>> data;
   CaptureRange<int> t_range{0, 0};
 
-  this->inject(Dispatch<int, int>{-DELAY - 1, 1});
-  this->inject(Dispatch<int, int>{-DELAY, 1});
+  this->inject(Dispatch<int, optional<int>>{-DELAY - 1, 1});
+  this->inject(Dispatch<int, optional<int>>{-DELAY, 1});
 
   ASSERT_EQ(this->size(), 2U);
   ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
@@ -116,12 +117,12 @@ TEST_F(FollowerAnyBefore, CapturePrimedOnDataAnyBeforeAndAtBoundary)
 
 TEST_F(FollowerAnyBefore, CapturePrimedMultiDataAnyBeforeBoundary)
 {
-  std::vector<Dispatch<int, int>> data;
+  std::vector<Dispatch<int, optional<int>>> data;
   CaptureRange<int> t_range{0, 0};
 
-  this->inject(Dispatch<int, int>{-DELAY - 1, 1});
-  this->inject(Dispatch<int, int>{-DELAY - 2, 1});
-  this->inject(Dispatch<int, int>{-DELAY + 1, 1});
+  this->inject(Dispatch<int, optional<int>>{-DELAY - 1, 1});
+  this->inject(Dispatch<int, optional<int>>{-DELAY - 2, 1});
+  this->inject(Dispatch<int, optional<int>>{-DELAY + 1, 1});
 
   ASSERT_EQ(this->size(), 3U);
   ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
@@ -133,12 +134,12 @@ TEST_F(FollowerAnyBefore, CapturePrimedMultiDataAnyBeforeBoundary)
 
 TEST_F(FollowerAnyBefore, CapturePrimedMultiDataAnyBeforeAndAtBoundary)
 {
-  std::vector<Dispatch<int, int>> data;
+  std::vector<Dispatch<int, optional<int>>> data;
   CaptureRange<int> t_range{0, 0};
 
-  this->inject(Dispatch<int, int>{-DELAY - 0, 1});
-  this->inject(Dispatch<int, int>{-DELAY - 1, 1});
-  this->inject(Dispatch<int, int>{-DELAY - 2, 1});
+  this->inject(Dispatch<int, optional<int>>{-DELAY - 0, 1});
+  this->inject(Dispatch<int, optional<int>>{-DELAY - 1, 1});
+  this->inject(Dispatch<int, optional<int>>{-DELAY - 2, 1});
 
   ASSERT_EQ(this->size(), 3U);
   ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
@@ -159,7 +160,7 @@ TEST_F(FollowerAnyBefore, LocatePrimedOnDataAtBoundary)
 {
   CaptureRange<int> t_range{0, 0};
 
-  this->inject(Dispatch<int, int>{-DELAY, 1});
+  this->inject(Dispatch<int, optional<int>>{-DELAY, 1});
 
   ASSERT_EQ(State::PRIMED, this->locate(t_range));
 }
@@ -169,7 +170,7 @@ TEST_F(FollowerAnyBefore, LocatePrimedOnDataAfterBoundary)
 {
   CaptureRange<int> t_range{0, 0};
 
-  this->inject(Dispatch<int, int>{-DELAY + 1, 1});
+  this->inject(Dispatch<int, optional<int>>{-DELAY + 1, 1});
 
   ASSERT_EQ(State::PRIMED, this->locate(t_range));
 }
@@ -179,7 +180,7 @@ TEST_F(FollowerAnyBefore, LocatePrimedOnDataAnyBeforeBoundary)
 {
   CaptureRange<int> t_range{0, 0};
 
-  this->inject(Dispatch<int, int>{-DELAY - 1, 1});
+  this->inject(Dispatch<int, optional<int>>{-DELAY - 1, 1});
 
   ASSERT_EQ(State::PRIMED, this->locate(t_range));
 }
@@ -189,8 +190,8 @@ TEST_F(FollowerAnyBefore, LocatePrimedOnDataAnyBeforeAndAfterBoundary)
 {
   CaptureRange<int> t_range{0, 0};
 
-  this->inject(Dispatch<int, int>{-DELAY - 1, 1});
-  this->inject(Dispatch<int, int>{-DELAY + 1, 1});
+  this->inject(Dispatch<int, optional<int>>{-DELAY - 1, 1});
+  this->inject(Dispatch<int, optional<int>>{-DELAY + 1, 1});
 
   ASSERT_EQ(State::PRIMED, this->locate(t_range));
 }
@@ -200,8 +201,8 @@ TEST_F(FollowerAnyBefore, LocatePrimedOnDataAnyBeforeAndAtBoundary)
 {
   CaptureRange<int> t_range{0, 0};
 
-  this->inject(Dispatch<int, int>{-DELAY - 1, 1});
-  this->inject(Dispatch<int, int>{-DELAY, 1});
+  this->inject(Dispatch<int, optional<int>>{-DELAY - 1, 1});
+  this->inject(Dispatch<int, optional<int>>{-DELAY, 1});
 
   ASSERT_EQ(State::PRIMED, this->locate(t_range));
 }
@@ -211,9 +212,9 @@ TEST_F(FollowerAnyBefore, LocatePrimedMultiDataAnyBeforeBoundary)
 {
   CaptureRange<int> t_range{0, 0};
 
-  this->inject(Dispatch<int, int>{-DELAY - 1, 1});
-  this->inject(Dispatch<int, int>{-DELAY - 2, 1});
-  this->inject(Dispatch<int, int>{-DELAY + 1, 1});
+  this->inject(Dispatch<int, optional<int>>{-DELAY - 1, 1});
+  this->inject(Dispatch<int, optional<int>>{-DELAY - 2, 1});
+  this->inject(Dispatch<int, optional<int>>{-DELAY + 1, 1});
 
   ASSERT_EQ(State::PRIMED, this->locate(t_range));
 }
@@ -223,9 +224,9 @@ TEST_F(FollowerAnyBefore, LocatePrimedMultiDataAnyBeforeAndAtBoundary)
 {
   CaptureRange<int> t_range{0, 0};
 
-  this->inject(Dispatch<int, int>{-DELAY - 0, 1});
-  this->inject(Dispatch<int, int>{-DELAY - 1, 1});
-  this->inject(Dispatch<int, int>{-DELAY - 2, 1});
+  this->inject(Dispatch<int, optional<int>>{-DELAY - 0, 1});
+  this->inject(Dispatch<int, optional<int>>{-DELAY - 1, 1});
+  this->inject(Dispatch<int, optional<int>>{-DELAY - 2, 1});
 
   ASSERT_EQ(State::PRIMED, this->locate(t_range));
 }
@@ -239,7 +240,7 @@ TEST_F(FollowerAnyBefore, RemovalOnAbort)
   int N = 10;
   while (N--)
   {
-    this->inject(Dispatch<int, int>{t, 1});
+    this->inject(Dispatch<int, optional<int>>{t, 1});
     t += 1;
   }
 

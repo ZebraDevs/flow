@@ -16,6 +16,7 @@
 // Flow
 #include <flow/captor/nolock.hpp>
 #include <flow/follower/ranged.hpp>
+#include <flow/utility/optional.hpp>
 
 using namespace flow;
 using namespace flow::follower;
@@ -23,7 +24,7 @@ using namespace flow::follower;
 
 struct FollowerRangedTest : ::testing::TestWithParam<::std::tuple<int>>
 {
-  using CaptorType = Ranged<Dispatch<int, int>, NoLock>;
+  using CaptorType = Ranged<Dispatch<int, optional<int>>, NoLock>;
 
   void SetUp() final { p_delay = std::get<0>(GetParam()); }
 
@@ -35,7 +36,7 @@ TEST_P(FollowerRangedTest, CaptureRetryOnEmpty)
 {
   CaptorType captor{p_delay};
 
-  std::vector<Dispatch<int, int>> data;
+  std::vector<Dispatch<int, optional<int>>> data;
 
   CaptureRange<int> t_range{0, 0};
   ASSERT_EQ(State::RETRY, captor.capture(std::back_inserter(data), t_range));
@@ -47,7 +48,7 @@ TEST_P(FollowerRangedTest, CaptureAbortOnTooFewBeforeZeroRange)
 {
   CaptorType captor{p_delay};
 
-  std::vector<Dispatch<int, int>> data;
+  std::vector<Dispatch<int, optional<int>>> data;
 
   captor.inject(-p_delay + 1, 100);
   captor.inject(-p_delay + 2, 100);
@@ -62,7 +63,7 @@ TEST_P(FollowerRangedTest, CaptureAbortOnTooFewBeforeNonZeroRange)
 {
   CaptorType captor{p_delay};
 
-  std::vector<Dispatch<int, int>> data;
+  std::vector<Dispatch<int, optional<int>>> data;
 
   captor.inject(-p_delay + 1, 100);
   captor.inject(-p_delay + 2, 100);
@@ -77,7 +78,7 @@ TEST_P(FollowerRangedTest, CaptureRetryOnNoneAfterZeroRange)
 {
   CaptorType captor{p_delay};
 
-  std::vector<Dispatch<int, int>> data;
+  std::vector<Dispatch<int, optional<int>>> data;
 
   captor.inject(-p_delay - 1, 100);
   captor.inject(-p_delay - 2, 100);
@@ -92,7 +93,7 @@ TEST_P(FollowerRangedTest, CaptureRetryOnNoneAfterNonZeroRange)
 {
   CaptorType captor{p_delay};
 
-  std::vector<Dispatch<int, int>> data;
+  std::vector<Dispatch<int, optional<int>>> data;
 
   captor.inject(-p_delay - 1, 100);
   captor.inject(-p_delay + 1, 100);
@@ -107,7 +108,7 @@ TEST_P(FollowerRangedTest, CaptureOnZeroRange)
 {
   CaptorType captor{p_delay};
 
-  std::vector<Dispatch<int, int>> data;
+  std::vector<Dispatch<int, optional<int>>> data;
 
   captor.inject(-p_delay - 1, 100);
   captor.inject(-p_delay + 1, 100);
@@ -122,7 +123,7 @@ TEST_P(FollowerRangedTest, CaptureOnZeroRangeWithIntermediate)
 {
   CaptorType captor{p_delay};
 
-  std::vector<Dispatch<int, int>> data;
+  std::vector<Dispatch<int, optional<int>>> data;
 
   captor.inject(-p_delay - 1, 100);
   captor.inject(-p_delay, 100);
@@ -138,7 +139,7 @@ TEST_P(FollowerRangedTest, CaptureOnNonZeroRange)
 {
   CaptorType captor{p_delay};
 
-  std::vector<Dispatch<int, int>> data;
+  std::vector<Dispatch<int, optional<int>>> data;
 
   captor.inject(-p_delay - 1, 100);
   captor.inject(-p_delay + 2, 100);
@@ -153,7 +154,7 @@ TEST_P(FollowerRangedTest, CaptureOnNonZeroRangeWithIntermediate)
 {
   CaptorType captor{p_delay};
 
-  std::vector<Dispatch<int, int>> data;
+  std::vector<Dispatch<int, optional<int>>> data;
 
   captor.inject(-p_delay - 1, 100);
   captor.inject(-p_delay, 100);
@@ -284,7 +285,7 @@ TEST_P(FollowerRangedTest, RemovalOnAbort)
   int N = 10;
   while (N--)
   {
-    captor.inject(Dispatch<int, int>{t, 1});
+    captor.inject(Dispatch<int, optional<int>>{t, 1});
     t += 1;
   }
 
