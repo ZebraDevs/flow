@@ -295,6 +295,14 @@ template&lt;typename... OtherTs&gt; </td></tr>
 template&lt;typename... OtherTs&gt; </td></tr>
 <tr class="memitem:a64d98f45c52bf4a40e1e29a055776882"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator!=</b> (const <a class="el" href="namespaceflow.html#adefe9726e597eb50c46f0f6a202018e9">State</a> lhs, const std::tuple&lt; <a class="el" href="namespaceflow.html#adefe9726e597eb50c46f0f6a202018e9">State</a>, OtherTs... &gt; &amp;rhs)</td></tr>
 <tr class="separator:a64d98f45c52bf4a40e1e29a055776882"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3842b5e8cd96a88a9b72471da6297bee"><td class="memTemplParams" colspan="2"><a id="a3842b5e8cd96a88a9b72471da6297bee"></a>
+template&lt;typename... OtherTs&gt; </td></tr>
+<tr class="memitem:a3842b5e8cd96a88a9b72471da6297bee"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator==</b> (const std::tuple&lt; <a class="el" href="namespaceflow.html#adefe9726e597eb50c46f0f6a202018e9">State</a>, OtherTs... &gt; &amp;lhs, const <a class="el" href="namespaceflow.html#adefe9726e597eb50c46f0f6a202018e9">State</a> rhs)</td></tr>
+<tr class="separator:a3842b5e8cd96a88a9b72471da6297bee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad41dcb83f942760c61de41f96bba6322"><td class="memTemplParams" colspan="2"><a id="ad41dcb83f942760c61de41f96bba6322"></a>
+template&lt;typename... OtherTs&gt; </td></tr>
+<tr class="memitem:ad41dcb83f942760c61de41f96bba6322"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator!=</b> (const std::tuple&lt; <a class="el" href="namespaceflow.html#adefe9726e597eb50c46f0f6a202018e9">State</a>, OtherTs... &gt; &amp;lhs, const <a class="el" href="namespaceflow.html#adefe9726e597eb50c46f0f6a202018e9">State</a> rhs)</td></tr>
+<tr class="separator:ad41dcb83f942760c61de41f96bba6322"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:add94bf5b887f5f969dd2988fdf0673d9"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceflow.html#add94bf5b887f5f969dd2988fdf0673d9">operator&lt;&lt;</a> (std::ostream &amp;os, const <a class="el" href="namespaceflow.html#adefe9726e597eb50c46f0f6a202018e9">State</a> state)</td></tr>
 <tr class="memdesc:add94bf5b887f5f969dd2988fdf0673d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Output stream overload for <code>State</code> codes.  <a href="namespaceflow.html#add94bf5b887f5f969dd2988fdf0673d9">More...</a><br /></td></tr>
 <tr class="separator:add94bf5b887f5f969dd2988fdf0673d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -329,8 +337,12 @@ template&lt;typename DispatchT &gt; </td></tr>
 <tr class="separator:addfb557e2933e92a2192c0de4d6b4621"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af637729bd4e582460174c671dc619000"><td class="memTemplParams" colspan="2">template&lt;typename NAryInvocableT , typename... ArgTuples&gt; </td></tr>
 <tr class="memitem:af637729bd4e582460174c671dc619000"><td class="memTemplItemLeft" align="right" valign="top">constexpr void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceflow.html#af637729bd4e582460174c671dc619000">apply_every</a> (NAryInvocableT &amp;&amp;fn, ArgTuples &amp;&amp;... targs)</td></tr>
-<tr class="memdesc:af637729bd4e582460174c671dc619000"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calls a binary function on each element of two tuples (e.g <code>std::tuple</code>)  <a href="namespaceflow.html#af637729bd4e582460174c671dc619000">More...</a><br /></td></tr>
+<tr class="memdesc:af637729bd4e582460174c671dc619000"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calls a N-ary function on each element of N tuples (e.g <code>std::tuple</code>)  <a href="namespaceflow.html#af637729bd4e582460174c671dc619000">More...</a><br /></td></tr>
 <tr class="separator:af637729bd4e582460174c671dc619000"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aec52d21de83de43502e0e26915388933"><td class="memTemplParams" colspan="2">template&lt;typename NAryInvocableT , typename... ArgTuples&gt; </td></tr>
+<tr class="memitem:aec52d21de83de43502e0e26915388933"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceflow.html#aec52d21de83de43502e0e26915388933">apply_every_r</a> (NAryInvocableT &amp;&amp;fn, ArgTuples &amp;&amp;... targs)</td></tr>
+<tr class="memdesc:aec52d21de83de43502e0e26915388933"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calls a N-ary function with a returned value on each element of N tuples (e.g <code>std::tuple</code>)  <a href="namespaceflow.html#aec52d21de83de43502e0e26915388933">More...</a><br /></td></tr>
+<tr class="separator:aec52d21de83de43502e0e26915388933"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af332d2067ac2938609786e4bb3ad8b5e"><td class="memTemplParams" colspan="2">template&lt;typename UnaryInvocableTupleT , typename ArgTupleT &gt; </td></tr>
 <tr class="memitem:af332d2067ac2938609786e4bb3ad8b5e"><td class="memTemplItemLeft" align="right" valign="top">constexpr void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceflow.html#af332d2067ac2938609786e4bb3ad8b5e">apply_each</a> (UnaryInvocableTupleT &amp;&amp;fns, ArgTupleT &amp;&amp;targs)</td></tr>
 <tr class="memdesc:af332d2067ac2938609786e4bb3ad8b5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calls a unique function on each element of a tuple (e.g <code>std::tuple</code>)  <a href="namespaceflow.html#af332d2067ac2938609786e4bb3ad8b5e">More...</a><br /></td></tr>
@@ -702,10 +714,10 @@ template&lt;typename NAryInvocableT , typename... ArgTuples&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Calls a binary function on each element of two tuples (e.g <code>std::tuple</code>) </p>
+<p>Calls a N-ary function on each element of N tuples (e.g <code>std::tuple</code>) </p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">NAryInvocableT</td><td>(deduced) binary invocable type:<ul>
+    <tr><td class="paramname">NAryInvocableT</td><td>(deduced) n-ary invocable type:<ul>
 <li>function pointer</li>
 <li>functor object with <code>Object::operator()</code></li>
 <li>lambda function expression </li>
@@ -722,6 +734,66 @@ template&lt;typename NAryInvocableT , typename... ArgTuples&gt; </div>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="aec52d21de83de43502e0e26915388933"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aec52d21de83de43502e0e26915388933">&#9670;&nbsp;</a></span>apply_every_r()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename NAryInvocableT , typename... ArgTuples&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr auto flow::apply_every_r </td>
+          <td>(</td>
+          <td class="paramtype">NAryInvocableT &amp;&amp;&#160;</td>
+          <td class="paramname"><em>fn</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ArgTuples &amp;&amp;...&#160;</td>
+          <td class="paramname"><em>targs</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Calls a N-ary function with a returned value on each element of N tuples (e.g <code>std::tuple</code>) </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">NAryInvocableT</td><td>(deduced) n-ary invocable type:<ul>
+<li>function pointer</li>
+<li>functor object with <code>Object::operator()</code></li>
+<li>lambda function expression </li>
+</ul>
+</td></tr>
+    <tr><td class="paramname">ArgTuples</td><td>(deduced) tuple-like type with element types order according to function argument list</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">fn</td><td>function pointer or functor object </td></tr>
+    <tr><td class="paramname">targs</td><td>tuple with arguments to pass to <code>f</code></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>tuple of return values </dd></dl>
 
 </div>
 </div>

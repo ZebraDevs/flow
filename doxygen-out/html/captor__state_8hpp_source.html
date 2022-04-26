@@ -105,9 +105,19 @@ $(function() {
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;  <span class="keywordflow">return</span> lhs != std::get&lt;0&gt;(rhs);</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;}</div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;}  <span class="comment">// namespace flow</span></div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="preprocessor">#endif  // FLOW_CAPTOR_STATE_HPP</span></div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span>... OtherTs&gt; constexpr <span class="keywordtype">bool</span> operator==(<span class="keyword">const</span> std::tuple&lt;State, OtherTs...&gt;&amp; lhs, <span class="keyword">const</span> <a class="code" href="namespaceflow.html#adefe9726e597eb50c46f0f6a202018e9">State</a> rhs)</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;{</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;  <span class="keywordflow">return</span> std::get&lt;0&gt;(lhs) == rhs;</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;}</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span>... OtherTs&gt; constexpr <span class="keywordtype">bool</span> operator!=(<span class="keyword">const</span> std::tuple&lt;State, OtherTs...&gt;&amp; lhs, <span class="keyword">const</span> <a class="code" href="namespaceflow.html#adefe9726e597eb50c46f0f6a202018e9">State</a> rhs)</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;{</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;  <span class="keywordflow">return</span> std::get&lt;0&gt;(lhs) != rhs;</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;}</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;}  <span class="comment">// namespace flow</span></div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="preprocessor">#endif  // FLOW_CAPTOR_STATE_HPP</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="anamespaceflow_html_adefe9726e597eb50c46f0f6a202018e9a5fb9cb06b1db824c6527795c8d73925d"><div class="ttname"><a href="namespaceflow.html#adefe9726e597eb50c46f0f6a202018e9a5fb9cb06b1db824c6527795c8d73925d">flow::State::ERROR_DRIVER_LOWER_BOUND_EXCEEDED</a></div><div class="ttdeci">@ ERROR_DRIVER_LOWER_BOUND_EXCEEDED</div><div class="ttdoc">Error code used to indicate that driving violated external lower bound.</div></div>
 <div class="ttc" id="anamespaceflow_html_adefe9726e597eb50c46f0f6a202018e9a6eed4968877959d0209d9b75fdd16b52"><div class="ttname"><a href="namespaceflow.html#adefe9726e597eb50c46f0f6a202018e9a6eed4968877959d0209d9b75fdd16b52">flow::State::PRIMED</a></div><div class="ttdeci">@ PRIMED</div><div class="ttdoc">Captor has captured data and its ready.</div></div>

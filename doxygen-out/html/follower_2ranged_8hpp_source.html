@@ -107,13 +107,13 @@ $(function() {
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;  <span class="keyword">friend</span> PolicyType;</div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;  <span class="keyword">template</span> &lt;<span class="keyword">typename</span> OutputDispatchIteratorT&gt;</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;  <span class="keyword">inline</span> <a class="code" href="namespaceflow.html#adefe9726e597eb50c46f0f6a202018e9">State</a> capture_follower_impl(OutputDispatchIteratorT&amp;&amp; output, <span class="keyword">const</span> <a class="code" href="structflow_1_1_capture_range.html">CaptureRange&lt;stamp_type&gt;</a>&amp; range);</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;  <span class="keyword">inline</span> <a class="code" href="namespaceflow.html#adefe9726e597eb50c46f0f6a202018e9">State</a> capture_follower_impl(OutputDispatchIteratorT&amp; output, <span class="keyword">const</span> <a class="code" href="structflow_1_1_capture_range.html">CaptureRange&lt;stamp_type&gt;</a>&amp; range);</div>
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160; </div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;  <span class="keyword">inline</span> std::tuple&lt;State, ExtractionRange&gt; locate_follower_impl(<span class="keyword">const</span> <a class="code" href="structflow_1_1_capture_range.html">CaptureRange&lt;stamp_type&gt;</a>&amp; range) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;  <span class="keyword">template</span> &lt;<span class="keyword">typename</span> OutputDispatchIteratorT&gt;</div>
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;  <span class="keyword">inline</span> <span class="keywordtype">void</span> extract_follower_impl(</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    OutputDispatchIteratorT output,</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    OutputDispatchIteratorT&amp; output,</div>
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    <span class="keyword">const</span> <a class="code" href="structflow_1_1_extraction_range.html">ExtractionRange</a>&amp; extraction_range,</div>
 <div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    <span class="keyword">const</span> <a class="code" href="structflow_1_1_capture_range.html">CaptureRange&lt;stamp_type&gt;</a>&amp; range);</div>
 <div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160; </div>

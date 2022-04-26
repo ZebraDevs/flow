@@ -156,6 +156,12 @@ enum \mbox{\hyperlink{namespaceflow_adefe9726e597eb50c46f0f6a202018e9}{State}} \
 \mbox{\Hypertarget{namespaceflow_a64d98f45c52bf4a40e1e29a055776882}\label{namespaceflow_a64d98f45c52bf4a40e1e29a055776882}} 
 {\footnotesize template$<$typename... Other\+Ts$>$ }\\constexpr bool {\bfseries operator!=} (const \mbox{\hyperlink{namespaceflow_adefe9726e597eb50c46f0f6a202018e9}{State}} lhs, const std\+::tuple$<$ \mbox{\hyperlink{namespaceflow_adefe9726e597eb50c46f0f6a202018e9}{State}}, Other\+Ts... $>$ \&rhs)
 \item 
+\mbox{\Hypertarget{namespaceflow_a3842b5e8cd96a88a9b72471da6297bee}\label{namespaceflow_a3842b5e8cd96a88a9b72471da6297bee}} 
+{\footnotesize template$<$typename... Other\+Ts$>$ }\\constexpr bool {\bfseries operator==} (const std\+::tuple$<$ \mbox{\hyperlink{namespaceflow_adefe9726e597eb50c46f0f6a202018e9}{State}}, Other\+Ts... $>$ \&lhs, const \mbox{\hyperlink{namespaceflow_adefe9726e597eb50c46f0f6a202018e9}{State}} rhs)
+\item 
+\mbox{\Hypertarget{namespaceflow_ad41dcb83f942760c61de41f96bba6322}\label{namespaceflow_ad41dcb83f942760c61de41f96bba6322}} 
+{\footnotesize template$<$typename... Other\+Ts$>$ }\\constexpr bool {\bfseries operator!=} (const std\+::tuple$<$ \mbox{\hyperlink{namespaceflow_adefe9726e597eb50c46f0f6a202018e9}{State}}, Other\+Ts... $>$ \&lhs, const \mbox{\hyperlink{namespaceflow_adefe9726e597eb50c46f0f6a202018e9}{State}} rhs)
+\item 
 std\+::ostream \& \mbox{\hyperlink{namespaceflow_add94bf5b887f5f969dd2988fdf0673d9}{operator$<$$<$}} (std\+::ostream \&os, const \mbox{\hyperlink{namespaceflow_adefe9726e597eb50c46f0f6a202018e9}{State}} state)
 \begin{DoxyCompactList}\small\item\em Output stream overload for {\ttfamily State} codes. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{namespaceflow_a7e74f2c2aa617c702eb0b184658b3e2e}\label{namespaceflow_a7e74f2c2aa617c702eb0b184658b3e2e}} 
@@ -175,7 +181,9 @@ std\+::ostream \& \mbox{\hyperlink{namespaceflow_add94bf5b887f5f969dd2988fdf0673
 {\footnotesize template$<$typename ReturnT , typename Unary\+InvocableT , typename Arg\+TupleT $>$ }\\constexpr std\+::enable\+\_\+if$<$ std\+::is\+\_\+void$<$ ReturnT $>$\+::value $>$\+::type \mbox{\hyperlink{namespaceflow_addfb557e2933e92a2192c0de4d6b4621}{apply}} (Unary\+InvocableT \&\&fn, Arg\+TupleT \&\&targs)
 \begin{DoxyCompactList}\small\item\em Calls function with with tuple (e.\+g {\ttfamily std\+::tuple}) as argument list. \end{DoxyCompactList}\item 
 {\footnotesize template$<$typename N\+Ary\+InvocableT , typename... Arg\+Tuples$>$ }\\constexpr void \mbox{\hyperlink{namespaceflow_af637729bd4e582460174c671dc619000}{apply\+\_\+every}} (N\+Ary\+InvocableT \&\&fn, Arg\+Tuples \&\&... targs)
-\begin{DoxyCompactList}\small\item\em Calls a binary function on each element of two tuples (e.\+g {\ttfamily std\+::tuple}) \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Calls a N-\/ary function on each element of N tuples (e.\+g {\ttfamily std\+::tuple}) \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename N\+Ary\+InvocableT , typename... Arg\+Tuples$>$ }\\constexpr auto \mbox{\hyperlink{namespaceflow_aec52d21de83de43502e0e26915388933}{apply\+\_\+every\+\_\+r}} (N\+Ary\+InvocableT \&\&fn, Arg\+Tuples \&\&... targs)
+\begin{DoxyCompactList}\small\item\em Calls a N-\/ary function with a returned value on each element of N tuples (e.\+g {\ttfamily std\+::tuple}) \end{DoxyCompactList}\item 
 {\footnotesize template$<$typename Unary\+Invocable\+TupleT , typename Arg\+TupleT $>$ }\\constexpr void \mbox{\hyperlink{namespaceflow_af332d2067ac2938609786e4bb3ad8b5e}{apply\+\_\+each}} (Unary\+Invocable\+TupleT \&\&fns, Arg\+TupleT \&\&targs)
 \begin{DoxyCompactList}\small\item\em Calls a unique function on each element of a tuple (e.\+g {\ttfamily std\+::tuple}) \end{DoxyCompactList}\end{DoxyCompactItemize}
 
@@ -458,11 +466,11 @@ constexpr void flow\+::apply\+\_\+every (\begin{DoxyParamCaption}\item[{N\+Ary\+
 
 
 
-Calls a binary function on each element of two tuples (e.\+g {\ttfamily std\+::tuple}) 
+Calls a N-\/ary function on each element of N tuples (e.\+g {\ttfamily std\+::tuple}) 
 
 
 \begin{DoxyTemplParams}{Template Parameters}
-{\em N\+Ary\+InvocableT} & (deduced) binary invocable type\+:
+{\em N\+Ary\+InvocableT} & (deduced) n-\/ary invocable type\+:
 \begin{DoxyItemize}
 \item function pointer
 \item functor object with {\ttfamily Object\+::operator()}
@@ -479,6 +487,39 @@ Calls a binary function on each element of two tuples (e.\+g {\ttfamily std\+::t
 {\em targs} & tuple with arguments to pass to {\ttfamily f} \\
 \hline
 \end{DoxyParams}
+\mbox{\Hypertarget{namespaceflow_aec52d21de83de43502e0e26915388933}\label{namespaceflow_aec52d21de83de43502e0e26915388933}} 
+\index{flow@{flow}!apply\_every\_r@{apply\_every\_r}}
+\index{apply\_every\_r@{apply\_every\_r}!flow@{flow}}
+\doxysubsubsection{\texorpdfstring{apply\_every\_r()}{apply\_every\_r()}}
+{\footnotesize\ttfamily template$<$typename N\+Ary\+InvocableT , typename... Arg\+Tuples$>$ \\
+constexpr auto flow\+::apply\+\_\+every\+\_\+r (\begin{DoxyParamCaption}\item[{N\+Ary\+InvocableT \&\&}]{fn,  }\item[{Arg\+Tuples \&\&...}]{targs }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+Calls a N-\/ary function with a returned value on each element of N tuples (e.\+g {\ttfamily std\+::tuple}) 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em N\+Ary\+InvocableT} & (deduced) n-\/ary invocable type\+:
+\begin{DoxyItemize}
+\item function pointer
+\item functor object with {\ttfamily Object\+::operator()}
+\item lambda function expression 
+\end{DoxyItemize}\\
+\hline
+{\em Arg\+Tuples} & (deduced) tuple-\/like type with element types order according to function argument list\\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em fn} & function pointer or functor object \\
+\hline
+{\em targs} & tuple with arguments to pass to {\ttfamily f}\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+tuple of return values 
+\end{DoxyReturn}
 \mbox{\Hypertarget{namespaceflow_a8423b9d75e853c9c36724474ba20d63a}\label{namespaceflow_a8423b9d75e853c9c36724474ba20d63a}} 
 \index{flow@{flow}!operator$<$$<$@{operator$<$$<$}}
 \index{operator$<$$<$@{operator$<$$<$}!flow@{flow}}

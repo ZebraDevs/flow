@@ -241,219 +241,223 @@ $(function() {
 <div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;  ExtractHelper(ResultT&amp; result) : result_{std::addressof(result)} {}</div>
 <div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160; </div>
 <div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;  <span class="keyword">template</span> &lt;<span class="keyword">typename</span> StampT&gt;</div>
-<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;  constexpr <span class="keywordtype">void</span></div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;  constexpr NoCapture</div>
 <div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;  operator()(<span class="keyword">const</span> CaptureRange&lt;StampT&gt;&amp; range, NoCapture __nc__, <span class="keyword">const</span> ExtractionRange&amp; extraction_range)</div>
-<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;  {}</div>
-<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160; </div>
-<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;  <span class="keyword">template</span> &lt;<span class="keyword">typename</span> CaptorT, <span class="keyword">typename</span> LockPolicyT, <span class="keyword">typename</span> QueueMonitorT, <span class="keyword">typename</span> OutputIteratorT&gt;</div>
-<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;  <span class="keyword">inline</span> <span class="keywordtype">void</span> operator()(</div>
-<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;    Captor&lt;CaptorT, LockPolicyT, QueueMonitorT&gt;&amp; c,</div>
-<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;    OutputIteratorT&amp;&amp; output,</div>
-<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;    <span class="keyword">const</span> ExtractionRange&amp; extraction_range)</div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;  {</div>
-<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;    c.extract(std::forward&lt;OutputIteratorT&gt;(output), extraction_range, result_-&gt;range);</div>
-<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;    c.update_queue_monitor(result_-&gt;range, result_-&gt;state);</div>
-<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;  }</div>
-<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160; </div>
-<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;  ResultT* <span class="keyword">const</span> result_;</div>
-<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;};</div>
-<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160; </div>
-<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span>... CaptorTs&gt; <span class="keyword">struct </span>captor_stamp_types_consistent;</div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;  {</div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;    <span class="keywordflow">return</span> NoCapture{};</div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;  }</div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160; </div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;  <span class="keyword">template</span> &lt;<span class="keyword">typename</span> CaptorT, <span class="keyword">typename</span> LockPolicyT, <span class="keyword">typename</span> QueueMonitorT, <span class="keyword">typename</span> OutputIteratorT&gt;</div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;  <span class="keyword">inline</span> OutputIteratorT operator()(</div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;    Captor&lt;CaptorT, LockPolicyT, QueueMonitorT&gt;&amp; c,</div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;    OutputIteratorT output,</div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;    <span class="keyword">const</span> ExtractionRange&amp; extraction_range)</div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;  {</div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;    output = c.extract(output, extraction_range, result_-&gt;range);</div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;    c.update_queue_monitor(result_-&gt;range, result_-&gt;state);</div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;    <span class="keywordflow">return</span> output;</div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;  }</div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160; </div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;  ResultT* <span class="keyword">const</span> result_;</div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;};</div>
 <div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160; </div>
-<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> CaptorT&gt; <span class="keyword">struct </span>captor_stamp_types_consistent&lt;CaptorT&gt; : std::integral_constant&lt;bool, true&gt;</div>
-<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;{};</div>
-<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160; </div>
-<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> StampT&gt;</div>
-<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;<span class="keyword">struct </span>captor_stamp_types_consistent&lt;CaptureRange&lt;StampT&gt;&gt; : std::integral_constant&lt;bool, true&gt;</div>
-<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;{};</div>
-<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160; </div>
-<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> Captor1T, <span class="keyword">typename</span> Captor2T, <span class="keyword">typename</span>... OtherCaptorTs&gt;</div>
-<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;<span class="keyword">struct </span>captor_stamp_types_consistent&lt;Captor1T, Captor2T, OtherCaptorTs...&gt;</div>
-<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;    : std::integral_constant&lt;</div>
-<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;        bool,</div>
-<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;        std::is_same&lt;</div>
-<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;          typename CaptorTraits&lt;std::remove_reference_t&lt;Captor1T&gt;&gt;::stamp_type,</div>
-<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;          typename CaptorTraits&lt;std::remove_reference_t&lt;Captor2T&gt;&gt;::stamp_type&gt;::value and</div>
-<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;          captor_stamp_types_consistent&lt;OtherCaptorTs...&gt;::value&gt;</div>
-<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;{};</div>
-<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160; </div>
-<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> StampT, <span class="keyword">typename</span> Captor2T, <span class="keyword">typename</span>... OtherCaptorTs&gt;</div>
-<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;<span class="keyword">struct </span>captor_stamp_types_consistent&lt;CaptureRange&lt;StampT&gt;, Captor2T, OtherCaptorTs...&gt;</div>
-<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;    : std::integral_constant&lt;</div>
-<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;        bool,</div>
-<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;        std::is_same&lt;StampT, typename CaptorTraits&lt;std::remove_reference_t&lt;Captor2T&gt;&gt;::stamp_type&gt;::value and</div>
-<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;          captor_stamp_types_consistent&lt;OtherCaptorTs...&gt;::value&gt;</div>
-<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;{};</div>
-<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160; </div>
-<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span>... FollowerTs&gt; <span class="keyword">struct </span>all_captors_are_followers : std::integral_constant&lt;bool, true&gt;</div>
-<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;{};</div>
-<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160; </div>
-<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> FollowerT, <span class="keyword">typename</span>... OtherFollowerTs&gt;</div>
-<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;<span class="keyword">struct </span>all_captors_are_followers&lt;FollowerT, OtherFollowerTs...&gt;</div>
-<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;    : std::integral_constant&lt;</div>
-<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;        bool,</div>
-<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;        is_follower&lt;std::remove_reference_t&lt;FollowerT&gt;&gt;::value and all_captors_are_followers&lt;OtherFollowerTs...&gt;::value&gt;</div>
-<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;{};</div>
-<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160; </div>
-<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> CaptorTupleT&gt; <span class="keyword">struct </span>captor_sequence_valid : std::integral_constant&lt;bool, false&gt;</div>
-<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;{};</div>
-<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160; </div>
-<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">template</span> &lt;<span class="keyword">typename</span>...&gt; <span class="keyword">class </span>TupleLikeTmpl, <span class="keyword">typename</span> DriverT, <span class="keyword">typename</span>... FollowerTs&gt;</div>
-<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;<span class="keyword">struct </span>captor_sequence_valid&lt;TupleLikeTmpl&lt;DriverT, FollowerTs...&gt;&gt;</div>
-<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;    : std::integral_constant&lt;</div>
-<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;        bool,</div>
-<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;        ((is_capture_range&lt;std::remove_const_t&lt;std::remove_reference_t&lt;DriverT&gt;&gt;&gt;::value and</div>
-<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;          sizeof...(FollowerTs) &gt; 0) or</div>
-<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;         (is_driver&lt;std::remove_reference_t&lt;DriverT&gt;&gt;::value)) and</div>
-<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;          all_captors_are_followers&lt;FollowerTs...&gt;::value&gt;</div>
-<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;{};</div>
-<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160; </div>
-<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;}  <span class="comment">// namespace detail</span></div>
-<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;<span class="preprocessor">#endif  // DOXYGEN_SKIP</span></div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span>... CaptorTs&gt; <span class="keyword">struct </span>captor_stamp_types_consistent;</div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160; </div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> CaptorT&gt; <span class="keyword">struct </span>captor_stamp_types_consistent&lt;CaptorT&gt; : std::integral_constant&lt;bool, true&gt;</div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;{};</div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160; </div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> StampT&gt;</div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;<span class="keyword">struct </span>captor_stamp_types_consistent&lt;CaptureRange&lt;StampT&gt;&gt; : std::integral_constant&lt;bool, true&gt;</div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;{};</div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160; </div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> Captor1T, <span class="keyword">typename</span> Captor2T, <span class="keyword">typename</span>... OtherCaptorTs&gt;</div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;<span class="keyword">struct </span>captor_stamp_types_consistent&lt;Captor1T, Captor2T, OtherCaptorTs...&gt;</div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;    : std::integral_constant&lt;</div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;        bool,</div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;        std::is_same&lt;</div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;          typename CaptorTraits&lt;std::remove_reference_t&lt;Captor1T&gt;&gt;::stamp_type,</div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;          typename CaptorTraits&lt;std::remove_reference_t&lt;Captor2T&gt;&gt;::stamp_type&gt;::value and</div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;          captor_stamp_types_consistent&lt;OtherCaptorTs...&gt;::value&gt;</div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;{};</div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160; </div>
+<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> StampT, <span class="keyword">typename</span> Captor2T, <span class="keyword">typename</span>... OtherCaptorTs&gt;</div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;<span class="keyword">struct </span>captor_stamp_types_consistent&lt;CaptureRange&lt;StampT&gt;, Captor2T, OtherCaptorTs...&gt;</div>
+<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;    : std::integral_constant&lt;</div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;        bool,</div>
+<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;        std::is_same&lt;StampT, typename CaptorTraits&lt;std::remove_reference_t&lt;Captor2T&gt;&gt;::stamp_type&gt;::value and</div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;          captor_stamp_types_consistent&lt;OtherCaptorTs...&gt;::value&gt;</div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;{};</div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160; </div>
+<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span>... FollowerTs&gt; <span class="keyword">struct </span>all_captors_are_followers : std::integral_constant&lt;bool, true&gt;</div>
+<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;{};</div>
+<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160; </div>
+<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> FollowerT, <span class="keyword">typename</span>... OtherFollowerTs&gt;</div>
+<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;<span class="keyword">struct </span>all_captors_are_followers&lt;FollowerT, OtherFollowerTs...&gt;</div>
+<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;    : std::integral_constant&lt;</div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;        bool,</div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;        is_follower&lt;std::remove_reference_t&lt;FollowerT&gt;&gt;::value and all_captors_are_followers&lt;OtherFollowerTs...&gt;::value&gt;</div>
+<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;{};</div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160; </div>
+<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> CaptorTupleT&gt; <span class="keyword">struct </span>captor_sequence_valid : std::integral_constant&lt;bool, false&gt;</div>
+<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;{};</div>
+<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160; </div>
+<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">template</span> &lt;<span class="keyword">typename</span>...&gt; <span class="keyword">class </span>TupleLikeTmpl, <span class="keyword">typename</span> DriverT, <span class="keyword">typename</span>... FollowerTs&gt;</div>
+<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;<span class="keyword">struct </span>captor_sequence_valid&lt;TupleLikeTmpl&lt;DriverT, FollowerTs...&gt;&gt;</div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;    : std::integral_constant&lt;</div>
+<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;        bool,</div>
+<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;        ((is_capture_range&lt;std::remove_const_t&lt;std::remove_reference_t&lt;DriverT&gt;&gt;&gt;::value and</div>
+<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;          sizeof...(FollowerTs) &gt; 0) or</div>
+<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;         (is_driver&lt;std::remove_reference_t&lt;DriverT&gt;&gt;::value)) and</div>
+<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;          all_captors_are_followers&lt;FollowerTs...&gt;::value&gt;</div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;{};</div>
 <div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160; </div>
-<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160; </div>
-<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> CaptorTupleT, <span class="keyword">typename</span> OutputIteratorTupleT, <span class="keyword">typename</span> ClockT, <span class="keyword">typename</span> DurationT&gt;</div>
-<div class="line"><a name="l00278"></a><span class="lineno"><a class="line" href="classflow_1_1_synchronizer.html#a664a2a24cba7030d984715454f3b1104">  278</a></span>&#160;<span class="keyword">typename</span> <a class="code" href="structflow_1_1_result.html">Synchronizer::result_t&lt;CaptorTupleT&gt;</a> <a class="code" href="classflow_1_1_synchronizer.html#a664a2a24cba7030d984715454f3b1104">Synchronizer::capture</a>(</div>
-<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;  CaptorTupleT&amp;&amp; captors,</div>
-<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;  OutputIteratorTupleT&amp;&amp; outputs,</div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;  <span class="keyword">const</span> <a class="code" href="classflow_1_1_synchronizer.html#a0f1e7062475c9492191e29b26d09106c">stamp_arg_t&lt;CaptorTupleT&gt;</a> lower_bound,</div>
-<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;  <span class="keyword">const</span> std::chrono::time_point&lt;ClockT, DurationT&gt;&amp; timeout)</div>
-<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;{</div>
-<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;  <span class="keyword">using</span> time_point_type = std::chrono::time_point&lt;ClockT, DurationT&gt;;</div>
-<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160; </div>
-<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;  <span class="comment">// Sanity check captors and outputs</span></div>
-<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;  constexpr <span class="keyword">auto</span> N_CAPTORS = std::tuple_size&lt;std::remove_reference_t&lt;CaptorTupleT&gt;&gt;();</div>
-<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;  constexpr <span class="keyword">auto</span> N_OUTPUTS = std::tuple_size&lt;std::remove_reference_t&lt;OutputIteratorTupleT&gt;&gt;();</div>
-<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;  FLOW_STATIC_ASSERT(N_OUTPUTS == N_CAPTORS, <span class="stringliteral">&quot;[Synchronizer] Number of outputs must match number of captors.&quot;</span>);</div>
-<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160; </div>
-<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;  <span class="comment">// Sanity check captor sequence</span></div>
-<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;  FLOW_STATIC_ASSERT(</div>
-<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;    detail::captor_sequence_valid&lt;CaptorTupleT&gt;(),</div>
-<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;    <span class="stringliteral">&quot;[Synchronizer::capture] Captor sequence is invalid. Must have (DriverType, FollowerTypes...) with &quot;</span></div>
-<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;    <span class="stringliteral">&quot;0 or more FollowerTypes allowed, or (CaptureRange&lt;StampT&gt;, FollowerTypes...) with at least 1 FollowerTypes.&quot;</span>);</div>
-<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160; </div>
-<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;  <span class="comment">// Sanity check captor stamp types</span></div>
-<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;  FLOW_STATIC_ASSERT(</div>
-<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;    detail::captor_stamp_types_consistent&lt;CaptorTupleT&gt;(),</div>
-<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;    <span class="stringliteral">&quot;[Synchronizer::capture] Associated captor stamp types do not match between all captors&quot;</span>);</div>
-<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160; </div>
-<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;  <span class="keyword">using</span> ResultType = <a class="code" href="structflow_1_1_result.html">result_t&lt;CaptorTupleT&gt;</a>;</div>
-<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;  <span class="keyword">using</span> StampType = <a class="code" href="classflow_1_1_synchronizer.html#a2a443abb40ad2413e6d5f7a7f3cfe4a7">stamp_t&lt;CaptorTupleT&gt;</a>;</div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;}  <span class="comment">// namespace detail</span></div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;<span class="preprocessor">#endif  // DOXYGEN_SKIP</span></div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160; </div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160; </div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> CaptorTupleT, <span class="keyword">typename</span> OutputIteratorTupleT, <span class="keyword">typename</span> ClockT, <span class="keyword">typename</span> DurationT&gt;</div>
+<div class="line"><a name="l00281"></a><span class="lineno"><a class="line" href="classflow_1_1_synchronizer.html#ab2d643076fd06ab5efb87f1914ce00f8">  281</a></span>&#160;<span class="keyword">typename</span> std::tuple&lt;Synchronizer::result_t&lt;CaptorTupleT&gt;, OutputIteratorTupleT&gt; <a class="code" href="classflow_1_1_synchronizer.html#ab2d643076fd06ab5efb87f1914ce00f8">Synchronizer::capture</a>(</div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;  CaptorTupleT&amp;&amp; captors,</div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;  OutputIteratorTupleT&amp;&amp; outputs,</div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;  <span class="keyword">const</span> <a class="code" href="classflow_1_1_synchronizer.html#a0f1e7062475c9492191e29b26d09106c">stamp_arg_t&lt;CaptorTupleT&gt;</a> lower_bound,</div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;  <span class="keyword">const</span> std::chrono::time_point&lt;ClockT, DurationT&gt;&amp; timeout)</div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;{</div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;  <span class="keyword">using</span> time_point_type = std::chrono::time_point&lt;ClockT, DurationT&gt;;</div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160; </div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;  <span class="comment">// Sanity check captors and outputs</span></div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;  constexpr <span class="keyword">auto</span> N_CAPTORS = std::tuple_size&lt;std::remove_reference_t&lt;CaptorTupleT&gt;&gt;();</div>
+<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;  constexpr <span class="keyword">auto</span> N_OUTPUTS = std::tuple_size&lt;std::remove_reference_t&lt;OutputIteratorTupleT&gt;&gt;();</div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;  FLOW_STATIC_ASSERT(N_OUTPUTS == N_CAPTORS, <span class="stringliteral">&quot;[Synchronizer] Number of outputs must match number of captors.&quot;</span>);</div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160; </div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;  <span class="comment">// Sanity check captor sequence</span></div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;  FLOW_STATIC_ASSERT(</div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;    detail::captor_sequence_valid&lt;CaptorTupleT&gt;(),</div>
+<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;    <span class="stringliteral">&quot;[Synchronizer::capture] Captor sequence is invalid. Must have (DriverType, FollowerTypes...) with &quot;</span></div>
+<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;    <span class="stringliteral">&quot;0 or more FollowerTypes allowed, or (CaptureRange&lt;StampT&gt;, FollowerTypes...) with at least 1 FollowerTypes.&quot;</span>);</div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160; </div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;  <span class="comment">// Sanity check captor stamp types</span></div>
+<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;  FLOW_STATIC_ASSERT(</div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;    detail::captor_stamp_types_consistent&lt;CaptorTupleT&gt;(),</div>
+<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;    <span class="stringliteral">&quot;[Synchronizer::capture] Associated captor stamp types do not match between all captors&quot;</span>);</div>
 <div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160; </div>
-<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;  <span class="keyword">auto</span> elements = detail::exchange_type_with&lt;ExtractionRange&gt;(captors);</div>
-<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160; </div>
-<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;  ResultType result;</div>
-<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160; </div>
-<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;  <span class="comment">// Attempt to locate elements that we will capture</span></div>
-<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;  <a class="code" href="namespaceflow.html#af637729bd4e582460174c671dc619000">apply_every</a>(</div>
-<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;    detail::LocateHelper&lt;ResultType, StampType, time_point_type&gt;{result, lower_bound, timeout},</div>
-<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;    std::forward&lt;CaptorTupleT&gt;(captors),</div>
-<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;    elements);</div>
-<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160; </div>
-<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;  <span class="comment">// If a RETRY state occurs, don&#39;t try to capture elements</span></div>
-<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;  <span class="keywordflow">if</span> (result.state == <a class="code" href="namespaceflow.html#adefe9726e597eb50c46f0f6a202018e9ac0cc02c3b3d55abb7bfb49ddbb4866c8">State::RETRY</a>)</div>
-<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;  {</div>
-<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;    <span class="keywordflow">return</span> result;</div>
-<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;  }</div>
-<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160; </div>
-<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;  <span class="comment">// Otherwise, capture elements and possibly remove elements from queues</span></div>
-<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;  <a class="code" href="namespaceflow.html#af637729bd4e582460174c671dc619000">apply_every</a>(</div>
-<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;    detail::ExtractHelper&lt;ResultType&gt;{result},</div>
-<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;    std::forward&lt;CaptorTupleT&gt;(captors),</div>
-<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;    std::forward&lt;OutputIteratorTupleT&gt;(outputs),</div>
-<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;    elements);</div>
-<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160; </div>
-<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;  <span class="keywordflow">return</span> result;</div>
-<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;}</div>
+<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;  <span class="keyword">using</span> ResultType = <a class="code" href="structflow_1_1_result.html">result_t&lt;CaptorTupleT&gt;</a>;</div>
+<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;  <span class="keyword">using</span> StampType = <a class="code" href="classflow_1_1_synchronizer.html#a2a443abb40ad2413e6d5f7a7f3cfe4a7">stamp_t&lt;CaptorTupleT&gt;</a>;</div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160; </div>
+<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;  <span class="keyword">auto</span> elements = detail::exchange_type_with&lt;ExtractionRange&gt;(captors);</div>
+<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160; </div>
+<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;  ResultType result;</div>
+<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160; </div>
+<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;  <span class="comment">// Attempt to locate elements that we will capture</span></div>
+<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;  <a class="code" href="namespaceflow.html#af637729bd4e582460174c671dc619000">apply_every</a>(</div>
+<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;    detail::LocateHelper&lt;ResultType, StampType, time_point_type&gt;{result, lower_bound, timeout},</div>
+<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;    std::forward&lt;CaptorTupleT&gt;(captors),</div>
+<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;    elements);</div>
+<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160; </div>
+<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;  <span class="comment">// If a RETRY state occurs, don&#39;t try to capture elements</span></div>
+<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;  <span class="keywordflow">if</span> (result.state == <a class="code" href="namespaceflow.html#adefe9726e597eb50c46f0f6a202018e9ac0cc02c3b3d55abb7bfb49ddbb4866c8">State::RETRY</a>)</div>
+<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;  {</div>
+<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;    <span class="keywordflow">return</span> std::make_tuple(result, std::forward&lt;OutputIteratorTupleT&gt;(outputs));</div>
+<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;  }</div>
+<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160; </div>
+<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;  <span class="comment">// Otherwise, capture elements and possibly remove elements from queues</span></div>
+<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;  <span class="keyword">const</span> <span class="keyword">auto</span> outputs_advanced = <a class="code" href="namespaceflow.html#aec52d21de83de43502e0e26915388933">apply_every_r</a>(</div>
+<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;    detail::ExtractHelper&lt;ResultType&gt;{result},</div>
+<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;    std::forward&lt;CaptorTupleT&gt;(captors),</div>
+<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;    std::forward&lt;OutputIteratorTupleT&gt;(outputs),</div>
+<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;    elements);</div>
 <div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160; </div>
-<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160; </div>
-<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> CaptorTupleT, <span class="keyword">typename</span> OutputIteratorTupleT&gt;</div>
-<div class="line"><a name="l00333"></a><span class="lineno"><a class="line" href="classflow_1_1_synchronizer.html#a140d39b1091ca2ad7f524421a5f9b353">  333</a></span>&#160;<span class="keyword">typename</span> <a class="code" href="structflow_1_1_result.html">Synchronizer::result_t&lt;CaptorTupleT&gt;</a> <a class="code" href="classflow_1_1_synchronizer.html#a664a2a24cba7030d984715454f3b1104">Synchronizer::capture</a>(</div>
-<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;  CaptorTupleT&amp;&amp; captors,</div>
-<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;  OutputIteratorTupleT&amp;&amp; outputs,</div>
-<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;  <span class="keyword">const</span> <a class="code" href="classflow_1_1_synchronizer.html#a0f1e7062475c9492191e29b26d09106c">stamp_arg_t&lt;CaptorTupleT&gt;</a> lower_bound)</div>
-<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;{</div>
-<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;  <span class="keywordflow">return</span> <a class="code" href="classflow_1_1_synchronizer.html#a664a2a24cba7030d984715454f3b1104">capture</a>(</div>
-<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;    std::forward&lt;CaptorTupleT&gt;(captors),</div>
-<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;    std::forward&lt;OutputIteratorTupleT&gt;(outputs),</div>
-<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;    lower_bound,</div>
-<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;    std::chrono::steady_clock::time_point::max());</div>
-<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;}</div>
-<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160; </div>
-<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> CaptorTupleT&gt;</div>
-<div class="line"><a name="l00346"></a><span class="lineno"><a class="line" href="classflow_1_1_synchronizer.html#a2f0d471246ef9e5629282ced5bc21692">  346</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classflow_1_1_synchronizer.html#a2f0d471246ef9e5629282ced5bc21692">Synchronizer::remove</a>(CaptorTupleT&amp;&amp; captors, <span class="keyword">const</span> <a class="code" href="classflow_1_1_synchronizer.html#a0f1e7062475c9492191e29b26d09106c">stamp_arg_t&lt;CaptorTupleT&gt;</a> t_remove)</div>
-<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;{</div>
-<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;  <span class="comment">// Sanity check captor sequence</span></div>
-<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;  FLOW_STATIC_ASSERT(</div>
-<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;    detail::captor_sequence_valid&lt;CaptorTupleT&gt;(),</div>
-<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;    <span class="stringliteral">&quot;[Synchronizer::remove] Captor sequence is invalid. Must have (DriverType, FollowerTypes...) with &quot;</span></div>
-<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;    <span class="stringliteral">&quot;0 or more FollowerTypes allowed, or (CaptureRange&lt;StampT&gt;, FollowerTypes...) with at least 1 FollowerTypes.&quot;</span>);</div>
-<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160; </div>
-<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;  <span class="comment">// Sanity check captor stamp types</span></div>
-<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;  FLOW_STATIC_ASSERT(</div>
-<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;    detail::captor_stamp_types_consistent&lt;CaptorTupleT&gt;(),</div>
-<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;    <span class="stringliteral">&quot;[Synchronizer::remove] Associated captor stamp types do not match between all captors&quot;</span>);</div>
-<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160; </div>
-<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;  <span class="keyword">using</span> StampType = <a class="code" href="classflow_1_1_synchronizer.html#a2a443abb40ad2413e6d5f7a7f3cfe4a7">stamp_t&lt;CaptorTupleT&gt;</a>;</div>
-<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;  <a class="code" href="namespaceflow.html#af637729bd4e582460174c671dc619000">apply_every</a>(detail::RemoveHelper&lt;StampType&gt;{t_remove}, std::forward&lt;CaptorTupleT&gt;(captors));</div>
-<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;}</div>
-<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160; </div>
-<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160; </div>
-<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> CaptorTupleT&gt;</div>
-<div class="line"><a name="l00365"></a><span class="lineno"><a class="line" href="classflow_1_1_synchronizer.html#a6f8979048fa639c51033f0fbca6436fa">  365</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classflow_1_1_synchronizer.html#a6f8979048fa639c51033f0fbca6436fa">Synchronizer::abort</a>(CaptorTupleT&amp;&amp; captors, <span class="keyword">const</span> <a class="code" href="classflow_1_1_synchronizer.html#a0f1e7062475c9492191e29b26d09106c">stamp_arg_t&lt;CaptorTupleT&gt;</a> t_abort)</div>
-<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;{</div>
-<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;  <span class="comment">// Sanity check captor sequence</span></div>
-<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;  FLOW_STATIC_ASSERT(</div>
-<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;    detail::captor_sequence_valid&lt;CaptorTupleT&gt;(),</div>
-<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;    <span class="stringliteral">&quot;[Synchronizer::abort] Captor sequence is invalid. Must have (DriverType, FollowerTypes...) with &quot;</span></div>
-<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;    <span class="stringliteral">&quot;0 or more FollowerTypes allowed, or (CaptureRange&lt;StampT&gt;, FollowerTypes...) with at least 1 FollowerTypes.&quot;</span>);</div>
-<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160; </div>
-<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;  <span class="comment">// Sanity check captor stamp types</span></div>
-<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;  FLOW_STATIC_ASSERT(</div>
-<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;    detail::captor_stamp_types_consistent&lt;CaptorTupleT&gt;(),</div>
-<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;    <span class="stringliteral">&quot;[Synchronizer::abort] Associated captor stamp types do not match between all captors&quot;</span>);</div>
-<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160; </div>
-<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;  <span class="keyword">using</span> StampType = <a class="code" href="classflow_1_1_synchronizer.html#a2a443abb40ad2413e6d5f7a7f3cfe4a7">stamp_t&lt;CaptorTupleT&gt;</a>;</div>
-<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;  <a class="code" href="namespaceflow.html#af637729bd4e582460174c671dc619000">apply_every</a>(detail::AbortHelper&lt;StampType&gt;{t_abort}, std::forward&lt;CaptorTupleT&gt;(captors));</div>
-<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;}</div>
-<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160; </div>
-<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160; </div>
-<div class="line"><a name="l00383"></a><span class="lineno"><a class="line" href="classflow_1_1_synchronizer.html#a26d473f5910f086c0374642c29fc6f87">  383</a></span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> CaptorTupleT&gt; <span class="keywordtype">void</span> <a class="code" href="classflow_1_1_synchronizer.html#a26d473f5910f086c0374642c29fc6f87">Synchronizer::reset</a>(CaptorTupleT&amp;&amp; captors)</div>
-<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;{</div>
-<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;  <span class="comment">// Sanity check captor sequence</span></div>
-<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;  FLOW_STATIC_ASSERT(</div>
-<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;    detail::captor_sequence_valid&lt;CaptorTupleT&gt;(),</div>
-<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;    <span class="stringliteral">&quot;[Synchronizer::reset] Captor sequence is invalid. Must have (DriverType, FollowerTypes...) with &quot;</span></div>
-<div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;    <span class="stringliteral">&quot;0 or more FollowerTypes allowed, or (CaptureRange&lt;StampT&gt;, FollowerTypes...) with at least 1 FollowerTypes.&quot;</span>);</div>
-<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160; </div>
-<div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;  <span class="comment">// Sanity check captor stamp types</span></div>
-<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;  FLOW_STATIC_ASSERT(</div>
-<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;    detail::captor_stamp_types_consistent&lt;CaptorTupleT&gt;(),</div>
-<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;    <span class="stringliteral">&quot;[Synchronizer::reset] Associated captor stamp types do not match between all captors&quot;</span>);</div>
-<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160; </div>
-<div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;  <a class="code" href="namespaceflow.html#af637729bd4e582460174c671dc619000">apply_every</a>(detail::ResetHelper{}, std::forward&lt;CaptorTupleT&gt;(captors));</div>
-<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;}</div>
+<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;  <span class="keywordflow">return</span> std::make_tuple(result, outputs_advanced);</div>
+<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;}</div>
+<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160; </div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160; </div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> CaptorTupleT, <span class="keyword">typename</span> OutputIteratorTupleT&gt;</div>
+<div class="line"><a name="l00336"></a><span class="lineno"><a class="line" href="classflow_1_1_synchronizer.html#a5e3a0a91aa662ba0b626a3ce524fee66">  336</a></span>&#160;<span class="keyword">typename</span> std::tuple&lt;Synchronizer::result_t&lt;CaptorTupleT&gt;, OutputIteratorTupleT&gt; <a class="code" href="classflow_1_1_synchronizer.html#ab2d643076fd06ab5efb87f1914ce00f8">Synchronizer::capture</a>(</div>
+<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;  CaptorTupleT&amp;&amp; captors,</div>
+<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;  OutputIteratorTupleT&amp;&amp; outputs,</div>
+<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;  <span class="keyword">const</span> <a class="code" href="classflow_1_1_synchronizer.html#a0f1e7062475c9492191e29b26d09106c">stamp_arg_t&lt;CaptorTupleT&gt;</a> lower_bound)</div>
+<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;{</div>
+<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;  <span class="keywordflow">return</span> <a class="code" href="classflow_1_1_synchronizer.html#ab2d643076fd06ab5efb87f1914ce00f8">capture</a>(</div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;    std::forward&lt;CaptorTupleT&gt;(captors),</div>
+<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;    std::forward&lt;OutputIteratorTupleT&gt;(outputs),</div>
+<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;    lower_bound,</div>
+<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;    std::chrono::steady_clock::time_point::max());</div>
+<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;}</div>
+<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160; </div>
+<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> CaptorTupleT&gt;</div>
+<div class="line"><a name="l00349"></a><span class="lineno"><a class="line" href="classflow_1_1_synchronizer.html#a2f0d471246ef9e5629282ced5bc21692">  349</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classflow_1_1_synchronizer.html#a2f0d471246ef9e5629282ced5bc21692">Synchronizer::remove</a>(CaptorTupleT&amp;&amp; captors, <span class="keyword">const</span> <a class="code" href="classflow_1_1_synchronizer.html#a0f1e7062475c9492191e29b26d09106c">stamp_arg_t&lt;CaptorTupleT&gt;</a> t_remove)</div>
+<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;{</div>
+<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;  <span class="comment">// Sanity check captor sequence</span></div>
+<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;  FLOW_STATIC_ASSERT(</div>
+<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;    detail::captor_sequence_valid&lt;CaptorTupleT&gt;(),</div>
+<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;    <span class="stringliteral">&quot;[Synchronizer::remove] Captor sequence is invalid. Must have (DriverType, FollowerTypes...) with &quot;</span></div>
+<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;    <span class="stringliteral">&quot;0 or more FollowerTypes allowed, or (CaptureRange&lt;StampT&gt;, FollowerTypes...) with at least 1 FollowerTypes.&quot;</span>);</div>
+<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160; </div>
+<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;  <span class="comment">// Sanity check captor stamp types</span></div>
+<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;  FLOW_STATIC_ASSERT(</div>
+<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;    detail::captor_stamp_types_consistent&lt;CaptorTupleT&gt;(),</div>
+<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;    <span class="stringliteral">&quot;[Synchronizer::remove] Associated captor stamp types do not match between all captors&quot;</span>);</div>
+<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160; </div>
+<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;  <span class="keyword">using</span> StampType = <a class="code" href="classflow_1_1_synchronizer.html#a2a443abb40ad2413e6d5f7a7f3cfe4a7">stamp_t&lt;CaptorTupleT&gt;</a>;</div>
+<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;  <a class="code" href="namespaceflow.html#af637729bd4e582460174c671dc619000">apply_every</a>(detail::RemoveHelper&lt;StampType&gt;{t_remove}, std::forward&lt;CaptorTupleT&gt;(captors));</div>
+<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;}</div>
+<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160; </div>
+<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160; </div>
+<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> CaptorTupleT&gt;</div>
+<div class="line"><a name="l00368"></a><span class="lineno"><a class="line" href="classflow_1_1_synchronizer.html#a6f8979048fa639c51033f0fbca6436fa">  368</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classflow_1_1_synchronizer.html#a6f8979048fa639c51033f0fbca6436fa">Synchronizer::abort</a>(CaptorTupleT&amp;&amp; captors, <span class="keyword">const</span> <a class="code" href="classflow_1_1_synchronizer.html#a0f1e7062475c9492191e29b26d09106c">stamp_arg_t&lt;CaptorTupleT&gt;</a> t_abort)</div>
+<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;{</div>
+<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;  <span class="comment">// Sanity check captor sequence</span></div>
+<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;  FLOW_STATIC_ASSERT(</div>
+<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;    detail::captor_sequence_valid&lt;CaptorTupleT&gt;(),</div>
+<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;    <span class="stringliteral">&quot;[Synchronizer::abort] Captor sequence is invalid. Must have (DriverType, FollowerTypes...) with &quot;</span></div>
+<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;    <span class="stringliteral">&quot;0 or more FollowerTypes allowed, or (CaptureRange&lt;StampT&gt;, FollowerTypes...) with at least 1 FollowerTypes.&quot;</span>);</div>
+<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160; </div>
+<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;  <span class="comment">// Sanity check captor stamp types</span></div>
+<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;  FLOW_STATIC_ASSERT(</div>
+<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;    detail::captor_stamp_types_consistent&lt;CaptorTupleT&gt;(),</div>
+<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;    <span class="stringliteral">&quot;[Synchronizer::abort] Associated captor stamp types do not match between all captors&quot;</span>);</div>
+<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160; </div>
+<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;  <span class="keyword">using</span> StampType = <a class="code" href="classflow_1_1_synchronizer.html#a2a443abb40ad2413e6d5f7a7f3cfe4a7">stamp_t&lt;CaptorTupleT&gt;</a>;</div>
+<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;  <a class="code" href="namespaceflow.html#af637729bd4e582460174c671dc619000">apply_every</a>(detail::AbortHelper&lt;StampType&gt;{t_abort}, std::forward&lt;CaptorTupleT&gt;(captors));</div>
+<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;}</div>
+<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160; </div>
+<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160; </div>
+<div class="line"><a name="l00386"></a><span class="lineno"><a class="line" href="classflow_1_1_synchronizer.html#a26d473f5910f086c0374642c29fc6f87">  386</a></span>&#160;<span class="keyword">template</span> &lt;<span class="keyword">typename</span> CaptorTupleT&gt; <span class="keywordtype">void</span> <a class="code" href="classflow_1_1_synchronizer.html#a26d473f5910f086c0374642c29fc6f87">Synchronizer::reset</a>(CaptorTupleT&amp;&amp; captors)</div>
+<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;{</div>
+<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;  <span class="comment">// Sanity check captor sequence</span></div>
+<div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;  FLOW_STATIC_ASSERT(</div>
+<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;    detail::captor_sequence_valid&lt;CaptorTupleT&gt;(),</div>
+<div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;    <span class="stringliteral">&quot;[Synchronizer::reset] Captor sequence is invalid. Must have (DriverType, FollowerTypes...) with &quot;</span></div>
+<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;    <span class="stringliteral">&quot;0 or more FollowerTypes allowed, or (CaptureRange&lt;StampT&gt;, FollowerTypes...) with at least 1 FollowerTypes.&quot;</span>);</div>
+<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160; </div>
+<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;  <span class="comment">// Sanity check captor stamp types</span></div>
+<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;  FLOW_STATIC_ASSERT(</div>
+<div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;    detail::captor_stamp_types_consistent&lt;CaptorTupleT&gt;(),</div>
+<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;    <span class="stringliteral">&quot;[Synchronizer::reset] Associated captor stamp types do not match between all captors&quot;</span>);</div>
 <div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160; </div>
-<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;}  <span class="comment">// namespace flow</span></div>
-<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160; </div>
-<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;<span class="preprocessor">#endif  // FLOW_IMPL_SYNCHRONIZER_HPP</span></div>
+<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;  <a class="code" href="namespaceflow.html#af637729bd4e582460174c671dc619000">apply_every</a>(detail::ResetHelper{}, std::forward&lt;CaptorTupleT&gt;(captors));</div>
+<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;}</div>
+<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160; </div>
+<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;}  <span class="comment">// namespace flow</span></div>
+<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160; </div>
+<div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160;<span class="preprocessor">#endif  // FLOW_IMPL_SYNCHRONIZER_HPP</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="aclassflow_1_1_synchronizer_html_a2a443abb40ad2413e6d5f7a7f3cfe4a7"><div class="ttname"><a href="classflow_1_1_synchronizer.html#a2a443abb40ad2413e6d5f7a7f3cfe4a7">flow::Synchronizer::stamp_t</a></div><div class="ttdeci">typename SequenceStampType&lt; std::remove_reference_t&lt; std::tuple_element_t&lt; 0UL, CaptorTupleT &gt; &gt;&gt;::type stamp_t</div><div class="ttdoc">Stamp type from capture sequence alias.</div><div class="ttdef"><b>Definition:</b> synchronizer.hpp:99</div></div>
 <div class="ttc" id="anamespaceflow_html_adefe9726e597eb50c46f0f6a202018e9a5fb9cb06b1db824c6527795c8d73925d"><div class="ttname"><a href="namespaceflow.html#adefe9726e597eb50c46f0f6a202018e9a5fb9cb06b1db824c6527795c8d73925d">flow::State::ERROR_DRIVER_LOWER_BOUND_EXCEEDED</a></div><div class="ttdeci">@ ERROR_DRIVER_LOWER_BOUND_EXCEEDED</div><div class="ttdoc">Error code used to indicate that driving violated external lower bound.</div></div>
 <div class="ttc" id="anamespaceflow_html_adefe9726e597eb50c46f0f6a202018e9a6eed4968877959d0209d9b75fdd16b52"><div class="ttname"><a href="namespaceflow.html#adefe9726e597eb50c46f0f6a202018e9a6eed4968877959d0209d9b75fdd16b52">flow::State::PRIMED</a></div><div class="ttdeci">@ PRIMED</div><div class="ttdoc">Captor has captured data and its ready.</div></div>
 <div class="ttc" id="anamespaceflow_html_adefe9726e597eb50c46f0f6a202018e9ac0cc02c3b3d55abb7bfb49ddbb4866c8"><div class="ttname"><a href="namespaceflow.html#adefe9726e597eb50c46f0f6a202018e9ac0cc02c3b3d55abb7bfb49ddbb4866c8">flow::State::RETRY</a></div><div class="ttdeci">@ RETRY</div><div class="ttdoc">Captor should continue waiting for data after prime attempt.</div></div>
-<div class="ttc" id="aclassflow_1_1_synchronizer_html_a664a2a24cba7030d984715454f3b1104"><div class="ttname"><a href="classflow_1_1_synchronizer.html#a664a2a24cba7030d984715454f3b1104">flow::Synchronizer::capture</a></div><div class="ttdeci">static result_t&lt; CaptorTupleT &gt; capture(CaptorTupleT &amp;&amp;captors, OutputIteratorTupleT &amp;&amp;outputs, const stamp_arg_t&lt; CaptorTupleT &gt; lower_bound, const std::chrono::time_point&lt; ClockT, DurationT &gt; &amp;timeout)</div><div class="ttdoc">Runs synchronization and data capture across all captors.</div><div class="ttdef"><b>Definition:</b> synchronizer.hpp:278</div></div>
 <div class="ttc" id="anamespaceflow_html"><div class="ttname"><a href="namespaceflow.html">flow</a></div><div class="ttdoc">Flow input synchronization library components.</div><div class="ttdef"><b>Definition:</b> lockable.hpp:20</div></div>
 <div class="ttc" id="anamespaceflow_html_adefe9726e597eb50c46f0f6a202018e9a8d12a2ca7e5a64036d7251a3eda51a38"><div class="ttname"><a href="namespaceflow.html#adefe9726e597eb50c46f0f6a202018e9a8d12a2ca7e5a64036d7251a3eda51a38">flow::State::ABORT</a></div><div class="ttdeci">@ ABORT</div><div class="ttdoc">Captor has requested to abort current capture attempt.</div></div>
-<div class="ttc" id="aclassflow_1_1_synchronizer_html_a6f8979048fa639c51033f0fbca6436fa"><div class="ttname"><a href="classflow_1_1_synchronizer.html#a6f8979048fa639c51033f0fbca6436fa">flow::Synchronizer::abort</a></div><div class="ttdeci">static void abort(CaptorTupleT &amp;&amp;captors, const stamp_arg_t&lt; CaptorTupleT &gt; t_abort)</div><div class="ttdoc">Abort active capture at and before t_abort.</div><div class="ttdef"><b>Definition:</b> synchronizer.hpp:365</div></div>
+<div class="ttc" id="aclassflow_1_1_synchronizer_html_a6f8979048fa639c51033f0fbca6436fa"><div class="ttname"><a href="classflow_1_1_synchronizer.html#a6f8979048fa639c51033f0fbca6436fa">flow::Synchronizer::abort</a></div><div class="ttdeci">static void abort(CaptorTupleT &amp;&amp;captors, const stamp_arg_t&lt; CaptorTupleT &gt; t_abort)</div><div class="ttdoc">Abort active capture at and before t_abort.</div><div class="ttdef"><b>Definition:</b> synchronizer.hpp:368</div></div>
 <div class="ttc" id="aclassflow_1_1_synchronizer_html_a0f1e7062475c9492191e29b26d09106c"><div class="ttname"><a href="classflow_1_1_synchronizer.html#a0f1e7062475c9492191e29b26d09106c">flow::Synchronizer::stamp_arg_t</a></div><div class="ttdeci">arg_t&lt; stamp_t&lt; CaptorTupleT &gt; &gt; stamp_arg_t</div><div class="ttdoc">Stamp argument type from capture sequence alias.</div><div class="ttdef"><b>Definition:</b> synchronizer.hpp:106</div></div>
 <div class="ttc" id="astructflow_1_1_no_capture_html"><div class="ttname"><a href="structflow_1_1_no_capture.html">flow::NoCapture</a></div><div class="ttdoc">Object used in place of output iterator as a placeholder with no data capture effects.</div><div class="ttdef"><b>Definition:</b> synchronizer.hpp:46</div></div>
-<div class="ttc" id="aclassflow_1_1_synchronizer_html_a2f0d471246ef9e5629282ced5bc21692"><div class="ttname"><a href="classflow_1_1_synchronizer.html#a2f0d471246ef9e5629282ced5bc21692">flow::Synchronizer::remove</a></div><div class="ttdeci">static void remove(CaptorTupleT &amp;&amp;captors, const stamp_arg_t&lt; CaptorTupleT &gt; t_remove)</div><div class="ttdoc">Removes all possible synchronization frames at and before t_remove.</div><div class="ttdef"><b>Definition:</b> synchronizer.hpp:346</div></div>
-<div class="ttc" id="anamespaceflow_html_af637729bd4e582460174c671dc619000"><div class="ttname"><a href="namespaceflow.html#af637729bd4e582460174c671dc619000">flow::apply_every</a></div><div class="ttdeci">constexpr void apply_every(NAryInvocableT &amp;&amp;fn, ArgTuples &amp;&amp;... targs)</div><div class="ttdoc">Calls a binary function on each element of two tuples (e.g std::tuple)</div><div class="ttdef"><b>Definition:</b> apply.hpp:131</div></div>
+<div class="ttc" id="aclassflow_1_1_synchronizer_html_a2f0d471246ef9e5629282ced5bc21692"><div class="ttname"><a href="classflow_1_1_synchronizer.html#a2f0d471246ef9e5629282ced5bc21692">flow::Synchronizer::remove</a></div><div class="ttdeci">static void remove(CaptorTupleT &amp;&amp;captors, const stamp_arg_t&lt; CaptorTupleT &gt; t_remove)</div><div class="ttdoc">Removes all possible synchronization frames at and before t_remove.</div><div class="ttdef"><b>Definition:</b> synchronizer.hpp:349</div></div>
+<div class="ttc" id="anamespaceflow_html_aec52d21de83de43502e0e26915388933"><div class="ttname"><a href="namespaceflow.html#aec52d21de83de43502e0e26915388933">flow::apply_every_r</a></div><div class="ttdeci">constexpr auto apply_every_r(NAryInvocableT &amp;&amp;fn, ArgTuples &amp;&amp;... targs)</div><div class="ttdoc">Calls a N-ary function with a returned value on each element of N tuples (e.g std::tuple)</div><div class="ttdef"><b>Definition:</b> apply.hpp:166</div></div>
+<div class="ttc" id="anamespaceflow_html_af637729bd4e582460174c671dc619000"><div class="ttname"><a href="namespaceflow.html#af637729bd4e582460174c671dc619000">flow::apply_every</a></div><div class="ttdeci">constexpr void apply_every(NAryInvocableT &amp;&amp;fn, ArgTuples &amp;&amp;... targs)</div><div class="ttdoc">Calls a N-ary function on each element of N tuples (e.g std::tuple)</div><div class="ttdef"><b>Definition:</b> apply.hpp:143</div></div>
 <div class="ttc" id="astructflow_1_1_result_html"><div class="ttname"><a href="structflow_1_1_result.html">flow::Result</a></div><div class="ttdoc">Event synchronization result summary.</div><div class="ttdef"><b>Definition:</b> synchronizer.hpp:25</div></div>
 <div class="ttc" id="anamespacestd_html"><div class="ttname"><a href="namespacestd.html">std</a></div><div class="ttdef"><b>Definition:</b> synchronizer.hpp:19</div></div>
-<div class="ttc" id="aclassflow_1_1_synchronizer_html_a26d473f5910f086c0374642c29fc6f87"><div class="ttname"><a href="classflow_1_1_synchronizer.html#a26d473f5910f086c0374642c29fc6f87">flow::Synchronizer::reset</a></div><div class="ttdeci">static void reset(CaptorTupleT &amp;&amp;captors)</div><div class="ttdoc">Resets internal captors states and removes all buffered data.</div><div class="ttdef"><b>Definition:</b> synchronizer.hpp:383</div></div>
+<div class="ttc" id="aclassflow_1_1_synchronizer_html_a26d473f5910f086c0374642c29fc6f87"><div class="ttname"><a href="classflow_1_1_synchronizer.html#a26d473f5910f086c0374642c29fc6f87">flow::Synchronizer::reset</a></div><div class="ttdeci">static void reset(CaptorTupleT &amp;&amp;captors)</div><div class="ttdoc">Resets internal captors states and removes all buffered data.</div><div class="ttdef"><b>Definition:</b> synchronizer.hpp:386</div></div>
+<div class="ttc" id="aclassflow_1_1_synchronizer_html_ab2d643076fd06ab5efb87f1914ce00f8"><div class="ttname"><a href="classflow_1_1_synchronizer.html#ab2d643076fd06ab5efb87f1914ce00f8">flow::Synchronizer::capture</a></div><div class="ttdeci">static std::tuple&lt; result_t&lt; CaptorTupleT &gt;, OutputIteratorTupleT &gt; capture(CaptorTupleT &amp;&amp;captors, OutputIteratorTupleT &amp;&amp;outputs, const stamp_arg_t&lt; CaptorTupleT &gt; lower_bound, const std::chrono::time_point&lt; ClockT, DurationT &gt; &amp;timeout)</div><div class="ttdoc">Runs synchronization and data capture across all captors.</div><div class="ttdef"><b>Definition:</b> synchronizer.hpp:281</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">

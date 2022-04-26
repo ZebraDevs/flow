@@ -5,5 +5,6 @@ var searchData=
   ['apply_3',['apply',['../namespaceflow.html#a576ffe4655756f441e6b680ae6c584ef',1,'flow::apply(UnaryInvocableT &amp;&amp;fn, ArgTupleT &amp;&amp;targs)'],['../namespaceflow.html#addfb557e2933e92a2192c0de4d6b4621',1,'flow::apply(UnaryInvocableT &amp;&amp;fn, ArgTupleT &amp;&amp;targs)']]],
   ['apply_5feach_4',['apply_each',['../namespaceflow.html#af332d2067ac2938609786e4bb3ad8b5e',1,'flow']]],
   ['apply_5fevery_5',['apply_every',['../namespaceflow.html#af637729bd4e582460174c671dc619000',1,'flow']]],
-  ['arg_5ft_6',['arg_t',['../classflow_1_1_synchronizer.html#a70d66cab3e69f69931cbaee6dbd5bdfb',1,'flow::Synchronizer']]]
+  ['apply_5fevery_5fr_6',['apply_every_r',['../namespaceflow.html#aec52d21de83de43502e0e26915388933',1,'flow']]],
+  ['arg_5ft_7',['arg_t',['../classflow_1_1_synchronizer.html#a70d66cab3e69f69931cbaee6dbd5bdfb',1,'flow::Synchronizer']]]
 ];

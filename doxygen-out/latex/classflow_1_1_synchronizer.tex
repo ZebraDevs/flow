@@ -30,9 +30,9 @@ Provides facilities to synchronize data across several Captors.
 \begin{DoxyCompactList}\small\item\em Abort active capture at and before {\ttfamily t\+\_\+abort}. \end{DoxyCompactList}\item 
 {\footnotesize template$<$typename Captor\+TupleT $>$ }\\static void \mbox{\hyperlink{classflow_1_1_synchronizer_a26d473f5910f086c0374642c29fc6f87}{reset}} (Captor\+TupleT \&\&captors)
 \begin{DoxyCompactList}\small\item\em Resets internal captors states and removes all buffered data. \end{DoxyCompactList}\item 
-{\footnotesize template$<$typename Captor\+TupleT , typename Output\+Iterator\+TupleT , typename ClockT , typename DurationT $>$ }\\static \mbox{\hyperlink{classflow_1_1_synchronizer_a4f9693650274ae93f5b9a11cb41a2d80}{result\+\_\+t}}$<$ Captor\+TupleT $>$ \mbox{\hyperlink{classflow_1_1_synchronizer_a664a2a24cba7030d984715454f3b1104}{capture}} (Captor\+TupleT \&\&captors, Output\+Iterator\+TupleT \&\&outputs, const \mbox{\hyperlink{classflow_1_1_synchronizer_a0f1e7062475c9492191e29b26d09106c}{stamp\+\_\+arg\+\_\+t}}$<$ Captor\+TupleT $>$ lower\+\_\+bound, const std\+::chrono\+::time\+\_\+point$<$ ClockT, DurationT $>$ \&timeout)
+{\footnotesize template$<$typename Captor\+TupleT , typename Output\+Iterator\+TupleT , typename ClockT , typename DurationT $>$ }\\static std\+::tuple$<$ \mbox{\hyperlink{classflow_1_1_synchronizer_a4f9693650274ae93f5b9a11cb41a2d80}{result\+\_\+t}}$<$ Captor\+TupleT $>$, Output\+Iterator\+TupleT $>$ \mbox{\hyperlink{classflow_1_1_synchronizer_ab2d643076fd06ab5efb87f1914ce00f8}{capture}} (Captor\+TupleT \&\&captors, Output\+Iterator\+TupleT \&\&outputs, const \mbox{\hyperlink{classflow_1_1_synchronizer_a0f1e7062475c9492191e29b26d09106c}{stamp\+\_\+arg\+\_\+t}}$<$ Captor\+TupleT $>$ lower\+\_\+bound, const std\+::chrono\+::time\+\_\+point$<$ ClockT, DurationT $>$ \&timeout)
 \begin{DoxyCompactList}\small\item\em Runs synchronization and data capture across all captors. \end{DoxyCompactList}\item 
-{\footnotesize template$<$typename Captor\+TupleT , typename Output\+Iterator\+TupleT $>$ }\\static \mbox{\hyperlink{classflow_1_1_synchronizer_a4f9693650274ae93f5b9a11cb41a2d80}{result\+\_\+t}}$<$ Captor\+TupleT $>$ \mbox{\hyperlink{classflow_1_1_synchronizer_a140d39b1091ca2ad7f524421a5f9b353}{capture}} (Captor\+TupleT \&\&captors, Output\+Iterator\+TupleT \&\&outputs, const \mbox{\hyperlink{classflow_1_1_synchronizer_a0f1e7062475c9492191e29b26d09106c}{stamp\+\_\+arg\+\_\+t}}$<$ Captor\+TupleT $>$ lower\+\_\+bound=\mbox{\hyperlink{structflow_1_1_stamp_traits}{Stamp\+Traits}}$<$ \mbox{\hyperlink{classflow_1_1_synchronizer_a2a443abb40ad2413e6d5f7a7f3cfe4a7}{stamp\+\_\+t}}$<$ Captor\+TupleT $>$$>$\+::min())
+{\footnotesize template$<$typename Captor\+TupleT , typename Output\+Iterator\+TupleT $>$ }\\static std\+::tuple$<$ \mbox{\hyperlink{classflow_1_1_synchronizer_a4f9693650274ae93f5b9a11cb41a2d80}{result\+\_\+t}}$<$ Captor\+TupleT $>$, Output\+Iterator\+TupleT $>$ \mbox{\hyperlink{classflow_1_1_synchronizer_a5e3a0a91aa662ba0b626a3ce524fee66}{capture}} (Captor\+TupleT \&\&captors, Output\+Iterator\+TupleT \&\&outputs, const \mbox{\hyperlink{classflow_1_1_synchronizer_a0f1e7062475c9492191e29b26d09106c}{stamp\+\_\+arg\+\_\+t}}$<$ Captor\+TupleT $>$ lower\+\_\+bound=\mbox{\hyperlink{structflow_1_1_stamp_traits}{Stamp\+Traits}}$<$ \mbox{\hyperlink{classflow_1_1_synchronizer_a2a443abb40ad2413e6d5f7a7f3cfe4a7}{stamp\+\_\+t}}$<$ Captor\+TupleT $>$$>$\+::min())
 \begin{DoxyCompactList}\small\item\em Runs synchronization and data capture across all captors. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
@@ -116,12 +116,12 @@ If a capture uses a data wait, this will notify the wait Captors will removing b
 {\em t\+\_\+abort} & abort time point \\
 \hline
 \end{DoxyParams}
-\mbox{\Hypertarget{classflow_1_1_synchronizer_a664a2a24cba7030d984715454f3b1104}\label{classflow_1_1_synchronizer_a664a2a24cba7030d984715454f3b1104}} 
+\mbox{\Hypertarget{classflow_1_1_synchronizer_ab2d643076fd06ab5efb87f1914ce00f8}\label{classflow_1_1_synchronizer_ab2d643076fd06ab5efb87f1914ce00f8}} 
 \index{flow::Synchronizer@{flow::Synchronizer}!capture@{capture}}
 \index{capture@{capture}!flow::Synchronizer@{flow::Synchronizer}}
 \doxysubsubsection{\texorpdfstring{capture()}{capture()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
 {\footnotesize\ttfamily template$<$typename Captor\+TupleT , typename Output\+Iterator\+TupleT , typename ClockT , typename DurationT $>$ \\
-\mbox{\hyperlink{classflow_1_1_synchronizer_a4f9693650274ae93f5b9a11cb41a2d80}{Synchronizer\+::result\+\_\+t}}$<$ Captor\+TupleT $>$ flow\+::\+Synchronizer\+::capture (\begin{DoxyParamCaption}\item[{Captor\+TupleT \&\&}]{captors,  }\item[{Output\+Iterator\+TupleT \&\&}]{outputs,  }\item[{const \mbox{\hyperlink{classflow_1_1_synchronizer_a0f1e7062475c9492191e29b26d09106c}{stamp\+\_\+arg\+\_\+t}}$<$ Captor\+TupleT $>$}]{lower\+\_\+bound,  }\item[{const std\+::chrono\+::time\+\_\+point$<$ ClockT, DurationT $>$ \&}]{timeout }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+std\+::tuple$<$ \mbox{\hyperlink{classflow_1_1_synchronizer_a4f9693650274ae93f5b9a11cb41a2d80}{Synchronizer\+::result\+\_\+t}}$<$ Captor\+TupleT $>$, Output\+Iterator\+TupleT $>$ flow\+::\+Synchronizer\+::capture (\begin{DoxyParamCaption}\item[{Captor\+TupleT \&\&}]{captors,  }\item[{Output\+Iterator\+TupleT \&\&}]{outputs,  }\item[{const \mbox{\hyperlink{classflow_1_1_synchronizer_a0f1e7062475c9492191e29b26d09106c}{stamp\+\_\+arg\+\_\+t}}$<$ Captor\+TupleT $>$}]{lower\+\_\+bound,  }\item[{const std\+::chrono\+::time\+\_\+point$<$ ClockT, DurationT $>$ \&}]{timeout }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
 
 
 
@@ -150,14 +150,14 @@ Runs synchronization and data capture across all captors.
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
-capture/synchronization details 
+{\ttfamily \{synchronization state, output iterators\}} 
 \end{DoxyReturn}
-\mbox{\Hypertarget{classflow_1_1_synchronizer_a140d39b1091ca2ad7f524421a5f9b353}\label{classflow_1_1_synchronizer_a140d39b1091ca2ad7f524421a5f9b353}} 
+\mbox{\Hypertarget{classflow_1_1_synchronizer_a5e3a0a91aa662ba0b626a3ce524fee66}\label{classflow_1_1_synchronizer_a5e3a0a91aa662ba0b626a3ce524fee66}} 
 \index{flow::Synchronizer@{flow::Synchronizer}!capture@{capture}}
 \index{capture@{capture}!flow::Synchronizer@{flow::Synchronizer}}
 \doxysubsubsection{\texorpdfstring{capture()}{capture()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
 {\footnotesize\ttfamily template$<$typename Captor\+TupleT , typename Output\+Iterator\+TupleT $>$ \\
-\mbox{\hyperlink{classflow_1_1_synchronizer_a4f9693650274ae93f5b9a11cb41a2d80}{Synchronizer\+::result\+\_\+t}}$<$ Captor\+TupleT $>$ flow\+::\+Synchronizer\+::capture (\begin{DoxyParamCaption}\item[{Captor\+TupleT \&\&}]{captors,  }\item[{Output\+Iterator\+TupleT \&\&}]{outputs,  }\item[{const \mbox{\hyperlink{classflow_1_1_synchronizer_a0f1e7062475c9492191e29b26d09106c}{stamp\+\_\+arg\+\_\+t}}$<$ Captor\+TupleT $>$}]{lower\+\_\+bound = {\ttfamily \mbox{\hyperlink{structflow_1_1_stamp_traits}{Stamp\+Traits}}$<$\mbox{\hyperlink{classflow_1_1_synchronizer_a2a443abb40ad2413e6d5f7a7f3cfe4a7}{stamp\+\_\+t}}$<$CaptorTupleT$>$$>$\+:\+:min()} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+std\+::tuple$<$ \mbox{\hyperlink{classflow_1_1_synchronizer_a4f9693650274ae93f5b9a11cb41a2d80}{Synchronizer\+::result\+\_\+t}}$<$ Captor\+TupleT $>$, Output\+Iterator\+TupleT $>$ flow\+::\+Synchronizer\+::capture (\begin{DoxyParamCaption}\item[{Captor\+TupleT \&\&}]{captors,  }\item[{Output\+Iterator\+TupleT \&\&}]{outputs,  }\item[{const \mbox{\hyperlink{classflow_1_1_synchronizer_a0f1e7062475c9492191e29b26d09106c}{stamp\+\_\+arg\+\_\+t}}$<$ Captor\+TupleT $>$}]{lower\+\_\+bound = {\ttfamily \mbox{\hyperlink{structflow_1_1_stamp_traits}{Stamp\+Traits}}$<$\mbox{\hyperlink{classflow_1_1_synchronizer_a2a443abb40ad2413e6d5f7a7f3cfe4a7}{stamp\+\_\+t}}$<$CaptorTupleT$>$$>$\+:\+:min()} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
 
 
 
@@ -180,7 +180,7 @@ Runs synchronization and data capture across all captors.
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
-capture/synchronization details 
+{\ttfamily \{synchronization state, output iterators\}} 
 \end{DoxyReturn}
 \mbox{\Hypertarget{classflow_1_1_synchronizer_a2f0d471246ef9e5629282ced5bc21692}\label{classflow_1_1_synchronizer_a2f0d471246ef9e5629282ced5bc21692}} 
 \index{flow::Synchronizer@{flow::Synchronizer}!remove@{remove}}

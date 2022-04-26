@@ -115,14 +115,14 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a26d473f5910f086c0374642c29fc6f87"><td class="memTemplItemLeft" align="right" valign="top">static void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classflow_1_1_synchronizer.html#a26d473f5910f086c0374642c29fc6f87">reset</a> (CaptorTupleT &amp;&amp;captors)</td></tr>
 <tr class="memdesc:a26d473f5910f086c0374642c29fc6f87"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resets internal captors states and removes all buffered data.  <a href="classflow_1_1_synchronizer.html#a26d473f5910f086c0374642c29fc6f87">More...</a><br /></td></tr>
 <tr class="separator:a26d473f5910f086c0374642c29fc6f87"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a664a2a24cba7030d984715454f3b1104"><td class="memTemplParams" colspan="2">template&lt;typename CaptorTupleT , typename OutputIteratorTupleT , typename ClockT , typename DurationT &gt; </td></tr>
-<tr class="memitem:a664a2a24cba7030d984715454f3b1104"><td class="memTemplItemLeft" align="right" valign="top">static <a class="el" href="classflow_1_1_synchronizer.html#a4f9693650274ae93f5b9a11cb41a2d80">result_t</a>&lt; CaptorTupleT &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classflow_1_1_synchronizer.html#a664a2a24cba7030d984715454f3b1104">capture</a> (CaptorTupleT &amp;&amp;captors, OutputIteratorTupleT &amp;&amp;outputs, const <a class="el" href="classflow_1_1_synchronizer.html#a0f1e7062475c9492191e29b26d09106c">stamp_arg_t</a>&lt; CaptorTupleT &gt; lower_bound, const std::chrono::time_point&lt; ClockT, DurationT &gt; &amp;timeout)</td></tr>
-<tr class="memdesc:a664a2a24cba7030d984715454f3b1104"><td class="mdescLeft">&#160;</td><td class="mdescRight">Runs synchronization and data capture across all captors.  <a href="classflow_1_1_synchronizer.html#a664a2a24cba7030d984715454f3b1104">More...</a><br /></td></tr>
-<tr class="separator:a664a2a24cba7030d984715454f3b1104"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a140d39b1091ca2ad7f524421a5f9b353"><td class="memTemplParams" colspan="2">template&lt;typename CaptorTupleT , typename OutputIteratorTupleT &gt; </td></tr>
-<tr class="memitem:a140d39b1091ca2ad7f524421a5f9b353"><td class="memTemplItemLeft" align="right" valign="top">static <a class="el" href="classflow_1_1_synchronizer.html#a4f9693650274ae93f5b9a11cb41a2d80">result_t</a>&lt; CaptorTupleT &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classflow_1_1_synchronizer.html#a140d39b1091ca2ad7f524421a5f9b353">capture</a> (CaptorTupleT &amp;&amp;captors, OutputIteratorTupleT &amp;&amp;outputs, const <a class="el" href="classflow_1_1_synchronizer.html#a0f1e7062475c9492191e29b26d09106c">stamp_arg_t</a>&lt; CaptorTupleT &gt; lower_bound=<a class="el" href="structflow_1_1_stamp_traits.html">StampTraits</a>&lt; <a class="el" href="classflow_1_1_synchronizer.html#a2a443abb40ad2413e6d5f7a7f3cfe4a7">stamp_t</a>&lt; CaptorTupleT &gt;&gt;::min())</td></tr>
-<tr class="memdesc:a140d39b1091ca2ad7f524421a5f9b353"><td class="mdescLeft">&#160;</td><td class="mdescRight">Runs synchronization and data capture across all captors.  <a href="classflow_1_1_synchronizer.html#a140d39b1091ca2ad7f524421a5f9b353">More...</a><br /></td></tr>
-<tr class="separator:a140d39b1091ca2ad7f524421a5f9b353"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab2d643076fd06ab5efb87f1914ce00f8"><td class="memTemplParams" colspan="2">template&lt;typename CaptorTupleT , typename OutputIteratorTupleT , typename ClockT , typename DurationT &gt; </td></tr>
+<tr class="memitem:ab2d643076fd06ab5efb87f1914ce00f8"><td class="memTemplItemLeft" align="right" valign="top">static std::tuple&lt; <a class="el" href="classflow_1_1_synchronizer.html#a4f9693650274ae93f5b9a11cb41a2d80">result_t</a>&lt; CaptorTupleT &gt;, OutputIteratorTupleT &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classflow_1_1_synchronizer.html#ab2d643076fd06ab5efb87f1914ce00f8">capture</a> (CaptorTupleT &amp;&amp;captors, OutputIteratorTupleT &amp;&amp;outputs, const <a class="el" href="classflow_1_1_synchronizer.html#a0f1e7062475c9492191e29b26d09106c">stamp_arg_t</a>&lt; CaptorTupleT &gt; lower_bound, const std::chrono::time_point&lt; ClockT, DurationT &gt; &amp;timeout)</td></tr>
+<tr class="memdesc:ab2d643076fd06ab5efb87f1914ce00f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Runs synchronization and data capture across all captors.  <a href="classflow_1_1_synchronizer.html#ab2d643076fd06ab5efb87f1914ce00f8">More...</a><br /></td></tr>
+<tr class="separator:ab2d643076fd06ab5efb87f1914ce00f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5e3a0a91aa662ba0b626a3ce524fee66"><td class="memTemplParams" colspan="2">template&lt;typename CaptorTupleT , typename OutputIteratorTupleT &gt; </td></tr>
+<tr class="memitem:a5e3a0a91aa662ba0b626a3ce524fee66"><td class="memTemplItemLeft" align="right" valign="top">static std::tuple&lt; <a class="el" href="classflow_1_1_synchronizer.html#a4f9693650274ae93f5b9a11cb41a2d80">result_t</a>&lt; CaptorTupleT &gt;, OutputIteratorTupleT &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classflow_1_1_synchronizer.html#a5e3a0a91aa662ba0b626a3ce524fee66">capture</a> (CaptorTupleT &amp;&amp;captors, OutputIteratorTupleT &amp;&amp;outputs, const <a class="el" href="classflow_1_1_synchronizer.html#a0f1e7062475c9492191e29b26d09106c">stamp_arg_t</a>&lt; CaptorTupleT &gt; lower_bound=<a class="el" href="structflow_1_1_stamp_traits.html">StampTraits</a>&lt; <a class="el" href="classflow_1_1_synchronizer.html#a2a443abb40ad2413e6d5f7a7f3cfe4a7">stamp_t</a>&lt; CaptorTupleT &gt;&gt;::min())</td></tr>
+<tr class="memdesc:a5e3a0a91aa662ba0b626a3ce524fee66"><td class="mdescLeft">&#160;</td><td class="mdescRight">Runs synchronization and data capture across all captors.  <a href="classflow_1_1_synchronizer.html#a5e3a0a91aa662ba0b626a3ce524fee66">More...</a><br /></td></tr>
+<tr class="separator:a5e3a0a91aa662ba0b626a3ce524fee66"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Provides facilities to synchronize data across several Captors. </p>
@@ -254,8 +254,8 @@ template&lt;typename CaptorTupleT &gt; </div>
 
 </div>
 </div>
-<a id="a664a2a24cba7030d984715454f3b1104"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a664a2a24cba7030d984715454f3b1104">&#9670;&nbsp;</a></span>capture() <span class="overload">[1/2]</span></h2>
+<a id="ab2d643076fd06ab5efb87f1914ce00f8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab2d643076fd06ab5efb87f1914ce00f8">&#9670;&nbsp;</a></span>capture() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -266,7 +266,7 @@ template&lt;typename CaptorTupleT , typename OutputIteratorTupleT , typename Clo
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classflow_1_1_synchronizer.html#a4f9693650274ae93f5b9a11cb41a2d80">Synchronizer::result_t</a>&lt; CaptorTupleT &gt; flow::Synchronizer::capture </td>
+          <td class="memname">std::tuple&lt; <a class="el" href="classflow_1_1_synchronizer.html#a4f9693650274ae93f5b9a11cb41a2d80">Synchronizer::result_t</a>&lt; CaptorTupleT &gt;, OutputIteratorTupleT &gt; flow::Synchronizer::capture </td>
           <td>(</td>
           <td class="paramtype">CaptorTupleT &amp;&amp;&#160;</td>
           <td class="paramname"><em>captors</em>, </td>
@@ -321,12 +321,12 @@ template&lt;typename CaptorTupleT , typename OutputIteratorTupleT , typename Clo
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>capture/synchronization details </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><code>{synchronization state, output iterators}</code> </dd></dl>
 
 </div>
 </div>
-<a id="a140d39b1091ca2ad7f524421a5f9b353"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a140d39b1091ca2ad7f524421a5f9b353">&#9670;&nbsp;</a></span>capture() <span class="overload">[2/2]</span></h2>
+<a id="a5e3a0a91aa662ba0b626a3ce524fee66"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5e3a0a91aa662ba0b626a3ce524fee66">&#9670;&nbsp;</a></span>capture() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -337,7 +337,7 @@ template&lt;typename CaptorTupleT , typename OutputIteratorTupleT &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classflow_1_1_synchronizer.html#a4f9693650274ae93f5b9a11cb41a2d80">Synchronizer::result_t</a>&lt; CaptorTupleT &gt; flow::Synchronizer::capture </td>
+          <td class="memname">std::tuple&lt; <a class="el" href="classflow_1_1_synchronizer.html#a4f9693650274ae93f5b9a11cb41a2d80">Synchronizer::result_t</a>&lt; CaptorTupleT &gt;, OutputIteratorTupleT &gt; flow::Synchronizer::capture </td>
           <td>(</td>
           <td class="paramtype">CaptorTupleT &amp;&amp;&#160;</td>
           <td class="paramname"><em>captors</em>, </td>
@@ -383,7 +383,7 @@ template&lt;typename CaptorTupleT , typename OutputIteratorTupleT &gt; </div>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>capture/synchronization details </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><code>{synchronization state, output iterators}</code> </dd></dl>
 
 </div>
 </div>
