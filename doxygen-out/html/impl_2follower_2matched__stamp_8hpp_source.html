@@ -150,7 +150,7 @@ $(function() {
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;  <span class="keyword">const</span> ExtractionRange&amp; extraction_range,</div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;  <span class="keyword">const</span> CaptureRange&lt;stamp_type&gt;&amp; range)</div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;{</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;  PolicyType::queue_.move(output, extraction_range);</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;  PolicyType::queue_.copy(output, extraction_range);</div>
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;  PolicyType::queue_.remove_first_n(extraction_range.first);</div>
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;}</div>
 <div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160; </div>
