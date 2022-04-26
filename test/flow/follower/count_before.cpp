@@ -29,6 +29,13 @@ struct FollowerCountBefore : ::testing::Test, CountBefore<Dispatch<int, optional
   FollowerCountBefore() : CountBefore<Dispatch<int, optional<int>>, NoLock>{COUNT, DELAY} {}
 
   void SetUp() final { this->reset(); }
+  void TearDown() final
+  {
+    this->inspect([](const Dispatch<int, optional<int>>& element) {
+      ASSERT_TRUE(element.value) << "At stamp(" << element.stamp
+                                 << "). Element is nullopt; likely moved erroneously during capture";
+    });
+  }
 };
 constexpr int FollowerCountBefore::COUNT;
 constexpr int FollowerCountBefore::DELAY;

@@ -29,6 +29,13 @@ struct FollowerClosestBefore : ::testing::Test, ClosestBefore<Dispatch<int, opti
   FollowerClosestBefore() : ClosestBefore<Dispatch<int, optional<int>>, NoLock>{PERIOD, DELAY} {}
 
   void SetUp() final { this->reset(); }
+  void TearDown() final
+  {
+    this->inspect([](const Dispatch<int, optional<int>>& element) {
+      ASSERT_TRUE(element.value) << "At stamp(" << element.stamp
+                                 << "). Element is nullopt; likely moved erroneously during capture";
+    });
+  }
 };
 constexpr int FollowerClosestBefore::PERIOD;
 constexpr int FollowerClosestBefore::DELAY;
