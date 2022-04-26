@@ -162,10 +162,10 @@ public:
    *              stamps which are greater than <code>lower_bound</code>
    * @param timeout  synchronization timeout for captors which require a data wait
    *
-   * @return capture/synchronization details
+   * @return <code>{synchronization state, output iterators}</code>
    */
   template <typename CaptorTupleT, typename OutputIteratorTupleT, typename ClockT, typename DurationT>
-  static result_t<CaptorTupleT> capture(
+  static std::tuple<result_t<CaptorTupleT>, OutputIteratorTupleT> capture(
     CaptorTupleT&& captors,
     OutputIteratorTupleT&& outputs,
     const stamp_arg_t<CaptorTupleT> lower_bound,
@@ -182,10 +182,10 @@ public:
    * @param lower_bound  synchronization stamp lower bound, forces all captured data to have associated
    *              stamps which are greater than <code>lower_bound</code>
    *
-   * @return capture/synchronization details
+   * @return <code>{synchronization state, output iterators}</code>
    */
   template <typename CaptorTupleT, typename OutputIteratorTupleT>
-  static result_t<CaptorTupleT> capture(
+  static std::tuple<result_t<CaptorTupleT>, OutputIteratorTupleT> capture(
     CaptorTupleT&& captors,
     OutputIteratorTupleT&& outputs,
     const stamp_arg_t<CaptorTupleT> lower_bound = StampTraits<stamp_t<CaptorTupleT>>::min());

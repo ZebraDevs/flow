@@ -52,8 +52,11 @@ void Batch<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::extract_driver_im
   const ExtractionRange& extraction_range,
   const CaptureRange<stamp_type>& range)
 {
-  PolicyType::queue_.move(output, extraction_range);
-  PolicyType::queue_.pop();
+  if (extraction_range)
+  {
+    output = PolicyType::queue_.copy(output, extraction_range);
+    PolicyType::queue_.pop();
+  }
 }
 
 

@@ -192,18 +192,21 @@ public:
   ExtractHelper(ResultT& result) : result_{std::addressof(result)} {}
 
   template <typename StampT>
-  constexpr void
+  constexpr NoCapture
   operator()(const CaptureRange<StampT>& range, NoCapture __nc__, const ExtractionRange& extraction_range)
-  {}
+  {
+    return NoCapture{};
+  }
 
   template <typename CaptorT, typename LockPolicyT, typename QueueMonitorT, typename OutputIteratorT>
-  inline void operator()(
+  inline OutputIteratorT operator()(
     Captor<CaptorT, LockPolicyT, QueueMonitorT>& c,
     OutputIteratorT output,
     const ExtractionRange& extraction_range)
   {
-    c.extract(output, extraction_range, result_->range);
+    output = c.extract(output, extraction_range, result_->range);
     c.update_queue_monitor(result_->range, result_->state);
+    return output;
   }
 
 private:
@@ -275,7 +278,7 @@ struct captor_sequence_valid<TupleLikeTmpl<DriverT, FollowerTs...>>
 
 
 template <typename CaptorTupleT, typename OutputIteratorTupleT, typename ClockT, typename DurationT>
-typename Synchronizer::result_t<CaptorTupleT> Synchronizer::capture(
+typename std::tuple<Synchronizer::result_t<CaptorTupleT>, OutputIteratorTupleT> Synchronizer::capture(
   CaptorTupleT&& captors,
   OutputIteratorTupleT&& outputs,
   const stamp_arg_t<CaptorTupleT> lower_bound,
@@ -315,22 +318,22 @@ typename Synchronizer::result_t<CaptorTupleT> Synchronizer::capture(
   // If a RETRY state occurs, don't try to capture elements
   if (result.state == State::RETRY)
   {
-    return result;
+    return std::make_tuple(result, std::forward<OutputIteratorTupleT>(outputs));
   }
 
   // Otherwise, capture elements and possibly remove elements from queues
-  apply_every(
+  const auto outputs_advanced = apply_every_r(
     detail::ExtractHelper<ResultType>{result},
     std::forward<CaptorTupleT>(captors),
     std::forward<OutputIteratorTupleT>(outputs),
     elements);
 
-  return result;
+  return std::make_tuple(result, outputs_advanced);
 }
 
 
 template <typename CaptorTupleT, typename OutputIteratorTupleT>
-typename Synchronizer::result_t<CaptorTupleT> Synchronizer::capture(
+typename std::tuple<Synchronizer::result_t<CaptorTupleT>, OutputIteratorTupleT> Synchronizer::capture(
   CaptorTupleT&& captors,
   OutputIteratorTupleT&& outputs,
   const stamp_arg_t<CaptorTupleT> lower_bound)

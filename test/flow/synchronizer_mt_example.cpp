@@ -81,7 +81,7 @@ TEST(Synchronizer, UsageExampleExampleMultiThreaded)
           std::back_inserter(closest_follower_data),
           std::back_inserter(before_follower_data)));
 
-      switch (result.state)
+      switch (std::get<0>(result).state)
       {
       case State::PRIMED:
         // do stuff with synchronized data
@@ -189,7 +189,7 @@ TEST(Synchronizer, UsageExampleExampleMultiThreadedPolling)
       // Do a little sleep
       std::this_thread::sleep_for(std::chrono::milliseconds{1});
 
-      switch (result.state)
+      switch (std::get<0>(result).state)
       {
       case State::PRIMED:
         // do stuff with synchronized data

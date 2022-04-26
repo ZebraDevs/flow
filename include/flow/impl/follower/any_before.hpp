@@ -55,7 +55,7 @@ void AnyBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::extract_follo
   const ExtractionRange& extraction_range,
   const CaptureRange<stamp_type>& range)
 {
-  PolicyType::queue_.move(output, extraction_range);
+  output = PolicyType::queue_.move(output, extraction_range);
   PolicyType::queue_.remove_first_n(extraction_range.last);
 }
 
