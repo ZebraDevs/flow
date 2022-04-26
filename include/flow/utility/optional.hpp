@@ -8,6 +8,9 @@
 // C++ Standard Library
 #include <type_traits>
 #include <utility>
+#ifndef NDEBUG
+#include <stdexcept>
+#endif  // NDEBUG
 
 namespace flow
 {
@@ -186,12 +189,30 @@ private:
   /**
    * @brief Returns reference to value
    */
-  inline const T& value() const { return *vptr(); }
+  inline const T& value() const
+  {
+#ifndef NDEBUG
+    if (!valid_)
+    {
+      throw std::runtime_error{"Value not set"};
+    }
+#endif
+    return *vptr();
+  }
 
   /**
    * @brief Returns reference to value
    */
-  inline T& value() { return *vptr(); }
+  inline T& value()
+  {
+#ifndef NDEBUG
+    if (!valid_)
+    {
+      throw std::runtime_error{"Value not set"};
+    }
+#endif
+    return *vptr();
+  }
 
   /// Whether the stored value is valid
   bool valid_;
