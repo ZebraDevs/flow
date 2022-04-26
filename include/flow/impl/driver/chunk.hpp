@@ -30,17 +30,6 @@ Chunk<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::Chunk(
 
 
 template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
-template <typename OutputDispatchIteratorT>
-State Chunk<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::capture_driver_impl(
-  OutputDispatchIteratorT output,
-  CaptureRange<stamp_type>& range)
-{
-  const auto locate_result = Chunk::locate_driver_impl(range);
-  Chunk::extract_driver_impl(output, std::get<1>(locate_result), range);
-  return std::get<0>(locate_result);
-}
-
-template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
 std::tuple<State, ExtractionRange>
 Chunk<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::locate_driver_impl(CaptureRange<stamp_type>& range) const
 {
@@ -56,16 +45,18 @@ Chunk<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::locate_driver_impl(Cap
   return std::make_tuple(State::RETRY, ExtractionRange{});
 }
 
+
 template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
 template <typename OutputDispatchIteratorT>
 void Chunk<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::extract_driver_impl(
-  OutputDispatchIteratorT output,
+  OutputDispatchIteratorT& output,
   const ExtractionRange& extraction_range,
   const CaptureRange<stamp_type>& range)
 {
   PolicyType::queue_.move(output, extraction_range);
   PolicyType::queue_.remove_first_n(extraction_range.last);
 }
+
 
 template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
 void Chunk<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::abort_driver_impl(const stamp_type& t_abort)

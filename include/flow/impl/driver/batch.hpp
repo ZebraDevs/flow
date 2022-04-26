@@ -29,18 +29,6 @@ Batch<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::Batch(
 
 
 template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
-template <typename OutputDispatchIteratorT>
-State Batch<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::capture_driver_impl(
-  OutputDispatchIteratorT output,
-  CaptureRange<stamp_type>& range)
-{
-  const auto locate_result = Batch::locate_driver_impl(range);
-  Batch::extract_driver_impl(output, std::get<1>(locate_result), range);
-  return std::get<0>(locate_result);
-}
-
-
-template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
 std::tuple<State, ExtractionRange>
 Batch<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::locate_driver_impl(CaptureRange<stamp_type>& range) const
 {
@@ -60,7 +48,7 @@ Batch<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::locate_driver_impl(Cap
 template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
 template <typename OutputDispatchIteratorT>
 void Batch<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::extract_driver_impl(
-  OutputDispatchIteratorT output,
+  OutputDispatchIteratorT& output,
   const ExtractionRange& extraction_range,
   const CaptureRange<stamp_type>& range)
 {

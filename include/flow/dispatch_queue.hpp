@@ -108,7 +108,7 @@ public:
    * @param range  element index range
    */
   template <typename OutputDispatchIteratorT>
-  inline OutputDispatchIteratorT copy(OutputDispatchIteratorT output, const ExtractionRange& extraction_range) const;
+  inline OutputDispatchIteratorT copy(OutputDispatchIteratorT& output, const ExtractionRange& extraction_range) const;
 
   /**
    * @brief Moves elements in \c range
@@ -117,7 +117,7 @@ public:
    * @param range  element index range
    */
   template <typename OutputDispatchIteratorT>
-  inline OutputDispatchIteratorT move(OutputDispatchIteratorT output, const ExtractionRange& extraction_range);
+  inline OutputDispatchIteratorT move(OutputDispatchIteratorT& output, const ExtractionRange& extraction_range);
 
   /**
    * @brief Returns first iterator to element before stamp

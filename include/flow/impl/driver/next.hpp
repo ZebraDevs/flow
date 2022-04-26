@@ -21,18 +21,6 @@ Next<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::Next(
 
 
 template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
-template <typename OutputDispatchIteratorT>
-State Next<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::capture_driver_impl(
-  OutputDispatchIteratorT output,
-  CaptureRange<stamp_type>& range)
-{
-  const auto locate_result = Next::locate_driver_impl(range);
-  Next::extract_driver_impl(output, std::get<1>(locate_result), range);
-  return std::get<0>(locate_result);
-}
-
-
-template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
 std::tuple<State, ExtractionRange>
 Next<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::locate_driver_impl(CaptureRange<stamp_type>& range) const
 {
@@ -51,7 +39,7 @@ Next<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::locate_driver_impl(Capt
 template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
 template <typename OutputDispatchIteratorT>
 void Next<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::extract_driver_impl(
-  OutputDispatchIteratorT output,
+  OutputDispatchIteratorT& output,
   const ExtractionRange& extraction_range,
   const CaptureRange<stamp_type>& range)
 {

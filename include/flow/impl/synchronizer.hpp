@@ -199,10 +199,10 @@ public:
   template <typename CaptorT, typename LockPolicyT, typename QueueMonitorT, typename OutputIteratorT>
   inline void operator()(
     Captor<CaptorT, LockPolicyT, QueueMonitorT>& c,
-    OutputIteratorT&& output,
+    OutputIteratorT output,
     const ExtractionRange& extraction_range)
   {
-    c.extract(std::forward<OutputIteratorT>(output), extraction_range, result_->range);
+    c.extract(output, extraction_range, result_->range);
     c.update_queue_monitor(result_->range, result_->state);
   }
 

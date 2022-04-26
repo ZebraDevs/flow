@@ -63,7 +63,7 @@ private:
    *         <code>range.upper_stamp</code> is available
    */
   template <typename OutputDispatchIteratorT>
-  inline State capture_follower_impl(OutputDispatchIteratorT output, const CaptureRange<stamp_type>& range);
+  inline State capture_follower_impl(OutputDispatchIteratorT& output, const CaptureRange<stamp_type>& range);
 
   /**
    * @copydoc Follower::locate_policy_impl
@@ -75,7 +75,7 @@ private:
    */
   template <typename OutputDispatchIteratorT>
   inline void extract_follower_impl(
-    OutputDispatchIteratorT output,
+    OutputDispatchIteratorT& output,
     const ExtractionRange& extraction_range,
     const CaptureRange<stamp_type>& range);
 

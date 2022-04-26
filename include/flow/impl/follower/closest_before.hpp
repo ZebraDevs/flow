@@ -25,18 +25,6 @@ ClosestBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::ClosestBefore(
 
 
 template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
-template <typename OutputDispatchIteratorT>
-State ClosestBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::capture_follower_impl(
-  OutputDispatchIteratorT output,
-  const CaptureRange<stamp_type>& range)
-{
-  const auto locate_result = ClosestBefore::locate_follower_impl(range);
-  ClosestBefore::extract_follower_impl(output, std::get<1>(locate_result), range);
-  return std::get<0>(locate_result);
-}
-
-
-template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
 std::tuple<State, ExtractionRange>
 ClosestBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::locate_follower_impl(
   const CaptureRange<stamp_type>& range) const
@@ -72,7 +60,7 @@ ClosestBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::locate_followe
 template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
 template <typename OutputDispatchIteratorT>
 void ClosestBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::extract_follower_impl(
-  OutputDispatchIteratorT output,
+  OutputDispatchIteratorT& output,
   const ExtractionRange& extraction_range,
   const CaptureRange<stamp_type>& range)
 {
