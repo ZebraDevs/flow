@@ -25,15 +25,28 @@ struct DriverThrottled : ::testing::Test, Throttled<Dispatch<int, optional<int>>
 {
   static constexpr int THROTTLE_PERIOD = 4;
 
+  std::vector<Dispatch<int, optional<int>>> data;
+
   DriverThrottled() : Throttled<Dispatch<int, optional<int>>, NoLock>{THROTTLE_PERIOD} {}
 
-  void SetUp() final { this->reset(); }
+  void SetUp() final
+  {
+    this->reset();
+    data.clear();
+  }
+
   void TearDown() final
   {
     this->inspect([](const Dispatch<int, optional<int>>& element) {
-      ASSERT_TRUE(element.value) << "At stamp(" << element.stamp
+      ASSERT_TRUE(element.value) << "Queue element invalid at stamp(" << element.stamp
                                  << "). Element is nullopt; likely moved erroneously during capture";
     });
+
+    for (const auto& element : data)
+    {
+      ASSERT_TRUE(element.value) << "Capture element invalid at stamp(" << element.stamp
+                                 << "). Element is nullopt; likely moved erroneously during capture";
+    }
   }
 };
 constexpr int DriverThrottled::THROTTLE_PERIOD;
@@ -41,7 +54,6 @@ constexpr int DriverThrottled::THROTTLE_PERIOD;
 
 TEST_F(DriverThrottled, CaptureRetryOnEmpty)
 {
-  std::vector<Dispatch<int, optional<int>>> data;
   CaptureRange<int> t_range{0, 0};
   ASSERT_EQ(State::RETRY, this->capture(std::back_inserter(data), t_range));
 }
@@ -59,7 +71,7 @@ TEST_F(DriverThrottled, CaptureRetryUnderLengthPeriod)
   // First capture attempt should be primed
   {
     CaptureRange<int> t_range{0, 0};
-    std::vector<Dispatch<int, optional<int>>> data;
+    data.clear();
     ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
     ASSERT_EQ(data.size(), 1UL);
   }
@@ -67,7 +79,7 @@ TEST_F(DriverThrottled, CaptureRetryUnderLengthPeriod)
   // Next is under throttling period
   {
     CaptureRange<int> t_range{0, 0};
-    std::vector<Dispatch<int, optional<int>>> data;
+    data.clear();
     ASSERT_EQ(State::RETRY, this->capture(std::back_inserter(data), t_range));
     ASSERT_EQ(data.size(), 0UL);
   }
@@ -88,14 +100,14 @@ TEST_F(DriverThrottled, CaptureNPrimedCapturesIntermediateMessages)
   // First capture attempt should be primed
   {
     CaptureRange<int> t_range{0, 0};
-    std::vector<Dispatch<int, optional<int>>> data;
+    data.clear();
     ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
     ASSERT_EQ(data.size(), 1UL);
   }
 
   for (int capture = 0; capture < N; ++capture)
   {
-    std::vector<Dispatch<int, optional<int>>> data;
+    data.clear();
 
     ASSERT_EQ(this->size(), static_cast<std::size_t>(N * THROTTLE_PERIOD - capture * THROTTLE_PERIOD));
 
@@ -112,7 +124,7 @@ TEST_F(DriverThrottled, CaptureNPrimedCapturesIntermediateMessages)
   // Next capture attempt should indicate RETRY signal, as there are not enough messages left
   // to check period between messages again
   {
-    std::vector<Dispatch<int, optional<int>>> data;
+    data.clear();
     CaptureRange<int> t_range{0, 0};
     ASSERT_EQ(State::RETRY, this->capture(std::back_inserter(data), t_range));
     ASSERT_EQ(data.size(), 0UL);
@@ -134,14 +146,14 @@ TEST_F(DriverThrottled, CaptureNPrimedCapturesExactMessages)
   // First capture attempt should be primed
   {
     CaptureRange<int> t_range{0, 0};
-    std::vector<Dispatch<int, optional<int>>> data;
+    data.clear();
     ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
     ASSERT_EQ(data.size(), 1UL);
   }
 
   for (int capture = 0; capture < N; ++capture)
   {
-    std::vector<Dispatch<int, optional<int>>> data;
+    data.clear();
 
     ASSERT_EQ(this->size(), static_cast<std::size_t>(N - capture));
 
@@ -185,7 +197,7 @@ TEST_F(DriverThrottled, LocateRetryUnderLengthPeriod)
   // First capture attempt should be primed
   {
     CaptureRange<int> t_range{0, 0};
-    std::vector<Dispatch<int, optional<int>>> data;
+    data.clear();
     ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
     ASSERT_EQ(data.size(), 1UL);
   }
@@ -212,7 +224,7 @@ TEST_F(DriverThrottled, LocateNPrimedCapturesIntermediateMessages)
   // First capture attempt should be primed
   {
     CaptureRange<int> t_range{0, 0};
-    std::vector<Dispatch<int, optional<int>>> data;
+    data.clear();
     ASSERT_EQ(State::PRIMED, this->locate(t_range));
     ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
     ASSERT_EQ(data.size(), 1UL);
@@ -220,7 +232,7 @@ TEST_F(DriverThrottled, LocateNPrimedCapturesIntermediateMessages)
 
   for (int capture = 0; capture < N; ++capture)
   {
-    std::vector<Dispatch<int, optional<int>>> data;
+    data.clear();
 
     ASSERT_EQ(this->size(), static_cast<std::size_t>(N * THROTTLE_PERIOD - capture * THROTTLE_PERIOD));
 
@@ -258,7 +270,7 @@ TEST_F(DriverThrottled, LocateNPrimedCapturesExactMessages)
   // First capture attempt should be primed
   {
     CaptureRange<int> t_range{0, 0};
-    std::vector<Dispatch<int, optional<int>>> data;
+    data.clear();
     ASSERT_EQ(State::PRIMED, this->locate(t_range));
     ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
     ASSERT_EQ(data.size(), 1UL);
@@ -266,7 +278,7 @@ TEST_F(DriverThrottled, LocateNPrimedCapturesExactMessages)
 
   for (int capture = 0; capture < N; ++capture)
   {
-    std::vector<Dispatch<int, optional<int>>> data;
+    data.clear();
 
     ASSERT_EQ(this->size(), static_cast<std::size_t>(N - capture));
 

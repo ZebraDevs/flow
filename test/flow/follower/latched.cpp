@@ -25,15 +25,28 @@ struct FollowerLatched : ::testing::Test, Latched<Dispatch<int, optional<int>>, 
 {
   static constexpr int MIN_PERIOD = 5;
 
+  std::vector<Dispatch<int, optional<int>>> data;
+
   FollowerLatched() : Latched<Dispatch<int, optional<int>>, NoLock>{MIN_PERIOD} {}
 
-  void SetUp() final { this->reset(); }
+  void SetUp() final
+  {
+    this->reset();
+    data.clear();
+  }
+
   void TearDown() final
   {
     this->inspect([](const Dispatch<int, optional<int>>& element) {
-      ASSERT_TRUE(element.value) << "At stamp(" << element.stamp
+      ASSERT_TRUE(element.value) << "Queue element invalid at stamp(" << element.stamp
                                  << "). Element is nullopt; likely moved erroneously during capture";
     });
+
+    for (const auto& element : data)
+    {
+      ASSERT_TRUE(element.value) << "Capture element invalid at stamp(" << element.stamp
+                                 << "). Element is nullopt; likely moved erroneously during capture";
+    }
   }
 };
 constexpr int FollowerLatched::MIN_PERIOD;

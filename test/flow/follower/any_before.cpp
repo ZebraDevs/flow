@@ -24,22 +24,34 @@ struct FollowerAnyBefore : ::testing::Test, AnyBefore<Dispatch<int, optional<int
 {
   static constexpr int DELAY = 1;
 
+  std::vector<Dispatch<int, optional<int>>> data;
+
   FollowerAnyBefore() : AnyBefore<Dispatch<int, optional<int>>, NoLock>{DELAY} {}
 
-  void SetUp() final { this->reset(); }
+  void SetUp() final
+  {
+    this->reset();
+    data.clear();
+  }
+
   void TearDown() final
   {
     this->inspect([](const Dispatch<int, optional<int>>& element) {
-      ASSERT_TRUE(element.value) << "At stamp(" << element.stamp
+      ASSERT_TRUE(element.value) << "Queue element invalid at stamp(" << element.stamp
                                  << "). Element is nullopt; likely moved erroneously during capture";
     });
+
+    for (const auto& element : data)
+    {
+      ASSERT_TRUE(element.value) << "Capture element invalid at stamp(" << element.stamp
+                                 << "). Element is nullopt; likely moved erroneously during capture";
+    }
   }
 };
 constexpr int FollowerAnyBefore::DELAY;
 
 TEST_F(FollowerAnyBefore, CapturePrimedOnEmpty)
 {
-  std::vector<Dispatch<int, optional<int>>> data;
   CaptureRange<int> t_range{0, 0};
   ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
 }
@@ -47,7 +59,6 @@ TEST_F(FollowerAnyBefore, CapturePrimedOnEmpty)
 
 TEST_F(FollowerAnyBefore, CapturePrimedOnDataAtBoundary)
 {
-  std::vector<Dispatch<int, optional<int>>> data;
   CaptureRange<int> t_range{0, 0};
 
   this->inject(Dispatch<int, optional<int>>{-DELAY, 1});
@@ -62,7 +73,6 @@ TEST_F(FollowerAnyBefore, CapturePrimedOnDataAtBoundary)
 
 TEST_F(FollowerAnyBefore, CapturePrimedOnDataAfterBoundary)
 {
-  std::vector<Dispatch<int, optional<int>>> data;
   CaptureRange<int> t_range{0, 0};
 
   this->inject(Dispatch<int, optional<int>>{-DELAY + 1, 1});
@@ -77,7 +87,6 @@ TEST_F(FollowerAnyBefore, CapturePrimedOnDataAfterBoundary)
 
 TEST_F(FollowerAnyBefore, CapturePrimedOnDataAnyBeforeBoundary)
 {
-  std::vector<Dispatch<int, optional<int>>> data;
   CaptureRange<int> t_range{0, 0};
 
   this->inject(Dispatch<int, optional<int>>{-DELAY - 1, 1});
@@ -92,7 +101,6 @@ TEST_F(FollowerAnyBefore, CapturePrimedOnDataAnyBeforeBoundary)
 
 TEST_F(FollowerAnyBefore, CapturePrimedOnDataAnyBeforeAndAfterBoundary)
 {
-  std::vector<Dispatch<int, optional<int>>> data;
   CaptureRange<int> t_range{0, 0};
 
   this->inject(Dispatch<int, optional<int>>{-DELAY - 1, 1});
@@ -108,7 +116,6 @@ TEST_F(FollowerAnyBefore, CapturePrimedOnDataAnyBeforeAndAfterBoundary)
 
 TEST_F(FollowerAnyBefore, CapturePrimedOnDataAnyBeforeAndAtBoundary)
 {
-  std::vector<Dispatch<int, optional<int>>> data;
   CaptureRange<int> t_range{0, 0};
 
   this->inject(Dispatch<int, optional<int>>{-DELAY - 1, 1});
@@ -124,7 +131,6 @@ TEST_F(FollowerAnyBefore, CapturePrimedOnDataAnyBeforeAndAtBoundary)
 
 TEST_F(FollowerAnyBefore, CapturePrimedMultiDataAnyBeforeBoundary)
 {
-  std::vector<Dispatch<int, optional<int>>> data;
   CaptureRange<int> t_range{0, 0};
 
   this->inject(Dispatch<int, optional<int>>{-DELAY - 1, 1});
@@ -141,7 +147,6 @@ TEST_F(FollowerAnyBefore, CapturePrimedMultiDataAnyBeforeBoundary)
 
 TEST_F(FollowerAnyBefore, CapturePrimedMultiDataAnyBeforeAndAtBoundary)
 {
-  std::vector<Dispatch<int, optional<int>>> data;
   CaptureRange<int> t_range{0, 0};
 
   this->inject(Dispatch<int, optional<int>>{-DELAY - 0, 1});

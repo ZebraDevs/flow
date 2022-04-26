@@ -25,15 +25,28 @@ struct DriverChunk : ::testing::Test, Chunk<Dispatch<int, optional<int>>, NoLock
 {
   static constexpr std::size_t CHUNK_SIZE = 10;
 
+  std::vector<Dispatch<int, optional<int>>> data;
+
   DriverChunk() : Chunk<Dispatch<int, optional<int>>, NoLock>{CHUNK_SIZE} {}
 
-  void SetUp() final { this->reset(); }
+  void SetUp() final
+  {
+    this->reset();
+    data.clear();
+  }
+
   void TearDown() final
   {
     this->inspect([](const Dispatch<int, optional<int>>& element) {
-      ASSERT_TRUE(element.value) << "At stamp(" << element.stamp
+      ASSERT_TRUE(element.value) << "Queue element invalid at stamp(" << element.stamp
                                  << "). Element is nullopt; likely moved erroneously during capture";
     });
+
+    for (const auto& element : data)
+    {
+      ASSERT_TRUE(element.value) << "Capture element invalid at stamp(" << element.stamp
+                                 << "). Element is nullopt; likely moved erroneously during capture";
+    }
   }
 };
 constexpr std::size_t DriverChunk::CHUNK_SIZE;
@@ -41,7 +54,7 @@ constexpr std::size_t DriverChunk::CHUNK_SIZE;
 
 TEST_F(DriverChunk, CaptureRetryOnEmpty)
 {
-  std::vector<Dispatch<int, optional<int>>> data;
+
   CaptureRange<int> t_range{0, 0};
 
   ASSERT_EQ(State::RETRY, this->capture(std::back_inserter(data), t_range));
@@ -64,7 +77,7 @@ TEST_F(DriverChunk, CaptureContinueLTChunkSize)
   ASSERT_EQ(this->size(), CHUNK_SIZE / 2);
 
   // Start processing
-  std::vector<Dispatch<int, optional<int>>> data;
+
   CaptureRange<int> t_range{0, 0};
 
   ASSERT_EQ(State::RETRY, this->capture(std::back_inserter(data), t_range));
@@ -86,7 +99,7 @@ TEST_F(DriverChunk, CapturePrimedEQChunkSize)
 
 
   // Start processing
-  std::vector<Dispatch<int, optional<int>>> data;
+
   CaptureRange<int> t_range{0, 0};
 
   ASSERT_EQ(this->size(), CHUNK_SIZE);
@@ -113,7 +126,7 @@ TEST_F(DriverChunk, CapturePrimedGTChunkSize)
 
 
   // Start processing
-  std::vector<Dispatch<int, optional<int>>> data;
+
   CaptureRange<int> t_range{0, 0};
 
   ASSERT_EQ(this->size(), CHUNK_SIZE + CHUNK_SIZE / 2);

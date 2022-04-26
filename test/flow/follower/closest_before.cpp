@@ -26,15 +26,28 @@ struct FollowerClosestBefore : ::testing::Test, ClosestBefore<Dispatch<int, opti
   static constexpr int PERIOD = 5;
   static constexpr int DELAY = 3;
 
+  std::vector<Dispatch<int, optional<int>>> data;
+
   FollowerClosestBefore() : ClosestBefore<Dispatch<int, optional<int>>, NoLock>{PERIOD, DELAY} {}
 
-  void SetUp() final { this->reset(); }
+  void SetUp() final
+  {
+    this->reset();
+    data.clear();
+  }
+
   void TearDown() final
   {
     this->inspect([](const Dispatch<int, optional<int>>& element) {
-      ASSERT_TRUE(element.value) << "At stamp(" << element.stamp
+      ASSERT_TRUE(element.value) << "Queue element invalid at stamp(" << element.stamp
                                  << "). Element is nullopt; likely moved erroneously during capture";
     });
+
+    for (const auto& element : data)
+    {
+      ASSERT_TRUE(element.value) << "Capture element invalid at stamp(" << element.stamp
+                                 << "). Element is nullopt; likely moved erroneously during capture";
+    }
   }
 };
 constexpr int FollowerClosestBefore::PERIOD;
