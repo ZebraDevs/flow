@@ -27,6 +27,13 @@ struct FollowerAnyBefore : ::testing::Test, AnyBefore<Dispatch<int, optional<int
   FollowerAnyBefore() : AnyBefore<Dispatch<int, optional<int>>, NoLock>{DELAY} {}
 
   void SetUp() final { this->reset(); }
+  void TearDown() final
+  {
+    this->inspect([](const Dispatch<int, optional<int>>& element) {
+      ASSERT_TRUE(element.value) << "At stamp(" << element.stamp
+                                 << "). Element is nullopt; likely moved erroneously during capture";
+    });
+  }
 };
 constexpr int FollowerAnyBefore::DELAY;
 

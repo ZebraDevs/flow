@@ -27,6 +27,13 @@ struct FollowerBefore : ::testing::Test, Before<Dispatch<int, optional<int>>, No
   FollowerBefore() : Before<Dispatch<int, optional<int>>, NoLock>{DELAY} {}
 
   void SetUp() final { this->reset(); }
+  void TearDown() final
+  {
+    this->inspect([](const Dispatch<int, optional<int>>& element) {
+      ASSERT_TRUE(element.value) << "At stamp(" << element.stamp
+                                 << "). Element is nullopt; likely moved erroneously during capture";
+    });
+  }
 };
 constexpr int FollowerBefore::DELAY;
 

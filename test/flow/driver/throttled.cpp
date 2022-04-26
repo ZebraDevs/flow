@@ -28,6 +28,13 @@ struct DriverThrottled : ::testing::Test, Throttled<Dispatch<int, optional<int>>
   DriverThrottled() : Throttled<Dispatch<int, optional<int>>, NoLock>{THROTTLE_PERIOD} {}
 
   void SetUp() final { this->reset(); }
+  void TearDown() final
+  {
+    this->inspect([](const Dispatch<int, optional<int>>& element) {
+      ASSERT_TRUE(element.value) << "At stamp(" << element.stamp
+                                 << "). Element is nullopt; likely moved erroneously during capture";
+    });
+  }
 };
 constexpr int DriverThrottled::THROTTLE_PERIOD;
 
