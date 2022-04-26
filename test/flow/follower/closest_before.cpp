@@ -59,6 +59,18 @@ TEST_F(FollowerClosestBefore, CaptureRetryOnEmpty)
   std::vector<Dispatch<int, optional<int>>> data;
   CaptureRange<int> t_range{0, 0};
   ASSERT_EQ(State::RETRY, this->capture(std::back_inserter(data), t_range));
+  ASSERT_TRUE(data.empty());
+}
+
+
+TEST_F(FollowerClosestBefore, CaptureRetryBeforeRange)
+{
+  std::vector<Dispatch<int, optional<int>>> data;
+  this->inject(Dispatch<int, optional<int>>{0, 0});
+
+  CaptureRange<int> t_range{20, 20};
+  ASSERT_EQ(State::RETRY, this->capture(std::back_inserter(data), t_range));
+  ASSERT_TRUE(data.empty());
 }
 
 

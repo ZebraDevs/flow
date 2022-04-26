@@ -33,7 +33,7 @@ ClosestBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::locate_followe
   const stamp_type boundary = range.lower_stamp - delay_;
 
   // Starting from the oldest data, return on when data found within periodic window
-  auto capture_itr = PolicyType::queue_.begin();
+  auto capture_itr = PolicyType::queue_.end();
   for (auto itr = PolicyType::queue_.begin(); itr != PolicyType::queue_.end(); ++itr)
   {
     if (get_stamp(*itr) >= boundary)
@@ -51,9 +51,14 @@ ClosestBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::locate_followe
 
   // Check if inputs are capturable
   // NOTE: If no capture input was set, then all data is at or after boundary
-  return std::make_tuple(
-    (capture_itr == PolicyType::queue_.end()) ? State::RETRY : State::PRIMED,
-    ExtractionRange{0, static_cast<std::size_t>(std::distance(PolicyType::queue_.begin(), capture_itr))});
+  if (capture_itr == PolicyType::queue_.end())
+  {
+    return std::make_tuple(State::RETRY, ExtractionRange{});
+  }
+
+  const std::size_t capture_idx = static_cast<std::size_t>(std::distance(PolicyType::queue_.begin(), capture_itr));
+  std::cout << capture_idx << std::endl;
+  return std::make_tuple(State::PRIMED, ExtractionRange{capture_idx, capture_idx + 1UL});
 }
 
 
@@ -66,8 +71,8 @@ void ClosestBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::extract_f
 {
   if (extraction_range)
   {
-    *(output++) = *std::next(PolicyType::queue_.begin(), extraction_range.last);
-    PolicyType::queue_.remove_first_n(extraction_range.last);
+    *(output++) = *std::next(PolicyType::queue_.begin(), extraction_range.first);
+    PolicyType::queue_.remove_first_n(extraction_range.first);
   }
 }
 
