@@ -21,9 +21,11 @@ Driver<PolicyT>::Driver(const DispatchContainerType& container, const DispatchQu
 
 template <typename PolicyT>
 template <typename OutputDispatchIteratorT>
-State Driver<PolicyT>::capture_policy_impl(OutputDispatchIteratorT&& output, CaptureRange<stamp_type>& range)
+State Driver<PolicyT>::capture_policy_impl(OutputDispatchIteratorT& output, CaptureRange<stamp_type>& range)
 {
-  return derived()->capture_driver_impl(std::forward<OutputDispatchIteratorT>(output), range);
+  const auto result = derived()->locate_driver_impl(range);
+  derived()->extract_driver_impl(output, std::get<1>(result), range);
+  return std::get<0>(result);
 }
 
 
@@ -37,11 +39,11 @@ std::tuple<State, ExtractionRange> Driver<PolicyT>::locate_policy_impl(CaptureRa
 template <typename PolicyT>
 template <typename OutputDispatchIteratorT>
 void Driver<PolicyT>::extract_policy_impl(
-  OutputDispatchIteratorT&& output,
+  OutputDispatchIteratorT& output,
   const ExtractionRange& extraction_range,
   const CaptureRange<stamp_type>& range)
 {
-  return derived()->extract_driver_impl(std::forward<OutputDispatchIteratorT>(output), extraction_range, range);
+  return derived()->extract_driver_impl(output, extraction_range, range);
 }
 
 

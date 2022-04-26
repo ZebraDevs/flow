@@ -167,7 +167,7 @@ private:
    */
   template <typename OutputDispatchIteratorT, typename CaptureRangeT, typename ClockT, typename DurationT>
   inline State capture_impl(
-    OutputDispatchIteratorT&& output,
+    OutputDispatchIteratorT& output,
     CaptureRangeT&& range,
     const std::chrono::time_point<ClockT, DurationT> timeout)
   {
@@ -178,8 +178,7 @@ private:
     while (capturing_)
     {
       // Attempt data capture
-      state = derived()->capture_policy_impl(
-        std::forward<OutputDispatchIteratorT>(output), std::forward<CaptureRangeT>(range));
+      state = derived()->capture_policy_impl(output, std::forward<CaptureRangeT>(range));
 
       // Check capture state, and whether or not a data wait is needed
       if (state != State::RETRY)
@@ -261,12 +260,12 @@ private:
    */
   template <typename OutputDispatchIteratorT>
   inline void extract_impl(
-    OutputDispatchIteratorT&& output,
+    OutputDispatchIteratorT& output,
     const ExtractionRange& extraction_range,
     const CaptureRange<stamp_type>& range)
   {
     LockableT lock{capture_mutex_};
-    derived()->extract_policy_impl(std::forward<OutputDispatchIteratorT>(output), extraction_range, range);
+    derived()->extract_policy_impl(output, extraction_range, range);
   }
 
   /**

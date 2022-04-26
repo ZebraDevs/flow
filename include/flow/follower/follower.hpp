@@ -71,7 +71,7 @@ private:
    * @retval State::RETRY  Captor should continue waiting for messages after prime attempt
    */
   template <typename OutputDispatchIteratorT>
-  inline State capture_policy_impl(OutputDispatchIteratorT&& output, const CaptureRange<stamp_type>& range);
+  inline State capture_policy_impl(OutputDispatchIteratorT& output, const CaptureRange<stamp_type>& range);
 
   /**
    * @copydoc CaptorInterface::locate
@@ -83,7 +83,7 @@ private:
    */
   template <typename OutputDispatchIteratorT>
   inline void extract_policy_impl(
-    OutputDispatchIteratorT&& output,
+    OutputDispatchIteratorT& output,
     const ExtractionRange& extraction_range,
     const CaptureRange<stamp_type>& range);
 

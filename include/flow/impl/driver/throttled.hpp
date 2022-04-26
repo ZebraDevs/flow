@@ -27,23 +27,6 @@ Throttled<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::Throttled(
 
 
 template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
-template <typename OutputDispatchIteratorT>
-State Throttled<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::capture_driver_impl(
-  OutputDispatchIteratorT output,
-  CaptureRange<stamp_type>& range)
-{
-  const auto locate_result = Throttled::locate_driver_impl(range);
-
-  if (std::get<0>(locate_result) == State::PRIMED)
-  {
-    Throttled::extract_driver_impl(output, std::get<1>(locate_result), range);
-  }
-
-  return std::get<0>(locate_result);
-}
-
-
-template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
 std::tuple<State, ExtractionRange>
 Throttled<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::locate_driver_impl(CaptureRange<stamp_type>& range) const
 {
@@ -68,13 +51,16 @@ Throttled<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::locate_driver_impl
 template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
 template <typename OutputDispatchIteratorT>
 void Throttled<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::extract_driver_impl(
-  OutputDispatchIteratorT output,
+  OutputDispatchIteratorT& output,
   const ExtractionRange& extraction_range,
   const CaptureRange<stamp_type>& range)
 {
-  PolicyType::queue_.move(output, extraction_range);
-  PolicyType::queue_.remove_first_n(extraction_range.last);
-  previous_stamp_ = range.lower_stamp;
+  if (extraction_range)
+  {
+    PolicyType::queue_.move(output, extraction_range);
+    PolicyType::queue_.remove_first_n(extraction_range.last);
+    previous_stamp_ = range.lower_stamp;
+  }
 }
 
 

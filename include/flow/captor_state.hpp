@@ -41,6 +41,16 @@ template <typename... OtherTs> constexpr bool operator!=(const State lhs, const 
   return lhs != std::get<0>(rhs);
 }
 
+template <typename... OtherTs> constexpr bool operator==(const std::tuple<State, OtherTs...>& lhs, const State rhs)
+{
+  return std::get<0>(lhs) == rhs;
+}
+
+template <typename... OtherTs> constexpr bool operator!=(const std::tuple<State, OtherTs...>& lhs, const State rhs)
+{
+  return std::get<0>(lhs) != rhs;
+}
+
 }  // namespace flow
 
 #endif  // FLOW_CAPTOR_STATE_HPP

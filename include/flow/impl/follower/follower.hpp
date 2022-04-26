@@ -21,11 +21,13 @@ Follower<PolicyT>::Follower(const DispatchContainerType& container, const Dispat
 
 template <typename PolicyT>
 template <typename OutputDispatchIteratorT>
-State Follower<PolicyT>::capture_policy_impl(OutputDispatchIteratorT&& output, const CaptureRange<stamp_type>& range)
+State Follower<PolicyT>::capture_policy_impl(OutputDispatchIteratorT& output, const CaptureRange<stamp_type>& range)
 {
   if (CaptorType::queue_monitor_.check(CaptorType::queue_, range))
   {
-    return derived()->capture_follower_impl(std::forward<OutputDispatchIteratorT>(output), range);
+    const auto result = derived()->locate_follower_impl(range);
+    derived()->extract_follower_impl(output, std::get<1>(result), range);
+    return std::get<0>(result);
   }
   else
   {
@@ -44,11 +46,11 @@ std::tuple<State, ExtractionRange> Follower<PolicyT>::locate_policy_impl(const C
 template <typename PolicyT>
 template <typename OutputDispatchIteratorT>
 void Follower<PolicyT>::extract_policy_impl(
-  OutputDispatchIteratorT&& output,
+  OutputDispatchIteratorT& output,
   const ExtractionRange& extraction_range,
   const CaptureRange<stamp_type>& range)
 {
-  return derived()->extract_follower_impl(std::forward<OutputDispatchIteratorT>(output), extraction_range, range);
+  return derived()->extract_follower_impl(output, extraction_range, range);
 }
 
 

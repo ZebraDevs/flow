@@ -171,11 +171,10 @@ private:
    * @copydoc CaptorInterface::capture
    */
   template <typename OutputDispatchIteratorT, typename CaptureRangeT>
-  inline State capture_impl(OutputDispatchIteratorT&& output, CaptureRangeT&& range)
+  inline State capture_impl(OutputDispatchIteratorT& output, CaptureRangeT&& range)
   {
     BasicLockableT lock{queue_mutex_};
-    return derived()->capture_policy_impl(
-      std::forward<OutputDispatchIteratorT>(output), std::forward<CaptureRangeT>(range));
+    return derived()->capture_policy_impl(output, std::forward<CaptureRangeT>(range));
   }
 
   /**
@@ -192,12 +191,12 @@ private:
    */
   template <typename OutputDispatchIteratorT>
   inline void extract_impl(
-    OutputDispatchIteratorT&& output,
+    OutputDispatchIteratorT& output,
     const ExtractionRange& extraction_range,
     const CaptureRange<stamp_type>& range)
   {
     BasicLockableT lock{queue_mutex_};
-    derived()->extract_policy_impl(std::forward<OutputDispatchIteratorT>(output), extraction_range, range);
+    derived()->extract_policy_impl(output, extraction_range, range);
   }
 
   /**

@@ -242,12 +242,13 @@ public:
    * @param[out] output  output data iterator
    * @param[in,out] range  data capture/sequencing range
    *
-   * @return capture directive code
+   * @return <code>{capture directive code, output iterator}</code>
    */
   template <typename OutputDispatchIteratorT, typename CaptureRangeT>
-  inline State capture(OutputDispatchIteratorT&& output, CaptureRangeT&& range)
+  inline std::tuple<State, OutputDispatchIteratorT> capture(OutputDispatchIteratorT output, CaptureRangeT&& range)
   {
-    return derived()->capture_impl(std::forward<OutputDispatchIteratorT>(output), std::forward<CaptureRangeT>(range));
+    const auto state = derived()->capture_impl(output, std::forward<CaptureRangeT>(range));
+    return std::make_tuple(state, output);
   }
 
   /**
@@ -256,13 +257,13 @@ public:
    * @param timeout  time to stop waiting for data
    */
   template <typename OutputDispatchIteratorT, typename CaptureRangeT, typename ClockT, typename DurationT>
-  inline State capture(
-    OutputDispatchIteratorT&& output,
+  inline std::tuple<State, OutputDispatchIteratorT> capture(
+    OutputDispatchIteratorT output,
     CaptureRangeT&& range,
     const std::chrono::time_point<ClockT, DurationT> timeout = std::chrono::time_point<ClockT, DurationT>::max())
   {
-    return derived()->capture_impl(
-      std::forward<OutputDispatchIteratorT>(output), std::forward<CaptureRangeT>(range), timeout);
+    const auto state = derived()->capture_impl(output, std::forward<CaptureRangeT>(range), timeout);
+    return std::make_tuple(state, output);
   }
 
   /**
@@ -303,14 +304,17 @@ public:
    * @param[out] output  output data iterator
    * @param extraction_range  range of elements to extract (by copy or move) from queue
    * @param range  data capture/sequencing range
+   *
+   * @return \c output iterator, advanced if elements were extracted
    */
   template <typename OutputDispatchIteratorT>
-  inline void extract(
-    OutputDispatchIteratorT&& output,
+  inline OutputDispatchIteratorT extract(
+    OutputDispatchIteratorT output,
     const ExtractionRange& extraction_range,
     const CaptureRange<stamp_type>& range)
   {
-    return derived()->extract_impl(std::forward<OutputDispatchIteratorT>(output), extraction_range, range);
+    derived()->extract_impl(output, extraction_range, range);
+    return output;
   }
 
   /**
