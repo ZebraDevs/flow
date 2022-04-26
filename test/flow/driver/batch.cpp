@@ -25,15 +25,28 @@ struct DriverBatch : ::testing::Test, Batch<Dispatch<int, optional<int>>, NoLock
 {
   static constexpr std::size_t CHUNK_SIZE = 10;
 
+  std::vector<Dispatch<int, optional<int>>> data;
+
   DriverBatch() : Batch<Dispatch<int, optional<int>>, NoLock>{CHUNK_SIZE} {}
 
-  void SetUp() final { this->reset(); }
+  void SetUp() final
+  {
+    this->reset();
+    data.clear();
+  }
+
   void TearDown() final
   {
     this->inspect([](const Dispatch<int, optional<int>>& element) {
-      ASSERT_TRUE(element.value) << "At stamp(" << element.stamp
+      ASSERT_TRUE(element.value) << "Queue element invalid at stamp(" << element.stamp
                                  << "). Element is nullopt; likely moved erroneously during capture";
     });
+
+    for (const auto& element : data)
+    {
+      ASSERT_TRUE(element.value) << "Capture element invalid at stamp(" << element.stamp
+                                 << "). Element is nullopt; likely moved erroneously during capture";
+    }
   }
 };
 constexpr std::size_t DriverBatch::CHUNK_SIZE;
@@ -41,7 +54,6 @@ constexpr std::size_t DriverBatch::CHUNK_SIZE;
 
 TEST_F(DriverBatch, CaptureRetryOnEmpty)
 {
-  std::vector<Dispatch<int, optional<int>>> data;
   CaptureRange<int> t_range;
 
   ASSERT_EQ(State::RETRY, this->capture(std::back_inserter(data), t_range));
@@ -64,7 +76,6 @@ TEST_F(DriverBatch, CaptureContinueLTBatchSize)
   ASSERT_EQ(this->size(), CHUNK_SIZE / 2);
 
   // Start processing
-  std::vector<Dispatch<int, optional<int>>> data;
   CaptureRange<int> t_range;
 
   ASSERT_EQ(State::RETRY, this->capture(std::back_inserter(data), t_range));
@@ -86,7 +97,6 @@ TEST_F(DriverBatch, CapturePrimedEQBatchSize)
 
 
   // Start processing
-  std::vector<Dispatch<int, optional<int>>> data;
   CaptureRange<int> t_range;
 
   ASSERT_EQ(this->size(), CHUNK_SIZE);
@@ -112,7 +122,6 @@ TEST_F(DriverBatch, CapturePrimedGTBatchSize)
   }
 
   // Start processing
-  std::vector<Dispatch<int, optional<int>>> data;
   CaptureRange<int> t_range;
 
   ASSERT_EQ(this->size(), CHUNK_SIZE + CHUNK_SIZE / 2);

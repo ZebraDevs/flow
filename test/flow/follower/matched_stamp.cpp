@@ -25,28 +25,38 @@ struct FollowerMatchedStamp : ::testing::Test, MatchedStamp<Dispatch<int, option
 {
   FollowerMatchedStamp() : MatchedStamp<Dispatch<int, optional<int>>, NoLock>{} {}
 
-  void SetUp() final { this->reset(); }
+  std::vector<Dispatch<int, optional<int>>> data;
+
+  void SetUp() final
+  {
+    this->reset();
+    data.clear();
+  }
+
   void TearDown() final
   {
     this->inspect([](const Dispatch<int, optional<int>>& element) {
-      ASSERT_TRUE(element.value) << "At stamp(" << element.stamp
+      ASSERT_TRUE(element.value) << "Queue element invalid at stamp(" << element.stamp
                                  << "). Element is nullopt; likely moved erroneously during capture";
     });
+
+    for (const auto& element : data)
+    {
+      ASSERT_TRUE(element.value) << "Capture element invalid at stamp(" << element.stamp
+                                 << "). Element is nullopt; likely moved erroneously during capture";
+    }
   }
 };
 
 
 TEST_F(FollowerMatchedStamp, CaptureRetryOnEmpty)
 {
-  std::vector<Dispatch<int, optional<int>>> data;
   CaptureRange<int> t_range{0, 0};
   ASSERT_EQ(State::RETRY, this->capture(std::back_inserter(data), t_range));
 }
 
 TEST_F(FollowerMatchedStamp, CaptureRetryOnDataTooOld)
 {
-  std::vector<Dispatch<int, optional<int>>> data;
-
   this->inject(Dispatch<int, optional<int>>{0, 0});
 
   CaptureRange<int> t_range{1, 0};
@@ -57,8 +67,6 @@ TEST_F(FollowerMatchedStamp, CaptureRetryOnDataTooOld)
 
 TEST_F(FollowerMatchedStamp, CaptureAbortOnDataTooNew)
 {
-  std::vector<Dispatch<int, optional<int>>> data;
-
   this->inject(Dispatch<int, optional<int>>{1, 0});
 
   CaptureRange<int> t_range{0, 0};
@@ -68,8 +76,6 @@ TEST_F(FollowerMatchedStamp, CaptureAbortOnDataTooNew)
 
 TEST_F(FollowerMatchedStamp, CapturePrimedOnExact)
 {
-  std::vector<Dispatch<int, optional<int>>> data;
-
   this->inject(Dispatch<int, optional<int>>{0, 0});
 
   CaptureRange<int> t_range{0, 0};
@@ -117,8 +123,6 @@ TEST_F(FollowerMatchedStamp, LocatePrimedOnExact)
 
 TEST_F(FollowerMatchedStamp, PrimedOnMatchedStamp)
 {
-  std::vector<Dispatch<int, optional<int>>> data;
-
   this->inject(Dispatch<int, optional<int>>{1, 0});
 
   CaptureRange<int> t_range{1, 1};
@@ -128,8 +132,6 @@ TEST_F(FollowerMatchedStamp, PrimedOnMatchedStamp)
 
 TEST_F(FollowerMatchedStamp, PrimedOnMatchedRange)
 {
-  std::vector<Dispatch<int, optional<int>>> data;
-
   this->inject(Dispatch<int, optional<int>>{1, 1});
   this->inject(Dispatch<int, optional<int>>{2, 2});
   this->inject(Dispatch<int, optional<int>>{3, 3});

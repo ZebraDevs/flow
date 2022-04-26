@@ -25,20 +25,32 @@ struct DriverNext : ::testing::Test, Next<Dispatch<int, optional<int>>, NoLock>
 {
   DriverNext() : Next<Dispatch<int, optional<int>>, NoLock>{} {}
 
-  void SetUp() final { this->reset(); }
+  std::vector<Dispatch<int, optional<int>>> data;
+
+  void SetUp() final
+  {
+    this->reset();
+    data.clear();
+  }
+
   void TearDown() final
   {
     this->inspect([](const Dispatch<int, optional<int>>& element) {
-      ASSERT_TRUE(element.value) << "At stamp(" << element.stamp
+      ASSERT_TRUE(element.value) << "Queue element invalid at stamp(" << element.stamp
                                  << "). Element is nullopt; likely moved erroneously during capture";
     });
+
+    for (const auto& element : data)
+    {
+      ASSERT_TRUE(element.value) << "Capture element invalid at stamp(" << element.stamp
+                                 << "). Element is nullopt; likely moved erroneously during capture";
+    }
   }
 };
 
 
 TEST_F(DriverNext, CaptureRetryOnEmpty)
 {
-  std::vector<Dispatch<int, optional<int>>> data;
   CaptureRange<int> t_range{0, 0};
   ASSERT_EQ(State::RETRY, this->capture(std::back_inserter(data), t_range));
 }
@@ -50,7 +62,6 @@ TEST_F(DriverNext, CapturePrimedWithOldest)
   this->inject(Dispatch<int, optional<int>>{t + 0, 1});
   this->inject(Dispatch<int, optional<int>>{t + 1, 2});
 
-  std::vector<Dispatch<int, optional<int>>> data;
   CaptureRange<int> t_range{0, 0};
   ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
 
