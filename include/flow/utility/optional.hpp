@@ -144,6 +144,16 @@ public:
   inline const T& operator*() const { return value(); }
 
   /**
+   * @brief Pointer-like access to underlying value
+   */
+  inline T* operator->() { return vptr(); }
+
+  /**
+   * @brief Pointer-like access to underlying value (const)
+   */
+  inline const T* operator->() const { return vptr(); }
+
+  /**
    * @brief Resets optional to no-value
    *
    * @note Does not call underlying destructor

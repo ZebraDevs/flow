@@ -35,7 +35,7 @@ template <typename DispatchT, typename ContainerT> bool DispatchQueue<DispatchT,
 template <typename DispatchT, typename ContainerT>
 template <typename OutputDispatchIteratorT>
 OutputDispatchIteratorT DispatchQueue<DispatchT, ContainerT>::copy(
-  OutputDispatchIteratorT& output,
+  OutputDispatchIteratorT output,
   const ExtractionRange& extraction_range) const
 {
   return std::copy(
@@ -48,7 +48,7 @@ OutputDispatchIteratorT DispatchQueue<DispatchT, ContainerT>::copy(
 template <typename DispatchT, typename ContainerT>
 template <typename OutputDispatchIteratorT>
 OutputDispatchIteratorT
-DispatchQueue<DispatchT, ContainerT>::move(OutputDispatchIteratorT& output, const ExtractionRange& extraction_range)
+DispatchQueue<DispatchT, ContainerT>::move(OutputDispatchIteratorT output, const ExtractionRange& extraction_range)
 {
   return std::move(
     std::next(container_.begin(), extraction_range.first),

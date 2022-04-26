@@ -74,8 +74,8 @@ TEST_F(SynchronizerTestSuiteST, CaptureCannotPrimeRetry)
       std::back_inserter(follower2_output_data)),
     0);
 
-  ASSERT_FALSE(result);
-  ASSERT_EQ(result.state, State::RETRY);
+  ASSERT_FALSE(std::get<0>(result));
+  ASSERT_EQ(std::get<0>(result).state, State::RETRY);
 }
 
 
@@ -97,8 +97,8 @@ TEST_F(SynchronizerTestSuiteST, CaptureCannotPrimeAbort)
       std::back_inserter(follower2_output_data)),
     0);
 
-  ASSERT_FALSE(result);
-  ASSERT_EQ(result.state, State::ABORT);
+  ASSERT_FALSE(std::get<0>(result));
+  ASSERT_EQ(std::get<0>(result).state, State::ABORT);
 }
 
 
@@ -121,8 +121,8 @@ TEST_F(SynchronizerTestSuiteST, CaptureCanPrime)
       std::back_inserter(follower2_output_data)),
     0);
 
-  ASSERT_TRUE(result);
-  ASSERT_EQ(result.state, State::PRIMED);
+  ASSERT_TRUE(std::get<0>(result));
+  ASSERT_EQ(std::get<0>(result).state, State::PRIMED);
 
   ASSERT_FALSE(driver_output_data.empty());
   ASSERT_FALSE(follower1_output_data.empty());
@@ -142,8 +142,8 @@ TEST_F(SynchronizerTestSuiteST, CaptureCanPrimeNoCapture)
     std::forward_as_tuple(NoCapture{}, NoCapture{}, NoCapture{}),
     0);
 
-  ASSERT_TRUE(result);
-  ASSERT_EQ(result.state, State::PRIMED);
+  ASSERT_TRUE(std::get<0>(result));
+  ASSERT_EQ(std::get<0>(result).state, State::PRIMED);
 }
 
 
@@ -162,8 +162,8 @@ TEST_F(SynchronizerTestSuiteST, CaptureDirectCaptureRange)
       NoCapture{}, std::back_inserter(follower1_output_data), std::back_inserter(follower2_output_data)),
     0);
 
-  ASSERT_TRUE(result);
-  ASSERT_EQ(result.state, State::PRIMED);
+  ASSERT_TRUE(std::get<0>(result));
+  ASSERT_EQ(std::get<0>(result).state, State::PRIMED);
 
   ASSERT_FALSE(follower1_output_data.empty());
   ASSERT_TRUE(follower2_output_data.empty());
@@ -189,8 +189,8 @@ TEST_F(SynchronizerTestSuiteST, CaptureErrorTimeGuard)
       std::back_inserter(follower2_output_data)),
     100 /*guard*/);
 
-  ASSERT_FALSE(result);
-  ASSERT_EQ(result.state, State::ERROR_DRIVER_LOWER_BOUND_EXCEEDED);
+  ASSERT_FALSE(std::get<0>(result));
+  ASSERT_EQ(std::get<0>(result).state, State::ERROR_DRIVER_LOWER_BOUND_EXCEEDED);
 
   // Inputs may be captured, but capture is aborted after
   ASSERT_FALSE(driver_output_data.empty());
