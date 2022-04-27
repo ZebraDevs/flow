@@ -57,7 +57,6 @@ ClosestBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::locate_followe
   }
 
   const std::size_t capture_idx = static_cast<std::size_t>(std::distance(PolicyType::queue_.begin(), capture_itr));
-  std::cout << capture_idx << std::endl;
   return std::make_tuple(State::PRIMED, ExtractionRange{capture_idx, capture_idx + 1UL});
 }
 
