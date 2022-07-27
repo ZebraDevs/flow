@@ -1,5 +1,5 @@
-\hypertarget{classflow_1_1follower_1_1_matched_stamp}{}\doxysection{flow\+::follower\+::Matched\+Stamp$<$ DispatchT, Lock\+PolicyT, ContainerT, Queue\+MonitorT $>$ Class Template Reference}
-\label{classflow_1_1follower_1_1_matched_stamp}\index{flow::follower::MatchedStamp$<$ DispatchT, LockPolicyT, ContainerT, QueueMonitorT $>$@{flow::follower::MatchedStamp$<$ DispatchT, LockPolicyT, ContainerT, QueueMonitorT $>$}}
+\hypertarget{classflow_1_1follower_1_1_matched_stamp}{}\doxysection{flow\+::follower\+::Matched\+Stamp$<$ DispatchT, Lock\+PolicyT, ContainerT, Queue\+MonitorT, Access\+StampT, Access\+ValueT $>$ Class Template Reference}
+\label{classflow_1_1follower_1_1_matched_stamp}\index{flow::follower::MatchedStamp$<$ DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT $>$@{flow::follower::MatchedStamp$<$ DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT $>$}}
 
 
 Captures one element with a stamp which exactly matches the capture range lower bound.  
@@ -11,7 +11,7 @@ Captures one element with a stamp which exactly matches the capture range lower 
 
 
 
-Inheritance diagram for flow\+::follower\+::Matched\+Stamp$<$ DispatchT, Lock\+PolicyT, ContainerT, Queue\+MonitorT $>$\+:
+Inheritance diagram for flow\+::follower\+::Matched\+Stamp$<$ DispatchT, Lock\+PolicyT, ContainerT, Queue\+MonitorT, Access\+StampT, Access\+ValueT $>$\+:
 \nopagebreak
 \begin{figure}[H]
 \begin{center}
@@ -21,7 +21,7 @@ Inheritance diagram for flow\+::follower\+::Matched\+Stamp$<$ DispatchT, Lock\+P
 \end{figure}
 
 
-Collaboration diagram for flow\+::follower\+::Matched\+Stamp$<$ DispatchT, Lock\+PolicyT, ContainerT, Queue\+MonitorT $>$\+:
+Collaboration diagram for flow\+::follower\+::Matched\+Stamp$<$ DispatchT, Lock\+PolicyT, ContainerT, Queue\+MonitorT, Access\+StampT, Access\+ValueT $>$\+:
 \nopagebreak
 \begin{figure}[H]
 \begin{center}
@@ -32,19 +32,19 @@ Collaboration diagram for flow\+::follower\+::Matched\+Stamp$<$ DispatchT, Lock\
 \doxysubsection*{Public Types}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\Hypertarget{classflow_1_1follower_1_1_matched_stamp_a46f9d99cd263a83d976d8f1bcb62bee0}\label{classflow_1_1follower_1_1_matched_stamp_a46f9d99cd263a83d976d8f1bcb62bee0}} 
-using \mbox{\hyperlink{classflow_1_1follower_1_1_matched_stamp_a46f9d99cd263a83d976d8f1bcb62bee0}{stamp\+\_\+type}} = typename \mbox{\hyperlink{structflow_1_1_captor_traits}{Captor\+Traits}}$<$ \mbox{\hyperlink{classflow_1_1follower_1_1_matched_stamp}{Matched\+Stamp}} $>$\+::\mbox{\hyperlink{classflow_1_1follower_1_1_matched_stamp_a46f9d99cd263a83d976d8f1bcb62bee0}{stamp\+\_\+type}}
+\mbox{\Hypertarget{classflow_1_1follower_1_1_matched_stamp_a6e165a0fa991dcf8535415d3b3bc1967}\label{classflow_1_1follower_1_1_matched_stamp_a6e165a0fa991dcf8535415d3b3bc1967}} 
+using \mbox{\hyperlink{classflow_1_1follower_1_1_matched_stamp_a6e165a0fa991dcf8535415d3b3bc1967}{stamp\+\_\+type}} = typename \mbox{\hyperlink{structflow_1_1_captor_traits}{Captor\+Traits}}$<$ \mbox{\hyperlink{classflow_1_1follower_1_1_matched_stamp}{Matched\+Stamp}} $>$\+::\mbox{\hyperlink{classflow_1_1follower_1_1_matched_stamp_a6e165a0fa991dcf8535415d3b3bc1967}{stamp\+\_\+type}}
 \begin{DoxyCompactList}\small\item\em Data stamp type. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{classflow_1_1follower_1_1_matched_stamp_a67f6b9b316170b553333d3c25dd47be0}{Matched\+Stamp}} (const ContainerT \&container=ContainerT\{\}, const Queue\+MonitorT \&queue\+\_\+monitor=Queue\+MonitorT\{\})
+\mbox{\hyperlink{classflow_1_1follower_1_1_matched_stamp_a8598b640e603c4ab428929455270fc1b}{Matched\+Stamp}} (const ContainerT \&container=ContainerT\{\}, const Queue\+MonitorT \&queue\+\_\+monitor=Queue\+MonitorT\{\})
 \begin{DoxyCompactList}\small\item\em Setup constructor. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
-\subsubsection*{template$<$typename DispatchT, typename Lock\+PolicyT = No\+Lock, typename ContainerT = Default\+Container$<$\+Dispatch\+T$>$, typename Queue\+MonitorT = Default\+Dispatch\+Queue\+Monitor$>$\newline
-class flow\+::follower\+::\+Matched\+Stamp$<$ Dispatch\+T, Lock\+Policy\+T, Container\+T, Queue\+Monitor\+T $>$}
+\subsubsection*{template$<$typename DispatchT, typename Lock\+PolicyT = No\+Lock, typename ContainerT = Default\+Container$<$\+Dispatch\+T$>$, typename Queue\+MonitorT = Default\+Dispatch\+Queue\+Monitor, typename Access\+StampT = Default\+Stamp\+Access, typename Access\+ValueT = Default\+Value\+Access$>$\newline
+class flow\+::follower\+::\+Matched\+Stamp$<$ Dispatch\+T, Lock\+Policy\+T, Container\+T, Queue\+Monitor\+T, Access\+Stamp\+T, Access\+Value\+T $>$}
 
 Captures one element with a stamp which exactly matches the capture range lower bound. 
 
@@ -60,16 +60,20 @@ All older elements are removed.
 \hline
 {\em Queue\+MonitorT} & object used to monitor queue state on each insertion; used to precondition capture \\
 \hline
+{\em Access\+StampT} & custom stamp access \\
+\hline
+{\em Access\+ValueT} & custom value access \\
+\hline
 \end{DoxyTemplParams}
 
 
 \doxysubsection{Constructor \& Destructor Documentation}
-\mbox{\Hypertarget{classflow_1_1follower_1_1_matched_stamp_a67f6b9b316170b553333d3c25dd47be0}\label{classflow_1_1follower_1_1_matched_stamp_a67f6b9b316170b553333d3c25dd47be0}} 
-\index{flow::follower::MatchedStamp$<$ DispatchT, LockPolicyT, ContainerT, QueueMonitorT $>$@{flow::follower::MatchedStamp$<$ DispatchT, LockPolicyT, ContainerT, QueueMonitorT $>$}!MatchedStamp@{MatchedStamp}}
-\index{MatchedStamp@{MatchedStamp}!flow::follower::MatchedStamp$<$ DispatchT, LockPolicyT, ContainerT, QueueMonitorT $>$@{flow::follower::MatchedStamp$<$ DispatchT, LockPolicyT, ContainerT, QueueMonitorT $>$}}
+\mbox{\Hypertarget{classflow_1_1follower_1_1_matched_stamp_a8598b640e603c4ab428929455270fc1b}\label{classflow_1_1follower_1_1_matched_stamp_a8598b640e603c4ab428929455270fc1b}} 
+\index{flow::follower::MatchedStamp$<$ DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT $>$@{flow::follower::MatchedStamp$<$ DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT $>$}!MatchedStamp@{MatchedStamp}}
+\index{MatchedStamp@{MatchedStamp}!flow::follower::MatchedStamp$<$ DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT $>$@{flow::follower::MatchedStamp$<$ DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT $>$}}
 \doxysubsubsection{\texorpdfstring{MatchedStamp()}{MatchedStamp()}}
-{\footnotesize\ttfamily template$<$typename DispatchT , typename Lock\+PolicyT , typename ContainerT , typename Queue\+MonitorT $>$ \\
-\mbox{\hyperlink{classflow_1_1follower_1_1_matched_stamp}{flow\+::follower\+::\+Matched\+Stamp}}$<$ DispatchT, Lock\+PolicyT, ContainerT, Queue\+MonitorT $>$\+::\mbox{\hyperlink{classflow_1_1follower_1_1_matched_stamp}{Matched\+Stamp}} (\begin{DoxyParamCaption}\item[{const ContainerT \&}]{container = {\ttfamily ContainerT\{\}},  }\item[{const Queue\+MonitorT \&}]{queue\+\_\+monitor = {\ttfamily QueueMonitorT\{\}} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+{\footnotesize\ttfamily template$<$typename DispatchT , typename Lock\+PolicyT , typename ContainerT , typename Queue\+MonitorT , typename Access\+StampT , typename Access\+ValueT $>$ \\
+\mbox{\hyperlink{classflow_1_1follower_1_1_matched_stamp}{flow\+::follower\+::\+Matched\+Stamp}}$<$ DispatchT, Lock\+PolicyT, ContainerT, Queue\+MonitorT, Access\+StampT, Access\+ValueT $>$\+::\mbox{\hyperlink{classflow_1_1follower_1_1_matched_stamp}{Matched\+Stamp}} (\begin{DoxyParamCaption}\item[{const ContainerT \&}]{container = {\ttfamily ContainerT\{\}},  }\item[{const Queue\+MonitorT \&}]{queue\+\_\+monitor = {\ttfamily QueueMonitorT\{\}} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
 
 
 

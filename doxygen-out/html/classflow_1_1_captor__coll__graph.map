@@ -1,7 +1,7 @@
 <map id="flow::Captor&lt; CaptorT, LockableT, QueueMonitorT &gt;" name="flow::Captor&lt; CaptorT, LockableT, QueueMonitorT &gt;">
-<area shape="rect" id="node1" title="Default constructor." alt="" coords="859,70,1073,111"/>
-<area shape="rect" id="node2" href="$classflow_1_1_captor_interface.html" title=" " alt="" coords="599,63,809,119"/>
-<area shape="rect" id="node3" href="$structflow_1_1_captor_traits_3_01_captor_3_01_captor_t_00_01_lockable_t_00_01_queue_monitor_t_01_4_01_4.html" title="Traits struct for captor types." alt="" coords="210,5,421,61"/>
+<area shape="rect" id="node1" title="Default constructor." alt="" coords="917,70,1132,111"/>
+<area shape="rect" id="node2" href="$classflow_1_1_captor_interface.html" title=" " alt="" coords="657,63,868,119"/>
+<area shape="rect" id="node3" href="$structflow_1_1_captor_traits_3_01_captor_3_01_captor_t_00_01_lockable_t_00_01_queue_monitor_t_01_4_01_4.html" title="Traits struct for captor types." alt="" coords="239,5,450,61"/>
 <area shape="rect" id="node4" href="$structflow_1_1_captor_traits.html" title="Traits struct for captor types." alt="" coords="5,13,140,54"/>
-<area shape="rect" id="node5" href="$classflow_1_1_dispatch_queue.html" title=" " alt="" coords="189,85,441,141"/>
+<area shape="rect" id="node5" href="$classflow_1_1_dispatch_queue.html" title=" " alt="" coords="189,85,500,141"/>
 </map>

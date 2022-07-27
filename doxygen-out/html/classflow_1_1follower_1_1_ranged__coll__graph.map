@@ -1,4 +1,4 @@
-<map id="flow::follower::Ranged&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT &gt;" name="flow::follower::Ranged&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT &gt;">
-<area shape="rect" id="node1" title="Captures one one element before the capture range lower bound; one element after the capture range up..." alt="" coords="347,13,567,69"/>
-<area shape="rect" id="node2" href="$classflow_1_1_follower.html" title=" " alt="" coords="5,5,299,76"/>
+<map id="flow::follower::Ranged&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT &gt;" name="flow::follower::Ranged&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT &gt;">
+<area shape="rect" id="node1" title="Captures one one element before the capture range lower bound; one element after the capture range up..." alt="" coords="347,13,580,83"/>
+<area shape="rect" id="node2" href="$classflow_1_1_follower.html" title=" " alt="" coords="5,5,299,91"/>
 </map>

@@ -1,5 +1,5 @@
-\hypertarget{classflow_1_1follower_1_1_latched}{}\doxysection{flow\+::follower\+::Latched$<$ DispatchT, Lock\+PolicyT, ContainerT, Queue\+MonitorT $>$ Class Template Reference}
-\label{classflow_1_1follower_1_1_latched}\index{flow::follower::Latched$<$ DispatchT, LockPolicyT, ContainerT, QueueMonitorT $>$@{flow::follower::Latched$<$ DispatchT, LockPolicyT, ContainerT, QueueMonitorT $>$}}
+\hypertarget{classflow_1_1follower_1_1_latched}{}\doxysection{flow\+::follower\+::Latched$<$ DispatchT, Lock\+PolicyT, ContainerT, Queue\+MonitorT, Access\+StampT, Access\+ValueT $>$ Class Template Reference}
+\label{classflow_1_1follower_1_1_latched}\index{flow::follower::Latched$<$ DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT $>$@{flow::follower::Latched$<$ DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT $>$}}
 
 
 Captures one element before the capture range lower bound, minus a minimum period.  
@@ -11,7 +11,7 @@ Captures one element before the capture range lower bound, minus a minimum perio
 
 
 
-Inheritance diagram for flow\+::follower\+::Latched$<$ DispatchT, Lock\+PolicyT, ContainerT, Queue\+MonitorT $>$\+:
+Inheritance diagram for flow\+::follower\+::Latched$<$ DispatchT, Lock\+PolicyT, ContainerT, Queue\+MonitorT, Access\+StampT, Access\+ValueT $>$\+:
 \nopagebreak
 \begin{figure}[H]
 \begin{center}
@@ -21,7 +21,7 @@ Inheritance diagram for flow\+::follower\+::Latched$<$ DispatchT, Lock\+PolicyT,
 \end{figure}
 
 
-Collaboration diagram for flow\+::follower\+::Latched$<$ DispatchT, Lock\+PolicyT, ContainerT, Queue\+MonitorT $>$\+:
+Collaboration diagram for flow\+::follower\+::Latched$<$ DispatchT, Lock\+PolicyT, ContainerT, Queue\+MonitorT, Access\+StampT, Access\+ValueT $>$\+:
 \nopagebreak
 \begin{figure}[H]
 \begin{center}
@@ -32,22 +32,22 @@ Collaboration diagram for flow\+::follower\+::Latched$<$ DispatchT, Lock\+Policy
 \doxysubsection*{Public Types}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\Hypertarget{classflow_1_1follower_1_1_latched_a330b7f9dd745cd2b513b21789250131d}\label{classflow_1_1follower_1_1_latched_a330b7f9dd745cd2b513b21789250131d}} 
-using \mbox{\hyperlink{classflow_1_1follower_1_1_latched_a330b7f9dd745cd2b513b21789250131d}{stamp\+\_\+type}} = typename \mbox{\hyperlink{structflow_1_1_captor_traits}{Captor\+Traits}}$<$ \mbox{\hyperlink{classflow_1_1follower_1_1_latched}{Latched}} $>$\+::\mbox{\hyperlink{classflow_1_1follower_1_1_latched_a330b7f9dd745cd2b513b21789250131d}{stamp\+\_\+type}}
+\mbox{\Hypertarget{classflow_1_1follower_1_1_latched_aa7e1bff49a4e024a0aa7a930f21f4d2b}\label{classflow_1_1follower_1_1_latched_aa7e1bff49a4e024a0aa7a930f21f4d2b}} 
+using \mbox{\hyperlink{classflow_1_1follower_1_1_latched_aa7e1bff49a4e024a0aa7a930f21f4d2b}{stamp\+\_\+type}} = typename \mbox{\hyperlink{structflow_1_1_captor_traits}{Captor\+Traits}}$<$ \mbox{\hyperlink{classflow_1_1follower_1_1_latched}{Latched}} $>$\+::\mbox{\hyperlink{classflow_1_1follower_1_1_latched_aa7e1bff49a4e024a0aa7a930f21f4d2b}{stamp\+\_\+type}}
 \begin{DoxyCompactList}\small\item\em Data stamp type. \end{DoxyCompactList}\item 
-\mbox{\Hypertarget{classflow_1_1follower_1_1_latched_a437fa0b63a9d5c36c7a63774a53d6552}\label{classflow_1_1follower_1_1_latched_a437fa0b63a9d5c36c7a63774a53d6552}} 
-using \mbox{\hyperlink{classflow_1_1follower_1_1_latched_a437fa0b63a9d5c36c7a63774a53d6552}{offset\+\_\+type}} = typename \mbox{\hyperlink{structflow_1_1_captor_traits}{Captor\+Traits}}$<$ \mbox{\hyperlink{classflow_1_1follower_1_1_latched}{Latched}} $>$\+::\mbox{\hyperlink{classflow_1_1follower_1_1_latched_a437fa0b63a9d5c36c7a63774a53d6552}{offset\+\_\+type}}
+\mbox{\Hypertarget{classflow_1_1follower_1_1_latched_a14b057f1779542a2354465b978fd1d03}\label{classflow_1_1follower_1_1_latched_a14b057f1779542a2354465b978fd1d03}} 
+using \mbox{\hyperlink{classflow_1_1follower_1_1_latched_a14b057f1779542a2354465b978fd1d03}{offset\+\_\+type}} = typename \mbox{\hyperlink{structflow_1_1_captor_traits}{Captor\+Traits}}$<$ \mbox{\hyperlink{classflow_1_1follower_1_1_latched}{Latched}} $>$\+::\mbox{\hyperlink{classflow_1_1follower_1_1_latched_a14b057f1779542a2354465b978fd1d03}{offset\+\_\+type}}
 \begin{DoxyCompactList}\small\item\em Data stamp duration type. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{classflow_1_1follower_1_1_latched_a5974d2c9a24b8ef6d9e1f71b696fafdb}{Latched}} (const \mbox{\hyperlink{classflow_1_1follower_1_1_latched_a437fa0b63a9d5c36c7a63774a53d6552}{offset\+\_\+type}} min\+\_\+period, const ContainerT \&container=ContainerT\{\}, const Queue\+MonitorT \&queue\+\_\+monitor=Queue\+MonitorT\{\})
+\mbox{\hyperlink{classflow_1_1follower_1_1_latched_aab1e6e0978713d9d7a1e78b7a2834078}{Latched}} (const \mbox{\hyperlink{classflow_1_1follower_1_1_latched_a14b057f1779542a2354465b978fd1d03}{offset\+\_\+type}} min\+\_\+period, const ContainerT \&container=ContainerT\{\}, const Queue\+MonitorT \&queue\+\_\+monitor=Queue\+MonitorT\{\})
 \begin{DoxyCompactList}\small\item\em Setup constructor. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
-\subsubsection*{template$<$typename DispatchT, typename Lock\+PolicyT = No\+Lock, typename ContainerT = Default\+Container$<$\+Dispatch\+T$>$, typename Queue\+MonitorT = Default\+Dispatch\+Queue\+Monitor$>$\newline
-class flow\+::follower\+::\+Latched$<$ Dispatch\+T, Lock\+Policy\+T, Container\+T, Queue\+Monitor\+T $>$}
+\subsubsection*{template$<$typename DispatchT, typename Lock\+PolicyT = No\+Lock, typename ContainerT = Default\+Container$<$\+Dispatch\+T$>$, typename Queue\+MonitorT = Default\+Dispatch\+Queue\+Monitor, typename Access\+StampT = Default\+Stamp\+Access, typename Access\+ValueT = Default\+Value\+Access$>$\newline
+class flow\+::follower\+::\+Latched$<$ Dispatch\+T, Lock\+Policy\+T, Container\+T, Queue\+Monitor\+T, Access\+Stamp\+T, Access\+Value\+T $>$}
 
 Captures one element before the capture range lower bound, minus a minimum period. 
 
@@ -61,7 +61,11 @@ All older elements are removed. If no newer elements are present on the next cap
 \hline
 {\em ContainerT} & underlying {\ttfamily DispatchT} container type \\
 \hline
-{\em Queue\+MonitorT} & object used to monitor queue state on each insertion; used to precondition capture\\
+{\em Queue\+MonitorT} & object used to monitor queue state on each insertion; used to precondition capture \\
+\hline
+{\em Access\+StampT} & custom stamp access \\
+\hline
+{\em Access\+ValueT} & custom value access\\
 \hline
 \end{DoxyTemplParams}
 \begin{DoxyNote}{Note}
@@ -70,12 +74,12 @@ All older elements are removed. If no newer elements are present on the next cap
 @warn \mbox{\hyperlink{classflow_1_1follower_1_1_latched}{Latched}} may never enter a R\+E\+A\+DY state if data never becomes available. Calling application may need to implement a synchronization timeout behavior 
 
 \doxysubsection{Constructor \& Destructor Documentation}
-\mbox{\Hypertarget{classflow_1_1follower_1_1_latched_a5974d2c9a24b8ef6d9e1f71b696fafdb}\label{classflow_1_1follower_1_1_latched_a5974d2c9a24b8ef6d9e1f71b696fafdb}} 
-\index{flow::follower::Latched$<$ DispatchT, LockPolicyT, ContainerT, QueueMonitorT $>$@{flow::follower::Latched$<$ DispatchT, LockPolicyT, ContainerT, QueueMonitorT $>$}!Latched@{Latched}}
-\index{Latched@{Latched}!flow::follower::Latched$<$ DispatchT, LockPolicyT, ContainerT, QueueMonitorT $>$@{flow::follower::Latched$<$ DispatchT, LockPolicyT, ContainerT, QueueMonitorT $>$}}
+\mbox{\Hypertarget{classflow_1_1follower_1_1_latched_aab1e6e0978713d9d7a1e78b7a2834078}\label{classflow_1_1follower_1_1_latched_aab1e6e0978713d9d7a1e78b7a2834078}} 
+\index{flow::follower::Latched$<$ DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT $>$@{flow::follower::Latched$<$ DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT $>$}!Latched@{Latched}}
+\index{Latched@{Latched}!flow::follower::Latched$<$ DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT $>$@{flow::follower::Latched$<$ DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT $>$}}
 \doxysubsubsection{\texorpdfstring{Latched()}{Latched()}}
-{\footnotesize\ttfamily template$<$typename DispatchT , typename Lock\+PolicyT , typename ContainerT , typename Queue\+MonitorT $>$ \\
-\mbox{\hyperlink{classflow_1_1follower_1_1_latched}{flow\+::follower\+::\+Latched}}$<$ DispatchT, Lock\+PolicyT, ContainerT, Queue\+MonitorT $>$\+::\mbox{\hyperlink{classflow_1_1follower_1_1_latched}{Latched}} (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classflow_1_1follower_1_1_latched_a437fa0b63a9d5c36c7a63774a53d6552}{offset\+\_\+type}}}]{min\+\_\+period,  }\item[{const ContainerT \&}]{container = {\ttfamily ContainerT\{\}},  }\item[{const Queue\+MonitorT \&}]{queue\+\_\+monitor = {\ttfamily QueueMonitorT\{\}} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+{\footnotesize\ttfamily template$<$typename DispatchT , typename Lock\+PolicyT , typename ContainerT , typename Queue\+MonitorT , typename Access\+StampT , typename Access\+ValueT $>$ \\
+\mbox{\hyperlink{classflow_1_1follower_1_1_latched}{flow\+::follower\+::\+Latched}}$<$ DispatchT, Lock\+PolicyT, ContainerT, Queue\+MonitorT, Access\+StampT, Access\+ValueT $>$\+::\mbox{\hyperlink{classflow_1_1follower_1_1_latched}{Latched}} (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classflow_1_1follower_1_1_latched_a14b057f1779542a2354465b978fd1d03}{offset\+\_\+type}}}]{min\+\_\+period,  }\item[{const ContainerT \&}]{container = {\ttfamily ContainerT\{\}},  }\item[{const Queue\+MonitorT \&}]{queue\+\_\+monitor = {\ttfamily QueueMonitorT\{\}} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
 
 
 

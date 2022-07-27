@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Flow: flow::follower::CountBefore&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT &gt; Class Template Reference</title>
+<title>Flow: flow::follower::CountBefore&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT &gt; Class Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -72,7 +72,7 @@ $(function() {
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="classflow_1_1follower_1_1_count_before-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">flow::follower::CountBefore&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT &gt; Class Template Reference</div>  </div>
+<div class="title">flow::follower::CountBefore&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -81,65 +81,65 @@ $(function() {
 
 <p><code>#include &lt;<a class="el" href="follower_2count__before_8hpp_source.html">count_before.hpp</a>&gt;</code></p>
 <div class="dynheader">
-Inheritance diagram for flow::follower::CountBefore&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT &gt;:</div>
+Inheritance diagram for flow::follower::CountBefore&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT &gt;:</div>
 <div class="dyncontent">
-<div class="center"><img src="classflow_1_1follower_1_1_count_before__inherit__graph.png" border="0" usemap="#flow_1_1follower_1_1_count_before_3_01_dispatch_t_00_01_lock_policy_t_00_01_container_t_00_01_queue_monitor_t_01_4_inherit__map" alt="Inheritance graph"/></div>
-<map name="flow_1_1follower_1_1_count_before_3_01_dispatch_t_00_01_lock_policy_t_00_01_container_t_00_01_queue_monitor_t_01_4_inherit__map" id="flow_1_1follower_1_1_count_before_3_01_dispatch_t_00_01_lock_policy_t_00_01_container_t_00_01_queue_monitor_t_01_4_inherit__map">
-<area shape="rect" title="Captures N&#45;elements before the capture range lower bound, minus a delay period." alt="" coords="405,5,625,61"/>
-<area shape="rect" href="classflow_1_1_follower.html" title=" " alt="" coords="5,5,357,61"/>
+<div class="center"><img src="classflow_1_1follower_1_1_count_before__inherit__graph.png" border="0" usemap="#flow_1_1follower_1_1_count_before_3_01_dispatch_t_00_01_lock_policy_t_00_01_container_t_00_01_queue_monitor_t_00_01_access_stamp_t_00_01_access_value_t_01_4_inherit__map" alt="Inheritance graph"/></div>
+<map name="flow_1_1follower_1_1_count_before_3_01_dispatch_t_00_01_lock_policy_t_00_01_container_t_00_01_queue_monitor_t_00_01_access_stamp_t_00_01_access_value_t_01_4_inherit__map" id="flow_1_1follower_1_1_count_before_3_01_dispatch_t_00_01_lock_policy_t_00_01_container_t_00_01_queue_monitor_t_00_01_access_stamp_t_00_01_access_value_t_01_4_inherit__map">
+<area shape="rect" title="Captures N&#45;elements before the capture range lower bound, minus a delay period." alt="" coords="381,5,615,76"/>
+<area shape="rect" href="classflow_1_1_follower.html" title=" " alt="" coords="5,5,333,76"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
-Collaboration diagram for flow::follower::CountBefore&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT &gt;:</div>
+Collaboration diagram for flow::follower::CountBefore&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT &gt;:</div>
 <div class="dyncontent">
-<div class="center"><img src="classflow_1_1follower_1_1_count_before__coll__graph.png" border="0" usemap="#flow_1_1follower_1_1_count_before_3_01_dispatch_t_00_01_lock_policy_t_00_01_container_t_00_01_queue_monitor_t_01_4_coll__map" alt="Collaboration graph"/></div>
-<map name="flow_1_1follower_1_1_count_before_3_01_dispatch_t_00_01_lock_policy_t_00_01_container_t_00_01_queue_monitor_t_01_4_coll__map" id="flow_1_1follower_1_1_count_before_3_01_dispatch_t_00_01_lock_policy_t_00_01_container_t_00_01_queue_monitor_t_01_4_coll__map">
-<area shape="rect" title="Captures N&#45;elements before the capture range lower bound, minus a delay period." alt="" coords="405,5,625,61"/>
-<area shape="rect" href="classflow_1_1_follower.html" title=" " alt="" coords="5,5,357,61"/>
+<div class="center"><img src="classflow_1_1follower_1_1_count_before__coll__graph.png" border="0" usemap="#flow_1_1follower_1_1_count_before_3_01_dispatch_t_00_01_lock_policy_t_00_01_container_t_00_01_queue_monitor_t_00_01_access_stamp_t_00_01_access_value_t_01_4_coll__map" alt="Collaboration graph"/></div>
+<map name="flow_1_1follower_1_1_count_before_3_01_dispatch_t_00_01_lock_policy_t_00_01_container_t_00_01_queue_monitor_t_00_01_access_stamp_t_00_01_access_value_t_01_4_coll__map" id="flow_1_1follower_1_1_count_before_3_01_dispatch_t_00_01_lock_policy_t_00_01_container_t_00_01_queue_monitor_t_00_01_access_stamp_t_00_01_access_value_t_01_4_coll__map">
+<area shape="rect" title="Captures N&#45;elements before the capture range lower bound, minus a delay period." alt="" coords="381,5,615,76"/>
+<area shape="rect" href="classflow_1_1_follower.html" title=" " alt="" coords="5,5,333,76"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a097b09f3a4af8a2a2772bfaddb00fdcc"><td class="memItemLeft" align="right" valign="top"><a id="a097b09f3a4af8a2a2772bfaddb00fdcc"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classflow_1_1follower_1_1_count_before.html#a097b09f3a4af8a2a2772bfaddb00fdcc">size_type</a> = typename <a class="el" href="structflow_1_1_captor_traits.html">CaptorTraits</a>&lt; <a class="el" href="classflow_1_1follower_1_1_count_before.html">CountBefore</a> &gt;::<a class="el" href="classflow_1_1follower_1_1_count_before.html#a097b09f3a4af8a2a2772bfaddb00fdcc">size_type</a></td></tr>
-<tr class="memdesc:a097b09f3a4af8a2a2772bfaddb00fdcc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Integer size type. <br /></td></tr>
-<tr class="separator:a097b09f3a4af8a2a2772bfaddb00fdcc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9d39e5e485167849767fc463986525a6"><td class="memItemLeft" align="right" valign="top"><a id="a9d39e5e485167849767fc463986525a6"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classflow_1_1follower_1_1_count_before.html#a9d39e5e485167849767fc463986525a6">stamp_type</a> = typename <a class="el" href="structflow_1_1_captor_traits.html">CaptorTraits</a>&lt; <a class="el" href="classflow_1_1follower_1_1_count_before.html">CountBefore</a> &gt;::<a class="el" href="classflow_1_1follower_1_1_count_before.html#a9d39e5e485167849767fc463986525a6">stamp_type</a></td></tr>
-<tr class="memdesc:a9d39e5e485167849767fc463986525a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Data stamp type. <br /></td></tr>
-<tr class="separator:a9d39e5e485167849767fc463986525a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a99a0abf1a1d75aad7a5b1958f527f0a8"><td class="memItemLeft" align="right" valign="top"><a id="a99a0abf1a1d75aad7a5b1958f527f0a8"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classflow_1_1follower_1_1_count_before.html#a99a0abf1a1d75aad7a5b1958f527f0a8">offset_type</a> = typename <a class="el" href="structflow_1_1_captor_traits.html">CaptorTraits</a>&lt; <a class="el" href="classflow_1_1follower_1_1_count_before.html">CountBefore</a> &gt;::<a class="el" href="classflow_1_1follower_1_1_count_before.html#a99a0abf1a1d75aad7a5b1958f527f0a8">offset_type</a></td></tr>
-<tr class="memdesc:a99a0abf1a1d75aad7a5b1958f527f0a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Data stamp duration type. <br /></td></tr>
-<tr class="separator:a99a0abf1a1d75aad7a5b1958f527f0a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_types_classflow_1_1_follower"><td colspan="2" onclick="javascript:toggleInherit('pub_types_classflow_1_1_follower')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="classflow_1_1_follower.html">flow::Follower&lt; CountBefore&lt; DispatchT, NoLock, DefaultContainer&lt; DispatchT &gt;, DefaultDispatchQueueMonitor &gt; &gt;</a></td></tr>
+<tr class="memitem:af45beb48d74e92ba0150181c7639ecb4"><td class="memItemLeft" align="right" valign="top"><a id="af45beb48d74e92ba0150181c7639ecb4"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classflow_1_1follower_1_1_count_before.html#af45beb48d74e92ba0150181c7639ecb4">size_type</a> = typename <a class="el" href="structflow_1_1_captor_traits.html">CaptorTraits</a>&lt; <a class="el" href="classflow_1_1follower_1_1_count_before.html">CountBefore</a> &gt;::<a class="el" href="classflow_1_1follower_1_1_count_before.html#af45beb48d74e92ba0150181c7639ecb4">size_type</a></td></tr>
+<tr class="memdesc:af45beb48d74e92ba0150181c7639ecb4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Integer size type. <br /></td></tr>
+<tr class="separator:af45beb48d74e92ba0150181c7639ecb4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5903c8c617618a8cef42f244127beca4"><td class="memItemLeft" align="right" valign="top"><a id="a5903c8c617618a8cef42f244127beca4"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classflow_1_1follower_1_1_count_before.html#a5903c8c617618a8cef42f244127beca4">stamp_type</a> = typename <a class="el" href="structflow_1_1_captor_traits.html">CaptorTraits</a>&lt; <a class="el" href="classflow_1_1follower_1_1_count_before.html">CountBefore</a> &gt;::<a class="el" href="classflow_1_1follower_1_1_count_before.html#a5903c8c617618a8cef42f244127beca4">stamp_type</a></td></tr>
+<tr class="memdesc:a5903c8c617618a8cef42f244127beca4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Data stamp type. <br /></td></tr>
+<tr class="separator:a5903c8c617618a8cef42f244127beca4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab4d75513d2de71b04d315052a473422c"><td class="memItemLeft" align="right" valign="top"><a id="ab4d75513d2de71b04d315052a473422c"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classflow_1_1follower_1_1_count_before.html#ab4d75513d2de71b04d315052a473422c">offset_type</a> = typename <a class="el" href="structflow_1_1_captor_traits.html">CaptorTraits</a>&lt; <a class="el" href="classflow_1_1follower_1_1_count_before.html">CountBefore</a> &gt;::<a class="el" href="classflow_1_1follower_1_1_count_before.html#ab4d75513d2de71b04d315052a473422c">offset_type</a></td></tr>
+<tr class="memdesc:ab4d75513d2de71b04d315052a473422c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Data stamp duration type. <br /></td></tr>
+<tr class="separator:ab4d75513d2de71b04d315052a473422c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_types_classflow_1_1_follower"><td colspan="2" onclick="javascript:toggleInherit('pub_types_classflow_1_1_follower')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="classflow_1_1_follower.html">flow::Follower&lt; CountBefore&lt; DispatchT, NoLock, DefaultContainer&lt; DispatchT &gt;, DefaultDispatchQueueMonitor, DefaultStampAccess, DefaultValueAccess &gt; &gt;</a></td></tr>
 <tr class="memitem:a2c30490de514f45d9cc287eb8baed5db inherit pub_types_classflow_1_1_follower"><td class="memItemLeft" align="right" valign="top"><a id="a2c30490de514f45d9cc287eb8baed5db"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classflow_1_1_follower.html#a2c30490de514f45d9cc287eb8baed5db">DispatchContainerType</a> = typename <a class="el" href="structflow_1_1_captor_traits.html">CaptorTraits</a>&lt; CountBefore&lt; DispatchT, <a class="el" href="structflow_1_1_no_lock.html">NoLock</a>, <a class="el" href="namespaceflow.html#ae5be95d6aaac2a27a1504e60657ad00d">DefaultContainer</a>&lt; DispatchT &gt;, <a class="el" href="structflow_1_1_default_dispatch_queue_monitor.html">DefaultDispatchQueueMonitor</a> &gt; &gt;::<a class="el" href="classflow_1_1_follower.html#a2c30490de514f45d9cc287eb8baed5db">DispatchContainerType</a></td></tr>
+using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classflow_1_1_follower.html#a2c30490de514f45d9cc287eb8baed5db">DispatchContainerType</a> = typename <a class="el" href="structflow_1_1_captor_traits.html">CaptorTraits</a>&lt; CountBefore&lt; DispatchT, <a class="el" href="structflow_1_1_no_lock.html">NoLock</a>, <a class="el" href="namespaceflow.html#ae5be95d6aaac2a27a1504e60657ad00d">DefaultContainer</a>&lt; DispatchT &gt;, <a class="el" href="structflow_1_1_default_dispatch_queue_monitor.html">DefaultDispatchQueueMonitor</a>, <a class="el" href="structflow_1_1_default_stamp_access.html">DefaultStampAccess</a>, <a class="el" href="structflow_1_1_default_value_access.html">DefaultValueAccess</a> &gt; &gt;::<a class="el" href="classflow_1_1_follower.html#a2c30490de514f45d9cc287eb8baed5db">DispatchContainerType</a></td></tr>
 <tr class="memdesc:a2c30490de514f45d9cc287eb8baed5db inherit pub_types_classflow_1_1_follower"><td class="mdescLeft">&#160;</td><td class="mdescRight">Underlying dispatch container type. <br /></td></tr>
 <tr class="separator:a2c30490de514f45d9cc287eb8baed5db inherit pub_types_classflow_1_1_follower"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa19997fc64e57b6603f167144927de45 inherit pub_types_classflow_1_1_follower"><td class="memItemLeft" align="right" valign="top"><a id="aa19997fc64e57b6603f167144927de45"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classflow_1_1_follower.html#aa19997fc64e57b6603f167144927de45">DispatchQueueMonitorType</a> = typename <a class="el" href="structflow_1_1_captor_traits.html">CaptorTraits</a>&lt; CountBefore&lt; DispatchT, <a class="el" href="structflow_1_1_no_lock.html">NoLock</a>, <a class="el" href="namespaceflow.html#ae5be95d6aaac2a27a1504e60657ad00d">DefaultContainer</a>&lt; DispatchT &gt;, <a class="el" href="structflow_1_1_default_dispatch_queue_monitor.html">DefaultDispatchQueueMonitor</a> &gt; &gt;::<a class="el" href="classflow_1_1_follower.html#aa19997fc64e57b6603f167144927de45">DispatchQueueMonitorType</a></td></tr>
+using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classflow_1_1_follower.html#aa19997fc64e57b6603f167144927de45">DispatchQueueMonitorType</a> = typename <a class="el" href="structflow_1_1_captor_traits.html">CaptorTraits</a>&lt; CountBefore&lt; DispatchT, <a class="el" href="structflow_1_1_no_lock.html">NoLock</a>, <a class="el" href="namespaceflow.html#ae5be95d6aaac2a27a1504e60657ad00d">DefaultContainer</a>&lt; DispatchT &gt;, <a class="el" href="structflow_1_1_default_dispatch_queue_monitor.html">DefaultDispatchQueueMonitor</a>, <a class="el" href="structflow_1_1_default_stamp_access.html">DefaultStampAccess</a>, <a class="el" href="structflow_1_1_default_value_access.html">DefaultValueAccess</a> &gt; &gt;::<a class="el" href="classflow_1_1_follower.html#aa19997fc64e57b6603f167144927de45">DispatchQueueMonitorType</a></td></tr>
 <tr class="memdesc:aa19997fc64e57b6603f167144927de45 inherit pub_types_classflow_1_1_follower"><td class="mdescLeft">&#160;</td><td class="mdescRight">Queue monitor/capture preconditioning type. <br /></td></tr>
 <tr class="separator:aa19997fc64e57b6603f167144927de45 inherit pub_types_classflow_1_1_follower"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1388657aef71e23dd17a18ed7c628ae0 inherit pub_types_classflow_1_1_follower"><td class="memItemLeft" align="right" valign="top"><a id="a1388657aef71e23dd17a18ed7c628ae0"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classflow_1_1_follower.html#a1388657aef71e23dd17a18ed7c628ae0">stamp_type</a> = typename <a class="el" href="structflow_1_1_captor_traits.html">CaptorTraits</a>&lt; CountBefore&lt; DispatchT, <a class="el" href="structflow_1_1_no_lock.html">NoLock</a>, <a class="el" href="namespaceflow.html#ae5be95d6aaac2a27a1504e60657ad00d">DefaultContainer</a>&lt; DispatchT &gt;, <a class="el" href="structflow_1_1_default_dispatch_queue_monitor.html">DefaultDispatchQueueMonitor</a> &gt; &gt;::<a class="el" href="classflow_1_1_follower.html#a1388657aef71e23dd17a18ed7c628ae0">stamp_type</a></td></tr>
+using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classflow_1_1_follower.html#a1388657aef71e23dd17a18ed7c628ae0">stamp_type</a> = typename <a class="el" href="structflow_1_1_captor_traits.html">CaptorTraits</a>&lt; CountBefore&lt; DispatchT, <a class="el" href="structflow_1_1_no_lock.html">NoLock</a>, <a class="el" href="namespaceflow.html#ae5be95d6aaac2a27a1504e60657ad00d">DefaultContainer</a>&lt; DispatchT &gt;, <a class="el" href="structflow_1_1_default_dispatch_queue_monitor.html">DefaultDispatchQueueMonitor</a>, <a class="el" href="structflow_1_1_default_stamp_access.html">DefaultStampAccess</a>, <a class="el" href="structflow_1_1_default_value_access.html">DefaultValueAccess</a> &gt; &gt;::<a class="el" href="classflow_1_1_follower.html#a1388657aef71e23dd17a18ed7c628ae0">stamp_type</a></td></tr>
 <tr class="memdesc:a1388657aef71e23dd17a18ed7c628ae0 inherit pub_types_classflow_1_1_follower"><td class="mdescLeft">&#160;</td><td class="mdescRight">Data stamp type. <br /></td></tr>
 <tr class="separator:a1388657aef71e23dd17a18ed7c628ae0 inherit pub_types_classflow_1_1_follower"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a0fdc19c152e8fc8f5ad9dc3fd23af265"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classflow_1_1follower_1_1_count_before.html#a0fdc19c152e8fc8f5ad9dc3fd23af265">CountBefore</a> (const <a class="el" href="classflow_1_1follower_1_1_count_before.html#a097b09f3a4af8a2a2772bfaddb00fdcc">size_type</a> count, const <a class="el" href="classflow_1_1follower_1_1_count_before.html#a99a0abf1a1d75aad7a5b1958f527f0a8">offset_type</a> &amp;delay, const ContainerT &amp;container=ContainerT{}, const QueueMonitorT &amp;queue_monitor=QueueMonitorT{})</td></tr>
-<tr class="memdesc:a0fdc19c152e8fc8f5ad9dc3fd23af265"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setup constructor.  <a href="classflow_1_1follower_1_1_count_before.html#a0fdc19c152e8fc8f5ad9dc3fd23af265">More...</a><br /></td></tr>
-<tr class="separator:a0fdc19c152e8fc8f5ad9dc3fd23af265"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_methods_classflow_1_1_follower"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classflow_1_1_follower')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classflow_1_1_follower.html">flow::Follower&lt; CountBefore&lt; DispatchT, NoLock, DefaultContainer&lt; DispatchT &gt;, DefaultDispatchQueueMonitor &gt; &gt;</a></td></tr>
+<tr class="memitem:a88dea35e7442a028a98488a203912d51"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classflow_1_1follower_1_1_count_before.html#a88dea35e7442a028a98488a203912d51">CountBefore</a> (const <a class="el" href="classflow_1_1follower_1_1_count_before.html#af45beb48d74e92ba0150181c7639ecb4">size_type</a> count, const <a class="el" href="classflow_1_1follower_1_1_count_before.html#ab4d75513d2de71b04d315052a473422c">offset_type</a> &amp;delay, const ContainerT &amp;container=ContainerT{}, const QueueMonitorT &amp;queue_monitor=QueueMonitorT{})</td></tr>
+<tr class="memdesc:a88dea35e7442a028a98488a203912d51"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setup constructor.  <a href="classflow_1_1follower_1_1_count_before.html#a88dea35e7442a028a98488a203912d51">More...</a><br /></td></tr>
+<tr class="separator:a88dea35e7442a028a98488a203912d51"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_classflow_1_1_follower"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classflow_1_1_follower')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classflow_1_1_follower.html">flow::Follower&lt; CountBefore&lt; DispatchT, NoLock, DefaultContainer&lt; DispatchT &gt;, DefaultDispatchQueueMonitor, DefaultStampAccess, DefaultValueAccess &gt; &gt;</a></td></tr>
 <tr class="memitem:a3355c5acbcb1daea2fbe8e0c39f7b558 inherit pub_methods_classflow_1_1_follower"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classflow_1_1_follower.html#a3355c5acbcb1daea2fbe8e0c39f7b558">Follower</a> (const <a class="el" href="classflow_1_1_follower.html#a2c30490de514f45d9cc287eb8baed5db">DispatchContainerType</a> &amp;container, const <a class="el" href="classflow_1_1_follower.html#aa19997fc64e57b6603f167144927de45">DispatchQueueMonitorType</a> &amp;queue_monitor)</td></tr>
 <tr class="memdesc:a3355c5acbcb1daea2fbe8e0c39f7b558 inherit pub_methods_classflow_1_1_follower"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialization constructor.  <a href="classflow_1_1_follower.html#a3355c5acbcb1daea2fbe8e0c39f7b558">More...</a><br /></td></tr>
 <tr class="separator:a3355c5acbcb1daea2fbe8e0c39f7b558 inherit pub_methods_classflow_1_1_follower"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;typename DispatchT, typename LockPolicyT = NoLock, typename ContainerT = DefaultContainer&lt;DispatchT&gt;, typename QueueMonitorT = DefaultDispatchQueueMonitor&gt;<br />
-class flow::follower::CountBefore&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT &gt;</h3>
+<div class="textblock"><h3>template&lt;typename DispatchT, typename LockPolicyT = NoLock, typename ContainerT = DefaultContainer&lt;DispatchT&gt;, typename QueueMonitorT = DefaultDispatchQueueMonitor, typename AccessStampT = DefaultStampAccess, typename AccessValueT = DefaultValueAccess&gt;<br />
+class flow::follower::CountBefore&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT &gt;</h3>
 
 <p>Captures N-elements before the capture range lower bound, minus a delay period. </p>
 <p>All older elements are removed.</p>
@@ -149,28 +149,30 @@ class flow::follower::CountBefore&lt; DispatchT, LockPolicyT, ContainerT, QueueM
     <tr><td class="paramname">LockPolicyT</td><td>a BasicLockable (<a href="https://en.cppreference.com/w/cpp/named_req/BasicLockable">https://en.cppreference.com/w/cpp/named_req/BasicLockable</a>) object or <a class="el" href="structflow_1_1_no_lock.html" title="Stand-in type used to signify that captors will be used in a single-threaded context.">NoLock</a> or <a class="el" href="structflow_1_1_polling_lock.html" title="Stand-in type used to signify that captors will be used in a threaded context, but will not wait for ...">PollingLock</a> </td></tr>
     <tr><td class="paramname">ContainerT</td><td>underlying <code>DispatchT</code> container type </td></tr>
     <tr><td class="paramname">QueueMonitorT</td><td>object used to monitor queue state on each insertion; used to precondition capture </td></tr>
+    <tr><td class="paramname">AccessStampT</td><td>custom stamp access </td></tr>
+    <tr><td class="paramname">AccessValueT</td><td>custom value access </td></tr>
   </table>
   </dd>
 </dl>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a0fdc19c152e8fc8f5ad9dc3fd23af265"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0fdc19c152e8fc8f5ad9dc3fd23af265">&#9670;&nbsp;</a></span>CountBefore()</h2>
+<a id="a88dea35e7442a028a98488a203912d51"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a88dea35e7442a028a98488a203912d51">&#9670;&nbsp;</a></span>CountBefore()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename DispatchT , typename LockPolicyT , typename ContainerT , typename QueueMonitorT &gt; </div>
+template&lt;typename DispatchT , typename LockPolicyT , typename ContainerT , typename QueueMonitorT , typename AccessStampT , typename AccessValueT &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classflow_1_1follower_1_1_count_before.html">flow::follower::CountBefore</a>&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT &gt;::<a class="el" href="classflow_1_1follower_1_1_count_before.html">CountBefore</a> </td>
+          <td class="memname"><a class="el" href="classflow_1_1follower_1_1_count_before.html">flow::follower::CountBefore</a>&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT &gt;::<a class="el" href="classflow_1_1follower_1_1_count_before.html">CountBefore</a> </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classflow_1_1follower_1_1_count_before.html#a097b09f3a4af8a2a2772bfaddb00fdcc">size_type</a>&#160;</td>
+          <td class="paramtype">const <a class="el" href="classflow_1_1follower_1_1_count_before.html#af45beb48d74e92ba0150181c7639ecb4">size_type</a>&#160;</td>
           <td class="paramname"><em>count</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="classflow_1_1follower_1_1_count_before.html#a99a0abf1a1d75aad7a5b1958f527f0a8">offset_type</a> &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classflow_1_1follower_1_1_count_before.html#ab4d75513d2de71b04d315052a473422c">offset_type</a> &amp;&#160;</td>
           <td class="paramname"><em>delay</em>, </td>
         </tr>
         <tr>

@@ -1,4 +1,4 @@
-<map id="flow::driver::Chunk&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT &gt;" name="flow::driver::Chunk&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT &gt;">
-<area shape="rect" id="node1" title="Captures the next oldest data element." alt="" coords="333,13,553,69"/>
-<area shape="rect" id="node2" href="$classflow_1_1_driver.html" title=" " alt="" coords="5,5,285,76"/>
+<map id="flow::driver::Chunk&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT &gt;" name="flow::driver::Chunk&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT &gt;">
+<area shape="rect" id="node1" title="Captures the next oldest data element." alt="" coords="381,13,615,83"/>
+<area shape="rect" id="node2" href="$classflow_1_1_driver.html" title=" " alt="" coords="5,5,333,91"/>
 </map>

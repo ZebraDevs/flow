@@ -1,5 +1,5 @@
-\hypertarget{classflow_1_1follower_1_1_before}{}\doxysection{flow\+::follower\+::Before$<$ DispatchT, Lock\+PolicyT, ContainerT, Queue\+MonitorT $>$ Class Template Reference}
-\label{classflow_1_1follower_1_1_before}\index{flow::follower::Before$<$ DispatchT, LockPolicyT, ContainerT, QueueMonitorT $>$@{flow::follower::Before$<$ DispatchT, LockPolicyT, ContainerT, QueueMonitorT $>$}}
+\hypertarget{classflow_1_1follower_1_1_before}{}\doxysection{flow\+::follower\+::Before$<$ DispatchT, Lock\+PolicyT, ContainerT, Queue\+MonitorT, Access\+StampT, Access\+ValueT $>$ Class Template Reference}
+\label{classflow_1_1follower_1_1_before}\index{flow::follower::Before$<$ DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT $>$@{flow::follower::Before$<$ DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT $>$}}
 
 
 Captures all elements before the capture range lower bound, minus a delay period.  
@@ -11,7 +11,7 @@ Captures all elements before the capture range lower bound, minus a delay period
 
 
 
-Inheritance diagram for flow\+::follower\+::Before$<$ DispatchT, Lock\+PolicyT, ContainerT, Queue\+MonitorT $>$\+:
+Inheritance diagram for flow\+::follower\+::Before$<$ DispatchT, Lock\+PolicyT, ContainerT, Queue\+MonitorT, Access\+StampT, Access\+ValueT $>$\+:
 \nopagebreak
 \begin{figure}[H]
 \begin{center}
@@ -21,7 +21,7 @@ Inheritance diagram for flow\+::follower\+::Before$<$ DispatchT, Lock\+PolicyT, 
 \end{figure}
 
 
-Collaboration diagram for flow\+::follower\+::Before$<$ DispatchT, Lock\+PolicyT, ContainerT, Queue\+MonitorT $>$\+:
+Collaboration diagram for flow\+::follower\+::Before$<$ DispatchT, Lock\+PolicyT, ContainerT, Queue\+MonitorT, Access\+StampT, Access\+ValueT $>$\+:
 \nopagebreak
 \begin{figure}[H]
 \begin{center}
@@ -32,22 +32,22 @@ Collaboration diagram for flow\+::follower\+::Before$<$ DispatchT, Lock\+PolicyT
 \doxysubsection*{Public Types}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\Hypertarget{classflow_1_1follower_1_1_before_afd0adcf4c1d76dce28f8856f25347aa7}\label{classflow_1_1follower_1_1_before_afd0adcf4c1d76dce28f8856f25347aa7}} 
-using \mbox{\hyperlink{classflow_1_1follower_1_1_before_afd0adcf4c1d76dce28f8856f25347aa7}{stamp\+\_\+type}} = typename \mbox{\hyperlink{structflow_1_1_captor_traits}{Captor\+Traits}}$<$ \mbox{\hyperlink{classflow_1_1follower_1_1_before}{Before}} $>$\+::\mbox{\hyperlink{classflow_1_1follower_1_1_before_afd0adcf4c1d76dce28f8856f25347aa7}{stamp\+\_\+type}}
+\mbox{\Hypertarget{classflow_1_1follower_1_1_before_a4238a04079920088f0ac0006253f02c3}\label{classflow_1_1follower_1_1_before_a4238a04079920088f0ac0006253f02c3}} 
+using \mbox{\hyperlink{classflow_1_1follower_1_1_before_a4238a04079920088f0ac0006253f02c3}{stamp\+\_\+type}} = typename \mbox{\hyperlink{structflow_1_1_captor_traits}{Captor\+Traits}}$<$ \mbox{\hyperlink{classflow_1_1follower_1_1_before}{Before}} $>$\+::\mbox{\hyperlink{classflow_1_1follower_1_1_before_a4238a04079920088f0ac0006253f02c3}{stamp\+\_\+type}}
 \begin{DoxyCompactList}\small\item\em Data stamp type. \end{DoxyCompactList}\item 
-\mbox{\Hypertarget{classflow_1_1follower_1_1_before_a5bb9194263576cac18c7e602ab33e7b4}\label{classflow_1_1follower_1_1_before_a5bb9194263576cac18c7e602ab33e7b4}} 
-using \mbox{\hyperlink{classflow_1_1follower_1_1_before_a5bb9194263576cac18c7e602ab33e7b4}{offset\+\_\+type}} = typename \mbox{\hyperlink{structflow_1_1_captor_traits}{Captor\+Traits}}$<$ \mbox{\hyperlink{classflow_1_1follower_1_1_before}{Before}} $>$\+::\mbox{\hyperlink{classflow_1_1follower_1_1_before_a5bb9194263576cac18c7e602ab33e7b4}{offset\+\_\+type}}
+\mbox{\Hypertarget{classflow_1_1follower_1_1_before_ad3bd1d49cc1183712719ac829fb6289a}\label{classflow_1_1follower_1_1_before_ad3bd1d49cc1183712719ac829fb6289a}} 
+using \mbox{\hyperlink{classflow_1_1follower_1_1_before_ad3bd1d49cc1183712719ac829fb6289a}{offset\+\_\+type}} = typename \mbox{\hyperlink{structflow_1_1_captor_traits}{Captor\+Traits}}$<$ \mbox{\hyperlink{classflow_1_1follower_1_1_before}{Before}} $>$\+::\mbox{\hyperlink{classflow_1_1follower_1_1_before_ad3bd1d49cc1183712719ac829fb6289a}{offset\+\_\+type}}
 \begin{DoxyCompactList}\small\item\em Data stamp duration type. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{classflow_1_1follower_1_1_before_a8245d0990db036bd525f3534ef7876bb}{Before}} (const \mbox{\hyperlink{classflow_1_1follower_1_1_before_a5bb9194263576cac18c7e602ab33e7b4}{offset\+\_\+type}} \&delay, const ContainerT \&container=ContainerT\{\}, const Queue\+MonitorT \&queue\+\_\+monitor=Queue\+MonitorT\{\})
+\mbox{\hyperlink{classflow_1_1follower_1_1_before_affe28e64352f897ac37793d1468d05a8}{Before}} (const \mbox{\hyperlink{classflow_1_1follower_1_1_before_ad3bd1d49cc1183712719ac829fb6289a}{offset\+\_\+type}} \&delay, const ContainerT \&container=ContainerT\{\}, const Queue\+MonitorT \&queue\+\_\+monitor=Queue\+MonitorT\{\})
 \begin{DoxyCompactList}\small\item\em Setup constructor. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
-\subsubsection*{template$<$typename DispatchT, typename Lock\+PolicyT = No\+Lock, typename ContainerT = Default\+Container$<$\+Dispatch\+T$>$, typename Queue\+MonitorT = Default\+Dispatch\+Queue\+Monitor$>$\newline
-class flow\+::follower\+::\+Before$<$ Dispatch\+T, Lock\+Policy\+T, Container\+T, Queue\+Monitor\+T $>$}
+\subsubsection*{template$<$typename DispatchT, typename Lock\+PolicyT = No\+Lock, typename ContainerT = Default\+Container$<$\+Dispatch\+T$>$, typename Queue\+MonitorT = Default\+Dispatch\+Queue\+Monitor, typename Access\+StampT = Default\+Stamp\+Access, typename Access\+ValueT = Default\+Value\+Access$>$\newline
+class flow\+::follower\+::\+Before$<$ Dispatch\+T, Lock\+Policy\+T, Container\+T, Queue\+Monitor\+T, Access\+Stamp\+T, Access\+Value\+T $>$}
 
 Captures all elements before the capture range lower bound, minus a delay period. 
 
@@ -63,16 +63,20 @@ Once at least a single element is available after said sequencing boundary. All 
 \hline
 {\em Queue\+MonitorT} & object used to monitor queue state on each insertion; used to precondition capture \\
 \hline
+{\em Access\+StampT} & custom stamp access \\
+\hline
+{\em Access\+ValueT} & custom value access \\
+\hline
 \end{DoxyTemplParams}
 
 
 \doxysubsection{Constructor \& Destructor Documentation}
-\mbox{\Hypertarget{classflow_1_1follower_1_1_before_a8245d0990db036bd525f3534ef7876bb}\label{classflow_1_1follower_1_1_before_a8245d0990db036bd525f3534ef7876bb}} 
-\index{flow::follower::Before$<$ DispatchT, LockPolicyT, ContainerT, QueueMonitorT $>$@{flow::follower::Before$<$ DispatchT, LockPolicyT, ContainerT, QueueMonitorT $>$}!Before@{Before}}
-\index{Before@{Before}!flow::follower::Before$<$ DispatchT, LockPolicyT, ContainerT, QueueMonitorT $>$@{flow::follower::Before$<$ DispatchT, LockPolicyT, ContainerT, QueueMonitorT $>$}}
+\mbox{\Hypertarget{classflow_1_1follower_1_1_before_affe28e64352f897ac37793d1468d05a8}\label{classflow_1_1follower_1_1_before_affe28e64352f897ac37793d1468d05a8}} 
+\index{flow::follower::Before$<$ DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT $>$@{flow::follower::Before$<$ DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT $>$}!Before@{Before}}
+\index{Before@{Before}!flow::follower::Before$<$ DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT $>$@{flow::follower::Before$<$ DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT $>$}}
 \doxysubsubsection{\texorpdfstring{Before()}{Before()}}
-{\footnotesize\ttfamily template$<$typename DispatchT , typename Lock\+PolicyT , typename ContainerT , typename Queue\+MonitorT $>$ \\
-\mbox{\hyperlink{classflow_1_1follower_1_1_before}{flow\+::follower\+::\+Before}}$<$ DispatchT, Lock\+PolicyT, ContainerT, Queue\+MonitorT $>$\+::\mbox{\hyperlink{classflow_1_1follower_1_1_before}{Before}} (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classflow_1_1follower_1_1_before_a5bb9194263576cac18c7e602ab33e7b4}{offset\+\_\+type}} \&}]{delay,  }\item[{const ContainerT \&}]{container = {\ttfamily ContainerT\{\}},  }\item[{const Queue\+MonitorT \&}]{queue\+\_\+monitor = {\ttfamily QueueMonitorT\{\}} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+{\footnotesize\ttfamily template$<$typename DispatchT , typename Lock\+PolicyT , typename ContainerT , typename Queue\+MonitorT , typename Access\+StampT , typename Access\+ValueT $>$ \\
+\mbox{\hyperlink{classflow_1_1follower_1_1_before}{flow\+::follower\+::\+Before}}$<$ DispatchT, Lock\+PolicyT, ContainerT, Queue\+MonitorT, Access\+StampT, Access\+ValueT $>$\+::\mbox{\hyperlink{classflow_1_1follower_1_1_before}{Before}} (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classflow_1_1follower_1_1_before_ad3bd1d49cc1183712719ac829fb6289a}{offset\+\_\+type}} \&}]{delay,  }\item[{const ContainerT \&}]{container = {\ttfamily ContainerT\{\}},  }\item[{const Queue\+MonitorT \&}]{queue\+\_\+monitor = {\ttfamily QueueMonitorT\{\}} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
 
 
 

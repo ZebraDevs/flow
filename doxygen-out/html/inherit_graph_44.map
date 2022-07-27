@@ -1,9 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" title=" " alt="" coords="5,162,140,189"/>
-<area shape="rect" id="node2" href="$structflow_1_1is__capture__range.html" title="Checks if object type is an instance of CaptureRange." alt="" coords="217,5,383,47"/>
-<area shape="rect" id="node3" href="$structflow_1_1is__capture__range_3_01_capture_range_3_01_stamp_t_01_4_01_4.html" title="Checks if object type is an instance of CaptureRange." alt="" coords="188,71,412,112"/>
-<area shape="rect" id="node4" href="$structflow_1_1is__no__lock.html" title="Checks if LockableT is of type NoLock." alt="" coords="191,137,409,163"/>
-<area shape="rect" id="node5" href="$structflow_1_1is__polling.html" title="Checks if captor is serviced by polling capture." alt="" coords="201,187,399,214"/>
-<area shape="rect" id="node6" href="$structflow_1_1is__polling__lock.html" title="Checks if LockableT is instance of PollingLock." alt="" coords="224,239,376,280"/>
-<area shape="rect" id="node7" href="$structflow_1_1is__polling__lock_3_01_polling_lock_3_01_lockable_t_01_4_01_4.html" title="Checks if LockableT is instance of PollingLock." alt="" coords="189,304,411,345"/>
+<area shape="rect" id="node1" href="$classflow_1_1_follower.html" title=" " alt="" coords="5,5,299,91"/>
+<area shape="rect" id="node2" href="$classflow_1_1follower_1_1_ranged.html" title="Captures one one element before the capture range lower bound; one element after the capture range up..." alt="" coords="347,13,580,83"/>
 </map>

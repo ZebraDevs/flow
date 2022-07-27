@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Flow: flow::driver::Next&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT &gt; Class Template Reference</title>
+<title>Flow: flow::driver::Next&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT &gt; Class Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -72,7 +72,7 @@ $(function() {
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="classflow_1_1driver_1_1_next-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">flow::driver::Next&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT &gt; Class Template Reference</div>  </div>
+<div class="title">flow::driver::Next&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -81,61 +81,61 @@ $(function() {
 
 <p><code>#include &lt;<a class="el" href="driver_2next_8hpp_source.html">next.hpp</a>&gt;</code></p>
 <div class="dynheader">
-Inheritance diagram for flow::driver::Next&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT &gt;:</div>
+Inheritance diagram for flow::driver::Next&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT &gt;:</div>
 <div class="dyncontent">
-<div class="center"><img src="classflow_1_1driver_1_1_next__inherit__graph.png" border="0" usemap="#flow_1_1driver_1_1_next_3_01_dispatch_t_00_01_lock_policy_t_00_01_container_t_00_01_queue_monitor_t_01_4_inherit__map" alt="Inheritance graph"/></div>
-<map name="flow_1_1driver_1_1_next_3_01_dispatch_t_00_01_lock_policy_t_00_01_container_t_00_01_queue_monitor_t_01_4_inherit__map" id="flow_1_1driver_1_1_next_3_01_dispatch_t_00_01_lock_policy_t_00_01_container_t_00_01_queue_monitor_t_01_4_inherit__map">
-<area shape="rect" title="Captures the next oldest data element." alt="" coords="333,13,553,69"/>
-<area shape="rect" href="classflow_1_1_driver.html" title=" " alt="" coords="5,5,285,76"/>
+<div class="center"><img src="classflow_1_1driver_1_1_next__inherit__graph.png" border="0" usemap="#flow_1_1driver_1_1_next_3_01_dispatch_t_00_01_lock_policy_t_00_01_container_t_00_01_queue_monitor_t_00_01_access_stamp_t_00_01_access_value_t_01_4_inherit__map" alt="Inheritance graph"/></div>
+<map name="flow_1_1driver_1_1_next_3_01_dispatch_t_00_01_lock_policy_t_00_01_container_t_00_01_queue_monitor_t_00_01_access_stamp_t_00_01_access_value_t_01_4_inherit__map" id="flow_1_1driver_1_1_next_3_01_dispatch_t_00_01_lock_policy_t_00_01_container_t_00_01_queue_monitor_t_00_01_access_stamp_t_00_01_access_value_t_01_4_inherit__map">
+<area shape="rect" title="Captures the next oldest data element." alt="" coords="381,13,615,83"/>
+<area shape="rect" href="classflow_1_1_driver.html" title=" " alt="" coords="5,5,333,91"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
-Collaboration diagram for flow::driver::Next&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT &gt;:</div>
+Collaboration diagram for flow::driver::Next&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT &gt;:</div>
 <div class="dyncontent">
-<div class="center"><img src="classflow_1_1driver_1_1_next__coll__graph.png" border="0" usemap="#flow_1_1driver_1_1_next_3_01_dispatch_t_00_01_lock_policy_t_00_01_container_t_00_01_queue_monitor_t_01_4_coll__map" alt="Collaboration graph"/></div>
-<map name="flow_1_1driver_1_1_next_3_01_dispatch_t_00_01_lock_policy_t_00_01_container_t_00_01_queue_monitor_t_01_4_coll__map" id="flow_1_1driver_1_1_next_3_01_dispatch_t_00_01_lock_policy_t_00_01_container_t_00_01_queue_monitor_t_01_4_coll__map">
-<area shape="rect" title="Captures the next oldest data element." alt="" coords="333,13,553,69"/>
-<area shape="rect" href="classflow_1_1_driver.html" title=" " alt="" coords="5,5,285,76"/>
+<div class="center"><img src="classflow_1_1driver_1_1_next__coll__graph.png" border="0" usemap="#flow_1_1driver_1_1_next_3_01_dispatch_t_00_01_lock_policy_t_00_01_container_t_00_01_queue_monitor_t_00_01_access_stamp_t_00_01_access_value_t_01_4_coll__map" alt="Collaboration graph"/></div>
+<map name="flow_1_1driver_1_1_next_3_01_dispatch_t_00_01_lock_policy_t_00_01_container_t_00_01_queue_monitor_t_00_01_access_stamp_t_00_01_access_value_t_01_4_coll__map" id="flow_1_1driver_1_1_next_3_01_dispatch_t_00_01_lock_policy_t_00_01_container_t_00_01_queue_monitor_t_00_01_access_stamp_t_00_01_access_value_t_01_4_coll__map">
+<area shape="rect" title="Captures the next oldest data element." alt="" coords="381,13,615,83"/>
+<area shape="rect" href="classflow_1_1_driver.html" title=" " alt="" coords="5,5,333,91"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a642dfa5c658efdc32d41b90fb71ea3a6"><td class="memItemLeft" align="right" valign="top"><a id="a642dfa5c658efdc32d41b90fb71ea3a6"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classflow_1_1driver_1_1_next.html#a642dfa5c658efdc32d41b90fb71ea3a6">size_type</a> = typename <a class="el" href="structflow_1_1_captor_traits.html">CaptorTraits</a>&lt; <a class="el" href="classflow_1_1driver_1_1_next.html">Next</a> &gt;::<a class="el" href="classflow_1_1driver_1_1_next.html#a642dfa5c658efdc32d41b90fb71ea3a6">size_type</a></td></tr>
-<tr class="memdesc:a642dfa5c658efdc32d41b90fb71ea3a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Integer size type. <br /></td></tr>
-<tr class="separator:a642dfa5c658efdc32d41b90fb71ea3a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac011d6eebb7dd89de890c09295f98613"><td class="memItemLeft" align="right" valign="top"><a id="ac011d6eebb7dd89de890c09295f98613"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classflow_1_1driver_1_1_next.html#ac011d6eebb7dd89de890c09295f98613">stamp_type</a> = typename <a class="el" href="structflow_1_1_captor_traits.html">CaptorTraits</a>&lt; <a class="el" href="classflow_1_1driver_1_1_next.html">Next</a> &gt;::<a class="el" href="classflow_1_1driver_1_1_next.html#ac011d6eebb7dd89de890c09295f98613">stamp_type</a></td></tr>
-<tr class="memdesc:ac011d6eebb7dd89de890c09295f98613"><td class="mdescLeft">&#160;</td><td class="mdescRight">Data stamp type. <br /></td></tr>
-<tr class="separator:ac011d6eebb7dd89de890c09295f98613"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_types_classflow_1_1_driver"><td colspan="2" onclick="javascript:toggleInherit('pub_types_classflow_1_1_driver')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="classflow_1_1_driver.html">flow::Driver&lt; Next&lt; DispatchT, NoLock, DefaultContainer&lt; DispatchT &gt;, DefaultDispatchQueueMonitor &gt; &gt;</a></td></tr>
+<tr class="memitem:af680f80f585181a1eabc909079d90e25"><td class="memItemLeft" align="right" valign="top"><a id="af680f80f585181a1eabc909079d90e25"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classflow_1_1driver_1_1_next.html#af680f80f585181a1eabc909079d90e25">size_type</a> = typename <a class="el" href="structflow_1_1_captor_traits.html">CaptorTraits</a>&lt; <a class="el" href="classflow_1_1driver_1_1_next.html">Next</a> &gt;::<a class="el" href="classflow_1_1driver_1_1_next.html#af680f80f585181a1eabc909079d90e25">size_type</a></td></tr>
+<tr class="memdesc:af680f80f585181a1eabc909079d90e25"><td class="mdescLeft">&#160;</td><td class="mdescRight">Integer size type. <br /></td></tr>
+<tr class="separator:af680f80f585181a1eabc909079d90e25"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a560aad3a816a076011ea2947b1587a09"><td class="memItemLeft" align="right" valign="top"><a id="a560aad3a816a076011ea2947b1587a09"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classflow_1_1driver_1_1_next.html#a560aad3a816a076011ea2947b1587a09">stamp_type</a> = typename <a class="el" href="structflow_1_1_captor_traits.html">CaptorTraits</a>&lt; <a class="el" href="classflow_1_1driver_1_1_next.html">Next</a> &gt;::<a class="el" href="classflow_1_1driver_1_1_next.html#a560aad3a816a076011ea2947b1587a09">stamp_type</a></td></tr>
+<tr class="memdesc:a560aad3a816a076011ea2947b1587a09"><td class="mdescLeft">&#160;</td><td class="mdescRight">Data stamp type. <br /></td></tr>
+<tr class="separator:a560aad3a816a076011ea2947b1587a09"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_types_classflow_1_1_driver"><td colspan="2" onclick="javascript:toggleInherit('pub_types_classflow_1_1_driver')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="classflow_1_1_driver.html">flow::Driver&lt; Next&lt; DispatchT, NoLock, DefaultContainer&lt; DispatchT &gt;, DefaultDispatchQueueMonitor, DefaultStampAccess, DefaultValueAccess &gt; &gt;</a></td></tr>
 <tr class="memitem:a422446d9a2d8ae99613e3c5728956921 inherit pub_types_classflow_1_1_driver"><td class="memItemLeft" align="right" valign="top"><a id="a422446d9a2d8ae99613e3c5728956921"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classflow_1_1_driver.html#a422446d9a2d8ae99613e3c5728956921">DispatchContainerType</a> = typename <a class="el" href="structflow_1_1_captor_traits.html">CaptorTraits</a>&lt; Next&lt; DispatchT, <a class="el" href="structflow_1_1_no_lock.html">NoLock</a>, <a class="el" href="namespaceflow.html#ae5be95d6aaac2a27a1504e60657ad00d">DefaultContainer</a>&lt; DispatchT &gt;, <a class="el" href="structflow_1_1_default_dispatch_queue_monitor.html">DefaultDispatchQueueMonitor</a> &gt; &gt;::<a class="el" href="classflow_1_1_driver.html#a422446d9a2d8ae99613e3c5728956921">DispatchContainerType</a></td></tr>
+using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classflow_1_1_driver.html#a422446d9a2d8ae99613e3c5728956921">DispatchContainerType</a> = typename <a class="el" href="structflow_1_1_captor_traits.html">CaptorTraits</a>&lt; Next&lt; DispatchT, <a class="el" href="structflow_1_1_no_lock.html">NoLock</a>, <a class="el" href="namespaceflow.html#ae5be95d6aaac2a27a1504e60657ad00d">DefaultContainer</a>&lt; DispatchT &gt;, <a class="el" href="structflow_1_1_default_dispatch_queue_monitor.html">DefaultDispatchQueueMonitor</a>, <a class="el" href="structflow_1_1_default_stamp_access.html">DefaultStampAccess</a>, <a class="el" href="structflow_1_1_default_value_access.html">DefaultValueAccess</a> &gt; &gt;::<a class="el" href="classflow_1_1_driver.html#a422446d9a2d8ae99613e3c5728956921">DispatchContainerType</a></td></tr>
 <tr class="memdesc:a422446d9a2d8ae99613e3c5728956921 inherit pub_types_classflow_1_1_driver"><td class="mdescLeft">&#160;</td><td class="mdescRight">Underlying dispatch container type. <br /></td></tr>
 <tr class="separator:a422446d9a2d8ae99613e3c5728956921 inherit pub_types_classflow_1_1_driver"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab20e67754359b2e562ef594672ee8855 inherit pub_types_classflow_1_1_driver"><td class="memItemLeft" align="right" valign="top"><a id="ab20e67754359b2e562ef594672ee8855"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classflow_1_1_driver.html#ab20e67754359b2e562ef594672ee8855">DispatchQueueMonitorType</a> = typename <a class="el" href="structflow_1_1_captor_traits.html">CaptorTraits</a>&lt; Next&lt; DispatchT, <a class="el" href="structflow_1_1_no_lock.html">NoLock</a>, <a class="el" href="namespaceflow.html#ae5be95d6aaac2a27a1504e60657ad00d">DefaultContainer</a>&lt; DispatchT &gt;, <a class="el" href="structflow_1_1_default_dispatch_queue_monitor.html">DefaultDispatchQueueMonitor</a> &gt; &gt;::<a class="el" href="classflow_1_1_driver.html#ab20e67754359b2e562ef594672ee8855">DispatchQueueMonitorType</a></td></tr>
+using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classflow_1_1_driver.html#ab20e67754359b2e562ef594672ee8855">DispatchQueueMonitorType</a> = typename <a class="el" href="structflow_1_1_captor_traits.html">CaptorTraits</a>&lt; Next&lt; DispatchT, <a class="el" href="structflow_1_1_no_lock.html">NoLock</a>, <a class="el" href="namespaceflow.html#ae5be95d6aaac2a27a1504e60657ad00d">DefaultContainer</a>&lt; DispatchT &gt;, <a class="el" href="structflow_1_1_default_dispatch_queue_monitor.html">DefaultDispatchQueueMonitor</a>, <a class="el" href="structflow_1_1_default_stamp_access.html">DefaultStampAccess</a>, <a class="el" href="structflow_1_1_default_value_access.html">DefaultValueAccess</a> &gt; &gt;::<a class="el" href="classflow_1_1_driver.html#ab20e67754359b2e562ef594672ee8855">DispatchQueueMonitorType</a></td></tr>
 <tr class="memdesc:ab20e67754359b2e562ef594672ee8855 inherit pub_types_classflow_1_1_driver"><td class="mdescLeft">&#160;</td><td class="mdescRight">Queue monitor type. <br /></td></tr>
 <tr class="separator:ab20e67754359b2e562ef594672ee8855 inherit pub_types_classflow_1_1_driver"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a29830caddd19fac6828c5f3eb8df5e65 inherit pub_types_classflow_1_1_driver"><td class="memItemLeft" align="right" valign="top"><a id="a29830caddd19fac6828c5f3eb8df5e65"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classflow_1_1_driver.html#a29830caddd19fac6828c5f3eb8df5e65">stamp_type</a> = typename <a class="el" href="structflow_1_1_captor_traits.html">CaptorTraits</a>&lt; Next&lt; DispatchT, <a class="el" href="structflow_1_1_no_lock.html">NoLock</a>, <a class="el" href="namespaceflow.html#ae5be95d6aaac2a27a1504e60657ad00d">DefaultContainer</a>&lt; DispatchT &gt;, <a class="el" href="structflow_1_1_default_dispatch_queue_monitor.html">DefaultDispatchQueueMonitor</a> &gt; &gt;::<a class="el" href="classflow_1_1_driver.html#a29830caddd19fac6828c5f3eb8df5e65">stamp_type</a></td></tr>
+using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classflow_1_1_driver.html#a29830caddd19fac6828c5f3eb8df5e65">stamp_type</a> = typename <a class="el" href="structflow_1_1_captor_traits.html">CaptorTraits</a>&lt; Next&lt; DispatchT, <a class="el" href="structflow_1_1_no_lock.html">NoLock</a>, <a class="el" href="namespaceflow.html#ae5be95d6aaac2a27a1504e60657ad00d">DefaultContainer</a>&lt; DispatchT &gt;, <a class="el" href="structflow_1_1_default_dispatch_queue_monitor.html">DefaultDispatchQueueMonitor</a>, <a class="el" href="structflow_1_1_default_stamp_access.html">DefaultStampAccess</a>, <a class="el" href="structflow_1_1_default_value_access.html">DefaultValueAccess</a> &gt; &gt;::<a class="el" href="classflow_1_1_driver.html#a29830caddd19fac6828c5f3eb8df5e65">stamp_type</a></td></tr>
 <tr class="memdesc:a29830caddd19fac6828c5f3eb8df5e65 inherit pub_types_classflow_1_1_driver"><td class="mdescLeft">&#160;</td><td class="mdescRight">Data stamp type. <br /></td></tr>
 <tr class="separator:a29830caddd19fac6828c5f3eb8df5e65 inherit pub_types_classflow_1_1_driver"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a1313d1526a137be521b64bc9758a809e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classflow_1_1driver_1_1_next.html#a1313d1526a137be521b64bc9758a809e">Next</a> (const ContainerT &amp;container=ContainerT{}, const QueueMonitorT &amp;queue_monitor=QueueMonitorT{})</td></tr>
-<tr class="memdesc:a1313d1526a137be521b64bc9758a809e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Configuration constructor.  <a href="classflow_1_1driver_1_1_next.html#a1313d1526a137be521b64bc9758a809e">More...</a><br /></td></tr>
-<tr class="separator:a1313d1526a137be521b64bc9758a809e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_methods_classflow_1_1_driver"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classflow_1_1_driver')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classflow_1_1_driver.html">flow::Driver&lt; Next&lt; DispatchT, NoLock, DefaultContainer&lt; DispatchT &gt;, DefaultDispatchQueueMonitor &gt; &gt;</a></td></tr>
+<tr class="memitem:afa42cfb1abeadba38a48c19f21de9745"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classflow_1_1driver_1_1_next.html#afa42cfb1abeadba38a48c19f21de9745">Next</a> (const ContainerT &amp;container=ContainerT{}, const QueueMonitorT &amp;queue_monitor=QueueMonitorT{})</td></tr>
+<tr class="memdesc:afa42cfb1abeadba38a48c19f21de9745"><td class="mdescLeft">&#160;</td><td class="mdescRight">Configuration constructor.  <a href="classflow_1_1driver_1_1_next.html#afa42cfb1abeadba38a48c19f21de9745">More...</a><br /></td></tr>
+<tr class="separator:afa42cfb1abeadba38a48c19f21de9745"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_classflow_1_1_driver"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classflow_1_1_driver')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classflow_1_1_driver.html">flow::Driver&lt; Next&lt; DispatchT, NoLock, DefaultContainer&lt; DispatchT &gt;, DefaultDispatchQueueMonitor, DefaultStampAccess, DefaultValueAccess &gt; &gt;</a></td></tr>
 <tr class="memitem:a195110b2344944c9154290e3aa0e6684 inherit pub_methods_classflow_1_1_driver"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classflow_1_1_driver.html#a195110b2344944c9154290e3aa0e6684">Driver</a> (const <a class="el" href="classflow_1_1_driver.html#a422446d9a2d8ae99613e3c5728956921">DispatchContainerType</a> &amp;container, const <a class="el" href="classflow_1_1_driver.html#ab20e67754359b2e562ef594672ee8855">DispatchQueueMonitorType</a> &amp;queue_monitor)</td></tr>
 <tr class="memdesc:a195110b2344944c9154290e3aa0e6684 inherit pub_methods_classflow_1_1_driver"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dispatch container constructor.  <a href="classflow_1_1_driver.html#a195110b2344944c9154290e3aa0e6684">More...</a><br /></td></tr>
 <tr class="separator:a195110b2344944c9154290e3aa0e6684 inherit pub_methods_classflow_1_1_driver"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;typename DispatchT, typename LockPolicyT = NoLock, typename ContainerT = DefaultContainer&lt;DispatchT&gt;, typename QueueMonitorT = DefaultDispatchQueueMonitor&gt;<br />
-class flow::driver::Next&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT &gt;</h3>
+<div class="textblock"><h3>template&lt;typename DispatchT, typename LockPolicyT = NoLock, typename ContainerT = DefaultContainer&lt;DispatchT&gt;, typename QueueMonitorT = DefaultDispatchQueueMonitor, typename AccessStampT = DefaultStampAccess, typename AccessValueT = DefaultValueAccess&gt;<br />
+class flow::driver::Next&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT &gt;</h3>
 
 <p>Captures the next oldest data element. </p>
 <p>Establishes a sequencing range with <code>range.lower_stamp == range.upper_stamp</code> equal to the captured element stamp. Removes captured element from buffer.</p>
@@ -145,23 +145,25 @@ class flow::driver::Next&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT &
     <tr><td class="paramname">LockPolicyT</td><td>a BasicLockable (<a href="https://en.cppreference.com/w/cpp/named_req/BasicLockable">https://en.cppreference.com/w/cpp/named_req/BasicLockable</a>) object or <a class="el" href="structflow_1_1_no_lock.html" title="Stand-in type used to signify that captors will be used in a single-threaded context.">NoLock</a> or <a class="el" href="structflow_1_1_polling_lock.html" title="Stand-in type used to signify that captors will be used in a threaded context, but will not wait for ...">PollingLock</a> </td></tr>
     <tr><td class="paramname">ContainerT</td><td>underlying <code>DispatchT</code> container type </td></tr>
     <tr><td class="paramname">QueueMonitorT</td><td>object used to monitor queue state on each insertion </td></tr>
+    <tr><td class="paramname">AccessStampT</td><td>custom stamp access </td></tr>
+    <tr><td class="paramname">AccessValueT</td><td>custom value access </td></tr>
   </table>
   </dd>
 </dl>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a1313d1526a137be521b64bc9758a809e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1313d1526a137be521b64bc9758a809e">&#9670;&nbsp;</a></span>Next()</h2>
+<a id="afa42cfb1abeadba38a48c19f21de9745"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afa42cfb1abeadba38a48c19f21de9745">&#9670;&nbsp;</a></span>Next()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename DispatchT , typename LockPolicyT , typename ContainerT , typename QueueMonitorT &gt; </div>
+template&lt;typename DispatchT , typename LockPolicyT , typename ContainerT , typename QueueMonitorT , typename AccessStampT , typename AccessValueT &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classflow_1_1driver_1_1_next.html">flow::driver::Next</a>&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT &gt;::<a class="el" href="classflow_1_1driver_1_1_next.html">Next</a> </td>
+          <td class="memname"><a class="el" href="classflow_1_1driver_1_1_next.html">flow::driver::Next</a>&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT &gt;::<a class="el" href="classflow_1_1driver_1_1_next.html">Next</a> </td>
           <td>(</td>
           <td class="paramtype">const ContainerT &amp;&#160;</td>
           <td class="paramname"><em>container</em> = <code>ContainerT{}</code>, </td>

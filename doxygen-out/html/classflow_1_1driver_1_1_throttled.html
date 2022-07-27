@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Flow: flow::driver::Throttled&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT &gt; Class Template Reference</title>
+<title>Flow: flow::driver::Throttled&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT &gt; Class Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -72,7 +72,7 @@ $(function() {
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="classflow_1_1driver_1_1_throttled-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">flow::driver::Throttled&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT &gt; Class Template Reference</div>  </div>
+<div class="title">flow::driver::Throttled&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -81,61 +81,61 @@ $(function() {
 
 <p><code>#include &lt;<a class="el" href="driver_2throttled_8hpp_source.html">throttled.hpp</a>&gt;</code></p>
 <div class="dynheader">
-Inheritance diagram for flow::driver::Throttled&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT &gt;:</div>
+Inheritance diagram for flow::driver::Throttled&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT &gt;:</div>
 <div class="dyncontent">
-<div class="center"><img src="classflow_1_1driver_1_1_throttled__inherit__graph.png" border="0" usemap="#flow_1_1driver_1_1_throttled_3_01_dispatch_t_00_01_lock_policy_t_00_01_container_t_00_01_queue_monitor_t_01_4_inherit__map" alt="Inheritance graph"/></div>
-<map name="flow_1_1driver_1_1_throttled_3_01_dispatch_t_00_01_lock_policy_t_00_01_container_t_00_01_queue_monitor_t_01_4_inherit__map" id="flow_1_1driver_1_1_throttled_3_01_dispatch_t_00_01_lock_policy_t_00_01_container_t_00_01_queue_monitor_t_01_4_inherit__map">
-<area shape="rect" title="Throttled next element driving capture object." alt="" coords="347,13,567,69"/>
-<area shape="rect" href="classflow_1_1_driver.html" title=" " alt="" coords="5,5,299,76"/>
+<div class="center"><img src="classflow_1_1driver_1_1_throttled__inherit__graph.png" border="0" usemap="#flow_1_1driver_1_1_throttled_3_01_dispatch_t_00_01_lock_policy_t_00_01_container_t_00_01_queue_monitor_t_00_01_access_stamp_t_00_01_access_value_t_01_4_inherit__map" alt="Inheritance graph"/></div>
+<map name="flow_1_1driver_1_1_throttled_3_01_dispatch_t_00_01_lock_policy_t_00_01_container_t_00_01_queue_monitor_t_00_01_access_stamp_t_00_01_access_value_t_01_4_inherit__map" id="flow_1_1driver_1_1_throttled_3_01_dispatch_t_00_01_lock_policy_t_00_01_container_t_00_01_queue_monitor_t_00_01_access_stamp_t_00_01_access_value_t_01_4_inherit__map">
+<area shape="rect" title="Throttled next element driving capture object." alt="" coords="347,13,580,83"/>
+<area shape="rect" href="classflow_1_1_driver.html" title=" " alt="" coords="5,5,299,91"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <div class="dynheader">
-Collaboration diagram for flow::driver::Throttled&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT &gt;:</div>
+Collaboration diagram for flow::driver::Throttled&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT &gt;:</div>
 <div class="dyncontent">
-<div class="center"><img src="classflow_1_1driver_1_1_throttled__coll__graph.png" border="0" usemap="#flow_1_1driver_1_1_throttled_3_01_dispatch_t_00_01_lock_policy_t_00_01_container_t_00_01_queue_monitor_t_01_4_coll__map" alt="Collaboration graph"/></div>
-<map name="flow_1_1driver_1_1_throttled_3_01_dispatch_t_00_01_lock_policy_t_00_01_container_t_00_01_queue_monitor_t_01_4_coll__map" id="flow_1_1driver_1_1_throttled_3_01_dispatch_t_00_01_lock_policy_t_00_01_container_t_00_01_queue_monitor_t_01_4_coll__map">
-<area shape="rect" title="Throttled next element driving capture object." alt="" coords="347,13,567,69"/>
-<area shape="rect" href="classflow_1_1_driver.html" title=" " alt="" coords="5,5,299,76"/>
+<div class="center"><img src="classflow_1_1driver_1_1_throttled__coll__graph.png" border="0" usemap="#flow_1_1driver_1_1_throttled_3_01_dispatch_t_00_01_lock_policy_t_00_01_container_t_00_01_queue_monitor_t_00_01_access_stamp_t_00_01_access_value_t_01_4_coll__map" alt="Collaboration graph"/></div>
+<map name="flow_1_1driver_1_1_throttled_3_01_dispatch_t_00_01_lock_policy_t_00_01_container_t_00_01_queue_monitor_t_00_01_access_stamp_t_00_01_access_value_t_01_4_coll__map" id="flow_1_1driver_1_1_throttled_3_01_dispatch_t_00_01_lock_policy_t_00_01_container_t_00_01_queue_monitor_t_00_01_access_stamp_t_00_01_access_value_t_01_4_coll__map">
+<area shape="rect" title="Throttled next element driving capture object." alt="" coords="347,13,580,83"/>
+<area shape="rect" href="classflow_1_1_driver.html" title=" " alt="" coords="5,5,299,91"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:ad85cd0e20eecbab225d7304da6152c0d"><td class="memItemLeft" align="right" valign="top"><a id="ad85cd0e20eecbab225d7304da6152c0d"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classflow_1_1driver_1_1_throttled.html#ad85cd0e20eecbab225d7304da6152c0d">stamp_type</a> = typename <a class="el" href="structflow_1_1_captor_traits.html">CaptorTraits</a>&lt; <a class="el" href="classflow_1_1driver_1_1_throttled.html">Throttled</a> &gt;::<a class="el" href="classflow_1_1driver_1_1_throttled.html#ad85cd0e20eecbab225d7304da6152c0d">stamp_type</a></td></tr>
-<tr class="memdesc:ad85cd0e20eecbab225d7304da6152c0d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Data stamp type. <br /></td></tr>
-<tr class="separator:ad85cd0e20eecbab225d7304da6152c0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abceda047ac43fa03ddfe00b68317ae3d"><td class="memItemLeft" align="right" valign="top"><a id="abceda047ac43fa03ddfe00b68317ae3d"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classflow_1_1driver_1_1_throttled.html#abceda047ac43fa03ddfe00b68317ae3d">offset_type</a> = typename <a class="el" href="structflow_1_1_captor_traits.html">CaptorTraits</a>&lt; <a class="el" href="classflow_1_1driver_1_1_throttled.html">Throttled</a> &gt;::<a class="el" href="classflow_1_1driver_1_1_throttled.html#abceda047ac43fa03ddfe00b68317ae3d">offset_type</a></td></tr>
-<tr class="memdesc:abceda047ac43fa03ddfe00b68317ae3d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Data stamp duration type. <br /></td></tr>
-<tr class="separator:abceda047ac43fa03ddfe00b68317ae3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_types_classflow_1_1_driver"><td colspan="2" onclick="javascript:toggleInherit('pub_types_classflow_1_1_driver')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="classflow_1_1_driver.html">flow::Driver&lt; Throttled&lt; DispatchT, NoLock, DefaultContainer&lt; DispatchT &gt;, DefaultDispatchQueueMonitor &gt; &gt;</a></td></tr>
+<tr class="memitem:a3778f53795220dd3089c94eb1d0e96b8"><td class="memItemLeft" align="right" valign="top"><a id="a3778f53795220dd3089c94eb1d0e96b8"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classflow_1_1driver_1_1_throttled.html#a3778f53795220dd3089c94eb1d0e96b8">stamp_type</a> = typename <a class="el" href="structflow_1_1_captor_traits.html">CaptorTraits</a>&lt; <a class="el" href="classflow_1_1driver_1_1_throttled.html">Throttled</a> &gt;::<a class="el" href="classflow_1_1driver_1_1_throttled.html#a3778f53795220dd3089c94eb1d0e96b8">stamp_type</a></td></tr>
+<tr class="memdesc:a3778f53795220dd3089c94eb1d0e96b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Data stamp type. <br /></td></tr>
+<tr class="separator:a3778f53795220dd3089c94eb1d0e96b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a74ec2fd73483357cc85bde69dbc54d17"><td class="memItemLeft" align="right" valign="top"><a id="a74ec2fd73483357cc85bde69dbc54d17"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classflow_1_1driver_1_1_throttled.html#a74ec2fd73483357cc85bde69dbc54d17">offset_type</a> = typename <a class="el" href="structflow_1_1_captor_traits.html">CaptorTraits</a>&lt; <a class="el" href="classflow_1_1driver_1_1_throttled.html">Throttled</a> &gt;::<a class="el" href="classflow_1_1driver_1_1_throttled.html#a74ec2fd73483357cc85bde69dbc54d17">offset_type</a></td></tr>
+<tr class="memdesc:a74ec2fd73483357cc85bde69dbc54d17"><td class="mdescLeft">&#160;</td><td class="mdescRight">Data stamp duration type. <br /></td></tr>
+<tr class="separator:a74ec2fd73483357cc85bde69dbc54d17"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_types_classflow_1_1_driver"><td colspan="2" onclick="javascript:toggleInherit('pub_types_classflow_1_1_driver')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="classflow_1_1_driver.html">flow::Driver&lt; Throttled&lt; DispatchT, NoLock, DefaultContainer&lt; DispatchT &gt;, DefaultDispatchQueueMonitor, DefaultStampAccess, DefaultValueAccess &gt; &gt;</a></td></tr>
 <tr class="memitem:a422446d9a2d8ae99613e3c5728956921 inherit pub_types_classflow_1_1_driver"><td class="memItemLeft" align="right" valign="top"><a id="a422446d9a2d8ae99613e3c5728956921"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classflow_1_1_driver.html#a422446d9a2d8ae99613e3c5728956921">DispatchContainerType</a> = typename <a class="el" href="structflow_1_1_captor_traits.html">CaptorTraits</a>&lt; Throttled&lt; DispatchT, <a class="el" href="structflow_1_1_no_lock.html">NoLock</a>, <a class="el" href="namespaceflow.html#ae5be95d6aaac2a27a1504e60657ad00d">DefaultContainer</a>&lt; DispatchT &gt;, <a class="el" href="structflow_1_1_default_dispatch_queue_monitor.html">DefaultDispatchQueueMonitor</a> &gt; &gt;::<a class="el" href="classflow_1_1_driver.html#a422446d9a2d8ae99613e3c5728956921">DispatchContainerType</a></td></tr>
+using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classflow_1_1_driver.html#a422446d9a2d8ae99613e3c5728956921">DispatchContainerType</a> = typename <a class="el" href="structflow_1_1_captor_traits.html">CaptorTraits</a>&lt; Throttled&lt; DispatchT, <a class="el" href="structflow_1_1_no_lock.html">NoLock</a>, <a class="el" href="namespaceflow.html#ae5be95d6aaac2a27a1504e60657ad00d">DefaultContainer</a>&lt; DispatchT &gt;, <a class="el" href="structflow_1_1_default_dispatch_queue_monitor.html">DefaultDispatchQueueMonitor</a>, <a class="el" href="structflow_1_1_default_stamp_access.html">DefaultStampAccess</a>, <a class="el" href="structflow_1_1_default_value_access.html">DefaultValueAccess</a> &gt; &gt;::<a class="el" href="classflow_1_1_driver.html#a422446d9a2d8ae99613e3c5728956921">DispatchContainerType</a></td></tr>
 <tr class="memdesc:a422446d9a2d8ae99613e3c5728956921 inherit pub_types_classflow_1_1_driver"><td class="mdescLeft">&#160;</td><td class="mdescRight">Underlying dispatch container type. <br /></td></tr>
 <tr class="separator:a422446d9a2d8ae99613e3c5728956921 inherit pub_types_classflow_1_1_driver"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab20e67754359b2e562ef594672ee8855 inherit pub_types_classflow_1_1_driver"><td class="memItemLeft" align="right" valign="top"><a id="ab20e67754359b2e562ef594672ee8855"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classflow_1_1_driver.html#ab20e67754359b2e562ef594672ee8855">DispatchQueueMonitorType</a> = typename <a class="el" href="structflow_1_1_captor_traits.html">CaptorTraits</a>&lt; Throttled&lt; DispatchT, <a class="el" href="structflow_1_1_no_lock.html">NoLock</a>, <a class="el" href="namespaceflow.html#ae5be95d6aaac2a27a1504e60657ad00d">DefaultContainer</a>&lt; DispatchT &gt;, <a class="el" href="structflow_1_1_default_dispatch_queue_monitor.html">DefaultDispatchQueueMonitor</a> &gt; &gt;::<a class="el" href="classflow_1_1_driver.html#ab20e67754359b2e562ef594672ee8855">DispatchQueueMonitorType</a></td></tr>
+using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classflow_1_1_driver.html#ab20e67754359b2e562ef594672ee8855">DispatchQueueMonitorType</a> = typename <a class="el" href="structflow_1_1_captor_traits.html">CaptorTraits</a>&lt; Throttled&lt; DispatchT, <a class="el" href="structflow_1_1_no_lock.html">NoLock</a>, <a class="el" href="namespaceflow.html#ae5be95d6aaac2a27a1504e60657ad00d">DefaultContainer</a>&lt; DispatchT &gt;, <a class="el" href="structflow_1_1_default_dispatch_queue_monitor.html">DefaultDispatchQueueMonitor</a>, <a class="el" href="structflow_1_1_default_stamp_access.html">DefaultStampAccess</a>, <a class="el" href="structflow_1_1_default_value_access.html">DefaultValueAccess</a> &gt; &gt;::<a class="el" href="classflow_1_1_driver.html#ab20e67754359b2e562ef594672ee8855">DispatchQueueMonitorType</a></td></tr>
 <tr class="memdesc:ab20e67754359b2e562ef594672ee8855 inherit pub_types_classflow_1_1_driver"><td class="mdescLeft">&#160;</td><td class="mdescRight">Queue monitor type. <br /></td></tr>
 <tr class="separator:ab20e67754359b2e562ef594672ee8855 inherit pub_types_classflow_1_1_driver"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a29830caddd19fac6828c5f3eb8df5e65 inherit pub_types_classflow_1_1_driver"><td class="memItemLeft" align="right" valign="top"><a id="a29830caddd19fac6828c5f3eb8df5e65"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classflow_1_1_driver.html#a29830caddd19fac6828c5f3eb8df5e65">stamp_type</a> = typename <a class="el" href="structflow_1_1_captor_traits.html">CaptorTraits</a>&lt; Throttled&lt; DispatchT, <a class="el" href="structflow_1_1_no_lock.html">NoLock</a>, <a class="el" href="namespaceflow.html#ae5be95d6aaac2a27a1504e60657ad00d">DefaultContainer</a>&lt; DispatchT &gt;, <a class="el" href="structflow_1_1_default_dispatch_queue_monitor.html">DefaultDispatchQueueMonitor</a> &gt; &gt;::<a class="el" href="classflow_1_1_driver.html#a29830caddd19fac6828c5f3eb8df5e65">stamp_type</a></td></tr>
+using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classflow_1_1_driver.html#a29830caddd19fac6828c5f3eb8df5e65">stamp_type</a> = typename <a class="el" href="structflow_1_1_captor_traits.html">CaptorTraits</a>&lt; Throttled&lt; DispatchT, <a class="el" href="structflow_1_1_no_lock.html">NoLock</a>, <a class="el" href="namespaceflow.html#ae5be95d6aaac2a27a1504e60657ad00d">DefaultContainer</a>&lt; DispatchT &gt;, <a class="el" href="structflow_1_1_default_dispatch_queue_monitor.html">DefaultDispatchQueueMonitor</a>, <a class="el" href="structflow_1_1_default_stamp_access.html">DefaultStampAccess</a>, <a class="el" href="structflow_1_1_default_value_access.html">DefaultValueAccess</a> &gt; &gt;::<a class="el" href="classflow_1_1_driver.html#a29830caddd19fac6828c5f3eb8df5e65">stamp_type</a></td></tr>
 <tr class="memdesc:a29830caddd19fac6828c5f3eb8df5e65 inherit pub_types_classflow_1_1_driver"><td class="mdescLeft">&#160;</td><td class="mdescRight">Data stamp type. <br /></td></tr>
 <tr class="separator:a29830caddd19fac6828c5f3eb8df5e65 inherit pub_types_classflow_1_1_driver"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a745fa3afaa8aa8ffdf6f5b6efa49a4e2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classflow_1_1driver_1_1_throttled.html#a745fa3afaa8aa8ffdf6f5b6efa49a4e2">Throttled</a> (const <a class="el" href="classflow_1_1driver_1_1_throttled.html#abceda047ac43fa03ddfe00b68317ae3d">offset_type</a> throttle_period, const ContainerT &amp;container=ContainerT{}, const QueueMonitorT &amp;queue_monitor=QueueMonitorT{})</td></tr>
-<tr class="memdesc:a745fa3afaa8aa8ffdf6f5b6efa49a4e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Configuration constructor.  <a href="classflow_1_1driver_1_1_throttled.html#a745fa3afaa8aa8ffdf6f5b6efa49a4e2">More...</a><br /></td></tr>
-<tr class="separator:a745fa3afaa8aa8ffdf6f5b6efa49a4e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_methods_classflow_1_1_driver"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classflow_1_1_driver')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classflow_1_1_driver.html">flow::Driver&lt; Throttled&lt; DispatchT, NoLock, DefaultContainer&lt; DispatchT &gt;, DefaultDispatchQueueMonitor &gt; &gt;</a></td></tr>
+<tr class="memitem:a61fbc4a3786d1f937cc3290bdf444630"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classflow_1_1driver_1_1_throttled.html#a61fbc4a3786d1f937cc3290bdf444630">Throttled</a> (const <a class="el" href="classflow_1_1driver_1_1_throttled.html#a74ec2fd73483357cc85bde69dbc54d17">offset_type</a> throttle_period, const ContainerT &amp;container=ContainerT{}, const QueueMonitorT &amp;queue_monitor=QueueMonitorT{})</td></tr>
+<tr class="memdesc:a61fbc4a3786d1f937cc3290bdf444630"><td class="mdescLeft">&#160;</td><td class="mdescRight">Configuration constructor.  <a href="classflow_1_1driver_1_1_throttled.html#a61fbc4a3786d1f937cc3290bdf444630">More...</a><br /></td></tr>
+<tr class="separator:a61fbc4a3786d1f937cc3290bdf444630"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_classflow_1_1_driver"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classflow_1_1_driver')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classflow_1_1_driver.html">flow::Driver&lt; Throttled&lt; DispatchT, NoLock, DefaultContainer&lt; DispatchT &gt;, DefaultDispatchQueueMonitor, DefaultStampAccess, DefaultValueAccess &gt; &gt;</a></td></tr>
 <tr class="memitem:a195110b2344944c9154290e3aa0e6684 inherit pub_methods_classflow_1_1_driver"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classflow_1_1_driver.html#a195110b2344944c9154290e3aa0e6684">Driver</a> (const <a class="el" href="classflow_1_1_driver.html#a422446d9a2d8ae99613e3c5728956921">DispatchContainerType</a> &amp;container, const <a class="el" href="classflow_1_1_driver.html#ab20e67754359b2e562ef594672ee8855">DispatchQueueMonitorType</a> &amp;queue_monitor)</td></tr>
 <tr class="memdesc:a195110b2344944c9154290e3aa0e6684 inherit pub_methods_classflow_1_1_driver"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dispatch container constructor.  <a href="classflow_1_1_driver.html#a195110b2344944c9154290e3aa0e6684">More...</a><br /></td></tr>
 <tr class="separator:a195110b2344944c9154290e3aa0e6684 inherit pub_methods_classflow_1_1_driver"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;typename DispatchT, typename LockPolicyT = NoLock, typename ContainerT = DefaultContainer&lt;DispatchT&gt;, typename QueueMonitorT = DefaultDispatchQueueMonitor&gt;<br />
-class flow::driver::Throttled&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT &gt;</h3>
+<div class="textblock"><h3>template&lt;typename DispatchT, typename LockPolicyT = NoLock, typename ContainerT = DefaultContainer&lt;DispatchT&gt;, typename QueueMonitorT = DefaultDispatchQueueMonitor, typename AccessStampT = DefaultStampAccess, typename AccessValueT = DefaultValueAccess&gt;<br />
+class flow::driver::Throttled&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT &gt;</h3>
 
 <p><a class="el" href="classflow_1_1driver_1_1_throttled.html" title="Throttled next element driving capture object.">Throttled</a> next element driving capture object. </p>
 <p>Captures the next oldest data element, limited to a max expected period. This means that some elements are skipped if the input rate indicated by data sequence stamps is higher than the throttled rate. <br  />
@@ -146,25 +146,27 @@ Establishes a sequencing range with <code>range.lower_stamp == range.upper_stamp
     <tr><td class="paramname">LockPolicyT</td><td>a BasicLockable (<a href="https://en.cppreference.com/w/cpp/named_req/BasicLockable">https://en.cppreference.com/w/cpp/named_req/BasicLockable</a>) object or <a class="el" href="structflow_1_1_no_lock.html" title="Stand-in type used to signify that captors will be used in a single-threaded context.">NoLock</a> or <a class="el" href="structflow_1_1_polling_lock.html" title="Stand-in type used to signify that captors will be used in a threaded context, but will not wait for ...">PollingLock</a> </td></tr>
     <tr><td class="paramname">ContainerT</td><td>underlying <code>DispatchT</code> container type </td></tr>
     <tr><td class="paramname">QueueMonitorT</td><td>object used to monitor queue state on each insertion </td></tr>
+    <tr><td class="paramname">AccessStampT</td><td>custom stamp access </td></tr>
+    <tr><td class="paramname">AccessValueT</td><td>custom value access </td></tr>
   </table>
   </dd>
 </dl>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a745fa3afaa8aa8ffdf6f5b6efa49a4e2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a745fa3afaa8aa8ffdf6f5b6efa49a4e2">&#9670;&nbsp;</a></span>Throttled()</h2>
+<a id="a61fbc4a3786d1f937cc3290bdf444630"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a61fbc4a3786d1f937cc3290bdf444630">&#9670;&nbsp;</a></span>Throttled()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename DispatchT , typename LockPolicyT , typename ContainerT , typename QueueMonitorT &gt; </div>
+template&lt;typename DispatchT , typename LockPolicyT , typename ContainerT , typename QueueMonitorT , typename AccessStampT , typename AccessValueT &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classflow_1_1driver_1_1_throttled.html">flow::driver::Throttled</a>&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT &gt;::<a class="el" href="classflow_1_1driver_1_1_throttled.html">Throttled</a> </td>
+          <td class="memname"><a class="el" href="classflow_1_1driver_1_1_throttled.html">flow::driver::Throttled</a>&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT &gt;::<a class="el" href="classflow_1_1driver_1_1_throttled.html">Throttled</a> </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classflow_1_1driver_1_1_throttled.html#abceda047ac43fa03ddfe00b68317ae3d">offset_type</a>&#160;</td>
+          <td class="paramtype">const <a class="el" href="classflow_1_1driver_1_1_throttled.html#a74ec2fd73483357cc85bde69dbc54d17">offset_type</a>&#160;</td>
           <td class="paramname"><em>throttle_period</em>, </td>
         </tr>
         <tr>

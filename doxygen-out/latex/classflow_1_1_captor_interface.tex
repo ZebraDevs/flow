@@ -16,7 +16,7 @@ Collaboration diagram for flow\+::Captor\+Interface$<$ CaptorT $>$\+:
 \begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[width=269pt]{classflow_1_1_captor_interface__coll__graph}
+\includegraphics[width=350pt]{classflow_1_1_captor_interface__coll__graph}
 \end{center}
 \end{figure}
 \doxysubsection*{Public Types}
@@ -31,6 +31,12 @@ using \mbox{\hyperlink{classflow_1_1_captor_interface_a887171bf3b12d8232922a8184
 \mbox{\Hypertarget{classflow_1_1_captor_interface_a6624ec49c575e3a4c2730be405afe179}\label{classflow_1_1_captor_interface_a6624ec49c575e3a4c2730be405afe179}} 
 using \mbox{\hyperlink{classflow_1_1_captor_interface_a6624ec49c575e3a4c2730be405afe179}{Dispatch\+Queue\+Monitor\+Type}} = typename \mbox{\hyperlink{structflow_1_1_captor_traits}{Captor\+Traits}}$<$ CaptorT $>$\+::\mbox{\hyperlink{classflow_1_1_captor_interface_a6624ec49c575e3a4c2730be405afe179}{Dispatch\+Queue\+Monitor\+Type}}
 \begin{DoxyCompactList}\small\item\em Queue monitor/capture preconditioning type. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classflow_1_1_captor_interface_ac20bee4222d841bb5c9dbcd4c838cb9f}\label{classflow_1_1_captor_interface_ac20bee4222d841bb5c9dbcd4c838cb9f}} 
+using \mbox{\hyperlink{classflow_1_1_captor_interface_ac20bee4222d841bb5c9dbcd4c838cb9f}{Access\+Stamp\+Type}} = typename \mbox{\hyperlink{structflow_1_1_captor_traits}{Captor\+Traits}}$<$ CaptorT $>$\+::\mbox{\hyperlink{classflow_1_1_captor_interface_ac20bee4222d841bb5c9dbcd4c838cb9f}{Access\+Stamp\+Type}}
+\begin{DoxyCompactList}\small\item\em Stamp access implementation. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classflow_1_1_captor_interface_ae8a3e0c641441b1d283faf0baf1ea4c9}\label{classflow_1_1_captor_interface_ae8a3e0c641441b1d283faf0baf1ea4c9}} 
+using \mbox{\hyperlink{classflow_1_1_captor_interface_ae8a3e0c641441b1d283faf0baf1ea4c9}{Access\+Value\+Type}} = typename \mbox{\hyperlink{structflow_1_1_captor_traits}{Captor\+Traits}}$<$ CaptorT $>$\+::\mbox{\hyperlink{classflow_1_1_captor_interface_ae8a3e0c641441b1d283faf0baf1ea4c9}{Access\+Value\+Type}}
+\begin{DoxyCompactList}\small\item\em Value access implementation. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classflow_1_1_captor_interface_a2b87d20d17e8d1437941bd98fe514bc8}\label{classflow_1_1_captor_interface_a2b87d20d17e8d1437941bd98fe514bc8}} 
 using \mbox{\hyperlink{classflow_1_1_captor_interface_a2b87d20d17e8d1437941bd98fe514bc8}{stamp\+\_\+type}} = typename \mbox{\hyperlink{structflow_1_1_captor_traits}{Captor\+Traits}}$<$ CaptorT $>$\+::\mbox{\hyperlink{classflow_1_1_captor_interface_a2b87d20d17e8d1437941bd98fe514bc8}{stamp\+\_\+type}}
 \begin{DoxyCompactList}\small\item\em Data stamp type. \end{DoxyCompactList}\item 
@@ -94,8 +100,8 @@ void \mbox{\hyperlink{classflow_1_1_captor_interface_a8068310b1ece5c53a11252919a
 \mbox{\Hypertarget{classflow_1_1_captor_interface_a3675a127538e71404b53f7b1c36923d4}\label{classflow_1_1_captor_interface_a3675a127538e71404b53f7b1c36923d4}} 
 \mbox{\hyperlink{classflow_1_1_captor_interface_a62db6a158eebcb377e63ede6a1f1a8c6}{size\+\_\+type}} \mbox{\hyperlink{classflow_1_1_captor_interface_a3675a127538e71404b53f7b1c36923d4}{capacity\+\_\+}}
 \begin{DoxyCompactList}\small\item\em Buffered data capacity. \end{DoxyCompactList}\item 
-\mbox{\Hypertarget{classflow_1_1_captor_interface_a79b57c2c5af6220ec0342d75a654661c}\label{classflow_1_1_captor_interface_a79b57c2c5af6220ec0342d75a654661c}} 
-\mbox{\hyperlink{classflow_1_1_dispatch_queue}{Dispatch\+Queue}}$<$ \mbox{\hyperlink{classflow_1_1_captor_interface_ae1eafeb6cd50f4a50843b963c232720a}{Dispatch\+Type}}, \mbox{\hyperlink{classflow_1_1_captor_interface_a887171bf3b12d8232922a81844ea9a7d}{Dispatch\+Container\+Type}} $>$ \mbox{\hyperlink{classflow_1_1_captor_interface_a79b57c2c5af6220ec0342d75a654661c}{queue\+\_\+}}
+\mbox{\Hypertarget{classflow_1_1_captor_interface_a767b9a444e37ea7bf523906bccfcd1dc}\label{classflow_1_1_captor_interface_a767b9a444e37ea7bf523906bccfcd1dc}} 
+\mbox{\hyperlink{classflow_1_1_dispatch_queue}{Dispatch\+Queue}}$<$ \mbox{\hyperlink{classflow_1_1_captor_interface_ae1eafeb6cd50f4a50843b963c232720a}{Dispatch\+Type}}, \mbox{\hyperlink{classflow_1_1_captor_interface_a887171bf3b12d8232922a81844ea9a7d}{Dispatch\+Container\+Type}}, \mbox{\hyperlink{classflow_1_1_captor_interface_ac20bee4222d841bb5c9dbcd4c838cb9f}{Access\+Stamp\+Type}}, \mbox{\hyperlink{classflow_1_1_captor_interface_ae8a3e0c641441b1d283faf0baf1ea4c9}{Access\+Value\+Type}} $>$ \mbox{\hyperlink{classflow_1_1_captor_interface_a767b9a444e37ea7bf523906bccfcd1dc}{queue\+\_\+}}
 \begin{DoxyCompactList}\small\item\em Data dispatch queue. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{classflow_1_1_captor_interface_af8223b74249ca989f05b34ea776e8345}\label{classflow_1_1_captor_interface_af8223b74249ca989f05b34ea776e8345}} 
 \mbox{\hyperlink{classflow_1_1_captor_interface_a6624ec49c575e3a4c2730be405afe179}{Dispatch\+Queue\+Monitor\+Type}} \mbox{\hyperlink{classflow_1_1_captor_interface_af8223b74249ca989f05b34ea776e8345}{queue\+\_\+monitor\+\_\+}}
@@ -326,7 +332,7 @@ Inserts data into queue and limit queue size to capacity, if applicable.
 
 
 \begin{DoxyParams}{Parameters}
-{\em args} & args forward to {\ttfamily \mbox{\hyperlink{classflow_1_1_dispatch_queue_a5221c73d3790e6795c48229a2bcd7c0e}{Dispatch\+Queue\+::insert}}}\\
+{\em args} & args forward to {\ttfamily \mbox{\hyperlink{classflow_1_1_dispatch_queue_a529bb9e9de63f0a33678e53254b97560}{Dispatch\+Queue\+::insert}}}\\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}

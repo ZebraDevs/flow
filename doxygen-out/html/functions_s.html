@@ -70,11 +70,11 @@ $(function() {
 : <a class="el" href="classflow_1_1_captor_interface.html#a8068310b1ece5c53a11252919a62355a">flow::CaptorInterface&lt; CaptorT &gt;</a>
 </li>
 <li>shrink_to_fit()
-: <a class="el" href="classflow_1_1_dispatch_queue.html#a66f89e3d5c95709662227ce275f00607">flow::DispatchQueue&lt; DispatchT, ContainerT &gt;</a>
+: <a class="el" href="classflow_1_1_dispatch_queue.html#ade64bc3148f76da5af81535a417f3f9d">flow::DispatchQueue&lt; DispatchT, ContainerT, AccessStampT, AccessValueT &gt;</a>
 </li>
 <li>size()
 : <a class="el" href="classflow_1_1_captor_interface.html#a1a4b3f7f6c1bd16a2cb672d90a1cbbc0">flow::CaptorInterface&lt; CaptorT &gt;</a>
-, <a class="el" href="classflow_1_1_dispatch_queue.html#a0c604d7f3055e13cedaf140f16810a14">flow::DispatchQueue&lt; DispatchT, ContainerT &gt;</a>
+, <a class="el" href="classflow_1_1_dispatch_queue.html#a7b3a68ba930b6a316b118548d05ca9a1">flow::DispatchQueue&lt; DispatchT, ContainerT, AccessStampT, AccessValueT &gt;</a>
 , <a class="el" href="structflow_1_1integer__sequence.html#aa5d7c8c9ad37ffcce04ca6bc92258291">flow::integer_sequence&lt; IntT, Ns &gt;</a>
 </li>
 <li>size_type
@@ -83,12 +83,12 @@ $(function() {
 , <a class="el" href="classflow_1_1_captor_3_01_captor_t_00_01_polling_lock_3_01_basic_lockable_t_01_4_00_01_queue_monitor_t_01_4.html#a695419473b6321ce9efeaf914eacf659">flow::Captor&lt; CaptorT, PollingLock&lt; BasicLockableT &gt;, QueueMonitorT &gt;</a>
 , <a class="el" href="classflow_1_1_captor_interface.html#a62db6a158eebcb377e63ede6a1f1a8c6">flow::CaptorInterface&lt; CaptorT &gt;</a>
 , <a class="el" href="structflow_1_1_captor_traits_from_dispatch.html#a27a621f56a740abb5fae3cfe8c4c1e88">flow::CaptorTraitsFromDispatch&lt; DispatchT &gt;</a>
-, <a class="el" href="classflow_1_1_dispatch_queue.html#afdc67058e3461410fdd6170046df55bc">flow::DispatchQueue&lt; DispatchT, ContainerT &gt;</a>
-, <a class="el" href="classflow_1_1driver_1_1_batch.html#a81f688882ffe1a15ab3d8af872ffe6f7">flow::driver::Batch&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT &gt;</a>
-, <a class="el" href="classflow_1_1driver_1_1_chunk.html#ae04fbc608b52a2d35165e2ef95d742c3">flow::driver::Chunk&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT &gt;</a>
-, <a class="el" href="classflow_1_1driver_1_1_next.html#a642dfa5c658efdc32d41b90fb71ea3a6">flow::driver::Next&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT &gt;</a>
-, <a class="el" href="classflow_1_1follower_1_1_count_before.html#a097b09f3a4af8a2a2772bfaddb00fdcc">flow::follower::CountBefore&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT &gt;</a>
-, <a class="el" href="classflow_1_1follower_1_1_ranged.html#a3e6db30b2fbbca0464bd26e55cbd1dc8">flow::follower::Ranged&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT &gt;</a>
+, <a class="el" href="classflow_1_1_dispatch_queue.html#a52372ad88c23acb2f1de597b99d73388">flow::DispatchQueue&lt; DispatchT, ContainerT, AccessStampT, AccessValueT &gt;</a>
+, <a class="el" href="classflow_1_1driver_1_1_batch.html#a58f3122be93c3e1564da360c57598e33">flow::driver::Batch&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT &gt;</a>
+, <a class="el" href="classflow_1_1driver_1_1_chunk.html#a8b6a2ec52d00ce9540ef17416b8c8a7c">flow::driver::Chunk&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT &gt;</a>
+, <a class="el" href="classflow_1_1driver_1_1_next.html#af680f80f585181a1eabc909079d90e25">flow::driver::Next&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT &gt;</a>
+, <a class="el" href="classflow_1_1follower_1_1_count_before.html#af45beb48d74e92ba0150181c7639ecb4">flow::follower::CountBefore&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT &gt;</a>
+, <a class="el" href="classflow_1_1follower_1_1_ranged.html#a693d43adf6725575b7431b4081fc7fad">flow::follower::Ranged&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT &gt;</a>
 </li>
 <li>stamp
 : <a class="el" href="classflow_1_1_dispatch.html#aba36922397c417ba5da2858327463732">flow::Dispatch&lt; StampT, ValueT &gt;</a>
@@ -97,7 +97,7 @@ $(function() {
 : <a class="el" href="classflow_1_1_synchronizer.html#a0f1e7062475c9492191e29b26d09106c">flow::Synchronizer</a>
 </li>
 <li>stamp_const_arg_type
-: <a class="el" href="classflow_1_1_dispatch_queue.html#affc83531dc53ee147899a33e82a6cbf0">flow::DispatchQueue&lt; DispatchT, ContainerT &gt;</a>
+: <a class="el" href="classflow_1_1_dispatch_queue.html#acfa584cca765d5dcb63dd8ae3f065e06">flow::DispatchQueue&lt; DispatchT, ContainerT, AccessStampT, AccessValueT &gt;</a>
 </li>
 <li>stamp_t
 : <a class="el" href="classflow_1_1_synchronizer.html#a2a443abb40ad2413e6d5f7a7f3cfe4a7">flow::Synchronizer</a>
@@ -108,21 +108,21 @@ $(function() {
 , <a class="el" href="classflow_1_1_captor_3_01_captor_t_00_01_polling_lock_3_01_basic_lockable_t_01_4_00_01_queue_monitor_t_01_4.html#ad83f6dbb8926b551a198a836de7426a0">flow::Captor&lt; CaptorT, PollingLock&lt; BasicLockableT &gt;, QueueMonitorT &gt;</a>
 , <a class="el" href="classflow_1_1_captor_interface.html#a2b87d20d17e8d1437941bd98fe514bc8">flow::CaptorInterface&lt; CaptorT &gt;</a>
 , <a class="el" href="structflow_1_1_captor_traits_from_dispatch.html#a33d283d578e545b1ce4c6c51b0b270f1">flow::CaptorTraitsFromDispatch&lt; DispatchT &gt;</a>
-, <a class="el" href="classflow_1_1_dispatch_queue.html#a7908f3d78b7f1767462244b94434d748">flow::DispatchQueue&lt; DispatchT, ContainerT &gt;</a>
+, <a class="el" href="classflow_1_1_dispatch_queue.html#a65640eafd9731a7cdc4684748ec9d0b5">flow::DispatchQueue&lt; DispatchT, ContainerT, AccessStampT, AccessValueT &gt;</a>
 , <a class="el" href="structflow_1_1_dispatch_traits_3_01_dispatch_3_01_stamp_t_00_01_value_t_01_4_01_4.html#ae654e3252f6e1e479144a94d6388aabb">flow::DispatchTraits&lt; Dispatch&lt; StampT, ValueT &gt; &gt;</a>
 , <a class="el" href="structflow_1_1_dispatch_traits_3_1_1std_1_1pair_3_01_stamp_t_00_01_value_t_01_4_01_4.html#a25994c07a836d387868ad588f3cd4a2b">flow::DispatchTraits&lt;::std::pair&lt; StampT, ValueT &gt; &gt;</a>
-, <a class="el" href="classflow_1_1driver_1_1_batch.html#af28211948e71149b26cff0e2345b830f">flow::driver::Batch&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT &gt;</a>
-, <a class="el" href="classflow_1_1driver_1_1_chunk.html#a6d8458f79fba18833a4893b09dd2937d">flow::driver::Chunk&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT &gt;</a>
-, <a class="el" href="classflow_1_1driver_1_1_next.html#ac011d6eebb7dd89de890c09295f98613">flow::driver::Next&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT &gt;</a>
+, <a class="el" href="classflow_1_1driver_1_1_batch.html#ac6b1438c11e473db977213209032f4d8">flow::driver::Batch&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT &gt;</a>
+, <a class="el" href="classflow_1_1driver_1_1_chunk.html#a13b73da6c63688f860909473069ba8d5">flow::driver::Chunk&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT &gt;</a>
+, <a class="el" href="classflow_1_1driver_1_1_next.html#a560aad3a816a076011ea2947b1587a09">flow::driver::Next&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT &gt;</a>
 , <a class="el" href="classflow_1_1_driver.html#a29830caddd19fac6828c5f3eb8df5e65">flow::Driver&lt; PolicyT &gt;</a>
-, <a class="el" href="classflow_1_1driver_1_1_throttled.html#ad85cd0e20eecbab225d7304da6152c0d">flow::driver::Throttled&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT &gt;</a>
-, <a class="el" href="classflow_1_1follower_1_1_any_before.html#a314362d61e731cdffefbcbf0e12dd6d8">flow::follower::AnyBefore&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT &gt;</a>
-, <a class="el" href="classflow_1_1follower_1_1_before.html#afd0adcf4c1d76dce28f8856f25347aa7">flow::follower::Before&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT &gt;</a>
-, <a class="el" href="classflow_1_1follower_1_1_closest_before.html#af69e441e1ca309083983a6414cc606a2">flow::follower::ClosestBefore&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT &gt;</a>
-, <a class="el" href="classflow_1_1follower_1_1_count_before.html#a9d39e5e485167849767fc463986525a6">flow::follower::CountBefore&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT &gt;</a>
-, <a class="el" href="classflow_1_1follower_1_1_latched.html#a330b7f9dd745cd2b513b21789250131d">flow::follower::Latched&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT &gt;</a>
-, <a class="el" href="classflow_1_1follower_1_1_matched_stamp.html#a46f9d99cd263a83d976d8f1bcb62bee0">flow::follower::MatchedStamp&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT &gt;</a>
-, <a class="el" href="classflow_1_1follower_1_1_ranged.html#acaaecc53baafa375c577f2a96b5b5df1">flow::follower::Ranged&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT &gt;</a>
+, <a class="el" href="classflow_1_1driver_1_1_throttled.html#a3778f53795220dd3089c94eb1d0e96b8">flow::driver::Throttled&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT &gt;</a>
+, <a class="el" href="classflow_1_1follower_1_1_any_before.html#a508256e0b17c3138c0d9f0227957b127">flow::follower::AnyBefore&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT &gt;</a>
+, <a class="el" href="classflow_1_1follower_1_1_before.html#a4238a04079920088f0ac0006253f02c3">flow::follower::Before&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT &gt;</a>
+, <a class="el" href="classflow_1_1follower_1_1_closest_before.html#a3b70f4ef8397214ea7620815aa907f7e">flow::follower::ClosestBefore&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT &gt;</a>
+, <a class="el" href="classflow_1_1follower_1_1_count_before.html#a5903c8c617618a8cef42f244127beca4">flow::follower::CountBefore&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT &gt;</a>
+, <a class="el" href="classflow_1_1follower_1_1_latched.html#aa7e1bff49a4e024a0aa7a930f21f4d2b">flow::follower::Latched&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT &gt;</a>
+, <a class="el" href="classflow_1_1follower_1_1_matched_stamp.html#a6e165a0fa991dcf8535415d3b3bc1967">flow::follower::MatchedStamp&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT &gt;</a>
+, <a class="el" href="classflow_1_1follower_1_1_ranged.html#a4659215e05c397aa75a3a0a4f23c0b0e">flow::follower::Ranged&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT &gt;</a>
 , <a class="el" href="classflow_1_1_follower.html#a1388657aef71e23dd17a18ed7c628ae0">flow::Follower&lt; PolicyT &gt;</a>
 , <a class="el" href="structflow_1_1_stamp_traits.html#a69cb61df629f8f0ae9bb483e233b5174">flow::StampTraits&lt; StampT &gt;</a>
 , <a class="el" href="structflow_1_1_stamp_traits_3_01std_1_1chrono_1_1time__point_3_01_clock_t_00_01_duration_t_01_4_01_4.html#a06904e1c3115b03be761eba0d6b3e319">flow::StampTraits&lt; std::chrono::time_point&lt; ClockT, DurationT &gt; &gt;</a>

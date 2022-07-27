@@ -1,0 +1,4 @@
+<map id="flow::CaptorTraits&lt; driver::Chunk&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT &gt; &gt;" name="flow::CaptorTraits&lt; driver::Chunk&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT &gt; &gt;">
+<area shape="rect" id="node1" title="Traits struct for captor types." alt="" coords="5,95,239,180"/>
+<area shape="rect" id="node2" href="$structflow_1_1_captor_traits_from_dispatch.html" title="Basic captor traits struct with common type information from data dispatch object." alt="" coords="10,5,234,47"/>
+</map>

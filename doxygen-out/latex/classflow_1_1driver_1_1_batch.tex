@@ -1,5 +1,5 @@
-\hypertarget{classflow_1_1driver_1_1_batch}{}\doxysection{flow\+::driver\+::Batch$<$ DispatchT, Lock\+PolicyT, ContainerT, Queue\+MonitorT $>$ Class Template Reference}
-\label{classflow_1_1driver_1_1_batch}\index{flow::driver::Batch$<$ DispatchT, LockPolicyT, ContainerT, QueueMonitorT $>$@{flow::driver::Batch$<$ DispatchT, LockPolicyT, ContainerT, QueueMonitorT $>$}}
+\hypertarget{classflow_1_1driver_1_1_batch}{}\doxysection{flow\+::driver\+::Batch$<$ DispatchT, Lock\+PolicyT, ContainerT, Queue\+MonitorT, Access\+StampT, Access\+ValueT $>$ Class Template Reference}
+\label{classflow_1_1driver_1_1_batch}\index{flow::driver::Batch$<$ DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT $>$@{flow::driver::Batch$<$ DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT $>$}}
 
 
 Captures the N oldest data elements.  
@@ -11,7 +11,7 @@ Captures the N oldest data elements.
 
 
 
-Inheritance diagram for flow\+::driver\+::Batch$<$ DispatchT, Lock\+PolicyT, ContainerT, Queue\+MonitorT $>$\+:
+Inheritance diagram for flow\+::driver\+::Batch$<$ DispatchT, Lock\+PolicyT, ContainerT, Queue\+MonitorT, Access\+StampT, Access\+ValueT $>$\+:
 \nopagebreak
 \begin{figure}[H]
 \begin{center}
@@ -21,7 +21,7 @@ Inheritance diagram for flow\+::driver\+::Batch$<$ DispatchT, Lock\+PolicyT, Con
 \end{figure}
 
 
-Collaboration diagram for flow\+::driver\+::Batch$<$ DispatchT, Lock\+PolicyT, ContainerT, Queue\+MonitorT $>$\+:
+Collaboration diagram for flow\+::driver\+::Batch$<$ DispatchT, Lock\+PolicyT, ContainerT, Queue\+MonitorT, Access\+StampT, Access\+ValueT $>$\+:
 \nopagebreak
 \begin{figure}[H]
 \begin{center}
@@ -32,22 +32,22 @@ Collaboration diagram for flow\+::driver\+::Batch$<$ DispatchT, Lock\+PolicyT, C
 \doxysubsection*{Public Types}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\Hypertarget{classflow_1_1driver_1_1_batch_a81f688882ffe1a15ab3d8af872ffe6f7}\label{classflow_1_1driver_1_1_batch_a81f688882ffe1a15ab3d8af872ffe6f7}} 
-using \mbox{\hyperlink{classflow_1_1driver_1_1_batch_a81f688882ffe1a15ab3d8af872ffe6f7}{size\+\_\+type}} = typename \mbox{\hyperlink{structflow_1_1_captor_traits}{Captor\+Traits}}$<$ \mbox{\hyperlink{classflow_1_1driver_1_1_batch}{Batch}} $>$\+::\mbox{\hyperlink{classflow_1_1driver_1_1_batch_a81f688882ffe1a15ab3d8af872ffe6f7}{size\+\_\+type}}
+\mbox{\Hypertarget{classflow_1_1driver_1_1_batch_a58f3122be93c3e1564da360c57598e33}\label{classflow_1_1driver_1_1_batch_a58f3122be93c3e1564da360c57598e33}} 
+using \mbox{\hyperlink{classflow_1_1driver_1_1_batch_a58f3122be93c3e1564da360c57598e33}{size\+\_\+type}} = typename \mbox{\hyperlink{structflow_1_1_captor_traits}{Captor\+Traits}}$<$ \mbox{\hyperlink{classflow_1_1driver_1_1_batch}{Batch}} $>$\+::\mbox{\hyperlink{classflow_1_1driver_1_1_batch_a58f3122be93c3e1564da360c57598e33}{size\+\_\+type}}
 \begin{DoxyCompactList}\small\item\em Integer size type. \end{DoxyCompactList}\item 
-\mbox{\Hypertarget{classflow_1_1driver_1_1_batch_af28211948e71149b26cff0e2345b830f}\label{classflow_1_1driver_1_1_batch_af28211948e71149b26cff0e2345b830f}} 
-using \mbox{\hyperlink{classflow_1_1driver_1_1_batch_af28211948e71149b26cff0e2345b830f}{stamp\+\_\+type}} = typename \mbox{\hyperlink{structflow_1_1_captor_traits}{Captor\+Traits}}$<$ \mbox{\hyperlink{classflow_1_1driver_1_1_batch}{Batch}} $>$\+::\mbox{\hyperlink{classflow_1_1driver_1_1_batch_af28211948e71149b26cff0e2345b830f}{stamp\+\_\+type}}
+\mbox{\Hypertarget{classflow_1_1driver_1_1_batch_ac6b1438c11e473db977213209032f4d8}\label{classflow_1_1driver_1_1_batch_ac6b1438c11e473db977213209032f4d8}} 
+using \mbox{\hyperlink{classflow_1_1driver_1_1_batch_ac6b1438c11e473db977213209032f4d8}{stamp\+\_\+type}} = typename \mbox{\hyperlink{structflow_1_1_captor_traits}{Captor\+Traits}}$<$ \mbox{\hyperlink{classflow_1_1driver_1_1_batch}{Batch}} $>$\+::\mbox{\hyperlink{classflow_1_1driver_1_1_batch_ac6b1438c11e473db977213209032f4d8}{stamp\+\_\+type}}
 \begin{DoxyCompactList}\small\item\em Data stamp type. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{classflow_1_1driver_1_1_batch_a021d7a60b375a2fea3716deb6e709487}{Batch}} (const \mbox{\hyperlink{classflow_1_1driver_1_1_batch_a81f688882ffe1a15ab3d8af872ffe6f7}{size\+\_\+type}} size, const ContainerT \&container=ContainerT\{\}, const Queue\+MonitorT \&queue\+\_\+monitor=Queue\+MonitorT\{\}) noexcept(false)
+\mbox{\hyperlink{classflow_1_1driver_1_1_batch_a0af339897694b3a508d780931b1771e6}{Batch}} (const \mbox{\hyperlink{classflow_1_1driver_1_1_batch_a58f3122be93c3e1564da360c57598e33}{size\+\_\+type}} size, const ContainerT \&container=ContainerT\{\}, const Queue\+MonitorT \&queue\+\_\+monitor=Queue\+MonitorT\{\}) noexcept(false)
 \begin{DoxyCompactList}\small\item\em Configuration constructor. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
-\subsubsection*{template$<$typename DispatchT, typename Lock\+PolicyT = No\+Lock, typename ContainerT = Default\+Container$<$\+Dispatch\+T$>$, typename Queue\+MonitorT = Default\+Dispatch\+Queue\+Monitor$>$\newline
-class flow\+::driver\+::\+Batch$<$ Dispatch\+T, Lock\+Policy\+T, Container\+T, Queue\+Monitor\+T $>$}
+\subsubsection*{template$<$typename DispatchT, typename Lock\+PolicyT = No\+Lock, typename ContainerT = Default\+Container$<$\+Dispatch\+T$>$, typename Queue\+MonitorT = Default\+Dispatch\+Queue\+Monitor, typename Access\+StampT = Default\+Stamp\+Access, typename Access\+ValueT = Default\+Value\+Access$>$\newline
+class flow\+::driver\+::\+Batch$<$ Dispatch\+T, Lock\+Policy\+T, Container\+T, Queue\+Monitor\+T, Access\+Stamp\+T, Access\+Value\+T $>$}
 
 Captures the N oldest data elements. 
 
@@ -63,16 +63,20 @@ Establishes a sequencing range with where {\ttfamily range.\+lower\+\_\+stamp} i
 \hline
 {\em Queue\+MonitorT} & object used to monitor queue state on each insertion \\
 \hline
+{\em Access\+StampT} & custom stamp access \\
+\hline
+{\em Access\+ValueT} & custom value access \\
+\hline
 \end{DoxyTemplParams}
 
 
 \doxysubsection{Constructor \& Destructor Documentation}
-\mbox{\Hypertarget{classflow_1_1driver_1_1_batch_a021d7a60b375a2fea3716deb6e709487}\label{classflow_1_1driver_1_1_batch_a021d7a60b375a2fea3716deb6e709487}} 
-\index{flow::driver::Batch$<$ DispatchT, LockPolicyT, ContainerT, QueueMonitorT $>$@{flow::driver::Batch$<$ DispatchT, LockPolicyT, ContainerT, QueueMonitorT $>$}!Batch@{Batch}}
-\index{Batch@{Batch}!flow::driver::Batch$<$ DispatchT, LockPolicyT, ContainerT, QueueMonitorT $>$@{flow::driver::Batch$<$ DispatchT, LockPolicyT, ContainerT, QueueMonitorT $>$}}
+\mbox{\Hypertarget{classflow_1_1driver_1_1_batch_a0af339897694b3a508d780931b1771e6}\label{classflow_1_1driver_1_1_batch_a0af339897694b3a508d780931b1771e6}} 
+\index{flow::driver::Batch$<$ DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT $>$@{flow::driver::Batch$<$ DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT $>$}!Batch@{Batch}}
+\index{Batch@{Batch}!flow::driver::Batch$<$ DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT $>$@{flow::driver::Batch$<$ DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT $>$}}
 \doxysubsubsection{\texorpdfstring{Batch()}{Batch()}}
-{\footnotesize\ttfamily template$<$typename DispatchT , typename Lock\+PolicyT , typename ContainerT , typename Queue\+MonitorT $>$ \\
-\mbox{\hyperlink{classflow_1_1driver_1_1_batch}{flow\+::driver\+::\+Batch}}$<$ DispatchT, Lock\+PolicyT, ContainerT, Queue\+MonitorT $>$\+::\mbox{\hyperlink{classflow_1_1driver_1_1_batch}{Batch}} (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classflow_1_1driver_1_1_batch_a81f688882ffe1a15ab3d8af872ffe6f7}{size\+\_\+type}}}]{size,  }\item[{const ContainerT \&}]{container = {\ttfamily ContainerT\{\}},  }\item[{const Queue\+MonitorT \&}]{queue\+\_\+monitor = {\ttfamily QueueMonitorT\{\}} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}, {\ttfamily [noexcept]}}
+{\footnotesize\ttfamily template$<$typename DispatchT , typename Lock\+PolicyT , typename ContainerT , typename Queue\+MonitorT , typename Access\+StampT , typename Access\+ValueT $>$ \\
+\mbox{\hyperlink{classflow_1_1driver_1_1_batch}{flow\+::driver\+::\+Batch}}$<$ DispatchT, Lock\+PolicyT, ContainerT, Queue\+MonitorT, Access\+StampT, Access\+ValueT $>$\+::\mbox{\hyperlink{classflow_1_1driver_1_1_batch}{Batch}} (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classflow_1_1driver_1_1_batch_a58f3122be93c3e1564da360c57598e33}{size\+\_\+type}}}]{size,  }\item[{const ContainerT \&}]{container = {\ttfamily ContainerT\{\}},  }\item[{const Queue\+MonitorT \&}]{queue\+\_\+monitor = {\ttfamily QueueMonitorT\{\}} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}, {\ttfamily [noexcept]}}
 
 
 

@@ -68,18 +68,18 @@ $(function() {
 <h3><a id="index_o"></a>- o -</h3><ul>
 <li>offset_type
 : <a class="el" href="structflow_1_1_captor_traits_from_dispatch.html#a230ae2724dc491631b2e6806113b72b0">flow::CaptorTraitsFromDispatch&lt; DispatchT &gt;</a>
-, <a class="el" href="classflow_1_1driver_1_1_throttled.html#abceda047ac43fa03ddfe00b68317ae3d">flow::driver::Throttled&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT &gt;</a>
-, <a class="el" href="classflow_1_1follower_1_1_any_before.html#aee1b47d081b0b242b5fddabcd2c5310c">flow::follower::AnyBefore&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT &gt;</a>
-, <a class="el" href="classflow_1_1follower_1_1_before.html#a5bb9194263576cac18c7e602ab33e7b4">flow::follower::Before&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT &gt;</a>
-, <a class="el" href="classflow_1_1follower_1_1_closest_before.html#ad6e3ed90bcd84a7948178e017ea9e79e">flow::follower::ClosestBefore&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT &gt;</a>
-, <a class="el" href="classflow_1_1follower_1_1_count_before.html#a99a0abf1a1d75aad7a5b1958f527f0a8">flow::follower::CountBefore&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT &gt;</a>
-, <a class="el" href="classflow_1_1follower_1_1_latched.html#a437fa0b63a9d5c36c7a63774a53d6552">flow::follower::Latched&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT &gt;</a>
-, <a class="el" href="classflow_1_1follower_1_1_ranged.html#ab117a88915944f22ee67326888858354">flow::follower::Ranged&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT &gt;</a>
+, <a class="el" href="classflow_1_1driver_1_1_throttled.html#a74ec2fd73483357cc85bde69dbc54d17">flow::driver::Throttled&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT &gt;</a>
+, <a class="el" href="classflow_1_1follower_1_1_any_before.html#a9ab74f6af4192d2af35f1f6eb0529d78">flow::follower::AnyBefore&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT &gt;</a>
+, <a class="el" href="classflow_1_1follower_1_1_before.html#ad3bd1d49cc1183712719ac829fb6289a">flow::follower::Before&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT &gt;</a>
+, <a class="el" href="classflow_1_1follower_1_1_closest_before.html#a64a2a03d0dbaf619b39e0352d43e1652">flow::follower::ClosestBefore&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT &gt;</a>
+, <a class="el" href="classflow_1_1follower_1_1_count_before.html#ab4d75513d2de71b04d315052a473422c">flow::follower::CountBefore&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT &gt;</a>
+, <a class="el" href="classflow_1_1follower_1_1_latched.html#a14b057f1779542a2354465b978fd1d03">flow::follower::Latched&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT &gt;</a>
+, <a class="el" href="classflow_1_1follower_1_1_ranged.html#ac84133a3e121b7722983477bf06fb6e0">flow::follower::Ranged&lt; DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT &gt;</a>
 , <a class="el" href="structflow_1_1_stamp_traits.html#a82a66329de799814f0ae8eb96749ff80">flow::StampTraits&lt; StampT &gt;</a>
 , <a class="el" href="structflow_1_1_stamp_traits_3_01std_1_1chrono_1_1time__point_3_01_clock_t_00_01_duration_t_01_4_01_4.html#ac09d74296cf6de0a4b161f1e728fae41">flow::StampTraits&lt; std::chrono::time_point&lt; ClockT, DurationT &gt; &gt;</a>
 </li>
 <li>oldest_stamp()
-: <a class="el" href="classflow_1_1_dispatch_queue.html#a6411ccf159a54568dc00072b35593189">flow::DispatchQueue&lt; DispatchT, ContainerT &gt;</a>
+: <a class="el" href="classflow_1_1_dispatch_queue.html#a6f7ac99715b47830d3e5f9d8ad204994">flow::DispatchQueue&lt; DispatchT, ContainerT, AccessStampT, AccessValueT &gt;</a>
 </li>
 <li>operator bool()
 : <a class="el" href="structflow_1_1_capture_range.html#a9e48db61b83970a676a34c8af7bae594">flow::CaptureRange&lt; StampT &gt;</a>
