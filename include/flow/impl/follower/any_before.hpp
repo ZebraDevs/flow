@@ -18,8 +18,14 @@ namespace flow
 namespace follower
 {
 
-template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
-AnyBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::AnyBefore(
+template <
+  typename DispatchT,
+  typename LockPolicyT,
+  typename ContainerT,
+  typename QueueMonitorT,
+  typename AccessStampT,
+  typename AccessValueT>
+AnyBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT>::AnyBefore(
   const offset_type& delay,
   const ContainerT& container,
   const QueueMonitorT& queue_monitor) :
@@ -28,8 +34,15 @@ AnyBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::AnyBefore(
 {}
 
 
-template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
-std::tuple<State, ExtractionRange> AnyBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::locate_follower_impl(
+template <
+  typename DispatchT,
+  typename LockPolicyT,
+  typename ContainerT,
+  typename QueueMonitorT,
+  typename AccessStampT,
+  typename AccessValueT>
+std::tuple<State, ExtractionRange>
+AnyBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT>::locate_follower_impl(
   const CaptureRange<stamp_type>& range) const
 {
   // The boundary before which messages are valid and after which they are not. Non-inclusive.
@@ -39,7 +52,7 @@ std::tuple<State, ExtractionRange> AnyBefore<DispatchT, LockPolicyT, ContainerT,
 
   // Collect all the messages that are earlier than the first driving message's
   // timestamp minus the delay
-  while (itr != PolicyType::queue_.end() and get_stamp(*itr) < boundary)
+  while (itr != PolicyType::queue_.end() and AccessStampT::get(*itr) < boundary)
   {
     ++itr;
   }
@@ -48,9 +61,15 @@ std::tuple<State, ExtractionRange> AnyBefore<DispatchT, LockPolicyT, ContainerT,
     State::PRIMED, ExtractionRange{0, static_cast<std::size_t>(std::distance(PolicyType::queue_.begin(), itr))});
 }
 
-template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
+template <
+  typename DispatchT,
+  typename LockPolicyT,
+  typename ContainerT,
+  typename QueueMonitorT,
+  typename AccessStampT,
+  typename AccessValueT>
 template <typename OutputDispatchIteratorT>
-void AnyBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::extract_follower_impl(
+void AnyBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT>::extract_follower_impl(
   OutputDispatchIteratorT& output,
   const ExtractionRange& extraction_range,
   const CaptureRange<stamp_type>& range)
@@ -59,8 +78,15 @@ void AnyBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::extract_follo
   PolicyType::queue_.remove_first_n(extraction_range.last);
 }
 
-template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
-void AnyBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::abort_follower_impl(const stamp_type& t_abort)
+template <
+  typename DispatchT,
+  typename LockPolicyT,
+  typename ContainerT,
+  typename QueueMonitorT,
+  typename AccessStampT,
+  typename AccessValueT>
+void AnyBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT>::abort_follower_impl(
+  const stamp_type& t_abort)
 {
   PolicyType::queue_.remove_before(t_abort - delay_);
 }

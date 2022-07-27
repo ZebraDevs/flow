@@ -32,6 +32,8 @@ namespace follower
  * PollingLock
  * @tparam ContainerT  underlying <code>DispatchT</code> container type
  * @tparam QueueMonitorT  object used to monitor queue state on each insertion; used to precondition capture
+ * @tparam AccessStampT  custom stamp access
+ * @tparam AccessValueT  custom value access
  *
  * @warn This captor WILL NOT behave deterministically if all data is not available before capture time minus
  *       the specified delay. As such, setting the delay properly will alleviate non-deterministic behavior.
@@ -41,8 +43,11 @@ template <
   typename DispatchT,
   typename LockPolicyT = NoLock,
   typename ContainerT = DefaultContainer<DispatchT>,
-  typename QueueMonitorT = DefaultDispatchQueueMonitor>
-class AnyBefore : public Follower<AnyBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>>
+  typename QueueMonitorT = DefaultDispatchQueueMonitor,
+  typename AccessStampT = DefaultStampAccess,
+  typename AccessValueT = DefaultValueAccess>
+class AnyBefore
+    : public Follower<AnyBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT>>
 {
 public:
   /// Data stamp type
@@ -64,7 +69,7 @@ public:
     const QueueMonitorT& queue_monitor = QueueMonitorT{});
 
 private:
-  using PolicyType = Follower<AnyBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>>;
+  using PolicyType = Follower<AnyBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT>>;
   friend PolicyType;
 
   /**
@@ -118,8 +123,14 @@ private:
  * @tparam ContainerT  underlying <code>DispatchT</code> container type
  * @tparam QueueMonitorT queue monitor/capture preconditioning type
  */
-template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
-struct CaptorTraits<follower::AnyBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>>
+template <
+  typename DispatchT,
+  typename LockPolicyT,
+  typename ContainerT,
+  typename QueueMonitorT,
+  typename AccessStampT,
+  typename AccessValueT>
+struct CaptorTraits<follower::AnyBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT>>
     : CaptorTraitsFromDispatch<DispatchT>
 {
   /// Underlying dispatch container type
@@ -130,6 +141,12 @@ struct CaptorTraits<follower::AnyBefore<DispatchT, LockPolicyT, ContainerT, Queu
 
   /// Thread locking policy type
   using LockPolicyType = LockPolicyT;
+
+  /// Stamp access implementation
+  using AccessStampType = AccessStampT;
+
+  /// Value access implementation
+  using AccessValueType = AccessValueT;
 
   /// Indicates that data from this captor will NOT always be captured deterministically;
   /// i.e. is always dependent on when data is injected, and when captrue is executed

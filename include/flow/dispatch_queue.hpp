@@ -46,6 +46,22 @@ struct ExtractionRange
 };
 
 /**
+ * @brief Default implementation for accessing dispatch stamps
+ */
+struct DefaultStampAccess
+{
+  template <typename DispatchT> static auto get(const DispatchT& dispatch) { return get_stamp(dispatch); }
+};
+
+/**
+ * @brief Default implementation for accessing dispatch values
+ */
+struct DefaultValueAccess
+{
+  template <typename DispatchT> static auto get(const DispatchT& dispatch) { return get_value(dispatch); }
+};
+
+/**
  * @brief Dispatch queuing data structure
  *
  * FILO-type queue which orders data by sequence stamp, from oldest to newest. Provides
@@ -55,8 +71,15 @@ struct ExtractionRange
  *
  * @tparam DispatchT  data dipatch type
  * @tparam ContainerT  underlying <code>DispatchT</code> container timplementation
+ * @tparam AccessStampT  custom stamp access
+ * @tparam AccessValueT  custom value access
  */
-template <typename DispatchT, typename ContainerT> class DispatchQueue
+template <
+  typename DispatchT,
+  typename ContainerT,
+  typename AccessStampT = DefaultStampAccess,
+  typename AccessValueT = DefaultValueAccess>
+class DispatchQueue
 {
 public:
   /// Dispatch stamp type
@@ -77,6 +100,12 @@ public:
 
   /// Iterator type for container Dispatch elements
   using const_reverse_iterator = typename ContainerT::const_reverse_iterator;
+
+  /// Stamp access implementation
+  using AccessStamp = AccessStampT;
+
+  /// Value access implementation
+  using AccessValue = AccessValueT;
 
   /**
    * @brief Default construtor
@@ -169,7 +198,7 @@ public:
    *
    * @warning Undefined behavior when <code>empty() == true</code>
    */
-  inline stamp_type oldest_stamp() const { return get_stamp(container_.front()); }
+  inline stamp_type oldest_stamp() const { return AccessStampT::get(container_.front()); }
 
   /**
    * @brief Sequencing stamp associated with the newest data
@@ -178,7 +207,7 @@ public:
    *
    * @warning Undefined behavior when <code>empty() == true</code>
    */
-  inline stamp_type newest_stamp() const { return get_stamp(container_.back()); }
+  inline stamp_type newest_stamp() const { return AccessStampT::get(container_.back()); }
 
   /**
    * @brief Retrieves the oldest element

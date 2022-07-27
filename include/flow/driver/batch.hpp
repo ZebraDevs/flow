@@ -27,13 +27,17 @@ namespace driver
  * PollingLock
  * @tparam ContainerT  underlying <code>DispatchT</code> container type
  * @tparam QueueMonitorT  object used to monitor queue state on each insertion
+ * @tparam AccessStampT  custom stamp access
+ * @tparam AccessValueT  custom value access
  */
 template <
   typename DispatchT,
   typename LockPolicyT = NoLock,
   typename ContainerT = DefaultContainer<DispatchT>,
-  typename QueueMonitorT = DefaultDispatchQueueMonitor>
-class Batch : public Driver<Batch<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>>
+  typename QueueMonitorT = DefaultDispatchQueueMonitor,
+  typename AccessStampT = DefaultStampAccess,
+  typename AccessValueT = DefaultValueAccess>
+class Batch : public Driver<Batch<DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT>>
 {
 public:
   /// Integer size type
@@ -57,7 +61,7 @@ public:
     const QueueMonitorT& queue_monitor = QueueMonitorT{}) noexcept(false);
 
 private:
-  using PolicyType = Driver<Batch<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>>;
+  using PolicyType = Driver<Batch<DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT>>;
   friend PolicyType;
 
   /**
@@ -117,8 +121,14 @@ private:
  * @tparam ContainerT  underlying <code>DispatchT</code> container type
  * @tparam QueueMonitorT  object used to monitor queue state on each insertion
  */
-template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
-struct CaptorTraits<driver::Batch<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>>
+template <
+  typename DispatchT,
+  typename LockPolicyT,
+  typename ContainerT,
+  typename QueueMonitorT,
+  typename AccessStampT,
+  typename AccessValueT>
+struct CaptorTraits<driver::Batch<DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT>>
     : CaptorTraitsFromDispatch<DispatchT>
 {
   /// Underlying dispatch container type
@@ -129,6 +139,12 @@ struct CaptorTraits<driver::Batch<DispatchT, LockPolicyT, ContainerT, QueueMonit
 
   /// Thread locking policy type
   using LockPolicyType = LockPolicyT;
+
+  /// Stamp access implementation
+  using AccessStampType = AccessStampT;
+
+  /// Value access implementation
+  using AccessValueType = AccessValueT;
 
   /// Indicates that data from this captor will always be captured deterministically, so long as data
   /// injection is monotonically sequenced

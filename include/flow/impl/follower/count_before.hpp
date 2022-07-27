@@ -17,8 +17,14 @@ namespace flow
 namespace follower
 {
 
-template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
-CountBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::CountBefore(
+template <
+  typename DispatchT,
+  typename LockPolicyT,
+  typename ContainerT,
+  typename QueueMonitorT,
+  typename AccessStampT,
+  typename AccessValueT>
+CountBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT>::CountBefore(
   const size_type count,
   const offset_type& delay,
   const ContainerT& container,
@@ -34,8 +40,15 @@ CountBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::CountBefore(
 }
 
 
-template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
-std::tuple<State, ExtractionRange> CountBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::locate_follower_impl(
+template <
+  typename DispatchT,
+  typename LockPolicyT,
+  typename ContainerT,
+  typename QueueMonitorT,
+  typename AccessStampT,
+  typename AccessValueT>
+std::tuple<State, ExtractionRange>
+CountBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT>::locate_follower_impl(
   const CaptureRange<stamp_type>& range) const
 {
   // Retry if queue has no data
@@ -50,7 +63,7 @@ std::tuple<State, ExtractionRange> CountBefore<DispatchT, LockPolicyT, Container
   // Scroll to element boundary
   size_type before_boundary_count = 0;
   auto itr = PolicyType::queue_.begin();
-  while (itr != PolicyType::queue_.end() and boundary > get_stamp(*itr))
+  while (itr != PolicyType::queue_.end() and boundary > AccessStampT::get(*itr))
   {
     ++before_boundary_count;
     ++itr;
@@ -75,9 +88,15 @@ std::tuple<State, ExtractionRange> CountBefore<DispatchT, LockPolicyT, Container
 }
 
 
-template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
+template <
+  typename DispatchT,
+  typename LockPolicyT,
+  typename ContainerT,
+  typename QueueMonitorT,
+  typename AccessStampT,
+  typename AccessValueT>
 template <typename OutputDispatchIteratorT>
-void CountBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::extract_follower_impl(
+void CountBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT>::extract_follower_impl(
   OutputDispatchIteratorT& output,
   const ExtractionRange& extraction_range,
   const CaptureRange<stamp_type>& range)
