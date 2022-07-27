@@ -15,8 +15,14 @@ namespace flow
 namespace driver
 {
 
-template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
-Throttled<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::Throttled(
+template <
+  typename DispatchT,
+  typename LockPolicyT,
+  typename ContainerT,
+  typename QueueMonitorT,
+  typename AccessStampT,
+  typename AccessValueT>
+Throttled<DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT>::Throttled(
   const offset_type throttle_period,
   const ContainerT& container,
   const QueueMonitorT& queue_monitor) noexcept(false) :
@@ -26,17 +32,25 @@ Throttled<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::Throttled(
 {}
 
 
-template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
+template <
+  typename DispatchT,
+  typename LockPolicyT,
+  typename ContainerT,
+  typename QueueMonitorT,
+  typename AccessStampT,
+  typename AccessValueT>
 std::tuple<State, ExtractionRange>
-Throttled<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::locate_driver_impl(CaptureRange<stamp_type>& range) const
+Throttled<DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT>::locate_driver_impl(
+  CaptureRange<stamp_type>& range) const
 {
   std::size_t index = 0UL;
   for (const auto& dispatch : PolicyType::queue_)
   {
     if (
-      previous_stamp_ == StampTraits<stamp_type>::min() or (get_stamp(dispatch) - previous_stamp_) >= throttle_period_)
+      previous_stamp_ == StampTraits<stamp_type>::min() or
+      (AccessStampT::get(dispatch) - previous_stamp_) >= throttle_period_)
     {
-      range.lower_stamp = get_stamp(dispatch);
+      range.lower_stamp = AccessStampT::get(dispatch);
       range.upper_stamp = range.lower_stamp;
 
       return std::make_tuple(State::PRIMED, ExtractionRange{index, index + 1UL});
@@ -48,9 +62,15 @@ Throttled<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::locate_driver_impl
 }
 
 
-template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
+template <
+  typename DispatchT,
+  typename LockPolicyT,
+  typename ContainerT,
+  typename QueueMonitorT,
+  typename AccessStampT,
+  typename AccessValueT>
 template <typename OutputDispatchIteratorT>
-void Throttled<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::extract_driver_impl(
+void Throttled<DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT>::extract_driver_impl(
   OutputDispatchIteratorT& output,
   const ExtractionRange& extraction_range,
   const CaptureRange<stamp_type>& range)
@@ -64,15 +84,28 @@ void Throttled<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::extract_drive
 }
 
 
-template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
-void Throttled<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::abort_driver_impl(const stamp_type& t_abort)
+template <
+  typename DispatchT,
+  typename LockPolicyT,
+  typename ContainerT,
+  typename QueueMonitorT,
+  typename AccessStampT,
+  typename AccessValueT>
+void Throttled<DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT>::abort_driver_impl(
+  const stamp_type& t_abort)
 {
   PolicyType::queue_.remove_before(t_abort);
 }
 
 
-template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
-void Throttled<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::reset_driver_impl()
+template <
+  typename DispatchT,
+  typename LockPolicyT,
+  typename ContainerT,
+  typename QueueMonitorT,
+  typename AccessStampT,
+  typename AccessValueT>
+void Throttled<DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT>::reset_driver_impl()
 {
   previous_stamp_ = StampTraits<stamp_type>::min();
 }

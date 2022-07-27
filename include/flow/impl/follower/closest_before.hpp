@@ -12,8 +12,14 @@ namespace flow
 namespace follower
 {
 
-template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
-ClosestBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::ClosestBefore(
+template <
+  typename DispatchT,
+  typename LockPolicyT,
+  typename ContainerT,
+  typename QueueMonitorT,
+  typename AccessStampT,
+  typename AccessValueT>
+ClosestBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT>::ClosestBefore(
   const offset_type& period,
   const offset_type& delay,
   const ContainerT& container,
@@ -24,9 +30,15 @@ ClosestBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::ClosestBefore(
 {}
 
 
-template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
+template <
+  typename DispatchT,
+  typename LockPolicyT,
+  typename ContainerT,
+  typename QueueMonitorT,
+  typename AccessStampT,
+  typename AccessValueT>
 std::tuple<State, ExtractionRange>
-ClosestBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::locate_follower_impl(
+ClosestBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT>::locate_follower_impl(
   const CaptureRange<stamp_type>& range) const
 {
   // The boundary before which messages are valid and after which they are not. Non-inclusive.
@@ -36,12 +48,12 @@ ClosestBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::locate_followe
   auto capture_itr = PolicyType::queue_.end();
   for (auto itr = PolicyType::queue_.begin(); itr != PolicyType::queue_.end(); ++itr)
   {
-    if (get_stamp(*itr) >= boundary)
+    if (AccessStampT::get(*itr) >= boundary)
     {
       // If oldest element is far ahead of boundary, abort
       return std::make_tuple(State::ABORT, ExtractionRange{});
     }
-    else if (get_stamp(*itr) + period_ >= boundary)
+    else if (AccessStampT::get(*itr) + period_ >= boundary)
     {
       // If oldest element is first within period, collect
       capture_itr = itr;
@@ -61,12 +73,19 @@ ClosestBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::locate_followe
 }
 
 
-template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
+template <
+  typename DispatchT,
+  typename LockPolicyT,
+  typename ContainerT,
+  typename QueueMonitorT,
+  typename AccessStampT,
+  typename AccessValueT>
 template <typename OutputDispatchIteratorT>
-void ClosestBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::extract_follower_impl(
-  OutputDispatchIteratorT& output,
-  const ExtractionRange& extraction_range,
-  const CaptureRange<stamp_type>& range)
+void ClosestBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT>::
+  extract_follower_impl(
+    OutputDispatchIteratorT& output,
+    const ExtractionRange& extraction_range,
+    const CaptureRange<stamp_type>& range)
 {
   if (extraction_range)
   {
@@ -76,8 +95,15 @@ void ClosestBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::extract_f
 }
 
 
-template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
-void ClosestBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::abort_follower_impl(const stamp_type& t_abort)
+template <
+  typename DispatchT,
+  typename LockPolicyT,
+  typename ContainerT,
+  typename QueueMonitorT,
+  typename AccessStampT,
+  typename AccessValueT>
+void ClosestBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT>::abort_follower_impl(
+  const stamp_type& t_abort)
 {
   PolicyType::queue_.remove_before(t_abort - delay_ - period_);
 }

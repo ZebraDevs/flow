@@ -51,8 +51,14 @@ struct DefaultDispatchQueueMonitor
    * @retval true  allows capture to happen
    * @retval false  otherwise, causing Captor to return <code>State::SKIP_FRAME_QUEUE_PRECONDITION</code>
    */
-  template <typename DispatchT, typename DispatchContainerT, typename StampT>
-  static constexpr bool check(DispatchQueue<DispatchT, DispatchContainerT>&, const CaptureRange<StampT>&)
+  template <
+    typename DispatchT,
+    typename DispatchContainerT,
+    typename AccessStampT,
+    typename AccessValueT,
+    typename StampT>
+  static constexpr bool
+  check(DispatchQueue<DispatchT, DispatchContainerT, AccessStampT, AccessValueT>&, const CaptureRange<StampT>&)
   {
     return true;
   };
@@ -62,8 +68,16 @@ struct DefaultDispatchQueueMonitor
    *
    * Called during <code>Sychronizer::capture</code>, updating several associated Captor s
    */
-  template <typename DispatchT, typename DispatchContainerT, typename StampT>
-  static constexpr void update(DispatchQueue<DispatchT, DispatchContainerT>&, const CaptureRange<StampT>&, const State)
+  template <
+    typename DispatchT,
+    typename DispatchContainerT,
+    typename AccessStampT,
+    typename AccessValueT,
+    typename StampT>
+  static constexpr void update(
+    DispatchQueue<DispatchT, DispatchContainerT, AccessStampT, AccessValueT>&,
+    const CaptureRange<StampT>&,
+    const State)
   {}
 };
 
@@ -121,6 +135,12 @@ public:
 
   /// Queue monitor/capture preconditioning type
   using DispatchQueueMonitorType = typename CaptorTraits<CaptorT>::DispatchQueueMonitorType;
+
+  /// Stamp access implementation
+  using AccessStampType = typename CaptorTraits<CaptorT>::AccessStampType;
+
+  /// Value access implementation
+  using AccessValueType = typename CaptorTraits<CaptorT>::AccessValueType;
 
   /// Data stamp type
   using stamp_type = typename CaptorTraits<CaptorT>::stamp_type;
@@ -362,7 +382,7 @@ protected:
   size_type capacity_;
 
   /// Data dispatch queue
-  DispatchQueue<DispatchType, DispatchContainerType> queue_;
+  DispatchQueue<DispatchType, DispatchContainerType, AccessStampType, AccessValueType> queue_;
 
   /// Data dispatch queue capture monitor check
   DispatchQueueMonitorType queue_monitor_;

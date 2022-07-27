@@ -16,8 +16,14 @@ namespace flow
 namespace driver
 {
 
-template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
-Batch<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::Batch(
+template <
+  typename DispatchT,
+  typename LockPolicyT,
+  typename ContainerT,
+  typename QueueMonitorT,
+  typename AccessStampT,
+  typename AccessValueT>
+Batch<DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT>::Batch(
   const size_type size,
   const ContainerT& container,
   const QueueMonitorT& queue_monitor) noexcept(false) :
@@ -28,16 +34,23 @@ Batch<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::Batch(
 }
 
 
-template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
+template <
+  typename DispatchT,
+  typename LockPolicyT,
+  typename ContainerT,
+  typename QueueMonitorT,
+  typename AccessStampT,
+  typename AccessValueT>
 std::tuple<State, ExtractionRange>
-Batch<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::locate_driver_impl(CaptureRange<stamp_type>& range) const
+Batch<DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT>::locate_driver_impl(
+  CaptureRange<stamp_type>& range) const
 {
   if (PolicyType::queue_.size() >= batch_size_)
   {
     auto oldest_itr = PolicyType::queue_.begin();
 
-    range.lower_stamp = get_stamp(*oldest_itr);
-    range.upper_stamp = get_stamp(*std::next(oldest_itr, batch_size_ - 1));
+    range.lower_stamp = AccessStampT::get(*oldest_itr);
+    range.upper_stamp = AccessStampT::get(*std::next(oldest_itr, batch_size_ - 1));
 
     return std::make_tuple(State::PRIMED, ExtractionRange{0, batch_size_});
   }
@@ -45,9 +58,15 @@ Batch<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::locate_driver_impl(Cap
 }
 
 
-template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
+template <
+  typename DispatchT,
+  typename LockPolicyT,
+  typename ContainerT,
+  typename QueueMonitorT,
+  typename AccessStampT,
+  typename AccessValueT>
 template <typename OutputDispatchIteratorT>
-void Batch<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::extract_driver_impl(
+void Batch<DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT>::extract_driver_impl(
   OutputDispatchIteratorT& output,
   const ExtractionRange& extraction_range,
   const CaptureRange<stamp_type>& range)
@@ -60,15 +79,29 @@ void Batch<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::extract_driver_im
 }
 
 
-template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
-void Batch<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::abort_driver_impl(const stamp_type& t_abort)
+template <
+  typename DispatchT,
+  typename LockPolicyT,
+  typename ContainerT,
+  typename QueueMonitorT,
+  typename AccessStampT,
+  typename AccessValueT>
+void Batch<DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT>::abort_driver_impl(
+  const stamp_type& t_abort)
 {
   PolicyType::queue_.remove_before(t_abort);
 }
 
 
-template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
-void Batch<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::validate() const noexcept(false)
+template <
+  typename DispatchT,
+  typename LockPolicyT,
+  typename ContainerT,
+  typename QueueMonitorT,
+  typename AccessStampT,
+  typename AccessValueT>
+void Batch<DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT>::validate() const
+  noexcept(false)
 {
   if (batch_size_ == 0)
   {

@@ -15,8 +15,14 @@ namespace flow
 namespace follower
 {
 
-template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
-Latched<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::Latched(
+template <
+  typename DispatchT,
+  typename LockPolicyT,
+  typename ContainerT,
+  typename QueueMonitorT,
+  typename AccessStampT,
+  typename AccessValueT>
+Latched<DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT>::Latched(
   const offset_type min_period,
   const ContainerT& container,
   const QueueMonitorT& queue_monitor) :
@@ -25,8 +31,15 @@ Latched<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::Latched(
 {}
 
 
-template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
-std::tuple<State, ExtractionRange> Latched<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::locate_follower_impl(
+template <
+  typename DispatchT,
+  typename LockPolicyT,
+  typename ContainerT,
+  typename QueueMonitorT,
+  typename AccessStampT,
+  typename AccessValueT>
+std::tuple<State, ExtractionRange>
+Latched<DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT>::locate_follower_impl(
   const CaptureRange<stamp_type>& range) const
 {
   if (PolicyType::queue_.empty())
@@ -64,7 +77,7 @@ std::tuple<State, ExtractionRange> Latched<DispatchT, LockPolicyT, ContainerT, Q
   // Find data closest to boundary, starting from oldest
   // curr_qitr will never start at queue_.end() due to previous empty check
   auto curr_qitr = PolicyType::queue_.begin();
-  while (curr_qitr != PolicyType::queue_.end() and get_stamp(*curr_qitr) <= boundary)
+  while (curr_qitr != PolicyType::queue_.end() and AccessStampT::get(*curr_qitr) <= boundary)
   {
     ++curr_qitr;
   }
@@ -73,9 +86,15 @@ std::tuple<State, ExtractionRange> Latched<DispatchT, LockPolicyT, ContainerT, Q
 }
 
 
-template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
+template <
+  typename DispatchT,
+  typename LockPolicyT,
+  typename ContainerT,
+  typename QueueMonitorT,
+  typename AccessStampT,
+  typename AccessValueT>
 template <typename OutputDispatchIteratorT>
-void Latched<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::extract_follower_impl(
+void Latched<DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT>::extract_follower_impl(
   OutputDispatchIteratorT& output,
   const ExtractionRange& extraction_range,
   const CaptureRange<stamp_type>& range)
@@ -94,15 +113,29 @@ void Latched<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::extract_followe
 }
 
 
-template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
-void Latched<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::abort_follower_impl(const stamp_type& t_abort)
+template <
+  typename DispatchT,
+  typename LockPolicyT,
+  typename ContainerT,
+  typename QueueMonitorT,
+  typename AccessStampT,
+  typename AccessValueT>
+void Latched<DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT>::abort_follower_impl(
+  const stamp_type& t_abort)
 {
   // don't remove anything abort
 }
 
 
-template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
-void Latched<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::reset_follower_impl() noexcept(true)
+template <
+  typename DispatchT,
+  typename LockPolicyT,
+  typename ContainerT,
+  typename QueueMonitorT,
+  typename AccessStampT,
+  typename AccessValueT>
+void Latched<DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT>::
+  reset_follower_impl() noexcept(true)
 {
   latched_.reset();
 }

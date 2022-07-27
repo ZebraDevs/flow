@@ -15,17 +15,29 @@ namespace flow
 namespace follower
 {
 
-template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
-MatchedStamp<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::MatchedStamp(
+template <
+  typename DispatchT,
+  typename LockPolicyT,
+  typename ContainerT,
+  typename QueueMonitorT,
+  typename AccessStampT,
+  typename AccessValueT>
+MatchedStamp<DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT>::MatchedStamp(
   const ContainerT& container,
   const QueueMonitorT& queue_monitor) :
     PolicyType{container, queue_monitor}
 {}
 
 
-template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
+template <
+  typename DispatchT,
+  typename LockPolicyT,
+  typename ContainerT,
+  typename QueueMonitorT,
+  typename AccessStampT,
+  typename AccessValueT>
 std::tuple<State, ExtractionRange>
-MatchedStamp<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::locate_follower_impl(
+MatchedStamp<DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT>::locate_follower_impl(
   const CaptureRange<stamp_type>& range) const
 {
   if (PolicyType::queue_.empty())
@@ -43,7 +55,7 @@ MatchedStamp<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::locate_follower
   for (auto element_itr = PolicyType::queue_.begin(); element_itr != PolicyType::queue_.end();
        ++element_itr, ++element_index)
   {
-    if (get_stamp(*element_itr) < range.lower_stamp or get_stamp(*element_itr) > range.upper_stamp)
+    if (AccessStampT::get(*element_itr) < range.lower_stamp or AccessStampT::get(*element_itr) > range.upper_stamp)
     {
       continue;
     }
@@ -63,9 +75,15 @@ MatchedStamp<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::locate_follower
 }
 
 
-template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
+template <
+  typename DispatchT,
+  typename LockPolicyT,
+  typename ContainerT,
+  typename QueueMonitorT,
+  typename AccessStampT,
+  typename AccessValueT>
 template <typename OutputDispatchIteratorT>
-void MatchedStamp<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::extract_follower_impl(
+void MatchedStamp<DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT>::extract_follower_impl(
   OutputDispatchIteratorT& output,
   const ExtractionRange& extraction_range,
   const CaptureRange<stamp_type>& range)
@@ -75,8 +93,15 @@ void MatchedStamp<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::extract_fo
 }
 
 
-template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
-void MatchedStamp<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::abort_follower_impl(const stamp_type& t_abort)
+template <
+  typename DispatchT,
+  typename LockPolicyT,
+  typename ContainerT,
+  typename QueueMonitorT,
+  typename AccessStampT,
+  typename AccessValueT>
+void MatchedStamp<DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT>::abort_follower_impl(
+  const stamp_type& t_abort)
 {
   PolicyType::queue_.remove_before(t_abort);
 }

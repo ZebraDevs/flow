@@ -18,8 +18,14 @@ namespace flow
 namespace follower
 {
 
-template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
-Ranged<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::Ranged(
+template <
+  typename DispatchT,
+  typename LockPolicyT,
+  typename ContainerT,
+  typename QueueMonitorT,
+  typename AccessStampT,
+  typename AccessValueT>
+Ranged<DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT>::Ranged(
   const offset_type& delay,
   const ContainerT& container,
   const QueueMonitorT& queue_monitor) :
@@ -28,8 +34,15 @@ Ranged<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::Ranged(
 {}
 
 
-template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
-std::tuple<State, ExtractionRange> Ranged<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::locate_follower_impl(
+template <
+  typename DispatchT,
+  typename LockPolicyT,
+  typename ContainerT,
+  typename QueueMonitorT,
+  typename AccessStampT,
+  typename AccessValueT>
+std::tuple<State, ExtractionRange>
+Ranged<DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT>::locate_follower_impl(
   const CaptureRange<stamp_type>& range) const
 {
   // Abort early on empty queue
@@ -67,9 +80,15 @@ std::tuple<State, ExtractionRange> Ranged<DispatchT, LockPolicyT, ContainerT, Qu
 }
 
 
-template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
+template <
+  typename DispatchT,
+  typename LockPolicyT,
+  typename ContainerT,
+  typename QueueMonitorT,
+  typename AccessStampT,
+  typename AccessValueT>
 template <typename OutputDispatchIteratorT>
-void Ranged<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::extract_follower_impl(
+void Ranged<DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT>::extract_follower_impl(
   OutputDispatchIteratorT& output,
   const ExtractionRange& extraction_range,
   const CaptureRange<stamp_type>& range)
@@ -79,22 +98,34 @@ void Ranged<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::extract_follower
 }
 
 
-template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
-auto Ranged<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::find_after_first(
+template <
+  typename DispatchT,
+  typename LockPolicyT,
+  typename ContainerT,
+  typename QueueMonitorT,
+  typename AccessStampT,
+  typename AccessValueT>
+auto Ranged<DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT>::find_after_first(
   const CaptureRange<stamp_type>& range) const
 {
   return std::find_if(
     PolicyType::queue_.begin(),
     PolicyType::queue_.end(),
     [offset_lower_stamp = (range.lower_stamp - delay_)](const DispatchT& dispatch) {
-      return get_stamp(dispatch) >= offset_lower_stamp;
+      return AccessStampT::get(dispatch) >= offset_lower_stamp;
     });
 }
 
 
-template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
+template <
+  typename DispatchT,
+  typename LockPolicyT,
+  typename ContainerT,
+  typename QueueMonitorT,
+  typename AccessStampT,
+  typename AccessValueT>
 template <typename QueueIteratorT>
-auto Ranged<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::find_before_last(
+auto Ranged<DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT>::find_before_last(
   const CaptureRange<stamp_type>& range,
   const QueueIteratorT after_first) const
 {
@@ -102,12 +133,19 @@ auto Ranged<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::find_before_last
     after_first == PolicyType::queue_.end() ? PolicyType::queue_.begin() : after_first,
     PolicyType::queue_.end(),
     [offset_upper_stamp = (range.upper_stamp - delay_)](const DispatchT& dispatch) {
-      return get_stamp(dispatch) <= offset_upper_stamp;
+      return AccessStampT::get(dispatch) <= offset_upper_stamp;
     });
 }
 
-template <typename DispatchT, typename LockPolicyT, typename ContainerT, typename QueueMonitorT>
-void Ranged<DispatchT, LockPolicyT, ContainerT, QueueMonitorT>::abort_follower_impl(const stamp_type& t_abort)
+template <
+  typename DispatchT,
+  typename LockPolicyT,
+  typename ContainerT,
+  typename QueueMonitorT,
+  typename AccessStampT,
+  typename AccessValueT>
+void Ranged<DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT>::abort_follower_impl(
+  const stamp_type& t_abort)
 {}
 
 }  // namespace follower
