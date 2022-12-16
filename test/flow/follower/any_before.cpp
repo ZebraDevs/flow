@@ -26,7 +26,7 @@ struct FollowerAnyBefore : ::testing::Test, AnyBefore<Dispatch<int, optional<int
 
   std::vector<Dispatch<int, optional<int>>> data;
 
-  FollowerAnyBefore() : AnyBefore<Dispatch<int, optional<int>>, NoLock>{DELAY} {}
+  FollowerAnyBefore(bool inclusive_boundary) : AnyBefore<Dispatch<int, optional<int>>, NoLock>{DELAY, inclusive_boundary} {}
 
   void SetUp() final
   {
@@ -50,14 +50,26 @@ struct FollowerAnyBefore : ::testing::Test, AnyBefore<Dispatch<int, optional<int
 };
 constexpr int FollowerAnyBefore::DELAY;
 
-TEST_F(FollowerAnyBefore, CapturePrimedOnEmpty)
+// AnyBefore Follower with Non-Inclusive Capture Boundary
+struct FollowerAnyBeforeNonInclusive : FollowerAnyBefore
+{
+  FollowerAnyBeforeNonInclusive() : FollowerAnyBefore(false) {}
+};
+
+// AnyBefore Follower with Inclusive Capture Boundary
+struct FollowerAnyBeforeInclusive : FollowerAnyBefore
+{
+  FollowerAnyBeforeInclusive() : FollowerAnyBefore(true) {}
+};
+
+TEST_F(FollowerAnyBeforeNonInclusive, CapturePrimedOnEmpty)
 {
   CaptureRange<int> t_range{0, 0};
   ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
 }
 
 
-TEST_F(FollowerAnyBefore, CapturePrimedOnDataAtBoundary)
+TEST_F(FollowerAnyBeforeNonInclusive, CapturePrimedOnDataAtBoundary)
 {
   CaptureRange<int> t_range{0, 0};
 
@@ -71,7 +83,7 @@ TEST_F(FollowerAnyBefore, CapturePrimedOnDataAtBoundary)
 }
 
 
-TEST_F(FollowerAnyBefore, CapturePrimedOnDataAfterBoundary)
+TEST_F(FollowerAnyBeforeNonInclusive, CapturePrimedOnDataAfterBoundary)
 {
   CaptureRange<int> t_range{0, 0};
 
@@ -85,7 +97,7 @@ TEST_F(FollowerAnyBefore, CapturePrimedOnDataAfterBoundary)
 }
 
 
-TEST_F(FollowerAnyBefore, CapturePrimedOnDataAnyBeforeBoundary)
+TEST_F(FollowerAnyBeforeNonInclusive, CapturePrimedOnDataAnyBeforeBoundary)
 {
   CaptureRange<int> t_range{0, 0};
 
@@ -99,7 +111,7 @@ TEST_F(FollowerAnyBefore, CapturePrimedOnDataAnyBeforeBoundary)
 }
 
 
-TEST_F(FollowerAnyBefore, CapturePrimedOnDataAnyBeforeAndAfterBoundary)
+TEST_F(FollowerAnyBeforeNonInclusive, CapturePrimedOnDataAnyBeforeAndAfterBoundary)
 {
   CaptureRange<int> t_range{0, 0};
 
@@ -114,7 +126,7 @@ TEST_F(FollowerAnyBefore, CapturePrimedOnDataAnyBeforeAndAfterBoundary)
 }
 
 
-TEST_F(FollowerAnyBefore, CapturePrimedOnDataAnyBeforeAndAtBoundary)
+TEST_F(FollowerAnyBeforeNonInclusive, CapturePrimedOnDataAnyBeforeAndAtBoundary)
 {
   CaptureRange<int> t_range{0, 0};
 
@@ -129,7 +141,7 @@ TEST_F(FollowerAnyBefore, CapturePrimedOnDataAnyBeforeAndAtBoundary)
 }
 
 
-TEST_F(FollowerAnyBefore, CapturePrimedMultiDataAnyBeforeBoundary)
+TEST_F(FollowerAnyBeforeNonInclusive, CapturePrimedMultiDataAnyBeforeBoundary)
 {
   CaptureRange<int> t_range{0, 0};
 
@@ -145,7 +157,7 @@ TEST_F(FollowerAnyBefore, CapturePrimedMultiDataAnyBeforeBoundary)
 }
 
 
-TEST_F(FollowerAnyBefore, CapturePrimedMultiDataAnyBeforeAndAtBoundary)
+TEST_F(FollowerAnyBeforeNonInclusive, CapturePrimedMultiDataAnyBeforeAndAtBoundary)
 {
   CaptureRange<int> t_range{0, 0};
 
@@ -161,14 +173,14 @@ TEST_F(FollowerAnyBefore, CapturePrimedMultiDataAnyBeforeAndAtBoundary)
 }
 
 
-TEST_F(FollowerAnyBefore, LocatePrimedOnEmpty)
+TEST_F(FollowerAnyBeforeNonInclusive, LocatePrimedOnEmpty)
 {
   CaptureRange<int> t_range{0, 0};
   ASSERT_EQ(State::PRIMED, this->locate(t_range));
 }
 
 
-TEST_F(FollowerAnyBefore, LocatePrimedOnDataAtBoundary)
+TEST_F(FollowerAnyBeforeNonInclusive, LocatePrimedOnDataAtBoundary)
 {
   CaptureRange<int> t_range{0, 0};
 
@@ -178,7 +190,7 @@ TEST_F(FollowerAnyBefore, LocatePrimedOnDataAtBoundary)
 }
 
 
-TEST_F(FollowerAnyBefore, LocatePrimedOnDataAfterBoundary)
+TEST_F(FollowerAnyBeforeNonInclusive, LocatePrimedOnDataAfterBoundary)
 {
   CaptureRange<int> t_range{0, 0};
 
@@ -188,7 +200,7 @@ TEST_F(FollowerAnyBefore, LocatePrimedOnDataAfterBoundary)
 }
 
 
-TEST_F(FollowerAnyBefore, LocatePrimedOnDataAnyBeforeBoundary)
+TEST_F(FollowerAnyBeforeNonInclusive, LocatePrimedOnDataAnyBeforeBoundary)
 {
   CaptureRange<int> t_range{0, 0};
 
@@ -198,7 +210,7 @@ TEST_F(FollowerAnyBefore, LocatePrimedOnDataAnyBeforeBoundary)
 }
 
 
-TEST_F(FollowerAnyBefore, LocatePrimedOnDataAnyBeforeAndAfterBoundary)
+TEST_F(FollowerAnyBeforeNonInclusive, LocatePrimedOnDataAnyBeforeAndAfterBoundary)
 {
   CaptureRange<int> t_range{0, 0};
 
@@ -209,7 +221,7 @@ TEST_F(FollowerAnyBefore, LocatePrimedOnDataAnyBeforeAndAfterBoundary)
 }
 
 
-TEST_F(FollowerAnyBefore, LocatePrimedOnDataAnyBeforeAndAtBoundary)
+TEST_F(FollowerAnyBeforeNonInclusive, LocatePrimedOnDataAnyBeforeAndAtBoundary)
 {
   CaptureRange<int> t_range{0, 0};
 
@@ -220,7 +232,7 @@ TEST_F(FollowerAnyBefore, LocatePrimedOnDataAnyBeforeAndAtBoundary)
 }
 
 
-TEST_F(FollowerAnyBefore, LocatePrimedMultiDataAnyBeforeBoundary)
+TEST_F(FollowerAnyBeforeNonInclusive, LocatePrimedMultiDataAnyBeforeBoundary)
 {
   CaptureRange<int> t_range{0, 0};
 
@@ -232,7 +244,7 @@ TEST_F(FollowerAnyBefore, LocatePrimedMultiDataAnyBeforeBoundary)
 }
 
 
-TEST_F(FollowerAnyBefore, LocatePrimedMultiDataAnyBeforeAndAtBoundary)
+TEST_F(FollowerAnyBeforeNonInclusive, LocatePrimedMultiDataAnyBeforeAndAtBoundary)
 {
   CaptureRange<int> t_range{0, 0};
 
@@ -244,7 +256,218 @@ TEST_F(FollowerAnyBefore, LocatePrimedMultiDataAnyBeforeAndAtBoundary)
 }
 
 
-TEST_F(FollowerAnyBefore, RemovalOnAbort)
+TEST_F(FollowerAnyBeforeNonInclusive, RemovalOnAbort)
+{
+  // Start injecting data
+  const int t0 = 0;
+  int t = t0;
+  int N = 10;
+  while (N--)
+  {
+    this->inject(Dispatch<int, optional<int>>{t, 1});
+    t += 1;
+  }
+
+  this->abort(5);
+
+  ASSERT_EQ(this->size(), static_cast<std::size_t>(DELAY + 5));
+}
+
+TEST_F(FollowerAnyBeforeInclusive, CapturePrimedOnEmpty)
+{
+  CaptureRange<int> t_range{0, 0};
+  ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
+}
+
+
+TEST_F(FollowerAnyBeforeInclusive, CapturePrimedOnDataAtBoundary)
+{
+  CaptureRange<int> t_range{0, 0};
+
+  this->inject(Dispatch<int, optional<int>>{-DELAY, 1});
+
+  ASSERT_EQ(this->size(), 1U);
+  ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
+  ASSERT_EQ(this->size(), 0U);
+
+  ASSERT_EQ(data.size(), 1U);
+}
+
+
+TEST_F(FollowerAnyBeforeInclusive, CapturePrimedOnDataAfterBoundary)
+{
+  CaptureRange<int> t_range{0, 0};
+
+  this->inject(Dispatch<int, optional<int>>{-DELAY + 1, 1});
+
+  ASSERT_EQ(this->size(), 1U);
+  ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
+  ASSERT_EQ(this->size(), 1U);
+
+  ASSERT_EQ(data.size(), 0U);
+}
+
+
+TEST_F(FollowerAnyBeforeInclusive, CapturePrimedOnDataAnyBeforeBoundary)
+{
+  CaptureRange<int> t_range{0, 0};
+
+  this->inject(Dispatch<int, optional<int>>{-DELAY - 1, 1});
+
+  ASSERT_EQ(this->size(), 1U);
+  ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
+  ASSERT_EQ(this->size(), 0U);
+
+  ASSERT_EQ(data.size(), 1U);
+}
+
+
+TEST_F(FollowerAnyBeforeInclusive, CapturePrimedOnDataAnyBeforeAndAfterBoundary)
+{
+  CaptureRange<int> t_range{0, 0};
+
+  this->inject(Dispatch<int, optional<int>>{-DELAY - 1, 1});
+  this->inject(Dispatch<int, optional<int>>{-DELAY + 1, 1});
+
+  ASSERT_EQ(this->size(), 2U);
+  ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
+  ASSERT_EQ(this->size(), 1U);
+
+  ASSERT_EQ(data.size(), 1U);
+}
+
+
+TEST_F(FollowerAnyBeforeInclusive, CapturePrimedOnDataAnyBeforeAndAtBoundary)
+{
+  CaptureRange<int> t_range{0, 0};
+
+  this->inject(Dispatch<int, optional<int>>{-DELAY - 1, 1});
+  this->inject(Dispatch<int, optional<int>>{-DELAY, 1});
+
+  ASSERT_EQ(this->size(), 2U);
+  ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
+  ASSERT_EQ(this->size(), 0U);
+
+  ASSERT_EQ(data.size(), 2U);
+}
+
+
+TEST_F(FollowerAnyBeforeInclusive, CapturePrimedMultiDataAnyBeforeBoundary)
+{
+  CaptureRange<int> t_range{0, 0};
+
+  this->inject(Dispatch<int, optional<int>>{-DELAY - 1, 1});
+  this->inject(Dispatch<int, optional<int>>{-DELAY - 2, 1});
+  this->inject(Dispatch<int, optional<int>>{-DELAY + 1, 1});
+
+  ASSERT_EQ(this->size(), 3U);
+  ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
+  ASSERT_EQ(this->size(), 1U);
+
+  ASSERT_EQ(data.size(), 2U);
+}
+
+
+TEST_F(FollowerAnyBeforeInclusive, CapturePrimedMultiDataAnyBeforeAndAtBoundary)
+{
+  CaptureRange<int> t_range{0, 0};
+
+  this->inject(Dispatch<int, optional<int>>{-DELAY - 0, 1});
+  this->inject(Dispatch<int, optional<int>>{-DELAY - 1, 1});
+  this->inject(Dispatch<int, optional<int>>{-DELAY - 2, 1});
+
+  ASSERT_EQ(this->size(), 3U);
+  ASSERT_EQ(State::PRIMED, this->capture(std::back_inserter(data), t_range));
+  ASSERT_EQ(this->size(), 0U);
+
+  ASSERT_EQ(data.size(), 3U);
+}
+
+
+TEST_F(FollowerAnyBeforeInclusive, LocatePrimedOnEmpty)
+{
+  CaptureRange<int> t_range{0, 0};
+  ASSERT_EQ(State::PRIMED, this->locate(t_range));
+}
+
+
+TEST_F(FollowerAnyBeforeInclusive, LocatePrimedOnDataAtBoundary)
+{
+  CaptureRange<int> t_range{0, 0};
+
+  this->inject(Dispatch<int, optional<int>>{-DELAY, 1});
+
+  ASSERT_EQ(State::PRIMED, this->locate(t_range));
+}
+
+
+TEST_F(FollowerAnyBeforeInclusive, LocatePrimedOnDataAfterBoundary)
+{
+  CaptureRange<int> t_range{0, 0};
+
+  this->inject(Dispatch<int, optional<int>>{-DELAY + 1, 1});
+
+  ASSERT_EQ(State::PRIMED, this->locate(t_range));
+}
+
+
+TEST_F(FollowerAnyBeforeInclusive, LocatePrimedOnDataAnyBeforeBoundary)
+{
+  CaptureRange<int> t_range{0, 0};
+
+  this->inject(Dispatch<int, optional<int>>{-DELAY - 1, 1});
+
+  ASSERT_EQ(State::PRIMED, this->locate(t_range));
+}
+
+
+TEST_F(FollowerAnyBeforeInclusive, LocatePrimedOnDataAnyBeforeAndAfterBoundary)
+{
+  CaptureRange<int> t_range{0, 0};
+
+  this->inject(Dispatch<int, optional<int>>{-DELAY - 1, 1});
+  this->inject(Dispatch<int, optional<int>>{-DELAY + 1, 1});
+
+  ASSERT_EQ(State::PRIMED, this->locate(t_range));
+}
+
+
+TEST_F(FollowerAnyBeforeInclusive, LocatePrimedOnDataAnyBeforeAndAtBoundary)
+{
+  CaptureRange<int> t_range{0, 0};
+
+  this->inject(Dispatch<int, optional<int>>{-DELAY - 1, 1});
+  this->inject(Dispatch<int, optional<int>>{-DELAY, 1});
+
+  ASSERT_EQ(State::PRIMED, this->locate(t_range));
+}
+
+
+TEST_F(FollowerAnyBeforeInclusive, LocatePrimedMultiDataAnyBeforeBoundary)
+{
+  CaptureRange<int> t_range{0, 0};
+
+  this->inject(Dispatch<int, optional<int>>{-DELAY - 1, 1});
+  this->inject(Dispatch<int, optional<int>>{-DELAY - 2, 1});
+  this->inject(Dispatch<int, optional<int>>{-DELAY + 1, 1});
+
+  ASSERT_EQ(State::PRIMED, this->locate(t_range));
+}
+
+
+TEST_F(FollowerAnyBeforeInclusive, LocatePrimedMultiDataAnyBeforeAndAtBoundary)
+{
+  CaptureRange<int> t_range{0, 0};
+
+  this->inject(Dispatch<int, optional<int>>{-DELAY - 0, 1});
+  this->inject(Dispatch<int, optional<int>>{-DELAY - 1, 1});
+  this->inject(Dispatch<int, optional<int>>{-DELAY - 2, 1});
+
+  ASSERT_EQ(State::PRIMED, this->locate(t_range));
+}
+
+
+TEST_F(FollowerAnyBeforeInclusive, RemovalOnAbort)
 {
   // Start injecting data
   const int t0 = 0;

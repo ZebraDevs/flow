@@ -18,8 +18,8 @@ namespace follower
  *
  * This capture buffer will capture data which is behind the driving upper
  * sequence stamp (<code>range.upper_stamp</code>) by some sequencing delay
- * w.r.t a driver-provided target time. It will return all data at and before
- * that sequencing boundary that has not previously been captured.
+ * w.r.t a driver-provided target time. It can be configured to return all data at and before,
+ * or strictly just before, that sequencing boundary that has not previously been captured.
  * \n
  * This capture buffer is always ready, and will always return with a PRIMED state,
  * regardless of whether or not there is data available to capture.
@@ -60,11 +60,13 @@ public:
    * @brief Setup constructor
    *
    * @param delay  the delay with which to capture
+   * @param inclusive_capture_boundary  enable message capture exactly at sequencing boundary
    * @param container  container object with some initial state
    * @param queue_monitor  queue monitor with some initial state
    */
   explicit AnyBefore(
     const offset_type& delay,
+    const bool inclusive_capture_boundary = false,
     const ContainerT& container = ContainerT{},
     const QueueMonitorT& queue_monitor = QueueMonitorT{});
 
@@ -109,6 +111,9 @@ private:
 
   /// Capture delay
   offset_type delay_;
+
+  /// Include message capture at the sequencing boundary
+  const bool inclusive_capture_boundary_;
 };
 
 }  // namespace follower

@@ -27,10 +27,12 @@ template <
   typename AccessValueT>
 AnyBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT>::AnyBefore(
   const offset_type& delay,
+  const bool inclusive_capture_boundary,
   const ContainerT& container,
   const QueueMonitorT& queue_monitor) :
     PolicyType{container, queue_monitor},
-    delay_{delay}
+    delay_{delay},
+    inclusive_capture_boundary_{inclusive_capture_boundary}
 {}
 
 
@@ -45,15 +47,20 @@ std::tuple<State, ExtractionRange>
 AnyBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT>::locate_follower_impl(
   const CaptureRange<stamp_type>& range) const
 {
-  // The boundary before which messages are valid and after which they are not. Non-inclusive.
+  // The boundary before which messages are valid and after which they are not.
   const stamp_type boundary = range.upper_stamp - delay_;
 
   auto itr = PolicyType::queue_.begin();
 
   // Collect all the messages that are earlier than the first driving message's
   // timestamp minus the delay
-  while (itr != PolicyType::queue_.end() and AccessStampT::get(*itr) < boundary)
+  while (itr != PolicyType::queue_.end() and AccessStampT::get(*itr) <= boundary)
   {
+    // If the boundary is non-inclusive, do not capture messages at the boundary
+    if (!inclusive_capture_boundary_ && AccessStampT::get(*itr) == boundary)
+    {
+      break;
+    }
     ++itr;
   }
 

@@ -260,7 +260,8 @@ Captures the oldest available `Dispatch` elements. Capture range is the stamp as
 
 #### `flow::follower::AnyBefore`
 
-Captures all `Dispatch` elements before the capture range lower bound, minus a `delay` offset. All of the captured elements are removed. 
+Captures all `Dispatch` elements before the capture range lower bound, minus a `delay` offset. All of the captured elements are removed. It can additionally return captured elements exactly at the capture range lower bound by configuring the capture boundary
+to be inclusive.
 
 Capture will report a `flow::State::PRIMED` state even if the buffer is empty, making this captor the ideal choice if you are working with a data stream that is "optional" for the current synchronization attempt.
 
