@@ -1,9 +1,9 @@
 /**
- * @copyright 2020-present Fetch Robotics Inc.
- * @author Levon Avagyan, Brian Cairl
+ * @copyright 2023 Zebra Technologies
+ * @author Somesh Daga
  */
-#ifndef FLOW_FOLLOWER_ANY_BEFORE_HPP
-#define FLOW_FOLLOWER_ANY_BEFORE_HPP
+#ifndef FLOW_FOLLOWER_ANY_AT_OR_BEFORE_HPP
+#define FLOW_FOLLOWER_ANY_AT_OR_BEFORE_HPP
 
 // Flow
 #include <flow/follower/follower.hpp>
@@ -14,17 +14,17 @@ namespace follower
 {
 
 /**
- * @brief Captures all data elements from a delay before the driving sequencing stamp
+ * @brief Captures all data elements from a delay at and before the driving sequencing stamp
  *
- * This capture buffer will capture data which is behind the driving upper
+ * This capture buffer will capture data which is at and behind the driving upper
  * sequence stamp (<code>range.upper_stamp</code>) by some sequencing delay
- * w.r.t a driver-provided target time. It will return all data before
+ * w.r.t a driver-provided target time. It will return all data at and before
  * that sequencing boundary that has not previously been captured.
  * \n
  * This capture buffer is always ready, and will always return with a PRIMED state,
  * regardless of whether or not there is data available to capture.
  * \n
- * <b>Data removal:</b> Captor will remove all data before the driving time
+ * <b>Data removal:</b> Captor will remove all data at and before the driving time
  * message minus the delay
  *
  * @tparam DispatchT  data dispatch type
@@ -46,15 +46,15 @@ template <
   typename QueueMonitorT = DefaultDispatchQueueMonitor,
   typename AccessStampT = DefaultStampAccess,
   typename AccessValueT = DefaultValueAccess>
-class AnyBefore
-    : public Follower<AnyBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT>>
+class AnyAtOrBefore
+    : public Follower<AnyAtOrBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT>>
 {
 public:
   /// Data stamp type
-  using stamp_type = typename CaptorTraits<AnyBefore>::stamp_type;
+  using stamp_type = typename CaptorTraits<AnyAtOrBefore>::stamp_type;
 
   /// Data stamp duration type
-  using offset_type = typename CaptorTraits<AnyBefore>::offset_type;
+  using offset_type = typename CaptorTraits<AnyAtOrBefore>::offset_type;
 
   /**
    * @brief Setup constructor
@@ -63,13 +63,14 @@ public:
    * @param container  container object with some initial state
    * @param queue_monitor  queue monitor with some initial state
    */
-  explicit AnyBefore(
+  explicit AnyAtOrBefore(
     const offset_type& delay,
     const ContainerT& container = ContainerT{},
     const QueueMonitorT& queue_monitor = QueueMonitorT{});
 
 private:
-  using PolicyType = Follower<AnyBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT>>;
+  using PolicyType =
+    Follower<AnyAtOrBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT>>;
   friend PolicyType;
 
   /**
@@ -130,7 +131,8 @@ template <
   typename QueueMonitorT,
   typename AccessStampT,
   typename AccessValueT>
-struct CaptorTraits<follower::AnyBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT>>
+struct CaptorTraits<
+  follower::AnyAtOrBefore<DispatchT, LockPolicyT, ContainerT, QueueMonitorT, AccessStampT, AccessValueT>>
     : CaptorTraitsFromDispatch<DispatchT>
 {
   /// Underlying dispatch container type
@@ -156,6 +158,6 @@ struct CaptorTraits<follower::AnyBefore<DispatchT, LockPolicyT, ContainerT, Queu
 }  // namespace flow
 
 // Flow (implementation)
-#include <flow/impl/follower/any_before.hpp>
+#include <flow/impl/follower/any_at_or_before.hpp>
 
-#endif  // FLOW_FOLLOWER_ANY_BEFORE_HPP
+#endif  // FLOW_FOLLOWER_ANY_AT_OR_BEFORE_HPP
