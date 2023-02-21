@@ -269,6 +269,16 @@ It should be understood that the data captured by this captor is largely depende
 
 ![AnyBefore](doc/follower/any_before.png)
 
+#### `flow::follower::AnyAtOrBefore`
+
+Captures all `Dispatch` elements at and before the capture range lower bound, minus a `delay` offset. All of the captured elements are removed. 
+
+Capture will report a `flow::State::PRIMED` state even if the buffer is empty, making this captor the ideal choice if you are working with a data stream that is "optional" for the current synchronization attempt and you need to be able to optionally capture elements with the same stamp or at a fixed time offset (specified by the delay) from the driving message stamp.
+
+It should be understood that the data captured by this captor is largely dependent on how data is added to the buffer and when `capture` is called.
+
+
+TODO: Add Image
 
 
 #### `flow::follower::Before`

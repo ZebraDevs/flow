@@ -6,6 +6,7 @@
 #define FLOW_FOLLOWERS_HPP
 
 // Flow
+#include <flow/follower/any_at_or_before.hpp>
 #include <flow/follower/any_before.hpp>
 #include <flow/follower/before.hpp>
 #include <flow/follower/closest_before.hpp>
