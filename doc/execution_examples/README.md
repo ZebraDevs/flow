@@ -17,6 +17,7 @@ This directory contains detailed execution examples demonstrating how Flow's cap
 | [Edge Cases & Failures](./edge_cases_and_failures.md) | Common failure scenarios and how to handle them |
 | [Message Dropping Scenarios](./message_dropping.md) | When and why messages get dropped |
 | [Delay Configuration](./delay_configuration.md) | How delay parameter works, configuration options, and use cases |
+| [Boundary Calculation Reference](./boundary_calculation.md) | **Important:** Clarifies `lower_stamp` vs `upper_stamp` usage in followers (includes documentation discrepancy notes) |
 
 ## Quick Reference: State Outcomes
 

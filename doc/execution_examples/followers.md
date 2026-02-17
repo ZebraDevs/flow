@@ -26,6 +26,8 @@ This document provides detailed execution traces for all Flow follower types. Fo
 
 **Boundary:** `range.upper_stamp - delay` (non-inclusive)
 
+> ⚠️ **Note:** The README.md states this uses `lower_stamp`, but the actual implementation uses `upper_stamp`. For `driver::Next` they are equal, but for `Batch`/`Chunk` this matters. See [Boundary Calculation Reference](./boundary_calculation.md).
+
 **Requirements:** At least one element AFTER boundary must exist (proves data is complete)
 
 **Data Removal:** All captured elements removed
@@ -156,6 +158,8 @@ CAPTURE:
 - `offset_type delay` - Offset from driver's range
 
 **Boundary:** `range.lower_stamp - delay`
+
+> ✅ This follower correctly uses `lower_stamp` as documented.
 
 **Search Window:** `[boundary - period, boundary)`
 
@@ -296,7 +300,9 @@ CAPTURE:
 - `size_type count` - Number of elements to capture
 - `offset_type delay` - Offset from driver's range
 
-**Boundary:** `range.lower_stamp - delay`
+**Boundary:** `range.upper_stamp - delay`
+
+> ⚠️ **Note:** The README.md states this uses `lower_stamp`, but the actual implementation uses `upper_stamp`. See [Boundary Calculation Reference](./boundary_calculation.md).
 
 **Data Removal:** All elements before the N-th captured element
 
@@ -745,6 +751,10 @@ CAPTURE SEQUENCE:
 
 **Parameters:** `offset_type delay` - Offset from driver's range
 
+**Boundary:** `range.upper_stamp - delay`
+
+> ⚠️ **Note:** The README.md states this uses `lower_stamp`, but the actual implementation uses `upper_stamp`. See [Boundary Calculation Reference](./boundary_calculation.md).
+
 **Behavior:** Captures whatever is available, including nothing
 
 **Data Removal:** All elements before boundary
@@ -851,6 +861,8 @@ SOLUTION: Use appropriate delay to allow data to arrive
 **Parameters:** `offset_type delay` - Offset from driver's range
 
 **Boundary:** `range.upper_stamp - delay` (INCLUSIVE)
+
+> ⚠️ **Note:** The README.md states this uses `lower_stamp`, but the actual implementation uses `upper_stamp`. See [Boundary Calculation Reference](./boundary_calculation.md).
 
 **Behavior:** Captures stamps <= boundary (not just <)
 

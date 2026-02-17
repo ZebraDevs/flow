@@ -90,12 +90,14 @@ follower::Latched<Dispatch, Lock> latched{min_period};  // Different concept
 
 ## Boundary Calculation
 
+⚠️ **Important:** The README.md documentation states that most followers use `lower_stamp`, but the actual implementation differs. See [Boundary Calculation Reference](./boundary_calculation.md) for the full analysis.
+
 Different followers calculate their boundary differently:
 
 ### Upper Stamp Based (Before, CountBefore, AnyBefore, AnyAtOrBefore)
 
 ```cpp
-// From include/flow/impl/follower/before.hpp
+// From include/flow/impl/follower/before.hpp (line 55)
 const stamp_type boundary = range.upper_stamp - delay_;
 ```
 
@@ -108,10 +110,10 @@ boundary = 20 - 5 = 15
 Captures elements with stamp < 15
 ```
 
-### Lower Stamp Based (ClosestBefore)
+### Lower Stamp Based (ClosestBefore, Latched, MatchedStamp)
 
 ```cpp
-// From include/flow/impl/follower/closest_before.hpp
+// From include/flow/impl/follower/closest_before.hpp (line 44)
 const stamp_type boundary = range.lower_stamp - delay_;
 ```
 
@@ -140,6 +142,14 @@ Shifted range: {lower=5, upper=15}
 
 Captures elements in [5, 15] plus boundary elements
 ```
+
+### Why This Matters
+
+For `driver::Next` (single element), `lower_stamp == upper_stamp`, so it doesn't matter which is used.
+
+For `driver::Batch` or `driver::Chunk`:
+- **`upper_stamp` followers** (`Before`, `AnyBefore`, `CountBefore`): Capture data up to the END of the driver range, including data from DURING the driver's capture period
+- **`lower_stamp` followers** (`ClosestBefore`, `Latched`): Capture data up to the START of the driver range, only data from BEFORE the driver's capture period began
 
 ---
 
