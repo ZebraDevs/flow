@@ -16,6 +16,7 @@ This directory contains detailed execution examples demonstrating how Flow's cap
 | [Combined Workflows](./combined_workflows.md) | Real-world scenarios combining drivers and followers |
 | [Edge Cases & Failures](./edge_cases_and_failures.md) | Common failure scenarios and how to handle them |
 | [Message Dropping Scenarios](./message_dropping.md) | When and why messages get dropped |
+| [Delay Configuration](./delay_configuration.md) | How delay parameter works, configuration options, and use cases |
 
 ## Quick Reference: State Outcomes
 
